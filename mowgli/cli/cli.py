@@ -27,7 +27,7 @@ class Cli:
                         # In the container
                         "/data",
                         # In the checkout
-                        os.path.abspath(os.path.join(os.path.dirname(__file__),  "..", "data"))
+                        os.path.abspath(os.path.join(os.path.dirname(__file__),  "..", "..", "data"))
                 ):
                     if os.path.isdir(data_dir_path):
                         break
@@ -120,6 +120,7 @@ class Cli:
 
     def __instantiate_pipeline(self, args, pipeline_class, **kwds) -> _Pipeline:
         pipeline_kwds = vars(args).copy()
+        pipeline_kwds.pop("c")
         pipeline_kwds.pop("data_dir_path")
         pipeline_kwds.pop("force")
         pipeline_kwds.pop("force_extract")

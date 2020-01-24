@@ -7,12 +7,17 @@ from mowgli.lib.etl._transformer import _Transformer
 
 
 class _Pipeline(ABC):
-    """
-    Construct an extract-transform pipeline.
-    :param extractor: extractor implementation
-    :param id: unique identifier for this pipeline instance, may be adapted from arguments
-    :param transformer: transformer implementation
-    """
+    def __init__(self, *, extractor: _Extractor, id: str, transformer: _Transformer, **kwds):
+        """
+        Construct an extract-transform pipeline.
+        :param extractor: extractor implementation
+        :param id: unique identifier for this pipeline instance, may be adapted from arguments
+        :param transformer: transformer implementation
+        :param kwds: ignored
+        """
+        self.__extractor = extractor
+        self.__id = id
+        self.__transformer = transformer
 
     @classmethod
     def add_arguments(cls, arg_parser: ArgParser) -> None:
