@@ -5,9 +5,17 @@ jobs:
       - image: circleci/python:3.8
     steps:
       - checkout
+      - restore_cache:
+          keys:
+            - pip_cache-{{ checksum "requirements.txt" }}
+            - pip_cache
       - run: 
           name: Install dependencies
           command: pip install -r requirements.txt
+      - save_cache:
+          paths:
+            - ~/.cache/pip
+          key: pip_cache-{{ checksum "requirements.txt"}}
       - run:
           name: Run tests
           command: |
