@@ -1,4 +1,7 @@
 from mowgli.lib.etl._transformer import _Transformer
+from xml.dom.minidom import parse
+from mowgli.lib.cskg.node import Node
+from mowgli.lib.cskg.edge import Edge
 
 
 class EatTransformer(_Transformer):
@@ -21,7 +24,4 @@ class EatTransformer(_Transformer):
                 response_word = str(response.attributes['word'].value)
                 response_node = Node(datasource="eat", id="eat:" + response_word, label=response_word)
                 yield response_node
-
-        yield Edge(datasource="eat", object=stim_node, relation="cn:RelatedTo", subject=response_node)
-
-        raise NotImplementedError
+                yield Edge(datasource="eat", object_=stim_node, relation="cn:RelatedTo", subject=response_node)
