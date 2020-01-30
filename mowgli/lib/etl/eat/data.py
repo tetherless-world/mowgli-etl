@@ -11,10 +11,11 @@ for i in range(100):
 	response_words = []
 	for response in responses:
 		response_word = str(response.attributes['word'].value)
-		response_words.append(response_word)
+		percent = str(response.attributes['r'].value)
+		response_words.append((response_word, percent))
 	words[stim_word] = response_words
 
 for word in words:
 	for response in words[word]:
-		line = "<eat:" + word + ">" + "cn:relates-to<eat:" + response + ">" + '\n'
+		line = "<eat:" + word + ">" + "cn:relates-to<eat:" + response[0] + ">" + "r=" + response[1] + '\n'
 		print(line)

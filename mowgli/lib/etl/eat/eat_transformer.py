@@ -22,6 +22,7 @@ class EatTransformer(_Transformer):
 
             for response in responses:
                 response_word = str(response.attributes['word'].value)
+                percent = float(response.attributes['r'].value)
                 response_node = Node(datasource="eat", id="eat:" + response_word, label=response_word)
                 yield response_node
-                yield Edge(datasource="eat", object_=stim_node, relation="cn:RelatedTo", subject=response_node)
+                yield Edge(datasource="eat", object_=stim_node, relation="cn:RelatedTo", subject=response_node, weight=percent)
