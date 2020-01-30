@@ -30,5 +30,21 @@ class Node:
     def other(self):
         return self.__other
 
+    @property
     def pos(self):
         return self.__pos
+    
+    def __str__(self):
+        return ', '.join(str(val) for key, val in sorted(self.__dict__.items()))
+
+    def __repr__(self):
+        key_vals = ', '.join(f'{key}={val}' for key, val in sorted(self.__dict__.items()))
+        return f'{self.__class__.__name__}({key_vals})'
+
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            return self.__dict__ == other.__dict__
+        return NotImplemented
+    
+    def __hash__(self):
+        return hash(tuple(sorted(self.__dict__.items())))
