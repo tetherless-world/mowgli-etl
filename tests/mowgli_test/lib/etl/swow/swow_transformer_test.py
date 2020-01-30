@@ -19,9 +19,9 @@ def test_transform():
             edges.add(result)
 
     expected_node_names = ['a', 'one', 'b', 'c', 'indefinite article', 'a few', 'beers', 'bee']
-    expected_nodes = set(map(swow_node, expected_node_names))
+    expected_nodes = set(swow_node(name) for name in  expected_node_names)
 
-    expected_edges = set(swow_edge(cue=c, response=r, strength=s) for (c,r,s) in [
+    expected_edge_tuples = [
         ('a', 'one', 0.118518518518519),
         ('a', 'b', 0.0518518518518519),
         ('a', 'c', 0.0185185185185185),
@@ -30,7 +30,8 @@ def test_transform():
         ('b', 'bee', 0.121863799283154),
         ('b', 'c', 0.0896057347670251),
         ('b', 'a', 0.0681003584229391)
-    ])
+    ]
+    expected_edges = set(swow_edge(cue=c, response=r, strength=s) for (c,r,s) in expected_edge_tuples)
 
     assert nodes == expected_nodes
     assert edges == expected_edges

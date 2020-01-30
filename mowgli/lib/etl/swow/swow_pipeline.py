@@ -4,7 +4,8 @@ from mowgli.lib.etl.swow.swow_transformer import SwowTransformer
 
 
 class SwowPipeline(_Pipeline):
-    """ ETL pipeline that extracts from the Small World of Words corpus
+    """
+    ETL pipeline that extracts from the Small World of Words corpus.
 
     https://smallworldofwords.org
     """

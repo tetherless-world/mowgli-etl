@@ -21,9 +21,9 @@ class SwowTransformer(_Transformer):
         with open(csv_file_path) as csv_file:
             csv_reader = csv.DictReader(csv_file, delimiter='\t', quoting=csv.QUOTE_NONE)
             for row in csv_reader:
-                cue = row['cue']
-                response = row['response']
+                cue_node = swow_node(row['cue'])
+                response_node = swow_node(row['response'])
                 strength = float(row['R123.Strength'])
-                yield swow_node(cue)
-                yield swow_node(response)
-                yield swow_edge(cue=cue, response=response, strength=strength)
+                yield cue_node
+                yield response_node
+                yield swow_edge(cue=cue_node, response=response_node, strength=strength)

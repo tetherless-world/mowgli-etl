@@ -1,0 +1,2 @@
+SWOW_NAMESPACE = 'swow'
+SWOW_DATASOURCE_ID = 'swow'
