@@ -1,18 +1,16 @@
 from mowgli.lib.cskg.edge import Edge
 from mowgli.lib.cskg.node import Node
-from mowgli.lib.etl.swow.swow_transformer import SwowTransformer
-from mowgli.lib.etl.swow.swow_transformer import SwowTransformer
+from mowgli.lib.etl.swow.swow_constants import STRENGTH_FILE_KEY
 from mowgli.lib.etl.swow.swow_mappers import swow_edge, swow_node
-import pathlib
-import os
+from mowgli.lib.etl.swow.swow_transformer import SwowTransformer
+from mowgli.lib.etl.swow.swow_transformer import SwowTransformer
 
-def test_transform():
-    test_file_dir = pathlib.Path(__file__).parent.absolute()
-    test_file_path = os.path.join(test_file_dir, 'sample_swow_strengths.csv')
+def test_transform(sample_swow_strengths):
+    transform_args = {STRENGTH_FILE_KEY: sample_swow_strengths}
     transformer = SwowTransformer()
 
     nodes, edges = set(), set()
-    for result in transformer.transform(csv_file_path=test_file_path):
+    for result in transformer.transform(**transform_args):
         if isinstance(result, Node):
             nodes.add(result)
         elif isinstance(result, Edge):
