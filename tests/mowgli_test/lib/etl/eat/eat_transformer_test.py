@@ -44,25 +44,25 @@ def test_eat_tranform():
 
     expected_nodes = expected_stimulus_nodes | expected_response_nodes
 
-    expected_edges = set(Edge(datasource="eat", object_="eat:" + stim_node, relation="cn:RelatedTo", subject="eat:" + response_node) for (stim_node, response_node) in [
-        ('SPECIAL', 'TRAIN'),
-        ('SPECIAL', 'PARTICULAR'),
-        ('SPECIAL', 'EXTRA'),
-        ('SPECIAL', 'ORDINARY'),
-        ('SPECIAL', 'CASE'),
-        ('SPECIAL', 'PERSON'),
-        ('SPECIAL', 'BEER'),
-        ('SPECIAL', 'CAR'),
-        ('SPECIAL', 'CONSTABLE'),
-        ('SET', 'TELEVISION'),
-        ('SET', 'UP'),
-        ('SET', 'OUT'),
-        ('SET', 'TO'),
-        ('SET', 'DOWN'),
-        ('SET', 'GAME'),
-        ('SET', 'GROUP'),
-        ('SET', 'T.V.'),
-        ('SET', 'TEA')
+    expected_edges = set(Edge(datasource="eat", object_="eat:" + stim_node, relation="cn:RelatedTo", subject="eat:" + response_node, weight=response_weight) for (stim_node, response_node, response_weight) in [
+        ('SPECIAL', 'TRAIN', 0.07),
+        ('SPECIAL', 'PARTICULAR', 0.05),
+        ('SPECIAL', 'EXTRA', 0.04),
+        ('SPECIAL', 'ORDINARY', 0.04),
+        ('SPECIAL', 'CASE', 0.03),
+        ('SPECIAL', 'PERSON', 0.03),
+        ('SPECIAL', 'BEER', 0.02),
+        ('SPECIAL', 'CAR', 0.02),
+        ('SPECIAL', 'CONSTABLE', 0.02),
+        ('SET', 'TELEVISION', 0.06),
+        ('SET', 'UP', 0.05),
+        ('SET', 'OUT', 0.04),
+        ('SET', 'TO', 0.04),
+        ('SET', 'DOWN', 0.03),
+        ('SET', 'GAME', 0.03),
+        ('SET', 'GROUP', 0.03),
+        ('SET', 'T.V.', 0.03),
+        ('SET', 'TEA', 0.03)
     ])
 
     assert nodes == expected_nodes
