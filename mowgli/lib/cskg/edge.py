@@ -20,14 +20,19 @@ class Edge:
     def __eq__(self, other):
         if not isinstance(other, self.__class__):
             return NotImplemented
-        return (
-            self.__datasource == other.__datasource and
-            self.__object == other.__object and
-            self.__other == other.__other and
-            self.__relation == other.__relation and
-            self.__subject == other.__subject and 
-            self.__weight == other.__weight
-        )
+        if self.__datasource != other.__datasource:
+            return False
+        if self.__object != other.__object:
+            return False
+        if self.__other != other.__other:
+            return False
+        if self.__relation != other.__relation:
+            return False
+        if self.__subject != other.__subject:
+            return False
+        if self.__weight != other.__weight:
+            return False
+        return True
     
     def __hash__(self):
         return hash((

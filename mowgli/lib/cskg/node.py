@@ -19,9 +19,21 @@ class Node:
         return self.__datasource
 
     def __eq__(self, other):
-        if isinstance(other, self.__class__):
-            return self.__dict__ == other.__dict__
-        return NotImplemented
+        if not isinstance(other, self.__class__):
+            return NotImplemented
+        if self.__aliases != other.__aliases:
+            return False
+        if self.__datasource != other.__datasource:
+            return False
+        if self.__id != other.__id:
+            return False
+        if self.__label != other.__label:
+            return False
+        if self.__other != other.__other:
+            return False
+        if self.__pos != other.__pos:
+            return False
+        return True
     
     def __hash__(self):
         return hash((
