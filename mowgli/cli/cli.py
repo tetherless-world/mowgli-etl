@@ -1,3 +1,4 @@
+
 import logging
 import os.path
 from importlib import import_module
@@ -6,6 +7,7 @@ from typing import Generator, Union
 
 from configargparse import ArgParser
 
+from mowgli import paths
 from mowgli.lib.cskg.edge import Edge
 from mowgli.lib.cskg.node import Node
 from mowgli.lib.etl._pipeline import _Pipeline
@@ -27,7 +29,7 @@ class Cli:
                         # In the container
                         "/data",
                         # In the checkout
-                        os.path.abspath(os.path.join(os.path.dirname(__file__),  "..", "..", "data"))
+                        paths.DATA_DIR
                 ):
                     if os.path.isdir(data_dir_path):
                         break
@@ -167,3 +169,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
