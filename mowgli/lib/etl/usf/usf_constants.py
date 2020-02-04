@@ -1,0 +1,2 @@
+USF_NAMESPACE = 'usf'
+USF_DATASOURCE_ID = 'usf'
