@@ -6,4 +6,40 @@ import pathlib
 import os
 
 def test_transform():
-    
+    test_file_dir = pathlib.Path(__file__).parent.absolute()
+    test_file_path = os.path.join(test_file_dir, 'usf_test_data.xml')
+
+    transformer = USFTransformer()
+
+    nodes, edges = set(), set()
+    for result in transformer.transform(xml_file_path=test_file_path):
+        if isinstance(result, Node):
+            nodes.add(result)
+        elif isinstance(result, Edge):
+            edges.add(result)
+
+    expected_node_names = {'face':'N', 'book':'N', 'time':'N', 'lift':'V', 'mask':'N', 'half':'N', 'life':'N', 'whole':'N', 'part':'N','split':'V' ,
+                        'full':'AJ', 'swing':'V', 'bat':'N', 'dance':'V', 'set':'N', 'sway':'V'}
+
+    expected_nodes = set( usf_node(name,pos) for name,pos in  expected_node_names.items() )
+
+    expected_edge_tuples = [
+        ('face', 'book', 0.429),
+        ('face', 'time', 0.286),
+        ('face', 'lift', 0.143),
+        ('face', 'mask', 0.143),
+        ('half', 'life', 0.455),
+        ('half', 'whole', 0.182),
+        ('half', 'part', 0.182),
+        ('half', 'split', 0.091),
+        ('half', 'full', 0.091),
+        ('swing', 'bat', 0.4),
+        ('swing', 'dance', 0.2),
+        ('swing', 'set', 0.2),
+        ('swing', 'sway', 0.2)    
+    ]
+
+    expected_edges = set(usf_edge(cue=c, response=r, strength=s) for (c,r,s) in expected_edge_tuples)
+
+    assert nodes == expected_nodes
+    assert edges == expected_edges

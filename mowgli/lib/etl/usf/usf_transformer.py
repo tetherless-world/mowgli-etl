@@ -9,7 +9,7 @@ from xml.dom.minidom import parse, parseString
 class USFTransformer(_Transformer):
 
 
-    def transform(self, *, xml_file_path: str) -> Generator[Union[Node, Edge], None, None]:
+    def transform(self, xml_file_path: str) -> Generator[Union[Node, Edge], None, None]:
 
 
 

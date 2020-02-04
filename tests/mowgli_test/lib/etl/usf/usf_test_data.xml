@@ -13,9 +13,10 @@
         <target word="split" g="11" p="1" fsg=".091" pos="V"/>
         <target word="full" g="11" p="1" fsg=".091" pos="AJ"/>
     </cue>
-    <cue word="swing" fr="36" ps="V">
+    <cue word="swing" fr="36" pos="V">
         <target word="bat" g="5" p="2" fsg=".4" pos="N"/>
         <target word="dance" g="5" p="1" fsg=".2" pos="V"/>
         <target word="set" g="5" p="1" fsg=".2" pos="N"/>
         <target word="sway" g="5" p="1" fsg=".2" pos="V"/>
+    </cue>
 </free-association-norms>
