@@ -1,24 +1,21 @@
 from mowgli.lib.etl._pipeline import _Pipeline
 from mowgli.lib.etl.webchild.webchild_extractor import webchildExtractor
 from mowgli.lib.etl.webchild.webchild_transformer import webchildTransformer
+import os
 
 
 class webchildPipeline(_Pipeline):
-    """
-    ETL pipeline that extracts from the Small World of Words corpus.
 
-    https://smallworldofwords.org
-    """
+    #helper function to gather csvs we want from entire webchild txt folder
+    def getFiles():
+        mList = os.listdir(os.getcwd()+ r'\WebChildData')
+        return mList
 
-    def __init__(self, *, webchild_csv_file_paths: list, **kwds):
+    def __init__(self, *, **kwds):
         _Pipeline.__init__(
             self,
-            extractor=webchildExtractor(webchild_csv_file_path=webchild_csv_file_paths),
+            extractor=webchildExtractor(),
             id="webchild",
-            transformer=webchildTransformer(),
+            transformer=webchildTransformer(getFiles()),
             **kwds
         )
-
-    @classmethod
-    def add_arguments(cls, arg_parser):
-        arg_parser.add_argument("--webchild-csv-file-path", help="webchild .csv file paths", required=True)

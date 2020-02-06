@@ -21,9 +21,14 @@ class webchildTransformer(_Transformer):
             f = open(csv_file_path, "r")
             for x in f:
                 info = x.split('\t')
-                cue_node = webchild_node(info[1])
-                response_node = webchild_node(info[4])
+                if('WordNetWrapper' in csv_file_path):
+                    cue_node = webchild_node(info[0])
+                    response_node = webchild_node(info[3])
+                else:
+                    cue_node = webchild_node(info[1])
+                    response_node = webchild_node(info[4])
                 yield cue_node
                 yield response_node
+                #DO i want to make the change for "part of" here rather in mappers file. 
                 yield webchild_edge(cue=cue_node, response=response_node,csvPath =csv_file_path)
 
