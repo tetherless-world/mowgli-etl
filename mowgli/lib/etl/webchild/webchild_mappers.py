@@ -1,7 +1,7 @@
 from mowgli.lib.cskg.node import Node
 from mowgli.lib.cskg.edge import Edge
-from mowgli.lib.cskg.concept_net_predicates import HAS_A, MADE_OF
-from mowgli.lib.etl.webchild.webchild_constants import WEBCHILD_MEMEBEROF_DATASOURCE_ID, WEBCHILD_PHYSICAL_DATASOURCE_ID, WEBCHILD_SUBSTANCEOF_DATASOURCE_ID, WEBCHILD_NAMESPACE
+from mowgli.lib.cskg.concept_net_predicates import HAS_A, MADE_OF, PART_OF,DEFINED_AS
+from mowgli.lib.etl.webchild.webchild_constants import WEBCHILD_MEMEBEROF_DATASOURCE_ID, WEBCHILD_PHYSICAL_DATASOURCE_ID, WEBCHILD_SUBSTANCEOF_DATASOURCE_ID, WEBCHILD_NAMESPACE,WEBCHILD_WORD_NET_WRAPPER
 from typing import Union
 
 """ 
@@ -9,12 +9,14 @@ Utility methods for mapping webchild data into MOWGLI CSKG data structures.
 """
 
 def findProperDataSourceId(csvPath:str) -> str:
-    if('partof_memberof' in csvPath):
+    if('memberof' in csvPath):
         return WEBCHILD_MEMEBEROF_DATASOURCE_ID,HAS_A
-    if('partof_physical' in csvPath):
-        return WEBCHILD_PHYSICAL_DATASOURCE_ID,HAS_A
-    if('partof_substanceof' in csvPath):
+    if('physical' in csvPath):
+        return WEBCHILD_PHYSICAL_DATASOURCE_ID,PART_OF
+    if('substanceof' in csvPath):
         return WEBCHILD_SUBSTANCEOF_DATASOURCE_ID,MADE_OF
+    if('WordNetWrapper' in csvPath):
+        return WEBCHILD_WORD_NET_WRAPPER,DEFINED_AS
 
 def webchild_node(cueOrResponse: str,*args, **kwargs) -> Node:
     """ 
@@ -39,6 +41,11 @@ def webchild_edge(*, cue: Union[Node, str], response: Union[Node, str], csvPath:
     :param strength: frequency of the response among all responses for the cue word
     """ 
     ds,r = findProperDataSourceId(csvPath)
+    
+    if ds is WEBCHILD_PHYSICAL_DATASOURCE_ID:
+        temp = cue
+        cue = response
+        response = temp
     return Edge(
         datasource=ds,
         subject=cue if isinstance(cue, Node) else webchild_node(cue,ds),
