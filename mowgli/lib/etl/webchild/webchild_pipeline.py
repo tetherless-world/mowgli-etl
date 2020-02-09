@@ -7,15 +7,17 @@ import os
 class webchildPipeline(_Pipeline):
 
     #helper function to gather csvs we want from entire webchild txt folder
-    def getFiles():
-        mList = os.listdir(os.getcwd()+ r'\WebChildData')
-        return mList
+    def get_files():
+        os.chdir("../../../../Data/WebChildData")
+        file_list = os.listdir(os.getcwd())
+        return file_list
 
     def __init__(self, *, **kwds):
         _Pipeline.__init__(
             self,
-            extractor=webchildExtractor(),
+            extractor= webChildExtractor(csv_file_paths = get_files()),
             id="webchild",
-            transformer=webchildTransformer(getFiles()),
+            transformer=webchildTransformer(),
             **kwds
         )
+ 
