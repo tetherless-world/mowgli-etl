@@ -1,0 +1,5 @@
+#word	sense-number	WordNet-synsetid	Definition (WordNet gloss)
+entity	1	100001740	that which is perceived or known or inferred to have its own distinct existence (living or nonliving)
+physical entity	1	100001930	an entity that has physical existence
+abstraction	6	100002137	a general concept formed by extracting common features from specific examples
+abstract entity	1	100002137	a general concept formed by extracting common features from specific examples

@@ -1,12 +1,11 @@
 from mowgli.lib.etl._transformer import _Transformer
 from mowgli.lib.cskg.node import Node
 from mowgli.lib.cskg.edge import Edge
-from mowgli.lib.etl.webchild.webchild_mappers import webchild_edge, webchild_node
 
 from typing import Generator, Union
 import csv
 
-class webchildTransformer(_Transformer):
+class WebchildTransformer(_Transformer):
 
     #helper functino to identify datasource and relation based off of 
     def find_proper_data_source_id(csv_path:str) -> str:
@@ -32,7 +31,7 @@ class webchildTransformer(_Transformer):
                 if('WordNetWrapper' in csv_file_path):
                     object1_node = Node(datasource="webchild", id="webchild:" + info[0], label=info[0])
                     object2_node = Node(datasource="webchild", id="webchild:" + info[3], label=info[3])
-                else if('physical' in csv_file_path):
+                elif('physical' in csv_file_path):
                 #switch which object is which node
                     object1_node = Node(datasource="webchild", id="webchild:" + info[3], label=info[4])
                     object2_node = Node(datasource="webchild", id="webchild:" + info[0], label=info[1])
