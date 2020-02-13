@@ -6,7 +6,7 @@ import pathlib
 import os
 
 def test_transform():
-    file_list = os.listdir(os.getcwd())
+    file_list = os.listdir(pathlib.Path(__file__).parent.absolute())
     txt_list = []
     for file in file_list:
         if file[-3] == "txt":
@@ -29,7 +29,7 @@ def test_transform():
                 ('webchild_member_of','welfare state', relation, 'membership'),
                 ('webchild_member_of','Brotulidae', relation, 'Flaviviridae'),
                 ('webchild_member_of','Juncaceae', relation, 'Bunyaviridae'),
-                ('webchild_member_of','arthropod family', relation, 'subfamily'),
+                ('webchild_member_of','arthropod family', relation, 'subfamily')
             ]
             expected_memberof_edges = set(Edge(datasource=datasource, object_=object1_node, relation=relation, subject=object2_node) for (datasource,object1_node,relation.object2_node) in expected_edge_tuples)
 
@@ -93,7 +93,7 @@ def test_transform():
                 ('webchild_word_net_wrapper','entity', relation, 'that which is perceived or known or inferred to have its own distinct existence (living or nonliving)'),
                 ('webchild_word_net_wrapper','physical entity', relation, 'an entity that has physical existence'),
                 ('webchild_word_net_wrapper','abstraction', relation, 'a general concept formed by extracting common features from specific examples'),
-                ('webchild_word_net_wrapper','abstract entity', relation, 'a general concept formed by extracting common features from specific examples'),
+                ('webchild_word_net_wrapper','abstract entity', relation, 'a general concept formed by extracting common features from specific examples')
             ]
             expected_word_net_edges = set(Edge(datasource=datasource, object_=object1_node, relation=relation, subject=object2_node) for (datasource,object1_node,relation.object2_node) in expected_edge_tuples)
 
