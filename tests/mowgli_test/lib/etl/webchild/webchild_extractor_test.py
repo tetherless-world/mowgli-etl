@@ -10,5 +10,8 @@ def test_webchild_extractor():
         if file[-3:] == "txt":
             txt_list.append(file)
     extractor = WebchildExtractor(csv_file_paths = txt_list)
-    expected_extraction = {'csv_file_paths': ['test_webchild_partof_substanceof.txt', 'test_webchild_partof_memberof.txt', 'test_webchild_partof_physical.txt', 'test_WordNetWrapper.txt']}
-    assert extractor.extract() == expected_extraction
+    expected_extraction = {'csv_file_paths': ['test_webchild_partof_memberof.txt','test_webchild_partof_physical.txt','test_webchild_partof_substanceof.txt', 'test_WordNetWrapper.txt']}
+    real_extraction = extractor.extract()
+    real_extraction['csv_file_paths'].sort()
+    expected_extraction['csv_file_paths'].sort() 
+    assert  real_extraction== expected_extraction
