@@ -5,7 +5,9 @@ from typing import Optional, Dict
 from urllib.request import urlopen
 
 from mowgli.lib.etl._pipeline_storage import _PipelineStorage
-
+from zipfile import ZipFile
+import os.path
+from io import BytesIO, TextIOBase
 
 class _Extractor(ABC):
     def __init__(self):
@@ -47,3 +49,35 @@ class _Extractor(ABC):
         f = bz2.open(path)
         storage.put(path, f)
         self._logger.info("extracted bz2 file %s", path)
+
+    def _extract_zip(self,from_url: str, force: bool, storage: _PipelineStorage) -> str:
+        """
+        Utility method to decompress a local zip file and load it into the given storage repository.
+        """
+        fbytes = urlopen(from_url)
+
+        with ZipFile(BytesIO(fbytes.read())) as ZipObj:
+            self._logger.info("extracting zip folder %s", from_url)
+    
+            file = ZipObj.filelist[0]
+
+            for f in ZipObj.filelist:
+              if f.filename[-3:] == 'xml':
+                  file = f
+                  break
+
+
+            if not force and storage.head(file.filename):
+                self._logger.info("%s already zipped and force not specified, skipping extraction",file.filename)
+                return file.filename
+
+            xmlobj = ZipObj.read(file.filename)
+            xmliobase = BytesIO(xmlobj)
+            
+            storage.put(file.filename, xmliobase)
+            return file.filename
+
+#TO DO
+#Only extract the one file
+#cache the storage diretly with the xml file name
+        

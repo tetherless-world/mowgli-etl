@@ -11,10 +11,12 @@ def sample_swow_strengths():
 
 @pytest.fixture
 def sample_archive_path():
+    
     """
     Generate a bz2 archive from the sample strengths file and return the path.
     Remove the file on clean up.
     """
+
     with open(_sample_swow_strengths_path, mode='rb') as f:
         compressed = bz2.compress(f.read())
         current_dir = Path(__file__).parent
