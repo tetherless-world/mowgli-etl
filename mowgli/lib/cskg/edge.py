@@ -60,6 +60,10 @@ class Edge:
     def relation(self):
         return self.__relation
 
+    @property
+    def subject(self):
+        return self.__subject
+
     def __repr__(self):
         key_vals = ', '.join(f'{key}={val}' for key, val in sorted(self.__dict__.items()))
         return f'{self.__class__.__name__}({key_vals})'
