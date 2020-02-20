@@ -1,3 +1,4 @@
+import bz2
 import logging
 from abc import ABC, abstractmethod
 from typing import Optional, Dict
@@ -32,3 +33,17 @@ class _Extractor(ABC):
         :param force: force extraction, ignoring any cached data
         :return a **kwds dictionary to merge with kwds to pass to transformer
         """
+
+    def _extract_bz2(self, path: str, force: bool, storage: _PipelineStorage) -> None:
+        """
+        Utility method to decompress a local bz2 file and load it into the given storage repository.
+        """
+        if not force and storage.head(path):
+            self._logger.info(
+                "%s already extracted and force not specified, skipping decompression",
+                path)
+            return
+        self._logger.info("extracting bz2 file %s", path)
+        f = bz2.open(path)
+        storage.put(path, f)
+        self._logger.info("extracted bz2 file %s", path)

@@ -1,0 +1,216 @@
+
+# Auto detect text files and perform LF normalization
+* text=auto eol=lf
+
+#
+# The above will handle all files NOT found below
+#
+
+# Archives
+# ========
+*.7z  binary
+*.gz  binary
+*.jar binary
+*.rar binary
+*.tar binary
+*.zip binary
+
+# Audio
+# =====
+*.kar  binary
+*.m4a  binary
+*.mid  binary
+*.midi binary
+*.mp3  binary
+*.ogg  binary
+*.ra   binary
+
+# Binary files
+# ============
+*.db        binary
+*.exe       binary
+*.p         binary
+*.pkl       binary
+*.pyc       binary
+*.pyd       binary
+*.pyo       binary
+
+# Config Files
+# ============
+*.bowerrc       text
+*.cnf           text
+*.conf          text
+*.config        text
+*.dockerignore  text
+*.npmignore     text
+*.yaml          text
+*.yml           text
+.browserslistrc text
+.editorconfig   text
+.gitattributes  text
+.gitconfig      text
+.htaccess       text
+.slugignore     text
+Dockerfile      text
+Makefile        text
+Procfile        text
+browserslist    text
+makefile        text
+
+# Documents
+# =========
+*.DOC           diff=astextplain
+*.DOCX          diff=astextplain
+*.DOT           diff=astextplain
+*.PDF           diff=astextplain
+*.RTF           diff=astextplain
+*.adoc          text
+*.csv           text
+*.doc           diff=astextplain
+*.docx          diff=astextplain
+*.dot           diff=astextplain
+*.markdown      text
+*.md            text
+*.mdown         text
+*.mdtext        text
+*.mdtxt         text
+*.mdwn          text
+*.mkd           text
+*.mkdn          text
+*.mustache      text
+*.pdf           diff=astextplain
+*.rtf           diff=astextplain
+*.sql           text
+*.tab           text
+*.textile       text
+*.tsv           text
+*.txt           text
+*COPYRIGHT*     text
+*README*        text
+AUTHORS         text
+CHANGELOG       text
+CHANGES         text
+CONTRIBUTING    text
+COPYING         text
+INSTALL         text
+LICENSE         text
+NEWS            text
+TODO            text
+copyright       text
+license         text
+readme          text
+
+# Fonts
+# =====
+*.ttf   binary
+*.eot   binary
+*.otf   binary
+*.woff  binary
+*.woff2 binary
+
+# Graphics
+# ========
+*.ai   binary
+*.bmp  binary
+*.eps  binary
+*.gif  binary
+*.ico  binary
+*.ico  binary
+*.jng  binary
+*.jp2  binary
+*.jpeg binary
+*.jpg  binary
+*.jpx  binary
+*.jxr  binary
+*.pdf  binary
+*.png  binary
+*.psb  binary
+*.psd  binary
+*.svg  text
+*.svgz binary
+*.tif  binary
+*.tif  binary
+*.tiff binary
+*.tiff binary
+*.wbmp binary
+*.webp binary
+
+# Linters
+# =======
+.csslintrc    text
+.eslintrc     text
+.htmlhintrc   text
+.jscsrc       text
+.jshintrc     text
+.jshintignore text
+.stylelintrc  text
+
+# Source files
+# ============
+*.pxd           text
+*.py            text
+*.py3           text
+*.pyw           text
+*.pyx           text
+*.bat           text eol=crlf
+*.coffee        text
+*.css           text
+*.htm           text
+*.html          text
+*.inc           text
+*.ini           text
+*.js            text
+*.json          text
+*.jsx           text
+*.less          text
+*.od            text
+*.onlydata      text
+*.php           text
+*.pl            text
+*.py            text
+*.rb            text
+*.sass          text
+*.scm           text
+*.scss          text
+*.sh            text eol=lf
+*.sql           text
+*.styl          text
+*.tag           text
+*.ts            text
+*.tsx           text
+*.xml           text
+*.xhtml         text
+*.dot           text
+*.ejs           text
+*.haml          text
+*.handlebars    text
+*.hbs           text
+*.hbt           text
+*.jade          text
+*.latte         text
+*.mustache      text
+*.njk           text
+*.phtml         text
+*.tmpl          text
+*.tpl           text
+*.twig          text
+
+# Video
+# =====
+*.3gpp binary
+*.3gp  binary
+*.as   binary
+*.asf  binary
+*.asx  binary
+*.fla  binary
+*.flv  binary
+*.m4v  binary
+*.mng  binary
+*.mov  binary
+*.mp4  binary
+*.mpeg binary
+*.mpg  binary
+*.ogv  binary
+*.swc  binary
+*.swf  binary
+*.webm binary
