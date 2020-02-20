@@ -6,9 +6,9 @@ import json
 
 from mowgli.lib.cskg.edge import Edge
 from mowgli.lib.cskg.node import Node
-from mowgli.lib.cskg.loader._cskg_loader import _CskgLoader
+from mowgli.lib.etl._loader import _Loader
 
-class CsvCskgLoader(_CskgLoader):
+class CsvLoader(_Loader):
     def __init__(self, *, node_file: IOBase, edge_file: IOBase):
         writer_opts = {'delimiter': '\t', 'lineterminator': '\n'}
 
@@ -21,7 +21,7 @@ class CsvCskgLoader(_CskgLoader):
         self.__edge_writer.writeheader()
         self.__node_writer.writeheader()
 
-    # _CskgWriter Implementations 
+    # _CskgWriter Implementations
 
     @classmethod
     def mime_type(cls):
@@ -67,7 +67,7 @@ class CsvCskgLoader(_CskgLoader):
 
     @staticmethod
     def _serialize_field(value, serialize_fn: FunctionType) -> str:
-        """ 
+        """
         Call serialization function on a value and handle None values
         """
         serialized = serialize_fn(value)

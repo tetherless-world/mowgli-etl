@@ -4,9 +4,9 @@ from abc import ABC, abstractmethod
 from mowgli.lib.cskg.edge import Edge
 from mowgli.lib.cskg.node import Node
 
-class _CskgLoader(ABC):
+class _Loader(ABC):
     def __init__(self):
-        self._logger = logging.getLogger(self._CskgWriter.__name__)
+        self._logger = logging.getLogger(self.__class__.__name__)
 
     @classmethod
     @abstractmethod
@@ -19,4 +19,4 @@ class _CskgLoader(ABC):
 
     @abstractmethod
     def load_node(self, node: Node):
-        pass 
+        pass
