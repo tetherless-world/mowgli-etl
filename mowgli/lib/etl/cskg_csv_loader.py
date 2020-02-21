@@ -1,5 +1,5 @@
 from csv import DictWriter
-from io import IOBase
+from io import StringIO
 from types import FunctionType
 from typing import Dict, Union
 
@@ -8,35 +8,26 @@ from mowgli.lib.cskg.node import Node
 from mowgli.lib.etl._loader import _Loader
 
 class CskgCsvLoader(_Loader):
-    def __init__(self, *, node_file: Union[IOBase, str], edge_file: Union[IOBase]):
-        self.__edge_file = edge_file
-        self.__node_file = node_file
+    def open(self, pipeline_storage):
+        self.__pipeline_storage = pipeline_storage
 
-    def __enter__(self):
-        if isinstance(self.__edge_file, str):
-            self.__edge_file = open(self.__edge_file, "w+")
-        if isinstance(self.__node_file, str):
-            self.__node_file = open(self.__node_file, "w+")
-
-        edge_fields = self.__class__._edge_csv_fields().keys()
-        node_fields = self.__class__._node_csv_fields().keys()
+        self.__edge_file = StringIO()
+        self.__node_file = StringIO()
 
         writer_opts = {'delimiter': '\t', 'lineterminator': '\n'}
+        edge_fields = self.__class__._edge_csv_fields().keys()
         self.__edge_writer = DictWriter(self.__edge_file, edge_fields, **writer_opts)
-        self.__node_writer = DictWriter(self.__node_file, node_fields, **writer_opts)
-
         self.__edge_writer.writeheader()
+
+        node_fields = self.__class__._node_csv_fields().keys()
+        self.__node_writer = DictWriter(self.__node_file, node_fields, **writer_opts)
         self.__node_writer.writeheader()
 
         return self
 
-    def __exit__(self, *args, **kwds):
-        self.__edge_file.close()
-        self.__node_file.close()
-
-    @classmethod
-    def mime_type(cls):
-        return 'csv'
+    def close(self):
+        self.__pipeline_storage.put("edges.csv", self.__edge_file.getvalue())
+        self.__pipeline_storage.put("nodes.csv", self.__node_file.getvalue())
 
     def load_edge(self, edge: Edge):
         self.__class__._write_csv_line(self.__edge_writer, self.__class__._edge_csv_fields(), edge)

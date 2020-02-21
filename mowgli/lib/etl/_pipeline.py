@@ -3,6 +3,7 @@ from abc import ABC
 from configargparse import ArgParser
 
 from mowgli.lib.etl._extractor import _Extractor
+from mowgli.lib.etl._loader import _Loader
 from mowgli.lib.etl._transformer import _Transformer
 
 
