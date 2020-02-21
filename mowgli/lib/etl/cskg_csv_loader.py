@@ -8,8 +8,8 @@ from mowgli.lib.cskg.node import Node
 from mowgli.lib.etl._loader import _Loader
 
 class CskgCsvLoader(_Loader):
-    def open(self, pipeline_storage):
-        self.__pipeline_storage = pipeline_storage
+    def open(self, storage):
+        self.__storage = storage
 
         self.__edge_file = StringIO()
         self.__node_file = StringIO()
@@ -26,8 +26,8 @@ class CskgCsvLoader(_Loader):
         return self
 
     def close(self):
-        self.__pipeline_storage.put("edges.csv", self.__edge_file.getvalue())
-        self.__pipeline_storage.put("nodes.csv", self.__node_file.getvalue())
+        self.__storage.put("edges.csv", self.__edge_file.getvalue())
+        self.__storage.put("nodes.csv", self.__node_file.getvalue())
 
     def load_edge(self, edge: Edge):
         self.__class__._write_csv_line(self.__edge_writer, self.__class__._edge_csv_fields(), edge)

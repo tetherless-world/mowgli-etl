@@ -46,18 +46,16 @@ class Cli:
             return extract_kwds if extract_kwds is not None else {}
 
         def load(self, graph_generator: Generator[Union[Node, Edge], None, None]) -> None:
-            # transformed_storage = FilePipelineStorage.create(os.path.join(self.__data_dir_path, "transformed"))
-            for node_or_edge in graph_generator:
-                if isinstance(node_or_edge, Node):
-                    node = node_or_edge
-                    print("Node", node.id)
-                elif isinstance(node_or_edge, Edge):
-                    edge = node_or_edge
-                    print("Edge")
-                else:
-                    raise ValueError(type(node_or_edge))
-            # graph_ttl = graph.serialize(format="ttl")
-            # transformed_storage.put(self.__pipeline.id + ".ttl", graph_ttl)
+            loaded_storage = FilePipelineStorage.create(os.path.join(self.__data_dir_path, "loaded"))
+            with self.__pipeline.loader.open(storage=loaded_storage) as loader:
+                for node_or_edge in graph_generator:
+                    if isinstance(node_or_edge, Node):
+                        node = node_or_edge
+                        loader.load_node(node_or_edge)
+                    elif isinstance(node_or_edge, Edge):
+                        loader.load_edge(node_or_edge)
+                    else:
+                        raise ValueError(type(node_or_edge))
 
         def transform(self, force: bool, **extract_kwds):
             return self.__pipeline.transformer.transform(**extract_kwds)

@@ -23,7 +23,7 @@ class _Loader(ABC):
         self.close()
 
     @abstractmethod
-    def open(self, pipeline_storage: _PipelineStorage):
+    def open(self, storage: _PipelineStorage):
         """
         Open this loader before calling load_* methods.
         :param pipeline_storage:
