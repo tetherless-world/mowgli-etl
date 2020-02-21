@@ -1,9 +1,12 @@
 from abc import ABC
+from typing import Optional
 
 from configargparse import ArgParser
 
 from mowgli.lib.etl._extractor import _Extractor
+from mowgli.lib.etl._loader import _Loader
 from mowgli.lib.etl._transformer import _Transformer
+from mowgli.lib.etl.cskg_csv_loader import CskgCsvLoader
 
 
 class _Pipeline(ABC):
@@ -17,6 +20,7 @@ class _Pipeline(ABC):
         """
         self.__extractor = extractor
         self.__id = id
+        self.__loader = self.__create_loader(**kwds)
         self.__transformer = transformer
 
     @classmethod
@@ -24,6 +28,22 @@ class _Pipeline(ABC):
         """
         Add pipeline-specific arguments. The parsed arguments are passed to the constructor as keywords.
         """
+        cls.__add_loader_arguments(arg_parser)
+
+    @classmethod
+    def __add_loader_arguments(cls, arg_parser):
+        arg_parser.add_argument("--loader", default="cskg_csv")
+
+    def __create_loader(self, loader: Optional[str], **loader_kwds) -> _Loader:
+        if loader is None:
+            loader = "cskg_csv"
+        else:
+            loader = loader.lower()
+
+        if loader == "cskg_csv":
+            return CskgCsvLoader()
+        else:
+            raise NotImplementedError(loader)
 
     @property
     def extractor(self):
@@ -32,6 +52,10 @@ class _Pipeline(ABC):
     @property
     def id(self):
         return self.__id
+
+    @property
+    def loader(self):
+        return self.__loader
 
     @property
     def transformer(self):

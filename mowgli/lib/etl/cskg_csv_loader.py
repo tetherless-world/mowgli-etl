@@ -1,31 +1,33 @@
 from csv import DictWriter
-from io import IOBase
+from io import StringIO
 from types import FunctionType
 from typing import Dict, Union
-import json
 
 from mowgli.lib.cskg.edge import Edge
 from mowgli.lib.cskg.node import Node
-from mowgli.lib.cskg.loader._cskg_loader import _CskgLoader
+from mowgli.lib.etl._loader import _Loader
 
-class CsvCskgLoader(_CskgLoader):
-    def __init__(self, *, node_file: IOBase, edge_file: IOBase):
+class CskgCsvLoader(_Loader):
+    def open(self, storage):
+        self.__storage = storage
+
+        self.__edge_file = StringIO()
+        self.__node_file = StringIO()
+
         writer_opts = {'delimiter': '\t', 'lineterminator': '\n'}
-
         edge_fields = self.__class__._edge_csv_fields().keys()
-        node_fields = self.__class__._node_csv_fields().keys()
-
-        self.__edge_writer = DictWriter(edge_file, edge_fields, **writer_opts)
-        self.__node_writer = DictWriter(node_file, node_fields, **writer_opts)
-
+        self.__edge_writer = DictWriter(self.__edge_file, edge_fields, **writer_opts)
         self.__edge_writer.writeheader()
+
+        node_fields = self.__class__._node_csv_fields().keys()
+        self.__node_writer = DictWriter(self.__node_file, node_fields, **writer_opts)
         self.__node_writer.writeheader()
 
-    # _CskgWriter Implementations 
+        return self
 
-    @classmethod
-    def mime_type(cls):
-        return 'csv'
+    def close(self):
+        self.__storage.put("edges.csv", self.__edge_file.getvalue())
+        self.__storage.put("nodes.csv", self.__node_file.getvalue())
 
     def load_edge(self, edge: Edge):
         self.__class__._write_csv_line(self.__edge_writer, self.__class__._edge_csv_fields(), edge)
@@ -67,7 +69,7 @@ class CsvCskgLoader(_CskgLoader):
 
     @staticmethod
     def _serialize_field(value, serialize_fn: FunctionType) -> str:
-        """ 
+        """
         Call serialization function on a value and handle None values
         """
         serialized = serialize_fn(value)

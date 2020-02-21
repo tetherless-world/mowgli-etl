@@ -15,5 +15,6 @@ class EatPipeline(_Pipeline):
 
     @classmethod
     def add_arguments(cls, arg_parser):
+        _Pipeline.add_arguments(arg_parser)
         arg_parser.add_argument("--xml-file-path", help="EAT .xml file path", required=True)
 
