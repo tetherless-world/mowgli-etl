@@ -2,7 +2,7 @@ import io
 
 from mowgli.lib.cskg.node import Node
 from mowgli.lib.cskg.edge import Edge
-from mowgli.lib.cskg.loader.csv_cskg_loader import CsvCskgLoader
+from mowgli.lib.etl.cskg_csv_loader import CskgCsvLoader
 
 _EXPECTED_NODE_HEADER = 'id\tlabel\taliases\tpos\tdatasource\tother'
 _EXPECTED_EDGE_HEADER = 'subject\tpredicate\tobject\tdatasource\tweight\tother'
@@ -20,7 +20,7 @@ def test_write_node():
         pos='N'
     )
 
-    loader = CsvCskgLoader(node_file=node_buffer, edge_file=edge_buffer)
+    loader = CskgCsvLoader(node_file=node_buffer, edge_file=edge_buffer)
 
     loader.load_node(test_node)
 
@@ -47,7 +47,7 @@ def test_write_edge():
         weight=0.999
     )
 
-    loader = CsvCskgLoader(node_file=node_buffer, edge_file=edge_buffer)
+    loader = CskgCsvLoader(node_file=node_buffer, edge_file=edge_buffer)
 
     loader.load_edge(test_edge)
 
