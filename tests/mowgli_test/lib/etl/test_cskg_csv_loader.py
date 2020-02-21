@@ -20,19 +20,18 @@ def test_write_node():
         pos='N'
     )
 
-    loader = CskgCsvLoader(node_file=node_buffer, edge_file=edge_buffer)
+    with CskgCsvLoader(node_file=node_buffer, edge_file=edge_buffer) as loader:
+        loader.load_node(test_node)
 
-    loader.load_node(test_node)
+        expected_node_text = (
+            _EXPECTED_NODE_HEADER + '\n'
+            + 'test_nid\tTest Node\tt-node Node Test\tN\ttest_datasource\t'
+            + "{'datasets': ['test_dataset', 'other_test_dataset']}\n"
+        )
 
-    expected_node_text = (
-        _EXPECTED_NODE_HEADER + '\n'
-        + 'test_nid\tTest Node\tt-node Node Test\tN\ttest_datasource\t'
-        + "{'datasets': ['test_dataset', 'other_test_dataset']}\n"
-    )
+        assert node_buffer.getvalue() == expected_node_text
 
-    assert node_buffer.getvalue() == expected_node_text
-
-    assert edge_buffer.getvalue() == _EXPECTED_EDGE_HEADER + '\n'
+        assert edge_buffer.getvalue() == _EXPECTED_EDGE_HEADER + '\n'
 
 def test_write_edge():
     node_buffer = io.StringIO()
@@ -47,16 +46,15 @@ def test_write_edge():
         weight=0.999
     )
 
-    loader = CskgCsvLoader(node_file=node_buffer, edge_file=edge_buffer)
+    with CskgCsvLoader(node_file=node_buffer, edge_file=edge_buffer) as loader:
+        loader.load_edge(test_edge)
 
-    loader.load_edge(test_edge)
+        expected_edge_text = (
+            _EXPECTED_EDGE_HEADER + '\n'
+            + 'test_subject\ttest_rel\ttest_obj\ttest_datasource\t0.999\t'
+            + "{'datasets': ['test_dataset', 'other_test_dataset']}\n"
+        )
 
-    expected_edge_text = (
-        _EXPECTED_EDGE_HEADER + '\n'
-        + 'test_subject\ttest_rel\ttest_obj\ttest_datasource\t0.999\t'
-        + "{'datasets': ['test_dataset', 'other_test_dataset']}\n"
-    )
+        assert edge_buffer.getvalue() == expected_edge_text
 
-    assert edge_buffer.getvalue() == expected_edge_text
-
-    assert node_buffer.getvalue() == _EXPECTED_NODE_HEADER + '\n'
+        assert node_buffer.getvalue() == _EXPECTED_NODE_HEADER + '\n'

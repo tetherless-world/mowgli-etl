@@ -22,8 +22,9 @@ class SwowPipeline(_Pipeline):
 
     @classmethod
     def add_arguments(cls, arg_parser):
+        _Pipeline.add_arguments(arg_parser)
         arg_parser.add_argument(
-            "--swow-archive-path", 
-            help="Path to a bz2 archive to use as a source of SWOW data", 
+            "--swow-archive-path",
+            help="Path to a bz2 archive to use as a source of SWOW data",
             required=False,
             default=SWOW_ARCHIVE_PATH)

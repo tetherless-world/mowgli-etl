@@ -17,6 +17,7 @@ class _Pipeline(ABC):
         """
         self.__extractor = extractor
         self.__id = id
+        self.__loader = self.__create_loader(**kwds)
         self.__transformer = transformer
 
     @classmethod
@@ -24,6 +25,14 @@ class _Pipeline(ABC):
         """
         Add pipeline-specific arguments. The parsed arguments are passed to the constructor as keywords.
         """
+        cls.__add_loader_arguments(arg_parser)
+
+    @classmethod
+    def __add_loader_arguments(cls, arg_parser):
+        pass
+
+    def __create_loader(self, **loader_kwds) -> _Loader:
+        pass
 
     @property
     def extractor(self):

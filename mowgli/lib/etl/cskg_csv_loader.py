@@ -2,26 +2,37 @@ from csv import DictWriter
 from io import IOBase
 from types import FunctionType
 from typing import Dict, Union
-import json
 
 from mowgli.lib.cskg.edge import Edge
 from mowgli.lib.cskg.node import Node
 from mowgli.lib.etl._loader import _Loader
 
 class CskgCsvLoader(_Loader):
-    def __init__(self, *, node_file: IOBase, edge_file: IOBase):
-        writer_opts = {'delimiter': '\t', 'lineterminator': '\n'}
+    def __init__(self, *, node_file: Union[IOBase, str], edge_file: Union[IOBase]):
+        self.__edge_file = edge_file
+        self.__node_file = node_file
+
+    def __enter__(self):
+        if isinstance(self.__edge_file, str):
+            self.__edge_file = open(self.__edge_file, "w+")
+        if isinstance(self.__node_file, str):
+            self.__node_file = open(self.__node_file, "w+")
 
         edge_fields = self.__class__._edge_csv_fields().keys()
         node_fields = self.__class__._node_csv_fields().keys()
 
-        self.__edge_writer = DictWriter(edge_file, edge_fields, **writer_opts)
-        self.__node_writer = DictWriter(node_file, node_fields, **writer_opts)
+        writer_opts = {'delimiter': '\t', 'lineterminator': '\n'}
+        self.__edge_writer = DictWriter(self.__edge_file, edge_fields, **writer_opts)
+        self.__node_writer = DictWriter(self.__node_file, node_fields, **writer_opts)
 
         self.__edge_writer.writeheader()
         self.__node_writer.writeheader()
 
-    # _CskgWriter Implementations
+        return self
+
+    def __exit__(self, *args, **kwds):
+        self.__edge_file.close()
+        self.__node_file.close()
 
     @classmethod
     def mime_type(cls):
