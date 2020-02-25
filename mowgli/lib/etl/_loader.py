@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 
 from mowgli.lib.cskg.edge import Edge
 from mowgli.lib.cskg.node import Node
-from mowgli.lib.etl._pipeline_storage import _PipelineStorage
+from mowgli.lib.etl.pipeline_storage import PipelineStorage
 
 
 class _Loader(ABC):
@@ -23,11 +23,9 @@ class _Loader(ABC):
         self.close()
 
     @abstractmethod
-    def open(self, storage: _PipelineStorage):
+    def open(self, storage: PipelineStorage):
         """
         Open this loader before calling load_* methods.
-        :param pipeline_storage:
-        :return: self
         """
         return self
 

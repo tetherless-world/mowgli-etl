@@ -1,5 +1,4 @@
 from csv import DictWriter
-from io import StringIO
 from types import FunctionType
 from typing import Dict, Union
 
@@ -7,12 +6,14 @@ from mowgli.lib.cskg.edge import Edge
 from mowgli.lib.cskg.node import Node
 from mowgli.lib.etl._loader import _Loader
 
+
 class CskgCsvLoader(_Loader):
     def open(self, storage):
         self.__storage = storage
 
-        self.__edge_file = StringIO()
-        self.__node_file = StringIO()
+        # Open in text mode
+        self.__edge_file = open(storage.loaded_data_dir_path / "edges.csv", "w+")
+        self.__node_file = open(storage.loaded_data_dir_path / "nodes.csv", "w+")
 
         writer_opts = {'delimiter': '\t', 'lineterminator': '\n'}
         edge_fields = self.__class__._edge_csv_fields().keys()
@@ -26,8 +27,8 @@ class CskgCsvLoader(_Loader):
         return self
 
     def close(self):
-        self.__storage.put("edges.csv", self.__edge_file.getvalue())
-        self.__storage.put("nodes.csv", self.__node_file.getvalue())
+        self.__edge_file.close()
+        self.__node_file.close()
 
     def load_edge(self, edge: Edge):
         self.__class__._write_csv_line(self.__edge_writer, self.__class__._edge_csv_fields(), edge)
