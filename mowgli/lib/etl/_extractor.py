@@ -1,15 +1,15 @@
 import bz2
 import logging
+import os.path
 from abc import ABC, abstractmethod
 from typing import Optional, Dict
 from urllib.request import urlopen
+from zipfile import ZipFile
 
 from pathvalidate import sanitize_filename
 
 from mowgli.lib.etl.pipeline_storage import PipelineStorage
-from zipfile import ZipFile
-import os.path
-from io import BytesIO, TextIOBase
+
 
 class _Extractor(ABC):
     def __init__(self):
@@ -87,7 +87,7 @@ class _Extractor(ABC):
 
                 xmlobj = ZipObj.read(file.filename)
 
-                extracted_file_path = storage.extracted_data_dir_path / file.filename
+                extracted_file_path = storage.extracted_data_dir_path / sanitize_filename(file.filename)
                 with open(extracted_file_path, "w+b") as extracted_file:
                     extracted_file.write(xmlobj)
 
