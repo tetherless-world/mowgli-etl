@@ -10,7 +10,7 @@ from mowgli import paths
 from mowgli.lib.cskg.edge import Edge
 from mowgli.lib.cskg.node import Node
 from mowgli.lib.etl._pipeline import _Pipeline
-from mowgli.lib.etl.file_pipeline_storage import FilePipelineStorage
+from mowgli.lib.etl.pipeline_storage import PipelineStorage
 
 
 class Cli:
@@ -19,7 +19,7 @@ class Cli:
             self.__args = args
             self.__logger = logger
             self.__pipeline = pipeline
-            self.__data_dir_path = self.__create_data_dir_path()
+            self.__storage = PipelineStorage(pipeline_id=pipeline.id, root_data_dir_path=self.__create_data_dir_path())
 
         def __create_data_dir_path(self) -> str:
             data_dir_path = self.__args.data_dir_path
@@ -41,13 +41,11 @@ class Cli:
             return data_dir_path
 
         def extract(self, force: bool):
-            extract_kwds = self.__pipeline.extractor.extract(force=force, storage=FilePipelineStorage.create(
-                os.path.join(self.__data_dir_path, "extracted")))
+            extract_kwds = self.__pipeline.extractor.extract(force=force, storage=self.__storage)
             return extract_kwds if extract_kwds is not None else {}
 
         def load(self, graph_generator: Generator[Union[Node, Edge], None, None]) -> None:
-            loaded_storage = FilePipelineStorage.create(os.path.join(self.__data_dir_path, "loaded"))
-            with self.__pipeline.loader.open(storage=loaded_storage) as loader:
+            with self.__pipeline.loader.open(storage=self.__storage) as loader:
                 for node_or_edge in graph_generator:
                     if isinstance(node_or_edge, Node):
                         node = node_or_edge
