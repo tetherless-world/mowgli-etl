@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<free-association-norms>
+   <cue word="face" fr="9999" pos="N">
+        <target word="book" g="7" p="3" fsg=".429" pos="N"/>
+        <target word="time" g="7" p="2" fsg=".286" pos="N"/>
+        <target word="lift" g="7" p="1" fsg=".143" pos="V"/>
+        <target word="mask" g="7" p="1" fsg=".143" pos="N"/>
+    </cue>
+    <cue word="half" fr="23" pos="N">
+        <target word="life" g="11" p="5" fsg=".455" pos="N"/>
+        <target word="whole" g="11" p="2" fsg=".182" pos="N"/>
+        <target word="part" g="11" p="2" fsg=".182" pos="N"/>
+        <target word="split" g="11" p="1" fsg=".091" pos="V"/>
+        <target word="full" g="11" p="1" fsg=".091" pos="AJ"/>
+    </cue>
+    <cue word="swing" fr="36" pos="V">
+        <target word="bat" g="5" p="2" fsg=".4" pos="N"/>
+        <target word="dance" g="5" p="1" fsg=".2" pos="V"/>
+        <target word="set" g="5" p="1" fsg=".2" pos="N"/>
+        <target word="sway" g="5" p="1" fsg=".2" pos="V"/>
+    </cue>
+</free-association-norms>
