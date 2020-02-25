@@ -3,10 +3,11 @@ from pathlib import Path
 
 
 class PipelineStorage:
-    def __init__(self, data_dir_path: Path, pipeline_id: str):
-        self.__extracted_data_dir_path = self.__makedirs(data_dir_path / pipeline_id / "extracted")
-        self.__loaded_data_dir_path = self.__makedirs(data_dir_path / pipeline_id / "loaded")
-        self.__transformed_data_dir_path = self.__makedirs(data_dir_path / pipeline_id / "transformed")
+    def __init__(self, *, pipeline_id: str, root_data_dir_path: Path):
+        pipeline_data_dir_path = root_data_dir_path / Path(pipeline_id)
+        self.__extracted_data_dir_path = self.__makedirs(pipeline_data_dir_path / "extracted")
+        self.__loaded_data_dir_path = self.__makedirs(pipeline_data_dir_path / "loaded")
+        self.__transformed_data_dir_path = self.__makedirs(pipeline_data_dir_path / "transformed")
 
     def __makedirs(self, dir_path: Path) -> Path:
         if not os.path.isdir(dir_path):
