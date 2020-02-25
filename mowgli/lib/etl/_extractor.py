@@ -23,7 +23,7 @@ class _Extractor(ABC):
                 from_url)
             return
 
-        self._logger.info("downloading %s to %s", from_url)
+        self._logger.info("downloading %s", from_url)
         f = urlopen(from_url)
         storage.put(from_url, f)
         self._logger.info("downloaded %s", from_url)
@@ -50,11 +50,15 @@ class _Extractor(ABC):
         storage.put(path, f)
         self._logger.info("extracted bz2 file %s", path)
 
-    def _extract_zip(self,from_url: str, force: bool, storage: _PipelineStorage) -> str:
+    def _extract_zip(self,from_url: str, force: bool, storage: _PipelineStorage,target:str) -> str:
         """
         Utility method to decompress a local zip file and load it into the given storage repository.
         """
-        fbytes = urlopen(from_url)
+        
+        if not storage.head(from_url):
+            self._logger.info("%s zip not downloaded, try again",from_url)
+        
+        fbytes = storage.get(from_url)
 
         with ZipFile(BytesIO(fbytes.read())) as ZipObj:
             self._logger.info("extracting zip folder %s", from_url)
@@ -62,14 +66,15 @@ class _Extractor(ABC):
             file = ZipObj.filelist[0]
 
             for f in ZipObj.filelist:
-              if f.filename[-3:] == 'xml':
+              dirlist = f.filename.split("/")
+              if dirlist[-1] == target:
                   file = f
                   break
 
 
-            if not force and storage.head(file.filename):
+            """if not force and storage.head(file.filename):
                 self._logger.info("%s already zipped and force not specified, skipping extraction",file.filename)
-                return file.filename
+                return file.filename"""
 
             xmlobj = ZipObj.read(file.filename)
             xmliobase = BytesIO(xmlobj)
