@@ -26,8 +26,6 @@ class _Loader(ABC):
     def open(self, storage: PipelineStorage):
         """
         Open this loader before calling load_* methods.
-        :param pipeline_storage:
-        :return: self
         """
         return self
 

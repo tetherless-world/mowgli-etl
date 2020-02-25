@@ -47,7 +47,7 @@ class _Extractor(ABC):
         """
 
         extracted_file_path = storage.extracted_data_dir_path / sanitize_filename(path)
-        if not force and storage.head(extracted_file_path):
+        if not force and os.path.isfile(extracted_file_path):
             self._logger.info(
                 "%s already extracted and force not specified, skipping decompression",
                 path)
@@ -65,8 +65,8 @@ class _Extractor(ABC):
 
         zip_file_path = storage.extracted_data_dir_path / sanitize_filename(from_url)
 
-        if not storage.head(zip_file_path):
-            self._logger.info("%s zip not downloaded, try again", from_url)
+        # if not os.path.isfile(zip_file_path):
+        #     self._logger.info("%s zip not downloaded, try again", from_url)
 
         with open(zip_file_path, "rb") as extracted_file:
             with ZipFile(extracted_file) as ZipObj:
@@ -91,4 +91,4 @@ class _Extractor(ABC):
                 with open(extracted_file_path, "w+b") as extracted_file:
                     extracted_file.write(xmlobj)
 
-                return file.filename
+                return extracted_file_path

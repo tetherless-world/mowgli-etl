@@ -10,9 +10,9 @@ class USFExtractor(_Extractor):
 
     def extract(self, *, force: bool, storage: PipelineStorage, url=from_url, target=usf_target)  -> Optional[Dict[str, object]]:
         self._download(from_url=url, force=force,storage=storage)
-        filename = self._extract_zip(force=force,storage=storage,from_url=url,target=target)
-        strength_file_bytes = storage.get(filename)
-        strength_file_text = TextIOWrapper(strength_file_bytes)
+        extracted_file_path = self._extract_zip(force=force,storage=storage,from_url=url,target=target)
+        with open(extracted_file_path, "r") as f:
+            strength_file_text = f.read()
         return {STRENGTH_FILE_KEY: strength_file_text}
 
 

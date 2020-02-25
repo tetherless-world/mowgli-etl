@@ -11,8 +11,8 @@ class CskgCsvLoader(_Loader):
     def open(self, storage):
         self.__storage = storage
 
-        self.__edge_file = StringIO()
-        self.__node_file = StringIO()
+        self.__edge_file = open(storage.loaded_data_dir_path / "edges.csv", "w+b")
+        self.__node_file = open(storage.loaded_data_dir_path / "nodes.csv", "w+b")
 
         writer_opts = {'delimiter': '\t', 'lineterminator': '\n'}
         edge_fields = self.__class__._edge_csv_fields().keys()
@@ -26,8 +26,8 @@ class CskgCsvLoader(_Loader):
         return self
 
     def close(self):
-        self.__storage.put("edges.csv", self.__edge_file.getvalue())
-        self.__storage.put("nodes.csv", self.__node_file.getvalue())
+        self.__edge_file.close()
+        self.__node_file.close()
 
     def load_edge(self, edge: Edge):
         self.__class__._write_csv_line(self.__edge_writer, self.__class__._edge_csv_fields(), edge)
