@@ -3,12 +3,12 @@ import os
 import pathlib
 
 def test_webchild_extractor():
-    path_dir = str(pathlib.Path(__file__).parent.absolute()) 
+    path_dir = pathlib.Path(__file__).parent.absolute()
     
-    extractor = WebchildExtractor(memberof_csv_file_path = path_dir + r'\test_webchild_partof_memberof.txt', 
-                                  physical_csv_file_path= path_dir + r'\test_webchild_partof_physical.txt', 
-                                  substanceof_csv_file_path= path_dir + r'\test_webchild_partof_substanceof.txt', 
-                                  wordnet_csv_file_path= path_dir + r'\test_WordNetWrapper.txt' )
+    extractor = WebchildExtractor(memberof_csv_file_path = path_dir.joinpath('test_webchild_partof_memberof.txt'),
+                                  physical_csv_file_path= path_dir.joinpath('test_webchild_partof_physical.txt'), 
+                                  substanceof_csv_file_path= path_dir.joinpath('test_webchild_partof_substanceof.txt'), 
+                                  wordnet_csv_file_path= path_dir.joinpath('test_WordNetWrapper.txt' ))
     
     expected_extraction = { "memberof_csv_file_path": 'test_webchild_partof_memberof.txt',
                             "physical_csv_file_path": 'test_webchild_partof_physical.txt',
