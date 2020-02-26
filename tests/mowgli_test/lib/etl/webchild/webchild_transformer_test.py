@@ -124,10 +124,10 @@ def test_transform():
     
     transformer = WebchildTransformer()
     
-    memberof_file_path =str(pathlib.Path(__file__).parent.absolute()) + r'\test_webchild_partof_memberof.txt'
-    physical_file_path = str(pathlib.Path(__file__).parent.absolute()) + r'\test_webchild_partof_physical.txt'
-    substanceof_file_path = str(pathlib.Path(__file__).parent.absolute()) + r'\test_webchild_partof_substanceof.txt'
-    wordnet_file_path = str(pathlib.Path(__file__).parent.absolute()) + r'\test_WordNetWrapper.txt'
+    memberof_file_path =str(pathlib.Path(__file__).parent.absolute().joinpath('test_webchild_partof_memberof.txt'))
+    physical_file_path = str(pathlib.Path(__file__).parent.absolute().joinpath('test_webchild_partof_physical.txt'))
+    substanceof_file_path = str(pathlib.Path(__file__).parent.absolute().joinpath('test_webchild_partof_substanceof.txt'))
+    wordnet_file_path = str(pathlib.Path(__file__).parent.absolute().joinpath('test_WordNetWrapper.txt'))
 
     memberof_nodes, memberof_edges,physical_nodes,physical_edges, substanceof_nodes, substanceof_edges, wordnet_nodes, wordnet_edges = set(), set(),set(),set(),set(),set(),set(),set()
     for result in transformer.transform(memberof_csv_file_path = memberof_file_path, physical_csv_file_path=physical_file_path,substanceof_csv_file_path= substanceof_file_path,wordnet_csv_file_path = wordnet_file_path):
