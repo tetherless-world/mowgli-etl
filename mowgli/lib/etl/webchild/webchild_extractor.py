@@ -10,4 +10,5 @@ class WebchildExtractor(_Extractor):
 
     def extract(self, **kwds):
         self._logger.info("extract")
-        return {"csv_file_paths": [self.__memberof_csv_file_path, self.__physical_csv_file_path, self.__substanceof_csv_file_path, self.__wordnet_csv_file_path]}
+        return {"memberof_csv_file_path": self.__memberof_csv_file_path, "physical_csv_file_path": self.__physical_csv_file_path, "substanceof_csv_file_path" : self.__substanceof_csv_file_path, "wordnet_csv_file_path": self.__wordnet_csv_file_path}
+
