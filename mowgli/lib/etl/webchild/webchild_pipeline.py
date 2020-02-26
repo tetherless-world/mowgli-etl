@@ -17,10 +17,11 @@ class WebchildPipeline(_Pipeline):
  
     @classmethod
     def add_arguments(cls, arg_parser):
-        arg_parser.add_argument("--memberof-csv-file-path", help="WebChild memberof .csv file path", required=False, default ='/Data/WebChildData/webchild_partof_memberof.txt')
-        arg_parser.add_argument("--physical-csv-file-path", help="WebChild physical .csv file path", required=False, default = '/Data/WebChildData/webchild_partof_physical.txt')
-        arg_parser.add_argument("--substanceof-csv-file-path", help="WebChild substance of .csv file path", required=False, default = '/Data/WebChildData/webchild_partof_substanceof.txt')
-        arg_parser.add_argument("--wordnet-csv-file-path", help="WebChild WordNet .csv file path", required=False, default = '/Data/WebChildData/WordNetWrapper.txt')
+        path_dir = pathlib.Path(__file__).parent.absolute().parents[3]
+        arg_parser.add_argument("--memberof-csv-file-path", help="WebChild memberof .csv file path", required=False, default =path_dir.joinpath('Data\WebChildData\webchild_partof_memberof.txt'))
+        arg_parser.add_argument("--physical-csv-file-path", help="WebChild physical .csv file path", required=False, default = path_dir.joinpath('Data\WebChildData\webchild_partof_physical.txt'))
+        arg_parser.add_argument("--substanceof-csv-file-path", help="WebChild substance of .csv file path", required=False, default = path_dir.joinpath('Data/WebChildData\webchild_partof_substanceof.txt'))
+        arg_parser.add_argument("--wordnet-csv-file-path", help="WebChild WordNet .csv file path", required=False, default = path_dir.joinpath('Data\WebChildData\WordNetWrapper.txt'))
 
 
 
