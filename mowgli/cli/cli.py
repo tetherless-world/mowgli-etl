@@ -2,62 +2,16 @@ import logging
 import os.path
 from importlib import import_module
 from inspect import isclass
-from typing import Generator, Union
 
 from configargparse import ArgParser
 
 from mowgli import paths
-from mowgli.lib.cskg.edge import Edge
-from mowgli.lib.cskg.node import Node
-from mowgli.lib.etl._pipeline import _Pipeline
 from mowgli.lib.etl.pipeline_storage import PipelineStorage
+from mowgli.lib.etl.pipeline_wrapper import PipelineWrapper
+from mowgli.lib.etl._pipeline import _Pipeline
 
 
 class Cli:
-    class __PipelineWrapper:
-        def __init__(self, args, logger, pipeline: _Pipeline):
-            self.__args = args
-            self.__logger = logger
-            self.__pipeline = pipeline
-            self.__storage = PipelineStorage(pipeline_id=pipeline.id, root_data_dir_path=self.__create_data_dir_path())
-
-        def __create_data_dir_path(self) -> str:
-            data_dir_path = self.__args.data_dir_path
-            if data_dir_path is None:
-                for data_dir_path in (
-                        # In the container
-                        "/data",
-                        # In the checkout
-                        paths.DATA_DIR
-                ):
-                    if os.path.isdir(data_dir_path):
-                        break
-            if not os.path.isdir(data_dir_path):
-                raise ValueError("data dir path %s does not exist" % data_dir_path)
-            data_dir_path = os.path.join(data_dir_path, self.__pipeline.id)
-            if not os.path.isdir(data_dir_path):
-                os.makedirs(data_dir_path)
-                self.__logger.info("created pipeline data directory %s", data_dir_path)
-            return data_dir_path
-
-        def extract(self, force: bool):
-            extract_kwds = self.__pipeline.extractor.extract(force=force, storage=self.__storage)
-            return extract_kwds if extract_kwds is not None else {}
-
-        def load(self, graph_generator: Generator[Union[Node, Edge], None, None]) -> None:
-            with self.__pipeline.loader.open(storage=self.__storage) as loader:
-                for node_or_edge in graph_generator:
-                    if isinstance(node_or_edge, Node):
-                        node = node_or_edge
-                        loader.load_node(node_or_edge)
-                    elif isinstance(node_or_edge, Edge):
-                        loader.load_edge(node_or_edge)
-                    else:
-                        raise ValueError(type(node_or_edge))
-
-        def transform(self, force: bool, **extract_kwds):
-            return self.__pipeline.transformer.transform(**extract_kwds)
-
     def __init__(self):
         self.__arg_parser = ArgParser()
         self.__logger = logging.getLogger(self.__class__.__name__)
@@ -99,6 +53,24 @@ class Cli:
             format='%(asctime)s:%(module)s:%(lineno)s:%(name)s:%(levelname)s: %(message)s',
             level=logging_level
         )
+
+    def __create_data_dir_path(self, args) -> str:
+        data_dir_path = args.data_dir_path
+        if data_dir_path is None:
+            for data_dir_path in (
+                    # In the container
+                    "/data",
+                    # In the checkout
+                    paths.DATA_DIR
+            ):
+                if os.path.isdir(data_dir_path):
+                    break
+        if not os.path.isdir(data_dir_path):
+            raise ValueError("data dir path %s does not exist" % data_dir_path)
+        if not os.path.isdir(data_dir_path):
+            os.makedirs(data_dir_path)
+            self.__logger.info("created pipeline data directory %s", data_dir_path)
+        return data_dir_path
 
     def __import_pipeline_class(self, args) -> _Pipeline:
         try_pipeline_module_names = [args.pipeline_module]
@@ -147,7 +119,8 @@ class Cli:
         args = self.__arg_parser.parse_args()
 
         pipeline = self.__instantiate_pipeline(args, pipeline_class)
-        pipeline_wrapper = self.__PipelineWrapper(args=args, logger=self.__logger, pipeline=pipeline)
+        pipeline_storage = PipelineStorage(pipeline_id=pipeline.id, root_data_dir_path=self.__create_data_dir_path(args))
+        pipeline_wrapper = PipelineWrapper(args=args, logger=self.__logger, pipeline=pipeline, storage=pipeline_storage)
 
         force = bool(getattr(args, "force", False))
         force_extract = force or bool(getattr(args, "force_extract", False))
