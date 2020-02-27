@@ -30,7 +30,7 @@ class _Loader(ABC):
         return self
 
     @abstractmethod
-    def load_edge(self, edge: Edge, pi):
+    def load_edge(self, edge: Edge):
         pass
 
     @abstractmethod

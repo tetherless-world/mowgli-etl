@@ -11,8 +11,8 @@ class CskgCsvLoader(_Loader):
     def open(self, storage):
         self.__storage = storage
 
-        self.__loaded_node_ids = set()
-        self.__loaded_edges = set()
+        self.__loaded_node_hashes = set()
+        self.__loaded_edge_hashes = set()
 
         # Open in text mode
         self.__edge_file = open(storage.loaded_data_dir_path / "edges.csv", "w+")
@@ -34,15 +34,17 @@ class CskgCsvLoader(_Loader):
         self.__node_file.close()
 
     def load_edge(self, edge: Edge):
-        if edge in self.__loaded_edges:
+        edge_hash = hash(edge)
+        if edge_hash in self.__loaded_edge_hashes:
             return
-        self.__loaded_edges.add(edge)
+        self.__loaded_edge_hashes.add(edge_hash)
         self.__class__._write_csv_line(self.__edge_writer, self.__class__._edge_csv_fields(), edge)
 
     def load_node(self, node: Node):
-        if node.id in self.__loaded_node_ids:
+        node_hash = hash(node)
+        if node_hash in self.__loaded_node_hashes:
             return
-        self.__loaded_node_ids.add(node.id)
+        self.__loaded_node_hashes.add(node_hash)
         self.__class__._write_csv_line(self.__node_writer, self.__class__._node_csv_fields(), node)
 
     # Internal methods

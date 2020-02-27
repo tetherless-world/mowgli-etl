@@ -1,3 +1,4 @@
+import json
 from typing import Optional, Tuple, Dict
 
 
@@ -41,7 +42,7 @@ class Node:
             self.__datasource,
             self.__id,
             self.__label,
-            self.__other,
+            json.dumps(self.__other, sort_keys=True),
             self.__pos
         ))
 
