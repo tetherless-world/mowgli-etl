@@ -45,10 +45,6 @@ class Edge:
         ))
 
     @property
-    def id(self):
-        return self.__id
-
-    @property
     def object(self):
         return self.__object
 
