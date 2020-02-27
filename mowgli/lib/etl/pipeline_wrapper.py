@@ -14,7 +14,7 @@ class PipelineWrapper:
         self.__pipeline = pipeline
         self.__storage = storage
 
-    def extract(self, force: bool):
+    def extract(self, force: bool = False):
         extract_kwds = self.__pipeline.extractor.extract(force=force, storage=self.__storage)
         return extract_kwds if extract_kwds is not None else {}
 
@@ -28,5 +28,5 @@ class PipelineWrapper:
                 else:
                     raise ValueError(type(node_or_edge))
 
-    def transform(self, force: bool, **extract_kwds):
+    def transform(self, force: bool = False, **extract_kwds):
         return self.__pipeline.transformer.transform(**extract_kwds)
