@@ -120,7 +120,7 @@ class Cli:
 
         pipeline = self.__instantiate_pipeline(args, pipeline_class)
         pipeline_storage = PipelineStorage(pipeline_id=pipeline.id, root_data_dir_path=self.__create_data_dir_path(args))
-        pipeline_wrapper = PipelineWrapper(args=args, logger=self.__logger, pipeline=pipeline, storage=pipeline_storage)
+        pipeline_wrapper = PipelineWrapper(args=args, pipeline=pipeline, storage=pipeline_storage)
 
         force = bool(getattr(args, "force", False))
         force_extract = force or bool(getattr(args, "force_extract", False))
