@@ -18,6 +18,8 @@ def test_write_node(pipeline_storage):
 
     with CskgCsvLoader().open(pipeline_storage) as loader:
         loader.load_node(test_node)
+        # Load twice to test handling of redundant nodes
+        loader.load_node(test_node)
 
     expected_node_text = (
             _EXPECTED_NODE_HEADER + '\n'
@@ -43,6 +45,8 @@ def test_write_edge(pipeline_storage):
     )
 
     with CskgCsvLoader().open(pipeline_storage) as loader:
+        loader.load_edge(test_edge)
+        # Load twice to test handling of redundant edges
         loader.load_edge(test_edge)
 
     expected_edge_text = (

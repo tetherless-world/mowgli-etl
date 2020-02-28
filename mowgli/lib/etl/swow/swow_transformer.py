@@ -20,12 +20,12 @@ class SwowTransformer(_Transformer):
         """
         if STRENGTH_FILE_KEY not in kwds:
             raise ValueError(f'No SWOW strengths file found for key {STRENGTH_FILE_KEY}')
-        csv_file = kwds[STRENGTH_FILE_KEY]
-        csv_reader = csv.DictReader(csv_file, delimiter='\t', quoting=csv.QUOTE_NONE)
-        for row in csv_reader:
-            cue_node = swow_node(row['cue'])
-            response_node = swow_node(row['response'])
-            strength = float(row['R123.Strength'])
-            yield cue_node
-            yield response_node
-            yield swow_edge(cue=cue_node, response=response_node, strength=strength)
+        with open(kwds[STRENGTH_FILE_KEY], mode='r') as csv_file:
+            csv_reader = csv.DictReader(csv_file, delimiter='\t', quoting=csv.QUOTE_NONE)
+            for row in csv_reader:
+                cue_node = swow_node(row['cue'])
+                response_node = swow_node(row['response'])
+                strength = float(row['R123.Strength'])
+                yield cue_node
+                yield response_node
+                yield swow_edge(cue=cue_node, response=response_node, strength=strength)
