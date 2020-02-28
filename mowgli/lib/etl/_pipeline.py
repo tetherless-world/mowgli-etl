@@ -34,7 +34,7 @@ class _Pipeline(ABC):
     def __add_loader_arguments(cls, arg_parser):
         arg_parser.add_argument("--loader", default="cskg_csv")
 
-    def __create_loader(self, loader: Optional[str], **loader_kwds) -> _Loader:
+    def __create_loader(self, loader: Optional[str] = None, **loader_kwds) -> _Loader:
         if loader is None:
             loader = "cskg_csv"
         else:

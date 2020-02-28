@@ -4,6 +4,7 @@ from mowgli.lib.cskg.node import Node
 from mowgli.lib.cskg.edge import Edge
 from mowgli.lib.cskg.concept_net_predicates import RELATED_TO
 
+
 def test_swow_node():
     node = swow_node('test response')
     expected_node = Node(
@@ -12,6 +13,7 @@ def test_swow_node():
         label='test response'
     )
     assert node == expected_node
+
 
 def test_swow_edge():
     edge = swow_edge(
