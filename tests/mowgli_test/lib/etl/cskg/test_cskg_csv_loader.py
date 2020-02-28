@@ -1,6 +1,6 @@
 from mowgli.lib.cskg.edge import Edge
 from mowgli.lib.cskg.node import Node
-from mowgli.lib.etl.cskg_csv_loader import CskgCsvLoader
+from mowgli.lib.etl.cskg.cskg_csv_loader import CskgCsvLoader
 
 _EXPECTED_NODE_HEADER = 'id\tlabel\taliases\tpos\tdatasource\tother'
 _EXPECTED_EDGE_HEADER = 'subject\tpredicate\tobject\tdatasource\tweight\tother'
