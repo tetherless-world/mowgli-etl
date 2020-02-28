@@ -8,7 +8,7 @@ from mowgli.lib.etl._transformer import _Transformer
 
 
 class CskgCsvTransformer(_Transformer):
-    def transform(self, extracted_data_dir_path: Path, **kwds):
+    def transform(self, *, edges_csv_file_path: Path, nodes_csv_file_path: Path, **kwds):
         def get_optional_column(csv_row: Dict[str, str], column_name: str) -> Optional[str]:
             cell = csv_row.get(column_name)
             if cell is None:
@@ -26,7 +26,7 @@ class CskgCsvTransformer(_Transformer):
             return cell
 
         nodes_by_id = {}
-        with open(extracted_data_dir_path / "nodes.csv") as nodes_csv_file:
+        with open(nodes_csv_file_path) as nodes_csv_file:
             csv_reader = csv.DictReader(nodes_csv_file, delimiter="\t", quoting=csv.QUOTE_NONE)
             for csv_row in csv_reader:
                 node = \
@@ -42,7 +42,7 @@ class CskgCsvTransformer(_Transformer):
                 # assert node.id not in nodes_by_id, node.id
                 nodes_by_id[node.id] = node
 
-        with open(extracted_data_dir_path / "edges.csv") as edges_csv_file:
+        with open(edges_csv_file_path) as edges_csv_file:
             csv_reader = csv.DictReader(edges_csv_file, delimiter="\t", quoting=csv.QUOTE_NONE)
             for csv_row in csv_reader:
                 subject = nodes_by_id[get_required_column(csv_row, "subject")]

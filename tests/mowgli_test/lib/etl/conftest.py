@@ -7,8 +7,13 @@ from mowgli.lib.etl.pipeline_storage import PipelineStorage
 
 
 @pytest.fixture
-def cskg_csv_dir_path():
-    return os.path.dirname(__file__) / Path("cskg")
+def cskg_edges_csv_file_path():
+    return os.path.dirname(__file__) / Path("cskg") / Path("edges.csv")
+
+
+@pytest.fixture
+def cskg_nodes_csv_file_path():
+    return os.path.dirname(__file__) / Path("cskg") / Path("nodes.csv")
 
 
 @pytest.fixture
