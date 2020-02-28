@@ -6,7 +6,7 @@ from configargparse import ArgParser
 from mowgli.lib.etl._extractor import _Extractor
 from mowgli.lib.etl._loader import _Loader
 from mowgli.lib.etl._transformer import _Transformer
-from mowgli.lib.etl.cskg_csv_loader import CskgCsvLoader
+from mowgli.lib.etl.cskg.cskg_csv_loader import CskgCsvLoader
 
 
 class _Pipeline(ABC):
