@@ -1,6 +1,14 @@
+import os.path
+from pathlib import Path
+
 import pytest
 
 from mowgli.lib.etl.pipeline_storage import PipelineStorage
+
+
+@pytest.fixture
+def cskg_csv_dir_path():
+    return os.path.dirname(__file__) / Path("cskg")
 
 
 @pytest.fixture
