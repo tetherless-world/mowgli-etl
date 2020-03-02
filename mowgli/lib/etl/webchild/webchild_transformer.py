@@ -6,6 +6,8 @@ from mowgli.lib.cskg.concept_net_predicates import HAS_A, PART_OF, DEFINED_AS,MA
 
 from typing import Generator, Union
 import csv
+import re
+import string
 
 class WebchildTransformer(_Transformer):
 
@@ -13,7 +15,7 @@ class WebchildTransformer(_Transformer):
     
         datasource = WEBCHILD_MEMBEROF_DATASOURCE_ID
         relation = HAS_A
-        with open(memberof_csv_file_path.replace("'", "")) as csv_file:
+        with open(memberof_csv_file_path) as csv_file:
             csv_reader = csv.DictReader(csv_file, delimiter='\t', quoting=csv.QUOTE_NONE)
             for row in csv_reader:
                 object1_node = Node(datasource=datasource, id="webchild:" + row['to_ss'], label=row['to_word'])
@@ -68,6 +70,7 @@ class WebchildTransformer(_Transformer):
 
 
     def transform(self, *, memberof_csv_file_path: str, physical_csv_file_path: str, substanceof_csv_file_path:str, wordnet_csv_file_path:str)  -> Generator[Union[Node, Edge], None, None]:
+        
         yield from self.__transform_memberof_csv(memberof_csv_file_path = memberof_csv_file_path)
         yield from self.__transform_physical_csv(physical_csv_file_path = physical_csv_file_path)
         yield from self.__transform_substanceof_csv(substanceof_csv_file_path = substanceof_csv_file_path)
