@@ -1,4 +1,4 @@
-from typing import Generator, Union
+from typing import Generator, Union, Dict
 
 from mowgli.lib.cskg.edge import Edge
 from mowgli.lib.cskg.node import Node
@@ -11,9 +11,12 @@ class PipelineWrapper:
         self.__pipeline = pipeline
         self.__storage = storage
 
-    def extract(self, force: bool = False):
+    def extract(self, force: bool = False) -> Dict[str, object]:
         extract_kwds = self.__pipeline.extractor.extract(force=force, storage=self.__storage)
         return extract_kwds if extract_kwds is not None else {}
+
+    def id(self) -> str:
+        return self.__pipeline.id
 
     def load(self, graph_generator: Generator[Union[Node, Edge], None, None]) -> None:
         with self.__pipeline.loader.open(storage=self.__storage) as loader:
@@ -25,5 +28,5 @@ class PipelineWrapper:
                 else:
                     raise ValueError(type(node_or_edge))
 
-    def transform(self, force: bool = False, **extract_kwds):
+    def transform(self, force: bool = False, **extract_kwds) -> Generator[Union[Edge, Node], None, None]:
         return self.__pipeline.transformer.transform(**extract_kwds)
