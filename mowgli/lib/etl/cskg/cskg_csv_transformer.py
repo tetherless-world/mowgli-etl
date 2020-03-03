@@ -53,7 +53,7 @@ class CskgCsvTransformer(_Transformer):
                         datasource=get_required_column(csv_row, "datasource"),
                         object_=object_,
                         other=csv_row.get("other"),
-                        relation=get_required_column(csv_row, "predicate"),
+                        predicate=get_required_column(csv_row, "predicate"),
                         subject=subject,
                         weight=float(get_required_column(csv_row, "weight"))
                     )

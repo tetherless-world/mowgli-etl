@@ -1,15 +1,16 @@
-from typing import Optional, Tuple, Dict, Union
 import json
+from typing import Optional, Dict, Union
 
 from mowgli.lib.cskg.node import Node
 
 
 class Edge:
-    def __init__(self, *, datasource: str, object_: Union[str, Node], relation: str, subject: Union[str, Node], other: Optional[Dict[str, object]]=None, weight: Optional[float]=None):
+    def __init__(self, *, datasource: str, object_: Union[str, Node], predicate: str, subject: Union[str, Node],
+                 other: Optional[Dict[str, object]] = None, weight: Optional[float] = None):
         self.__datasource = datasource
         self.__object = object_.id if isinstance(object_, Node) else object_
         self.__other = other
-        self.__relation = relation
+        self.__predicate = predicate
         self.__subject = subject.id if isinstance(subject, Node) else subject
         self.__weight = weight
 
@@ -26,20 +27,20 @@ class Edge:
             return False
         if self.__other != other.__other:
             return False
-        if self.__relation != other.__relation:
+        if self.__predicate != other.__predicate:
             return False
         if self.__subject != other.__subject:
             return False
         if self.__weight != other.__weight:
             return False
         return True
-    
+
     def __hash__(self):
         return hash((
             self.__datasource,
             self.__object,
             json.dumps(self.__other, sort_keys=True),
-            self.__relation,
+            self.__predicate,
             self.__subject,
             self.__weight
         ))
@@ -53,8 +54,8 @@ class Edge:
         return self.__other
 
     @property
-    def relation(self):
-        return self.__relation
+    def predicate(self):
+        return self.__predicate
 
     @property
     def subject(self):

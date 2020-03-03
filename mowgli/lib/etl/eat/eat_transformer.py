@@ -1,7 +1,8 @@
-from mowgli.lib.etl._transformer import _Transformer
 from xml.dom.minidom import parse
-from mowgli.lib.cskg.node import Node
+
 from mowgli.lib.cskg.edge import Edge
+from mowgli.lib.cskg.node import Node
+from mowgli.lib.etl._transformer import _Transformer
 
 
 class EatTransformer(_Transformer):
@@ -25,4 +26,5 @@ class EatTransformer(_Transformer):
                 percent = float(response.attributes['r'].value)
                 response_node = Node(datasource="eat", id="eat:" + response_word, label=response_word)
                 yield response_node
-                yield Edge(datasource="eat", object_=stim_node, relation="cn:RelatedTo", subject=response_node, weight=percent)
+                yield Edge(datasource="eat", object_=stim_node, predicate="cn:RelatedTo", subject=response_node,
+                           weight=percent)

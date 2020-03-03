@@ -38,7 +38,7 @@ def test_write_edge(pipeline_storage):
     test_edge = Edge(
         datasource='test_datasource',
         object_='test_obj',
-        relation='test_rel',
+        predicate='test_rel',
         subject='test_subject',
         other={'datasets': ['test_dataset', 'other_test_dataset']},
         weight=0.999
