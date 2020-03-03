@@ -15,6 +15,11 @@ class PipelineWrapper:
         extract_kwds = self.__pipeline.extractor.extract(force=force, storage=self.__storage)
         return extract_kwds if extract_kwds is not None else {}
 
+    def extract_transform_load(self, force: bool = False):
+        extract_kwds = self.extract(force=force)
+        graph_generator = self.transform(force=force, **extract_kwds)
+        self.load(graph_generator)
+
     @property
     def id(self) -> str:
         return self.__pipeline.id
