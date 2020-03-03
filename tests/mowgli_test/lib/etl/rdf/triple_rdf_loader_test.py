@@ -11,20 +11,15 @@ def pipeline(cskg_edges_csv_file_path, cskg_nodes_csv_file_path,
              pipeline_storage: PipelineStorage):
     return PipelineWrapper(pipeline=RdfLoaderTestPipeline(cskg_edges_csv_file_path=cskg_edges_csv_file_path,
                                                           cskg_nodes_csv_file_path=cskg_nodes_csv_file_path,
-                                                          loader="quad-rdf-trig"),
+                                                          loader="triple-rdf-ttl"),
                            storage=pipeline_storage)
 
 
 def test_load(pipeline: PipelineWrapper, pipeline_storage: PipelineStorage):
     pipeline.extract_transform_load()
-    trig_file_path = pipeline_storage.loaded_data_dir_path / (
-            pipeline.id + ".trig")
-    conjunctive_graph = rdflib.ConjunctiveGraph()
-    conjunctive_graph.parse(format="trig",
-                            source=str(trig_file_path))
-    # conjunctive_graph.serialize(format="trig")
-    have_context = False
-    for context in conjunctive_graph.contexts():
-        have_context = True
-        assert len(context)
-    assert have_context
+    ttl_file_path = pipeline_storage.loaded_data_dir_path / (
+            pipeline.id + ".ttl")
+    graph = rdflib.Graph()
+    graph.parse(format="trig",
+                source=str(ttl_file_path))
+    assert len(graph)
