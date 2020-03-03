@@ -8,8 +8,8 @@ from mowgli.lib.etl.cskg.cskg_csv_transformer import CskgCsvTransformer
 
 @pytest.fixture
 def cskg_csv_extract_result(cskg_edges_csv_file_path, cskg_nodes_csv_file_path):
-    return CskgCsvExtractor(edges_csv_file_path=cskg_edges_csv_file_path,
-                            nodes_csv_file_path=cskg_nodes_csv_file_path).extract()
+    return CskgCsvExtractor(edges_csv_file_paths=(cskg_edges_csv_file_path,),
+                            nodes_csv_file_paths=(cskg_nodes_csv_file_path,)).extract()
 
 
 def test_transform(cskg_csv_extract_result):

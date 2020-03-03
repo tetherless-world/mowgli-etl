@@ -6,9 +6,9 @@ from inspect import isclass
 from configargparse import ArgParser
 
 from mowgli import paths
+from mowgli.lib.etl._pipeline import _Pipeline
 from mowgli.lib.etl.pipeline_storage import PipelineStorage
 from mowgli.lib.etl.pipeline_wrapper import PipelineWrapper
-from mowgli.lib.etl._pipeline import _Pipeline
 
 
 class Cli:
@@ -119,8 +119,9 @@ class Cli:
         args = self.__arg_parser.parse_args()
 
         pipeline = self.__instantiate_pipeline(args, pipeline_class)
-        pipeline_storage = PipelineStorage(pipeline_id=pipeline.id, root_data_dir_path=self.__create_data_dir_path(args))
-        pipeline_wrapper = PipelineWrapper(args=args, pipeline=pipeline, storage=pipeline_storage)
+        pipeline_storage = PipelineStorage(pipeline_id=pipeline.id,
+                                           root_data_dir_path=self.__create_data_dir_path(args))
+        pipeline_wrapper = PipelineWrapper(pipeline=pipeline, storage=pipeline_storage)
 
         force = bool(getattr(args, "force", False))
         force_extract = force or bool(getattr(args, "force_extract", False))
