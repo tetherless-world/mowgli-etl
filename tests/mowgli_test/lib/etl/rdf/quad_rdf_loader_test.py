@@ -11,7 +11,7 @@ def pipeline(cskg_edges_csv_file_path, cskg_nodes_csv_file_path,
              pipeline_storage: PipelineStorage):
     return PipelineWrapper(pipeline=RdfLoaderTestPipeline(cskg_edges_csv_file_path=cskg_edges_csv_file_path,
                                                           cskg_nodes_csv_file_path=cskg_nodes_csv_file_path,
-                                                          loader="quad-rdf-trig"),
+                                                          loader="quad_rdf_trig"),
                            storage=pipeline_storage)
 
 

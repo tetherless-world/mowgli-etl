@@ -43,8 +43,10 @@ class _Pipeline(ABC):
 
         if loader == "cskg_csv":
             return CskgCsvLoader()
-        elif loader.startswith("quad-rdf-"):
-            return QuadRdfLoader(format=loader[len("quad-rdf-"):], pipeline_id=id)
+        elif loader.startswith("quad_rdf_"):
+            return QuadRdfLoader(format=loader[len("quad_rdf_"):], pipeline_id=id)
+        elif loader.startswith("triple_rdf_"):
+            return QuadRdfLoader(format=loader[len("triple_rdf_"):], pipeline_id=id)
         else:
             raise NotImplementedError(loader)
 
