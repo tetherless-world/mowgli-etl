@@ -1,8 +1,10 @@
-from mowgli.lib.etl.eat.eat_transformer import EatTransformer
-from mowgli.lib.cskg.node import Node
-from mowgli.lib.cskg.edge import Edge
-import pathlib
 import os
+import pathlib
+
+from mowgli.lib.cskg.edge import Edge
+from mowgli.lib.cskg.node import Node
+from mowgli.lib.etl.eat.eat_transformer import EatTransformer
+
 
 def test_eat_tranform():
     test_file_dir = pathlib.Path(__file__).parent.absolute()
@@ -44,17 +46,19 @@ def test_eat_tranform():
 
     expected_nodes = expected_stimulus_nodes | expected_response_nodes
 
-    expected_edges = set(Edge(datasource="eat", object_="eat:" + stim_node, relation="cn:RelatedTo", subject="eat:" + response_node, weight=response_weight) for (stim_node, response_node, response_weight) in [
-        ('SPECIAL', 'TRAIN', 0.07),
-        ('SPECIAL', 'PARTICULAR', 0.05),
-        ('SPECIAL', 'EXTRA', 0.04),
-        ('SPECIAL', 'ORDINARY', 0.04),
-        ('SPECIAL', 'CASE', 0.03),
-        ('SPECIAL', 'PERSON', 0.03),
-        ('SPECIAL', 'BEER', 0.02),
-        ('SPECIAL', 'CAR', 0.02),
-        ('SPECIAL', 'CONSTABLE', 0.02),
-        ('SET', 'TELEVISION', 0.06),
+    expected_edges = set(
+        Edge(datasource="eat", object_="eat:" + stim_node, predicate="cn:RelatedTo", subject="eat:" + response_node,
+             weight=response_weight) for (stim_node, response_node, response_weight) in [
+            ('SPECIAL', 'TRAIN', 0.07),
+            ('SPECIAL', 'PARTICULAR', 0.05),
+            ('SPECIAL', 'EXTRA', 0.04),
+            ('SPECIAL', 'ORDINARY', 0.04),
+            ('SPECIAL', 'CASE', 0.03),
+            ('SPECIAL', 'PERSON', 0.03),
+            ('SPECIAL', 'BEER', 0.02),
+            ('SPECIAL', 'CAR', 0.02),
+            ('SPECIAL', 'CONSTABLE', 0.02),
+            ('SET', 'TELEVISION', 0.06),
         ('SET', 'UP', 0.05),
         ('SET', 'OUT', 0.04),
         ('SET', 'TO', 0.04),

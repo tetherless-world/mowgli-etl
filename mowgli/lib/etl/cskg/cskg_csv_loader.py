@@ -53,7 +53,7 @@ class CskgCsvLoader(_Loader):
     def _edge_csv_fields(cls) -> Dict[str, FunctionType]:
         return {
             'subject': Edge.subject.fget,
-            'predicate': Edge.relation.fget,
+            'predicate': Edge.predicate.fget,
             'object': Edge.object.fget,
             'datasource': Edge.datasource.fget,
             'weight': Edge.weight.fget,
