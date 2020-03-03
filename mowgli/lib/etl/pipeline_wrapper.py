@@ -1,7 +1,5 @@
-import os.path
 from typing import Generator, Union
 
-from mowgli import paths
 from mowgli.lib.cskg.edge import Edge
 from mowgli.lib.cskg.node import Node
 from mowgli.lib.etl._pipeline import _Pipeline
@@ -9,8 +7,7 @@ from mowgli.lib.etl.pipeline_storage import PipelineStorage
 
 
 class PipelineWrapper:
-    def __init__(self, args, pipeline: _Pipeline, storage: PipelineStorage):
-        self.__args = args
+    def __init__(self, pipeline: _Pipeline, storage: PipelineStorage):
         self.__pipeline = pipeline
         self.__storage = storage
 

@@ -7,7 +7,7 @@ from mowgli.lib.etl.swow.swow_pipeline import SwowPipeline
 def test_swow_pipeline(pipeline_storage, sample_archive_path, sample_swow_edges, sample_swow_nodes):
     args = {'swow_archive_path': sample_archive_path}
     swow_pipeline = SwowPipeline(**args)
-    pipeline_wrapper = PipelineWrapper({}, swow_pipeline, pipeline_storage)
+    pipeline_wrapper = PipelineWrapper(swow_pipeline, pipeline_storage)
 
     extract_kwds = pipeline_wrapper.extract()
     graph_generator = pipeline_wrapper.transform(**extract_kwds)
