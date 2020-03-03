@@ -7,6 +7,7 @@ from mowgli.lib.etl._extractor import _Extractor
 from mowgli.lib.etl._loader import _Loader
 from mowgli.lib.etl._transformer import _Transformer
 from mowgli.lib.etl.cskg.cskg_csv_loader import CskgCsvLoader
+from mowgli.lib.etl.rdf.rdf_loader import RdfLoader
 
 
 class _Pipeline(ABC):
@@ -20,7 +21,7 @@ class _Pipeline(ABC):
         """
         self.__extractor = extractor
         self.__id = id
-        self.__loader = self.__create_loader(**kwds)
+        self.__loader = self.__create_loader(id=id, **kwds)
         self.__transformer = transformer
 
     @classmethod
@@ -34,7 +35,7 @@ class _Pipeline(ABC):
     def __add_loader_arguments(cls, arg_parser):
         arg_parser.add_argument("--loader", default="cskg_csv")
 
-    def __create_loader(self, loader: Optional[str] = None, **loader_kwds) -> _Loader:
+    def __create_loader(self, id: str, loader: Optional[str] = None, **loader_kwds) -> _Loader:
         if loader is None:
             loader = "cskg_csv"
         else:
@@ -42,6 +43,10 @@ class _Pipeline(ABC):
 
         if loader == "cskg_csv":
             return CskgCsvLoader()
+        elif loader == "rdf":
+            return RdfLoader(pipeline_id=id)  # Default format
+        elif loader.startswith("rdf-"):
+            return RdfLoader(format=loader[len("rdf-"):], pipeline_id=id)
         else:
             raise NotImplementedError(loader)
 
