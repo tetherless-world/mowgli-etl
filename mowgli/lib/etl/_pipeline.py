@@ -8,6 +8,7 @@ from mowgli.lib.etl._loader import _Loader
 from mowgli.lib.etl._transformer import _Transformer
 from mowgli.lib.etl.cskg.cskg_csv_loader import CskgCsvLoader
 from mowgli.lib.etl.rdf.quad_rdf_loader import QuadRdfLoader
+from mowgli.lib.etl.rdf.triple_rdf_loader import TripleRdfLoader
 
 
 class _Pipeline(ABC):
@@ -46,7 +47,7 @@ class _Pipeline(ABC):
         elif loader.startswith("quad_rdf_"):
             return QuadRdfLoader(format=loader[len("quad_rdf_"):], pipeline_id=id)
         elif loader.startswith("triple_rdf_"):
-            return QuadRdfLoader(format=loader[len("triple_rdf_"):], pipeline_id=id)
+            return TripleRdfLoader(format=loader[len("triple_rdf_"):], pipeline_id=id)
         else:
             raise NotImplementedError(loader)
 
