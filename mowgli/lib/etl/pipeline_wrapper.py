@@ -15,6 +15,7 @@ class PipelineWrapper:
         extract_kwds = self.__pipeline.extractor.extract(force=force, storage=self.__storage)
         return extract_kwds if extract_kwds is not None else {}
 
+    @property
     def id(self) -> str:
         return self.__pipeline.id
 

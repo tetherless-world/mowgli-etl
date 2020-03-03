@@ -13,8 +13,9 @@ class RdfLoader(_Loader):
         self.__pipeline_id = pipeline_id
 
     def close(self):
-        with open(self.__storage.loaded_data_dir_path / (self.__pipeline_id + "." + self.__format), "w+b") as dest:
-            self.__conjunctive_graph.serialize(dest=dest, format=self.__format)
+        with open(self.__storage.loaded_data_dir_path / (self.__pipeline_id + "." + self.__format),
+                  "w+b") as loaded_file:
+            self.__conjunctive_graph.serialize(destination=loaded_file, format=self.__format)
 
     def load_edge(self, edge):
         # Assumes edges are loaded after the nodes they refer to
@@ -47,4 +48,4 @@ class RdfLoader(_Loader):
         return URIRef("urn:cskg:node:" + node.id)
 
     def __predicate_to_uri(self, edge: Edge) -> URIRef:
-        return URIRef("urn:cskg:edge:" + edge.predicate)
+        return URIRef("urn:cskg:predicate:" + edge.predicate)
