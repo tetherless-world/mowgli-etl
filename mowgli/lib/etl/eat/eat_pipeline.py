@@ -1,6 +1,9 @@
 from mowgli.lib.etl._pipeline import _Pipeline
 from mowgli.lib.etl.eat.eat_extractor import EatExtractor
 from mowgli.lib.etl.eat.eat_transformer import EatTransformer
+from mowgli.paths import DATA_DIR
+
+default_eat_file_path = str(DATA_DIR / 'eat' / 'eat100.xml')
 
 
 class EatPipeline(_Pipeline):
@@ -16,5 +19,5 @@ class EatPipeline(_Pipeline):
     @classmethod
     def add_arguments(cls, arg_parser):
         _Pipeline.add_arguments(arg_parser)
-        arg_parser.add_argument("--xml-file-path", help="EAT .xml file path", required=True)
+        arg_parser.add_argument("--xml-file-path", help="EAT .xml file path", default=default_eat_file_path)
 
