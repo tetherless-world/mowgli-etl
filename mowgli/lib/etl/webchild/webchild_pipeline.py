@@ -3,7 +3,7 @@ from mowgli.lib.etl.webchild.webchild_extractor import WebchildExtractor
 from mowgli.lib.etl.webchild.webchild_transformer import WebchildTransformer
 import os
 import pathlib
-
+from mowgli.paths import DATA_DIR
 class WebchildPipeline(_Pipeline):
 
     def __init__(self, *, memberof_csv_file_path: str, physical_csv_file_path: str, substanceof_csv_file_path: str, wordnet_csv_file_path: str, **kwds):
@@ -17,11 +17,12 @@ class WebchildPipeline(_Pipeline):
  
     @classmethod
     def add_arguments(cls, arg_parser):
-        path_dir = pathlib.Path(__file__).parent.absolute().parents[3]
-        arg_parser.add_argument("--memberof-csv-file-path", help="WebChild memberof .csv file path", required=False, default =path_dir.joinpath('data').joinpath('webchild').joinpath('webchild_partof_memberof.txt'))
-        arg_parser.add_argument("--physical-csv-file-path", help="WebChild physical .csv file path", required=False, default = path_dir.joinpath('data').joinpath('webchild').joinpath('webchild_partof_physical.zip'))
-        arg_parser.add_argument("--substanceof-csv-file-path", help="WebChild substance of .csv file path", required=False, default = path_dir.joinpath('data').joinpath('webchild').joinpath('webchild_partof_substanceof.txt'))
-        arg_parser.add_argument("--wordnet-csv-file-path", help="WebChild WordNet .csv file path", required=False, default = path_dir.joinpath('data').joinpath('webchild').joinpath('WordNetWrapper.txt'))
+        
+        path_dir = DATA_DIR.joinpath('webchild')
+        arg_parser.add_argument("--memberof-csv-file-path", help="WebChild memberof .csv file path", required=False, default =path_dir.joinpath('webchild_partof_memberof.txt'))
+        arg_parser.add_argument("--physical-csv-file-path", help="WebChild physical .csv file path", required=False, default = path_dir.joinpath('webchild_partof_physical.zip'))
+        arg_parser.add_argument("--substanceof-csv-file-path", help="WebChild substance of .csv file path", required=False, default = path_dir.joinpath('webchild_partof_substanceof.txt'))
+        arg_parser.add_argument("--wordnet-csv-file-path", help="WebChild WordNet .csv file path", required=False, default = path_dir.joinpath('WordNetWrapper.txt'))
 
 
 
