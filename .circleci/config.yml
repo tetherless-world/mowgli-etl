@@ -17,6 +17,7 @@ jobs:
             - ~/.cache/pip
           key: pip_cache-{{ checksum "requirements.txt"}}
   test_python:
+    steps:
       - run:
           name: Run tests
           command: |
