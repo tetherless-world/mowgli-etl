@@ -7,7 +7,7 @@ default_eat_file_path = str(DATA_DIR / 'eat' / 'eat100.xml')
 
 
 class EatPipeline(_Pipeline):
-    def __init__(self, xml_file_path: str, **kwds):
+    def __init__(self, xml_file_path: str = default_eat_file_path, **kwds):
         _Pipeline.__init__(
             self,
             extractor=EatExtractor(xml_file_path=xml_file_path),
