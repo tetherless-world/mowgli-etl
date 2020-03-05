@@ -6,7 +6,7 @@ from mowgli.lib.cskg.node import Node
 
 class Edge:
     def __init__(self, *, datasource: str, object_: Union[str, Node], predicate: str, subject: Union[str, Node],
-                 other: Optional[Dict[str, object]] = None, weight: Optional[float] = 1.0):
+                 other: Optional[Dict[str, object]] = None, weight: Optional[float] = None):
         self.__datasource = datasource
         self.__object = object_.id if isinstance(object_, Node) else object_
         self.__other = other

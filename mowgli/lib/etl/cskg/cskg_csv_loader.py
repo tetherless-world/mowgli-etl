@@ -56,7 +56,7 @@ class CskgCsvLoader(_Loader):
             'predicate': Edge.predicate.fget,
             'object': Edge.object.fget,
             'datasource': Edge.datasource.fget,
-            'weight': Edge.weight.fget,
+            'weight': cls._serialize_edge_weight,
             'other': cls._serialize_other
         }
 
@@ -94,3 +94,7 @@ class CskgCsvLoader(_Loader):
     @staticmethod
     def _serialize_node_aliases(node: Node) -> str:
         return ' '.join(node.aliases) if node.aliases is not None else None
+
+    @staticmethod
+    def _serialize_edge_weight(edge: Edge) -> float:
+        return edge.weight if edge.weight is not None else 1.0
