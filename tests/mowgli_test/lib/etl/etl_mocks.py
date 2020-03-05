@@ -1,4 +1,4 @@
-from typing import Optional, Dict, List, Generator, Union
+from typing import Optional, Dict, List, Generator, Union, Iterable
 
 from mowgli.lib.cskg.edge import Edge
 from mowgli.lib.cskg.node import Node
@@ -16,15 +16,11 @@ class MockExtractor(_Extractor):
 
 
 class MockTransformer(_Transformer):
-    def __init__(self, nodes: List[Node] = None, edges: List[Edge] = None):
-        self.__nodes = nodes
-        self.__edges = edges
+    def __init__(self, graph_iterator: Iterable[Union[Node, Edge]] = tuple()):
+        self.__graph_iterator = graph_iterator
 
     def transform(self, **kwds) -> Generator[Union[Node, Edge], None, None]:
-        if self.__nodes is not None:
-            yield from self.__nodes
-        if self.__edges is not None:
-            yield from self.__edges
+        yield from self.__graph_iterator
 
 
 class MockPipeline(_Pipeline):
@@ -33,5 +29,6 @@ class MockPipeline(_Pipeline):
         super().__init__(
             id=id,
             extractor=extractor if extractor is not None else MockExtractor(),
-            transformer=transformer if transformer is not None else MockTransformer()
+            transformer=transformer if transformer is not None else MockTransformer(),
+            **kwargs
         )

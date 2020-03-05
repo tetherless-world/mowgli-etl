@@ -1,6 +1,6 @@
 from os import PathLike
-from pathlib import PurePath, Path
-from typing import Dict, Union, List, Tuple
+from pathlib import Path, PurePath
+from typing import Dict, Tuple, Union
 
 from mowgli.lib.etl._extractor import _Extractor
 from mowgli.lib.etl._pipeline import _Pipeline
@@ -9,21 +9,22 @@ from mowgli.lib.etl.pipeline_wrapper import PipelineWrapper
 
 
 class CskgPipelineExtractor(_Extractor):
+    """
+    Extracts the CSKG formatted result of one or more pipelines
+    """
 
-    def __init__(self, *, cskg_data_dir_path: Union[str, PathLike, PurePath], pipelines: List[_Pipeline]):
+    def __init__(self, *, root_data_dir_path: Union[str, PathLike, PurePath], pipelines: Tuple[_Pipeline, ...]):
         super().__init__()
-        self.__cskg_data_dir_path = cskg_data_dir_path
+        self.__root_data_dir_path = root_data_dir_path
         self.__pipelines = pipelines
 
-    def extract(self, *, force: bool, **kwargs) -> Dict[str, Tuple[Path, ...]]:
+    def extract(self, *, force: bool = False, **kwargs) -> Dict[str, Tuple[Path, ...]]:
         node_file_paths, edge_file_paths = [], []
         for pipeline in self.__pipelines:
-            storage = PipelineStorage(pipeline_id=pipeline.id, root_data_dir_path=Path(self.__cskg_data_dir_path))
+            storage = PipelineStorage(pipeline_id=pipeline.id, root_data_dir_path=Path(self.__root_data_dir_path))
             pipeline_wrapper = PipelineWrapper(pipeline, storage)
 
-            extract_kwds = pipeline_wrapper.extract(force=force)
-            graph_generator = pipeline_wrapper.transform(force=force, **extract_kwds)
-            pipeline_wrapper.load(graph_generator)
+            pipeline_wrapper.extract_transform_load(force=force)
 
             node_file_path = storage.loaded_data_dir_path / 'nodes.csv'
             edge_file_path = storage.loaded_data_dir_path / 'edges.csv'
