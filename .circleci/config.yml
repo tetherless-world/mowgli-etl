@@ -26,8 +26,9 @@ jobs:
       - run:
           name: Generate CSKG
           command: |
-            python -m mowgli.cli --pipeline-module combined --data-dir-path data
-            cp -r data cskg
+            mkdir output
+            python -m mowgli.cli --pipeline-module combined --data-dir-path output
+            cp -r output cskg
             cd cskg
             for dir in `ls`; do
               mv "$dir/loaded/"*.csv "$dir/"
