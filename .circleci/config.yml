@@ -26,8 +26,14 @@ jobs:
       - run:
           name: Generate CSKG
           command: |
-            mkdir cskg
-            python -m mowgli.cli --pipeline-module combined --data-dir-path cskg
+            python -m mowgli.cli --pipeline-module combined --data-dir-path data
+            cp -r data cskg
+            cd cskg
+            for dir in `ls`; do
+              mv "$dir/loaded/"*.csv "$dir/"
+              rm -r "$dir/extracted" "$dir/transformed" "$dir/loaded"
+            done
+            cd ..
             tar -cvjSf cskg.tar.bz2 cskg
       - store_artifacts:
           path: cskg.tar.bz2
