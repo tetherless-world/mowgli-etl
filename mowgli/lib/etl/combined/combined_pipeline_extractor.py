@@ -8,20 +8,19 @@ from mowgli.lib.etl.pipeline_storage import PipelineStorage
 from mowgli.lib.etl.pipeline_wrapper import PipelineWrapper
 
 
-class CskgPipelineExtractor(_Extractor):
+class CombinedPipelineExtractor(_Extractor):
     """
     Extracts the CSKG formatted result of one or more pipelines
     """
 
-    def __init__(self, *, root_data_dir_path: Union[str, PathLike, PurePath], pipelines: Tuple[_Pipeline, ...]):
+    def __init__(self, *, pipelines: Tuple[_Pipeline, ...]):
         super().__init__()
-        self.__root_data_dir_path = root_data_dir_path
         self.__pipelines = pipelines
 
-    def extract(self, *, force: bool = False, **kwargs) -> Dict[str, Tuple[Path, ...]]:
+    def extract(self, *, force: bool = False, storage: PipelineStorage) -> Dict[str, Tuple[Path, ...]]:
         node_file_paths, edge_file_paths = [], []
         for pipeline in self.__pipelines:
-            storage = PipelineStorage(pipeline_id=pipeline.id, root_data_dir_path=Path(self.__root_data_dir_path))
+            storage = PipelineStorage(pipeline_id=pipeline.id, root_data_dir_path=storage.root_data_dir_path)
             pipeline_wrapper = PipelineWrapper(pipeline, storage)
 
             pipeline_wrapper.extract_transform_load(force=force)

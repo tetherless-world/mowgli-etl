@@ -1,14 +1,12 @@
 from itertools import islice
 
-from mowgli.lib.etl.cskg.cskg_combined_pipeline import CskgCombinedPipeline
+from mowgli.lib.etl.combined.combined_pipeline import CombinedPipeline
 from mowgli.lib.etl.pipeline_storage import PipelineStorage
 from mowgli.lib.etl.pipeline_wrapper import PipelineWrapper
 from tests.mowgli_test.lib.etl.etl_mocks import MockTransformer, MockPipeline
 
 
-def test_cskg_combined_pipeline(tmp_path_factory, graph_generator):
-    test_root = tmp_path_factory.mktemp('cskg_test_root')
-
+def test_cskg_combined_pipeline(pipeline_storage, graph_generator):
     rows_per_pipeline = 6
 
     pipelines = tuple(
@@ -17,10 +15,9 @@ def test_cskg_combined_pipeline(tmp_path_factory, graph_generator):
     )
 
     pipe_id = 'combined_test'
-    combined_pipeline = CskgCombinedPipeline(id=pipe_id, pipelines=pipelines, root_data_dir_path=test_root)
-    storage = PipelineStorage(pipeline_id=pipe_id, root_data_dir_path=test_root)
+    combined_pipeline = CombinedPipeline(id=pipe_id, pipelines=pipelines)
 
-    wrapper = PipelineWrapper(combined_pipeline, storage)
+    wrapper = PipelineWrapper(combined_pipeline, pipeline_storage)
     extract_kwds = wrapper.extract()
     transform_result = wrapper.transform(**extract_kwds)
 
