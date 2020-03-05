@@ -11,7 +11,7 @@ class SwowPipeline(_Pipeline):
     https://smallworldofwords.org
     """
 
-    def __init__(self, *, swow_archive_path: str, **kwds):
+    def __init__(self, *, swow_archive_path: str = SWOW_ARCHIVE_PATH, **kwds):
         _Pipeline.__init__(
             self,
             extractor=SwowExtractor(swow_archive_path=swow_archive_path),

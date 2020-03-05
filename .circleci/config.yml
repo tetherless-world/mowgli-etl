@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  test_python:
+  build:
     docker:
       - image: circleci/python:3.8
     steps:
@@ -9,7 +9,7 @@ jobs:
           keys:
             - pip_cache-{{ checksum "requirements.txt" }}
             - pip_cache
-      - run: 
+      - run:
           name: Install dependencies
           command: pip install -r requirements.txt
       - save_cache:
@@ -23,9 +23,18 @@ jobs:
             pytest --junitxml=test-results/junit.xml
       - store_test_results:
           path: test-results
-
-workflows:
-  version: 2
-  test:
-    jobs:
-      - test_python
+      - run:
+          name: Generate CSKG
+          command: |
+            mkdir output
+            python -m mowgli.cli --pipeline-module combined --data-dir-path output
+            cp -r output cskg
+            cd cskg
+            for dir in `ls`; do
+              mv "$dir/loaded/"*.csv "$dir/"
+              rm -r "$dir/extracted" "$dir/transformed" "$dir/loaded"
+            done
+            cd ..
+            tar -cvjSf cskg.tar.bz2 cskg
+      - store_artifacts:
+          path: cskg.tar.bz2
