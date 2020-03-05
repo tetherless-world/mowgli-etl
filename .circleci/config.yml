@@ -23,9 +23,34 @@ jobs:
             pytest --junitxml=test-results/junit.xml
       - store_test_results:
           path: test-results
+  build_cskg:
+    docker:
+      - image: circleci/python:3.8
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - pip_cache-{{ checksum "requirements.txt" }}
+            - pip_cache
+      - run:
+          name: Install dependencies
+          command: pip install -r requirements.txt
+      - save_cache:
+          paths:
+            - ~/.cache/pip
+          key: pip_cache-{{ checksum "requirements.txt"}}
+      - run:
+          name: Build CSKG
+          command: |
+            mkdir cskg
+            python -m mowgli.cli --pipeline-module combined --data-dir-path cskg
+            tar -cvjSf cskg.tar.bz2 cskg
+      - store_artfacts:
+          path: cskg.tar.bz2
 
 workflows:
   version: 2
   test:
     jobs:
       - test_python
+      - build_cskg
