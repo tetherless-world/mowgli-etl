@@ -45,7 +45,7 @@ jobs:
             mkdir cskg
             python -m mowgli.cli --pipeline-module combined --data-dir-path cskg
             tar -cvjSf cskg.tar.bz2 cskg
-      - store_artfacts:
+      - store_artifacts:
           path: cskg.tar.bz2
 
 workflows:
@@ -53,4 +53,6 @@ workflows:
   test:
     jobs:
       - test_python
+  build:
+    jobs:
       - build_cskg
