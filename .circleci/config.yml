@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  test_python:
+  build:
     docker:
       - image: circleci/python:3.8
     steps:
@@ -9,13 +9,14 @@ jobs:
           keys:
             - pip_cache-{{ checksum "requirements.txt" }}
             - pip_cache
-      - run: 
+      - run:
           name: Install dependencies
           command: pip install -r requirements.txt
       - save_cache:
           paths:
             - ~/.cache/pip
           key: pip_cache-{{ checksum "requirements.txt"}}
+  test_python:
       - run:
           name: Run tests
           command: |
@@ -23,24 +24,10 @@ jobs:
             pytest --junitxml=test-results/junit.xml
       - store_test_results:
           path: test-results
-  build_cskg:
-    docker:
-      - image: circleci/python:3.8
+  generate_cskg:
     steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - pip_cache-{{ checksum "requirements.txt" }}
-            - pip_cache
       - run:
-          name: Install dependencies
-          command: pip install -r requirements.txt
-      - save_cache:
-          paths:
-            - ~/.cache/pip
-          key: pip_cache-{{ checksum "requirements.txt"}}
-      - run:
-          name: Build CSKG
+          name: Generate CSKG
           command: |
             mkdir cskg
             python -m mowgli.cli --pipeline-module combined --data-dir-path cskg
@@ -50,9 +37,12 @@ jobs:
 
 workflows:
   version: 2
-  test:
-    jobs:
-      - test_python
   build:
     jobs:
-      - build_cskg
+      - build
+      - test_python:
+          requires:
+            - build
+      - generate_cskg:
+          requires:
+            - test_python
