@@ -16,8 +16,6 @@ jobs:
           paths:
             - ~/.cache/pip
           key: pip_cache-{{ checksum "requirements.txt"}}
-  test_python:
-    steps:
       - run:
           name: Run tests
           command: |
@@ -25,8 +23,6 @@ jobs:
             pytest --junitxml=test-results/junit.xml
       - store_test_results:
           path: test-results
-  generate_cskg:
-    steps:
       - run:
           name: Generate CSKG
           command: |
@@ -35,15 +31,3 @@ jobs:
             tar -cvjSf cskg.tar.bz2 cskg
       - store_artifacts:
           path: cskg.tar.bz2
-
-workflows:
-  version: 2
-  build:
-    jobs:
-      - build
-      - test_python:
-          requires:
-            - build
-      - generate_cskg:
-          requires:
-            - test_python
