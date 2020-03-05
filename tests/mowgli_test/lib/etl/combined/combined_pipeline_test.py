@@ -6,7 +6,7 @@ from mowgli.lib.etl.pipeline_wrapper import PipelineWrapper
 from tests.mowgli_test.lib.etl.etl_mocks import MockTransformer, MockPipeline
 
 
-def test_cskg_combined_pipeline(pipeline_storage, graph_generator):
+def test_combined_pipeline(pipeline_storage, graph_generator):
     rows_per_pipeline = 6
 
     pipelines = tuple(
@@ -14,12 +14,11 @@ def test_cskg_combined_pipeline(pipeline_storage, graph_generator):
         for pipe_num in range(1, 4)
     )
 
-    pipe_id = 'combined_test'
-    combined_pipeline = CombinedPipeline(id=pipe_id, pipelines=pipelines)
+    combined_pipeline = CombinedPipeline(pipelines=pipelines)
 
     wrapper = PipelineWrapper(combined_pipeline, pipeline_storage)
     extract_kwds = wrapper.extract()
     transform_result = wrapper.transform(**extract_kwds)
 
-    graph = tuple(_ for _ in transform_result)
+    graph = tuple(transform_result)
     assert len(graph) == len(pipelines) * rows_per_pipeline
