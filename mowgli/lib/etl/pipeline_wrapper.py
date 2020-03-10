@@ -42,14 +42,20 @@ class PipelineWrapper:
             if isinstance(node_or_edge, Node):
                 node = node_or_edge
                 existing_node = nodes.get(node.id)
-                if existing_node is not None and existing_node != node:
-                    raise ValueError("nodes with same id, different contents: " + node)
+                if existing_node is not None:
+                    if existing_node != node:
+                        raise ValueError(
+                            "nodes with same id, different contents: original=%s, duplicate=%s" % (existing_node, node))
+                    else:
+                        continue  # Ignore an exact duplicate
+                else:
+                    nodes[node.id] = node
             elif isinstance(node_or_edge, Edge):
                 edge = node_or_edge
-                subject_edges = edges.setdefault(edge.subject, {})
-                predicate_edges = subject_edges.setdefault(edge.predicate, {})
-                object_edge = predicate_edges.get(edge.object)
-                if object_edge is not None:
-                    raise ValueError("duplicate edge: " + edge)
-                predicate_edges[edge.object] = edge
+                existing_subject_edges = edges.setdefault(edge.subject, {})
+                existing_predicate_edges = existing_subject_edges.setdefault(edge.predicate, {})
+                existing_object_edge = existing_predicate_edges.get(edge.object)
+                if existing_object_edge is not None:
+                    raise ValueError("duplicate edge: original=%s, duplicate=%s" % (existing_object_edge, edge))
+                existing_predicate_edges[edge.object] = edge
             yield node_or_edge
