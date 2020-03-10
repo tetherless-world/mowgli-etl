@@ -11,7 +11,7 @@ def test_swow_node():
     node = swow_node('test response')
     expected_node = Node(
         datasource=SWOW_DATASOURCE_ID,
-        id=f'{SWOW_NAMESPACE}:{quote("test_response")}',
+        id=f'{SWOW_NAMESPACE}:{quote("test response")}',
         label='test response'
     )
     assert node == expected_node
@@ -26,7 +26,7 @@ def test_swow_edge():
     expected_edge = Edge(
         datasource=SWOW_DATASOURCE_ID,
         subject=f'{SWOW_NAMESPACE}:test',
-        object_=f'{SWOW_NAMESPACE}:{quote("test_response")}',
+        object_=f'{SWOW_NAMESPACE}:{quote("test response")}',
         predicate=RELATED_TO,
         weight=0.3
     )
