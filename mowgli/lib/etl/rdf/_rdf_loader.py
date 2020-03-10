@@ -28,7 +28,7 @@ class _RdfLoader(_Loader):
         pass
 
     def load_node(self, node):
-        assert node.id not in self.__nodes_by_id
+        assert node.id not in self.__nodes_by_id, node.id
         self.__nodes_by_id[node.id] = node
 
     @abstractmethod
