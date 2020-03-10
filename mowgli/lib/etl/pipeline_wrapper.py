@@ -35,20 +35,21 @@ class PipelineWrapper:
                     raise ValueError(type(node_or_edge))
 
     def transform(self, force: bool = False, **extract_kwds) -> Generator[Union[Edge, Node], None, None]:
-        edge_hashes = set()
-        node_hashes = set()
+        edges = {}
+        nodes = {}
 
         for node_or_edge in self.__pipeline.transformer.transform(**extract_kwds):
             if isinstance(node_or_edge, Node):
                 node = node_or_edge
-                node_hash = hash(node)
-                if node_hash in node_hashes:
-                    raise ValueError("duplicate node: " + node.id)
-                node_hashes.add(node_hash)
+                existing_node = nodes.get(node.id)
+                if existing_node is not None and existing_node != node:
+                    raise ValueError("nodes with same id, different contents: " + node)
             elif isinstance(node_or_edge, Edge):
                 edge = node_or_edge
-                edge_hash = hash(edge)
-                if edge_hash in edge_hashes:
+                subject_edges = edges.setdefault(edge.subject, {})
+                predicate_edges = subject_edges.setdefault(edge.predicate, {})
+                object_edge = predicate_edges.get(edge.object)
+                if object_edge is not None:
                     raise ValueError("duplicate edge: " + edge)
-                edge_hashes.add(edge_hash)
+                predicate_edges[edge.object] = edge
             yield node_or_edge
