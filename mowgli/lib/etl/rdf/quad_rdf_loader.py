@@ -39,5 +39,5 @@ class QuadRdfLoader(_RdfLoader):
         node_context_context.add((object_uri, DCTERMS.source, self.__datasource_uri(object_node.datasource)))
         node_context_context.add((subject_uri, DCTERMS.source, self.__datasource_uri(subject_node.datasource)))
 
-    def _new_graph(self):
-        return ConjunctiveGraph()
+    def _new_graph(self, store):
+        return ConjunctiveGraph(store=store)
