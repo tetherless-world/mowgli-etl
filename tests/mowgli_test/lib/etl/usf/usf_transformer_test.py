@@ -1,10 +1,10 @@
+import pathlib
+
 from mowgli.lib.cskg.edge import Edge
 from mowgli.lib.cskg.node import Node
-from mowgli.lib.etl.usf.usf_transformer import USFTransformer
-from mowgli.lib.etl.usf.usf_mappers import usf_edge, usf_node
-import pathlib
-import os
 from mowgli.lib.etl.usf.usf_constants import STRENGTH_FILE_KEY
+from mowgli.lib.etl.usf.usf_mappers import usf_edge, usf_node
+from mowgli.lib.etl.usf.usf_transformer import USFTransformer
 
 
 def test_transform():
@@ -41,7 +41,9 @@ def test_transform():
         ('swing', 'sway', 0.2)
     ]
 
-    expected_edges = set(usf_edge(cue=c, response=r, strength=s) for (c, r, s) in expected_edge_tuples)
+    expected_edges = set(
+        usf_edge(cue=usf_node(c, expected_node_names[c]), response=usf_node(r, expected_node_names[r]), strength=s) for
+        (c, r, s) in expected_edge_tuples)
 
     assert nodes == expected_nodes
     assert edges == expected_edges

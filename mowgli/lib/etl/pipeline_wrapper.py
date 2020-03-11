@@ -35,4 +35,34 @@ class PipelineWrapper:
                     raise ValueError(type(node_or_edge))
 
     def transform(self, force: bool = False, **extract_kwds) -> Generator[Union[Edge, Node], None, None]:
-        return self.__pipeline.transformer.transform(**extract_kwds)
+        edges = {}
+        nodes = {}
+
+        for node_or_edge in self.__pipeline.transformer.transform(**extract_kwds):
+            if isinstance(node_or_edge, Node):
+                node = node_or_edge
+                # Node ID's should be unique in the CSKG.
+                existing_node = nodes.get(node.id)
+                if existing_node is not None:
+                    if existing_node == node:
+                        # Common case: ignore exact duplicate nodes i.e., nodes that are the same in all fields.
+                        # This happens frequently in the word association sources, where the same word can come
+                        # up as a response to multiple cues.
+                        continue
+                    else:
+                        # Throw an exception if two nodes have the same id but aren't the same in all of their fields
+                        raise ValueError(
+                            "nodes with same id, different contents: original=%s, duplicate=%s" % (existing_node, node))
+                else:
+                    nodes[node.id] = node
+            elif isinstance(node_or_edge, Edge):
+                edge = node_or_edge
+                # Edges should be unique in the CSKG, meaning that the tuple of (subject, predicate, object) should be unique.
+                existing_subject_edges = edges.setdefault(edge.subject, {})
+                existing_predicate_edges = existing_subject_edges.setdefault(edge.predicate, {})
+                existing_object_edge = existing_predicate_edges.get(edge.object)
+                if existing_object_edge is not None:
+                    # Don't try to handle the exact duplicate case differently. It should never happen.
+                    raise ValueError("duplicate edge: original=%s, duplicate=%s" % (existing_object_edge, edge))
+                existing_predicate_edges[edge.object] = edge
+            yield node_or_edge
