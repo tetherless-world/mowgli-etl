@@ -31,9 +31,9 @@ jobs:
       - run:
           name: Generate combined CSKG RDF (master branch only)
           command: |
-            if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              python3 -m mowgli.cli --pipeline-module rdf --nodes-csv-file-path cskg/combined/loaded/nodes.csv --edges-csv-file-path cskg/combined/loaded/edges.csv --pipeline-id combined-rdf
-            fi
+            #            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+                     python3 -m mowgli.cli --pipeline-module rdf --nodes-csv-file-path cskg/combined/loaded/nodes.csv --edges-csv-file-path cskg/combined/loaded/edges.csv --pipeline-id combined-rdf
+      #            fi
       - run:
           name: Archive artifacts
           command: |
