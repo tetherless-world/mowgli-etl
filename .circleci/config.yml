@@ -39,7 +39,9 @@ jobs:
           command: |
             cd cskg
             for dir in `ls`; do
-              mv "$dir/loaded/"*.csv "$dir/"
+              mv "$dir/loaded/"*.csv "$dir/" || true
+              mv "$dir/loaded/"*.trig "$dir/" || true
+              mv "$dir/loaded/"*.ttl "$dir/" || true
               rm -fr "$dir/extracted" "$dir/transformed" "$dir/loaded"
             done
             cd ..
