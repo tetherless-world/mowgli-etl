@@ -32,7 +32,7 @@ jobs:
           name: Generate combined CSKG RDF (master branch only)
           command: |
             #            if [ "${CIRCLE_BRANCH}" == "master" ]; then
-                     python3 -m mowgli.cli --pipeline-module rdf --data-dir-path cskg --nodes-csv-file-path cskg/combined/loaded/nodes.csv --edges-csv-file-path cskg/combined/loaded/edges.csv --pipeline-id combined-rdf
+                     python3 -m mowgli.cli --pipeline-module rdf --nodes-csv-file-path cskg/combined/loaded/nodes.csv --edges-csv-file-path cskg/combined/loaded/edges.csv --pipeline-id combined-rdf
       #            fi
       - run:
           name: Archive artifacts
@@ -40,7 +40,7 @@ jobs:
             cd cskg
             for dir in `ls`; do
               mv "$dir/loaded/"*.csv "$dir/"
-              rm -r "$dir/extracted" "$dir/transformed" "$dir/loaded"
+              rm -fr "$dir/extracted" "$dir/transformed" "$dir/loaded"
             done
             cd ..
             tar -cvjSf cskg.tar.bz2 cskg
