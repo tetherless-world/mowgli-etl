@@ -24,15 +24,25 @@ jobs:
       - store_test_results:
           path: test-results
       - run:
-          name: Generate CSKG
+          name: Generate combined CSKG CSV
           command: |
-            mkdir output
-            python -m mowgli.cli --pipeline-module combined --data-dir-path output
-            cp -r output cskg
+            mkdir cskg
+            python -m mowgli.cli --pipeline-module combined --data-dir-path cskg
+      - run:
+          name: Generate combined CSKG RDF (master branch only)
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              python3 -m mowgli.cli --pipeline-module rdf --data-dir-path cskg --nodes-csv-file-path cskg/combined/loaded/nodes.csv --edges-csv-file-path cskg/combined/loaded/edges.csv --pipeline-id combined-rdf
+            fi
+      - run:
+          name: Archive artifacts
+          command: |
             cd cskg
             for dir in `ls`; do
-              mv "$dir/loaded/"*.csv "$dir/"
-              rm -r "$dir/extracted" "$dir/transformed" "$dir/loaded"
+              mv "$dir/loaded/"*.csv "$dir/" || true
+              mv "$dir/loaded/"*.trig "$dir/" || true
+              mv "$dir/loaded/"*.ttl "$dir/" || true
+              rm -fr "$dir/extracted" "$dir/transformed" "$dir/loaded"
             done
             cd ..
             tar -cvjSf cskg.tar.bz2 cskg

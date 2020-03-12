@@ -10,5 +10,5 @@ class TripleRdfLoader(_RdfLoader):
         subject_uri = self._node_uri(subject_node)
         graph.add((subject_uri, predicate_uri, object_uri))
 
-    def _new_graph(self):
-        return Graph()
+    def _new_graph(self, store):
+        return Graph(store=store)

@@ -1,5 +1,9 @@
+import os
+import shutil
 from abc import abstractmethod
 
+import rdflib.plugin
+import rdflib.store
 from rdflib import URIRef
 
 from mowgli.lib.cskg.edge import Edge
@@ -16,6 +20,9 @@ class _RdfLoader(_Loader):
         with open(self.__storage.loaded_data_dir_path / (self.__pipeline_id + "." + self.__format),
                   "w+b") as loaded_file:
             self.__graph.serialize(destination=loaded_file, format=self.__format)
+        self.__graph.close()
+        if os.path.isdir(self.__graph_store_dir_path):
+            shutil.rmtree(self.__graph_store_dir_path)
 
     def load_edge(self, edge):
         # Assumes edges are loaded after the nodes they refer to
@@ -32,13 +39,26 @@ class _RdfLoader(_Loader):
         self.__nodes_by_id[node.id] = node
 
     @abstractmethod
-    def _new_graph(self):
+    def _new_graph(self, store):
         raise NotImplementedError
 
     def open(self, storage):
-        self.__graph = self._new_graph()
-        self.__nodes_by_id = {}
         self.__storage = storage
+
+        self.__graph_store_dir_path = storage.loaded_data_dir_path / "bsddb"
+        if os.path.isdir(self.__graph_store_dir_path):
+            shutil.rmtree(self.__graph_store_dir_path)
+        os.makedirs(self.__graph_store_dir_path)
+
+        rdflib.plugin.get('Sleepycat', rdflib.store.Store)(str(self.__graph_store_dir_path))
+
+        self.__graph = self._new_graph(store="Sleepycat")
+
+        rt = self.__graph.open(str(self.__graph_store_dir_path), create=True)
+        assert rt == rdflib.store.VALID_STORE
+
+        self.__nodes_by_id = {}
+
         return self
 
     def _node_uri(self, node: Node) -> URIRef:
