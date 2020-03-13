@@ -13,7 +13,7 @@ class OntoPipeline(_Pipeline):
     def __init__(self,onto_archive_path: str = onto_archive_path,from_url=from_url, **kwds, ):
         _Pipeline.__init__(
             self,
-            extractor=ONTOExtractor(onto_archive_path=onto_archive_path, from_url = from_url),
+            extractor=ONTOExtractor(from_url = kwds['onto_from_url'],target = kwds['target']),
             id = "onto",
             transformer=ONTOTransformer(),
             **kwds
@@ -21,26 +21,24 @@ class OntoPipeline(_Pipeline):
 
     @classmethod
     def add_arguments(cls, arg_parser):
-        _Pipeline.add_arguments(arg_parser)
         arg_parser.add_argument(
             "--onto-archive-path",
             help="Path to a zip archive to use as a source of ONTO data",
             required=False,
             default=onto_archive_path)
 
-        _Pipeline.add_arguments(arg_parser)
         arg_parser.add_argument(
             "--onto-from-url",
             help="url to zip",
             required=False,
             default=from_url)
 
-        _Pipeline.add_arguments(arg_parser)
+        
         arg_parser.add_argument(
             "--target",
             help="url to zip",
             required=False,
             default=onto_target)
 
-
+        _Pipeline.add_arguments(arg_parser)
 

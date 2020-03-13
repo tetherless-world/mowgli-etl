@@ -9,20 +9,16 @@ from configargparse import ArgParser
 from mowgli.paths import DATA_DIR
 
 def test_onto_pipeline(pipeline_storage,strengths, sample_onto_edges, sample_onto_nodes,url):
-    arch = DATA_DIR / 'onto/extracted/testdata.zip'
-    args = ArgParser()
-    args.add_argument('--onto-from-url',help='url where zip is located')
-    args.add_argument('--target',help='name of file to extract')
-    args.add_argument('--onto-archive-path',help='archive path')
-    args.parse_args(['--onto-from-url', 'https://github.com/famildtesting/test_data/archive/master.zip'])
-    args.parse_args(['--target', 'test_data.owl'])
-    args.parse_args(['--onto-archive-path',str(arch)])
+    argparse = ArgParser()
+    OntoPipeline.add_arguments(argparse)
+    
+    args = argparse.parse_args(['--onto-from-url', 'https://github.com/famildtesting/test_data/archive/master.zip',
+                    '--target', 'test_data.owl'])
     pipeline_kwds = vars(args).copy()
     onto_pipeline = OntoPipeline(**pipeline_kwds)
     pipeline_wrapper = PipelineWrapper(onto_pipeline, pipeline_storage)
 
     extract_kwds = pipeline_wrapper.extract()
-    print(extract_kwds)
     graph_generator = pipeline_wrapper.transform(**extract_kwds)
 
 
