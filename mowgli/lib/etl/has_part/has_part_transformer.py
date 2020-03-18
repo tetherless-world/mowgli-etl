@@ -29,8 +29,13 @@ class HasPartTransformer(_Transformer):
         with open(has_part_kb_jsonl_file_path, "r") as has_part_kb_jsonl_file:
             for line in has_part_kb_jsonl_file:
                 json_object = json.loads(line)
+
                 arg1_node = self.__normalized_arg_to_node(json_object["arg1"])
+                yield arg1_node
+
                 arg2_node = self.__normalized_arg_to_node(json_object["arg2"])
+                yield arg2_node
+
                 average_score = json_object["average_score"]
 
                 # arg1 HasA arg2
