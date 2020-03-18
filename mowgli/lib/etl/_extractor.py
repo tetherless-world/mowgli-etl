@@ -57,6 +57,7 @@ class _Extractor(ABC):
             with open(extracted_file_path, "w+b") as out_f:
                 out_f.write(in_f.read())
         self._logger.info("extracted bz2 file %s", path)
+        return extracted_file_path
 
     def _extract_zip(self, from_url: str, force: bool, storage: PipelineStorage,target:str) -> str:
         """
