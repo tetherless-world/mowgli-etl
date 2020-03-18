@@ -15,12 +15,14 @@ class HasPartTransformer(_Transformer):
     def __normalized_arg_to_node(self, normalized_arg):
         # Create nodes in a custom namespace.
         # Will do sameAs WordNet or Wikipedia nodes in the transform instead of reusing their id's here.
+        # Don't include metadata as "other", since the data set contains multiple normalized args with different metadata,
+        # which violates our duplicate node id checks.
         return \
             Node(
                 datasource=self.__DATASOURCE,
                 id=self.__DATASOURCE + ":" + quote(normalized_arg["normalized"]),
                 label=normalized_arg["normalized"],
-                other=normalized_arg.get("metadata")
+                # other=normalized_arg.get("metadata")
             )
 
     def transform(self, has_part_kb_jsonl_file_path: Path):
