@@ -24,6 +24,8 @@ class HasPartTransformer(_Transformer):
             )
 
     def transform(self, has_part_kb_jsonl_file_path: Path):
+        same_as_edges_yielded = {}
+
         with open(has_part_kb_jsonl_file_path, "r") as has_part_kb_jsonl_file:
             for line in has_part_kb_jsonl_file:
                 json_object = json.loads(line)
@@ -53,28 +55,43 @@ class HasPartTransformer(_Transformer):
                     metadata = node.other
                     if metadata is None:
                         continue
+
+                    node_same_as_edges_yielded = same_as_edges_yielded.get(node.id)
+                    if node_same_as_edges_yielded is None:
+                        same_as_edges_yielded[node.id] = node_same_as_edges_yielded = set()
+
                     if "synset" in metadata:
                         synset = metadata["synset"]
                         assert synset.startswith("wn.")
-                        yield Edge(
-                            datasource=self.__DATASOURCE,
-                            object_=Node(
+                        wn_node = \
+                            Node(
                                 datasource=self.__DATASOURCE,
                                 id="wn:" + synset[len("wn."):],
                                 label=node.label,
-                            ),
+                            )
+                        if wn_node.id in node_same_as_edges_yielded:
+                            continue
+                        yield Edge(
+                            datasource=self.__DATASOURCE,
+                            object_=wn_node,
                             predicate=SAME_AS,
                             subject=node,
                         )
+                        node_same_as_edges_yielded.add(wn_node.id)
                     if "wikipedia_primary_page" in metadata:
                         wikipedia_primary_page = metadata["wikipedia_primary_page"]
-                        yield Edge(
-                            datasource=self.__DATASOURCE,
-                            object_=Node(
+                        wikipedia_node = \
+                            Node(
                                 datasource=self.__DATASOURCE,
                                 id="wikipedia:" + wikipedia_primary_page,
                                 label=node.label,
-                            ),
+                            )
+                        if wikipedia_node.id in node_same_as_edges_yielded:
+                            continue
+                        yield Edge(
+                            datasource=self.__DATASOURCE,
+                            object_=wikipedia_node,
                             predicate=SAME_AS,
                             subject=node,
                         )
+                        node_same_as_edges_yielded.add(wikipedia_node.id)
