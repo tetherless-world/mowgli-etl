@@ -51,6 +51,8 @@ class HasPartTransformer(_Transformer):
 
                 for node in (arg1_node, arg2_node):
                     metadata = node.other
+                    if metadata is None:
+                        continue
                     if "synset" in metadata:
                         synset = metadata["synset"]
                         assert synset.startswith("wn.")
