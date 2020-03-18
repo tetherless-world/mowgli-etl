@@ -1,5 +1,5 @@
+from mowgli.lib.etl.has_part.has_part_pipeline import HasPartPipeline
 from mowgli.lib.etl.pipeline_wrapper import PipelineWrapper
-from tests.mowgli_test.lib.etl.has_part.has_part_pipeline import HasPartPipeline
 
 
 def test_has_part_pipeline(pipeline_storage):
