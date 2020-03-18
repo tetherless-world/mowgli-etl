@@ -32,10 +32,12 @@ class HasPartTransformer(_Transformer):
             for line in has_part_kb_jsonl_file:
                 json_object = json.loads(line)
 
-                arg1_node = self.__normalized_arg_to_node(json_object["arg1"])
+                arg1_object = json_object["arg1"]
+                arg1_node = self.__normalized_arg_to_node(arg1_object)
                 yield arg1_node
 
-                arg2_node = self.__normalized_arg_to_node(json_object["arg2"])
+                arg2_object = json_object["arg2"]
+                arg2_node = self.__normalized_arg_to_node(arg2_object)
                 yield arg2_node
 
                 average_score = json_object["average_score"]
@@ -58,14 +60,17 @@ class HasPartTransformer(_Transformer):
                     weight=average_score,
                 )
 
-                for node in (arg1_node, arg2_node):
-                    metadata = node.other
+                for arg_node, arg_object in (
+                        (arg1_node, arg1_object),
+                        (arg2_node, arg2_object),
+                ):
+                    metadata = arg_object.get("metadata")
                     if metadata is None:
                         continue
 
-                    node_same_as_edges_yielded = same_as_edges_yielded.get(node.id)
+                    node_same_as_edges_yielded = same_as_edges_yielded.get(arg_node.id)
                     if node_same_as_edges_yielded is None:
-                        same_as_edges_yielded[node.id] = node_same_as_edges_yielded = set()
+                        same_as_edges_yielded[arg_node.id] = node_same_as_edges_yielded = set()
 
                     if "synset" in metadata:
                         synset = metadata["synset"]
@@ -74,7 +79,7 @@ class HasPartTransformer(_Transformer):
                             Node(
                                 datasource=self.__DATASOURCE,
                                 id="wn:" + synset[len("wn."):],
-                                label=node.label,
+                                label=arg_node.label,
                             )
                         if wn_node.id in node_same_as_edges_yielded:
                             continue
@@ -82,7 +87,7 @@ class HasPartTransformer(_Transformer):
                             datasource=self.__DATASOURCE,
                             object_=wn_node,
                             predicate=SAME_AS,
-                            subject=node,
+                            subject=arg_node,
                         )
                         node_same_as_edges_yielded.add(wn_node.id)
                     if "wikipedia_primary_page" in metadata:
@@ -91,7 +96,7 @@ class HasPartTransformer(_Transformer):
                             Node(
                                 datasource=self.__DATASOURCE,
                                 id="wikipedia:" + wikipedia_primary_page,
-                                label=node.label,
+                                label=arg_node.label,
                             )
                         if wikipedia_node.id in node_same_as_edges_yielded:
                             continue
@@ -99,6 +104,6 @@ class HasPartTransformer(_Transformer):
                             datasource=self.__DATASOURCE,
                             object_=wikipedia_node,
                             predicate=SAME_AS,
-                            subject=node,
+                            subject=arg_node,
                         )
                         node_same_as_edges_yielded.add(wikipedia_node.id)
