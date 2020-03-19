@@ -1,8 +1,10 @@
 import pytest
 import rdflib
 
+from mowgli.lib.cskg.edge import Edge
 from mowgli.lib.etl.pipeline_storage import PipelineStorage
 from mowgli.lib.etl.pipeline_wrapper import PipelineWrapper
+from mowgli.lib.etl.rdf.triple_rdf_loader import TripleRdfLoader
 from tests.mowgli_test.lib.etl.rdf.rdf_loader_test_pipeline import RdfLoaderTestPipeline
 
 
@@ -23,3 +25,13 @@ def test_load(pipeline: PipelineWrapper, pipeline_storage: PipelineStorage):
     graph.parse(format="trig",
                 source=str(ttl_file_path))
     assert len(graph)
+
+
+def test_load_missing_node(pipeline_storage: PipelineStorage):
+    with TripleRdfLoader(format="ttl", pipeline_id="test").open(pipeline_storage) as loader:
+        loader.load_edge(Edge(
+            datasource="test",
+            object_="missing_object",
+            predicate="predicate",
+            subject="missing_subject",
+        ))

@@ -1,6 +1,7 @@
 import os
 import shutil
 from abc import abstractmethod
+from typing import Union
 
 import rdflib.plugin
 import rdflib.store
@@ -25,13 +26,13 @@ class _RdfLoader(_Loader):
             shutil.rmtree(self.__graph_store_dir_path)
 
     def load_edge(self, edge):
-        # Assumes edges are loaded after the nodes they refer to
-        subject_node = self.__nodes_by_id[edge.subject]
-        object_node = self.__nodes_by_id[edge.object]
+        # Assumes edges are loaded after the nodes they refer to, if they're going to be loaded at all
+        subject_node = self.__nodes_by_id.get(edge.subject, edge.subject)
+        object_node = self.__nodes_by_id.get(edge.object, edge.object)
         self._load_edge(edge=edge, graph=self.__graph, object_node=object_node, subject_node=subject_node)
 
     @abstractmethod
-    def _load_edge(self, *, edge: Edge, graph, object_node: Node, subject_node: Node):
+    def _load_edge(self, *, edge: Edge, graph, object_node: Union[Node, str], subject_node: Union[Node, str]):
         pass
 
     def load_node(self, node):
@@ -61,8 +62,9 @@ class _RdfLoader(_Loader):
 
         return self
 
-    def _node_uri(self, node: Node) -> URIRef:
-        return URIRef("urn:cskg:node:" + node.id)
+    def _node_uri(self, node: Union[Node, str]) -> URIRef:
+        node_id = node.id if isinstance(node, Node) else node
+        return URIRef("urn:cskg:node:" + node_id)
 
     def _predicate_uri(self, edge: Edge) -> URIRef:
         return URIRef("urn:cskg:predicate:" + edge.predicate)
