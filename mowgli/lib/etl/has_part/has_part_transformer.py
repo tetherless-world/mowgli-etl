@@ -108,7 +108,7 @@ class HasPartTransformer(_Transformer):
 
             if "wikipedia_primary_page" in metadata:
                 wikipedia_primary_page = metadata["wikipedia_primary_page"]
-                wikipedia_node_id = "wikipedia:" + wikipedia_primary_page
+                wikipedia_node_id = "wikipedia:" + quote(wikipedia_primary_page)
                 if wikipedia_node_id in node_same_as_edges_yielded:
                     continue
                 yield Edge(
