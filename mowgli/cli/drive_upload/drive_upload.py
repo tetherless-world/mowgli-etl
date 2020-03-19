@@ -8,31 +8,50 @@ from googleapiclient.http import MediaFileUpload
 
 
 class DriveUpload:
+    """
+    Command line utility for uploading a single file to Google Drive
+    """
+
     def __init__(self):
         self.__arg_parser = ArgParser()
         self.__logger = logging.getLogger(self.__class__.__name__)
-        logging.basicConfig(level=logging.INFO,
-                            format='%(asctime)s:%(module)s:%(lineno)s:%(name)s:%(levelname)s: %(message)s')
+        logging.basicConfig(
+            level=logging.INFO,
+            format="%(asctime)s:%(module)s:%(lineno)s:%(name)s:%(levelname)s: %(message)s",
+        )
 
     def __add_arguments(self):
-        self.__arg_parser.add_argument("--file-path", required=True,
-                                       help="Local path to the file to be uploaded")
-        self.__arg_parser.add_argument("--file-id", required=True,
-                                       help="Id of the file in Drive that will be overwritten.  Must already exist.")
-        self.__arg_parser.add_argument("--service-account-file", required=True,
-                                       help="Path to Google Cloud service account file")
+        self.__arg_parser.add_argument(
+            "--file-path", required=True, help="Local path to the file to be uploaded"
+        )
+        self.__arg_parser.add_argument(
+            "--file-id",
+            required=True,
+            help="Id of the file in Drive that will be overwritten.  Must already exist.",
+        )
+        self.__arg_parser.add_argument(
+            "--service-account-file",
+            required=True,
+            help="Path to Google Cloud service account file",
+        )
 
     def __create_drive_client(self, service_account_file_path: Path):
-        scopes = ['https://www.googleapis.com/auth/drive.file']
+        scopes = ["https://www.googleapis.com/auth/drive.file"]
         credentials = service_account.Credentials.from_service_account_file(
             service_account_file_path, scopes=scopes
         )
-        return googleapiclient.discovery.build('drive', 'v3', credentials=credentials, cache_discovery=False)
+        return googleapiclient.discovery.build(
+            "drive", "v3", credentials=credentials, cache_discovery=False
+        )
 
     def __update_file(self, *, drive_client, file_path: Path, file_id: str):
-        body = {'name': file_path.name}
+        body = {"name": file_path.name}
         media_body = MediaFileUpload(file_path, resumable=True)
-        return drive_client.files().update(fileId=file_id, body=body, media_body=media_body).execute()
+        return (
+            drive_client.files()
+            .update(fileId=file_id, body=body, media_body=media_body)
+            .execute()
+        )
 
     def main(self):
         self.__add_arguments()
@@ -44,15 +63,16 @@ class DriveUpload:
         assert file_path.is_file()
 
         drive_client = self.__create_drive_client(service_account_file_path)
-        file = self.__update_file(drive_client=drive_client, file_path=file_path, file_id=args.file_id)
+        file = self.__update_file(
+            drive_client=drive_client, file_path=file_path, file_id=args.file_id
+        )
 
-        self.__logger.info('file uploaded %s', file)
+        self.__logger.info("file uploaded %s", file)
 
 
 def main():
     DriveUpload().main()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
-

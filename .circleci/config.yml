@@ -47,10 +47,12 @@ jobs:
             cd ..
             tar -cvjSf cskg.tar.bz2 cskg
       - run:
-          name: Google Drive Upload
+          name: Upload CSKG to Drive
           command: |
-            service_file_path="service_file_key.json"
-            cat <<< "$GCLOUD_SERVICE_KEY" > "$service_file_path"
-            python3 -m mowgli.cli.drive_upload --file-path=cskg.tar.bz2  --file-id="$CSKG_FILE_ID" --service-account-file="$service_file_path"
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              service_file_path="service_file_key.json"
+              cat <<< "$GCLOUD_SERVICE_KEY" > "$service_file_path"
+              python3 -m mowgli.cli.drive_upload --file-path=cskg.tar.bz2  --file-id="$CSKG_FILE_ID" --service-account-file="$service_file_path"
+            fi
       - store_artifacts:
           path: cskg.tar.bz2
