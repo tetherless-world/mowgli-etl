@@ -2,6 +2,7 @@ import bz2
 import logging
 import os.path
 from abc import ABC, abstractmethod
+from pathlib import Path
 from typing import Optional, Dict
 from urllib.request import urlopen
 from zipfile import ZipFile
@@ -41,7 +42,7 @@ class _Extractor(ABC):
         :return a **kwds dictionary to merge with kwds to pass to transformer
         """
 
-    def _extract_bz2(self, path: str, force: bool, storage: PipelineStorage) -> None:
+    def _extract_bz2(self, path: str, force: bool, storage: PipelineStorage) -> Path:
         """
         Utility method to decompress a local bz2 file and load it into the given storage repository.
         """
@@ -51,7 +52,7 @@ class _Extractor(ABC):
             self._logger.info(
                 "%s already extracted and force not specified, skipping decompression",
                 path)
-            return
+            return extracted_file_path
         self._logger.info("extracting bz2 file %s", path)
         with bz2.open(path) as in_f:
             with open(extracted_file_path, "w+b") as out_f:
