@@ -75,35 +75,25 @@ class HasPartTransformer(_Transformer):
                     if "synset" in metadata:
                         synset = metadata["synset"]
                         assert synset.startswith("wn.")
-                        wn_node = \
-                            Node(
-                                datasource=self.__DATASOURCE,
-                                id="wn:" + synset[len("wn."):],
-                                label=arg_node.label,
-                            )
-                        if wn_node.id in node_same_as_edges_yielded:
+                        wn_node_id = "wn:" + synset[len("wn."):]
+                        if wn_node_id in node_same_as_edges_yielded:
                             continue
                         yield Edge(
                             datasource=self.__DATASOURCE,
-                            object_=wn_node,
+                            object_=wn_node_id,
                             predicate=SAME_AS,
                             subject=arg_node,
                         )
-                        node_same_as_edges_yielded.add(wn_node.id)
+                        node_same_as_edges_yielded.add(wn_node_id)
                     if "wikipedia_primary_page" in metadata:
                         wikipedia_primary_page = metadata["wikipedia_primary_page"]
-                        wikipedia_node = \
-                            Node(
-                                datasource=self.__DATASOURCE,
-                                id="wikipedia:" + wikipedia_primary_page,
-                                label=arg_node.label,
-                            )
-                        if wikipedia_node.id in node_same_as_edges_yielded:
+                        wikipedia_node_id = "wikipedia:" + wikipedia_primary_page
+                        if wikipedia_node_id in node_same_as_edges_yielded:
                             continue
                         yield Edge(
                             datasource=self.__DATASOURCE,
-                            object_=wikipedia_node,
+                            object_=wikipedia_node_id,
                             predicate=SAME_AS,
                             subject=arg_node,
                         )
-                        node_same_as_edges_yielded.add(wikipedia_node.id)
+                        node_same_as_edges_yielded.add(wikipedia_node_id)
