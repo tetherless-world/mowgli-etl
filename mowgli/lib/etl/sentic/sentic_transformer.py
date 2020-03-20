@@ -3,17 +3,17 @@ from mowgli.lib.cskg.node import Node
 from mowgli.lib.cskg.edge import Edge
 from typing import Generator, Union
 from xml.dom.minidom import parse, parseString
-from mowgli.lib.etl.onto.onto_constants import ONTOLOGY_FILE_KEY
-from mowgli.lib.etl.onto.onto_mappers import onto_edge, onto_node
+from mowgli.lib.etl.sentic.sentic_constants import SENTIC_FILE_KEY
+from mowgli.lib.etl.sentic.sentic_mappers import sentic_edge, sentic_node
 
-class ONTOTransformer(_Transformer):
+class SENTICTransformer(_Transformer):
     def transform(self, **kwds) -> Generator[Union[Node, Edge], None, None]:
 
 
-        self._logger.info("transform %s", ONTOLOGY_FILE_KEY)
+        self._logger.info("transform %s", SENTIC_FILE_KEY)
         
 
-        with open(kwds[ONTOLOGY_FILE_KEY], mode='r') as strength_file:
+        with open(kwds[SENTIC_FILE_KEY], mode='r') as strength_file:
             #print(strength_file.read())
             dom = parse(strength_file)
 
@@ -22,15 +22,15 @@ class ONTOTransformer(_Transformer):
             for ind in namedinds:
                 subjectword = ind.getAttribute("rdf:about").split('#')[-1]
 
-                subjectnode = onto_node(subjectword)
+                subjectnode = sentic_node(subjectword)
 
                 semrows = ind.getElementsByTagName("semantics")
 
                 for row in semrows:
 
                     targetword = row.getAttribute("rdf:resource").split('#')[-1]
-                    targetnode = onto_node(targetword)
-                    edge = onto_edge(subject=subjectnode,object_=targetnode)
+                    targetnode = sentic_node(targetword)
+                    edge = sentic_edge(subject=subjectnode,object_=targetnode)
 
                     yield subjectnode
                     yield targetnode
