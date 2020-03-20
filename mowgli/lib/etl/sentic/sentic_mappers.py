@@ -21,6 +21,6 @@ def sentic_edge(*, subject: Union[Node, str], object_: Union[Node, str]) -> Edge
         datasource=SENTIC_DATASOURCE_ID,
         subject=subject if isinstance(subject, Node) else sentic_node(subject),
         object_=object_ if isinstance(object_, Node) else sentic_node(object_),
-        predicate = None
+        predicate = RELATED_TO
     )
 
