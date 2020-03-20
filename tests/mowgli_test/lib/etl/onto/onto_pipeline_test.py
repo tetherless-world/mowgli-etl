@@ -2,7 +2,7 @@ from mowgli.lib.cskg.edge import Edge
 from mowgli.lib.cskg.node import Node
 from mowgli.lib.etl.pipeline_wrapper import PipelineWrapper
 from mowgli.lib.etl.onto.onto_pipeline import OntoPipeline
-from mowgli.lib.etl.onto.onto_constants import STRENGTH_FILE_KEY
+from mowgli.lib.etl.onto.onto_constants import ONTOLOGY_FILE_KEY
 from mowgli.lib.etl.onto.onto_transformer import ONTOTransformer
 from mowgli.lib.etl.onto.onto_constants import onto_archive_path
 from configargparse import ArgParser

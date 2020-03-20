@@ -41,5 +41,5 @@ def sample_onto_edges():
         ('swing', 'sway')    
     ]
 
-    expected_edges = set(onto_edge(cue=c, response=r) for (c, r) in expected_edge_tuples)
+    expected_edges = set(onto_edge(subject=c, object_=r) for (c, r) in expected_edge_tuples)
     return expected_edges

@@ -1,5 +1,5 @@
 from mowgli.lib.etl._extractor import _Extractor
-from mowgli.lib.etl.onto.onto_constants import onto_target, STRENGTH_FILE_KEY, onto_archive_path
+from mowgli.lib.etl.onto.onto_constants import onto_target, ONTOLOGY_FILE_KEY, onto_archive_path
 from typing import Dict, Optional
 from io import TextIOWrapper
 from mowgli.lib.etl.pipeline_storage import PipelineStorage
@@ -15,6 +15,6 @@ class ONTOExtractor(_Extractor):
     def extract(self, *, force: bool, storage: PipelineStorage)  -> Optional[Dict[str, object]]: 
         self._download(from_url=self.__from_url, force=force,storage=storage)
         filename = self._extract_zip(force=force,storage=storage,from_url=self.__from_url,target=self.__target)
-        return {STRENGTH_FILE_KEY: filename}
+        return {ONTOLOGY_FILE_KEY: filename}
 
 
