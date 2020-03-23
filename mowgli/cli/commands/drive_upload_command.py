@@ -14,9 +14,6 @@ class DriveUploadCommand(_Command):
     Command line utility for uploading a single file to Google Drive
     """
 
-    def __init__(self):
-        super().__init__()
-
     def add_arguments(self, arg_parser: ArgParser):
         arg_parser.add_argument(
             "--file-path", required=True, help="Local path to the file to be uploaded"

@@ -14,9 +14,6 @@ from mowgli.lib.etl.pipeline_wrapper import PipelineWrapper
 
 
 class EtlCommand(_Command):
-    def __init__(self):
-        super().__init__()
-
     def add_arguments(self, arg_parser: ArgParser):
         arg_parser.add_argument(
             "--data-dir-path",
