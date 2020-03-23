@@ -6,34 +6,45 @@ from configargparse import ArgParser
 from google.oauth2 import service_account
 from googleapiclient.http import MediaFileUpload
 
+from mowgli.cli.commands._command import _Command
 
-class DriveUpload:
+
+class DriveUploadCommand(_Command):
     """
     Command line utility for uploading a single file to Google Drive
     """
 
     def __init__(self):
-        self.__arg_parser = ArgParser()
+        super().__init__()
         self.__logger = logging.getLogger(self.__class__.__name__)
-        logging.basicConfig(
-            level=logging.INFO,
-            format="%(asctime)s:%(module)s:%(lineno)s:%(name)s:%(levelname)s: %(message)s",
-        )
 
-    def __add_arguments(self):
-        self.__arg_parser.add_argument(
+    def add_arguments(self, arg_parser: ArgParser):
+        arg_parser.add_argument(
             "--file-path", required=True, help="Local path to the file to be uploaded"
         )
-        self.__arg_parser.add_argument(
+        arg_parser.add_argument(
             "--file-id",
             required=True,
             help="Id of the file in Drive that will be overwritten.  Must already exist.",
         )
-        self.__arg_parser.add_argument(
+        arg_parser.add_argument(
             "--service-account-file",
             required=True,
             help="Path to Google Cloud service account file",
         )
+
+    def __call__(self, args, arg_parser: ArgParser):
+        service_account_file_path = Path(args.service_account_file)
+        assert service_account_file_path.is_file()
+        file_path = Path(args.file_path)
+        assert file_path.is_file()
+
+        drive_client = self.__create_drive_client(service_account_file_path)
+        file = self.__update_file(
+            drive_client=drive_client, file_path=file_path, file_id=args.file_id
+        )
+
+        self.__logger.info("file uploaded %s", file)
 
     def __create_drive_client(self, service_account_file_path: Path):
         scopes = ["https://www.googleapis.com/auth/drive.file"]
@@ -52,27 +63,3 @@ class DriveUpload:
             .update(fileId=file_id, body=body, media_body=media_body)
             .execute()
         )
-
-    def main(self):
-        self.__add_arguments()
-        args = self.__arg_parser.parse_args()
-
-        service_account_file_path = Path(args.service_account_file)
-        assert service_account_file_path.is_file()
-        file_path = Path(args.file_path)
-        assert file_path.is_file()
-
-        drive_client = self.__create_drive_client(service_account_file_path)
-        file = self.__update_file(
-            drive_client=drive_client, file_path=file_path, file_id=args.file_id
-        )
-
-        self.__logger.info("file uploaded %s", file)
-
-
-def main():
-    DriveUpload().main()
-
-
-if __name__ == "__main__":
-    main()

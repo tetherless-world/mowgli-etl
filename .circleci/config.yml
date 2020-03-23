@@ -27,12 +27,12 @@ jobs:
           name: Generate combined CSKG CSV
           command: |
             mkdir cskg
-            python -m mowgli.cli --pipeline-module combined --data-dir-path cskg
+            python -m mowgli.cli etl --pipeline-module combined --data-dir-path cskg
       - run:
           name: Generate combined CSKG RDF (master branch only)
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              python3 -m mowgli.cli --pipeline-module rdf --data-dir-path cskg --nodes-csv-file-path cskg/combined/loaded/nodes.csv --edges-csv-file-path cskg/combined/loaded/edges.csv --pipeline-id combined-rdf
+              python3 -m mowgli.cli etl --pipeline-module rdf --data-dir-path cskg --nodes-csv-file-path cskg/combined/loaded/nodes.csv --edges-csv-file-path cskg/combined/loaded/edges.csv --pipeline-id combined-rdf
             fi
       - run:
           name: Archive artifacts
@@ -49,10 +49,10 @@ jobs:
       - run:
           name: Upload CSKG to Drive
           command: |
-            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+            # if [ "${CIRCLE_BRANCH}" == "master" ]; then
               service_file_path="service_file_key.json"
               cat <<< "$GCLOUD_SERVICE_KEY" > "$service_file_path"
-              python3 -m mowgli.cli.drive_upload --file-path=cskg.tar.bz2  --file-id="$CSKG_FILE_ID" --service-account-file="$service_file_path"
-            fi
+              python3 -m mowgli.cli drive-upload --file-path=cskg.tar.bz2  --file-id="$CSKG_FILE_ID" --service-account-file="$service_file_path"
+            # fi
       - store_artifacts:
           path: cskg.tar.bz2
