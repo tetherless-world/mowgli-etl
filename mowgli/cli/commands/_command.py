@@ -20,11 +20,9 @@ class _Command(ABC):
         """
         Add sub-command-specific arguments to the argparse (sub-) ArgParser
         """
-        pass
 
     @abstractmethod
     def __call__(self, args, arg_parser: ArgParser) -> None:
         """
         Invoke .__call__ with the parsed arguments and the arg parser
         """
-        pass

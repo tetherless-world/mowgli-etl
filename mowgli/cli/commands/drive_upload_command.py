@@ -16,7 +16,6 @@ class DriveUploadCommand(_Command):
 
     def __init__(self):
         super().__init__()
-        self.__logger = logging.getLogger(self.__class__.__name__)
 
     def add_arguments(self, arg_parser: ArgParser):
         arg_parser.add_argument(
@@ -44,7 +43,7 @@ class DriveUploadCommand(_Command):
             drive_client=drive_client, file_path=file_path, file_id=args.file_id
         )
 
-        self.__logger.info("file uploaded %s", file)
+        self._logger.info("file uploaded %s", file)
 
     def __create_drive_client(self, service_account_file_path: Path):
         scopes = ["https://www.googleapis.com/auth/drive.file"]

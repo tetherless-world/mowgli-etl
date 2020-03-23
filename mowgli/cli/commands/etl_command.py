@@ -16,7 +16,6 @@ from mowgli.lib.etl.pipeline_wrapper import PipelineWrapper
 class EtlCommand(_Command):
     def __init__(self):
         super().__init__()
-        self.__logger = logging.getLogger(self.__class__.__name__)
 
     def add_arguments(self, arg_parser: ArgParser):
         arg_parser.add_argument(
@@ -84,7 +83,7 @@ class EtlCommand(_Command):
             raise ValueError("data dir path %s does not exist" % data_dir_path)
         if not os.path.isdir(data_dir_path):
             os.makedirs(data_dir_path)
-            self.__logger.info("created pipeline data directory %s", data_dir_path)
+            self._logger.info("created pipeline data directory %s", data_dir_path)
         return data_dir_path
 
     def __import_pipeline_class(self, args) -> Type[_Pipeline]:

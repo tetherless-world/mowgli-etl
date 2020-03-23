@@ -7,7 +7,7 @@ from mowgli.cli.commands.drive_upload_command import DriveUploadCommand
 from mowgli.cli.commands.etl_command import EtlCommand
 
 
-class Cli(object):
+class Cli:
     def __init__(self):
         self.__commands = {
             "etl": EtlCommand(),
@@ -47,7 +47,7 @@ class Cli(object):
             command.add_arguments(subparser)
             subparser.set_defaults(command=command)
 
-        parsed_args = arg_parser.parse_args()
+        parsed_args, _ = arg_parser.parse_known_args()
 
         if not hasattr(parsed_args, "command"):
             arg_parser.print_usage()
@@ -58,3 +58,7 @@ class Cli(object):
 
 def main():
     Cli().main()
+
+
+if __name__ == "__main__":
+    main()
