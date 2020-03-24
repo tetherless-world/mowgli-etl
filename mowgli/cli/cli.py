@@ -14,6 +14,17 @@ class Cli:
             "drive-upload": DriveUploadCommand(),
         }
 
+    @staticmethod
+    def __add_global_args(arg_parser: ArgParser):
+        arg_parser.add_argument("-c", is_config_file=True, help="config file path")
+        arg_parser.add_argument(
+            "--debug", action="store_true", help="turn on debugging"
+        )
+        arg_parser.add_argument(
+            "--logging-level",
+            help="set logging-level level (see Python logging module)",
+        )
+
     def __configure_logging(self, args):
         if args.debug:
             logging_level = logging.DEBUG
@@ -27,31 +38,22 @@ class Cli:
         )
 
     def main(self):
-        arg_parser = ArgParser()
-        args = self.__parse_args(arg_parser)
+        args = self.__parse_args()
         self.__configure_logging(args)
-        args.command(args, arg_parser)
+        self.__commands[args.command](args)
 
-    def __parse_args(self, arg_parser: ArgParser):
-        arg_parser.add_argument("-c", is_config_file=True, help="config file path")
-        arg_parser.add_argument(
-            "--debug", action="store_true", help="turn on debugging"
+    def __parse_args(self):
+        arg_parser = ArgParser()
+        subparsers = arg_parser.add_subparsers(
+            title="commands", dest="command", required=True
         )
-        arg_parser.add_argument(
-            "--logging-level",
-            help="set logging-level level (see Python logging module)",
-        )
-        subparsers = arg_parser.add_subparsers()
+        self.__add_global_args(arg_parser)
         for command_name, command in self.__commands.items():
             subparser = subparsers.add_parser(command_name)
-            command.add_arguments(subparser)
-            subparser.set_defaults(command=command)
+            self.__add_global_args(subparser)
+            command.add_arguments(subparser, self.__add_global_args)
 
-        parsed_args, _ = arg_parser.parse_known_args()
-
-        if not hasattr(parsed_args, "command"):
-            arg_parser.print_usage()
-            sys.exit(1)
+        parsed_args = arg_parser.parse_args()
 
         return parsed_args
 
