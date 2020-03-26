@@ -37,7 +37,7 @@ Activate the virtual environment as above, then run:
 
 Activate the virtual environment as above, then run:
 
-    python3 -m mowgli.cli etl --pipeline-module combined
+    python3 -m mowgli.cli etl combined
     
 to run all of the available pipelines as well as combine their output.
 

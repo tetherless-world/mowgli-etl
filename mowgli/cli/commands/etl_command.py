@@ -1,8 +1,9 @@
-import logging
+import importlib.util
 import os.path
-from importlib import import_module
+import re
 from inspect import isclass
-from typing import Type
+from types import FunctionType
+from typing import Type, Tuple, Optional
 
 from configargparse import ArgParser
 
@@ -14,7 +15,25 @@ from mowgli.lib.etl.pipeline_wrapper import PipelineWrapper
 
 
 class EtlCommand(_Command):
-    def add_arguments(self, arg_parser: ArgParser):
+    def __init__(self):
+        super().__init__()
+        self.__pipeline_class_dict = self.__import_pipeline_classes()
+
+    def add_arguments(self, arg_parser: ArgParser, add_parent_args: FunctionType):
+        self.__add_general_etl_args(arg_parser)
+        subparsers = arg_parser.add_subparsers(
+            title="pipeline modules",
+            help="module name for the pipeline implementation",
+            dest="pipeline_module",
+            required=True
+        )
+        for pipeline_name, pipeline_class in self.__pipeline_class_dict.items():
+            subparser = subparsers.add_parser(pipeline_name)
+            add_parent_args(subparser)
+            self.__add_general_etl_args(subparser)
+            pipeline_class.add_arguments(subparser)
+
+    def __add_general_etl_args(self, arg_parser):
         arg_parser.add_argument(
             "--data-dir-path",
             help="path to a directory to store extracted and transformed data",
@@ -38,15 +57,9 @@ class EtlCommand(_Command):
         arg_parser.add_argument(
             "--fuseki-data-url", default="http://fuseki:3030/ds/data"
         )
-        arg_parser.add_argument(
-            "--pipeline-module", help="module name for the pipeline implementation"
-        )
 
-    def __call__(self, args, arg_parser):
-        pipeline_class = self.__import_pipeline_class(args)
-        pipeline_class.add_arguments(arg_parser)
-
-        args = arg_parser.parse_args()
+    def __call__(self, args):
+        pipeline_class = self.__pipeline_class_dict[args.pipeline_module]
 
         pipeline = self.__instantiate_pipeline(args, pipeline_class)
         pipeline_storage = PipelineStorage(
@@ -83,35 +96,42 @@ class EtlCommand(_Command):
             self._logger.info("created pipeline data directory %s", data_dir_path)
         return data_dir_path
 
-    def __import_pipeline_class(self, args) -> Type[_Pipeline]:
-        try_pipeline_module_names = [args.pipeline_module]
-        if not "." in args.pipeline_module:
-            try_pipeline_module_names.append(
-                ".%s.%s" % (args.pipeline_module, args.pipeline_module + "_pipeline")
-            )
-
-        first_import_error = None
-        pipeline_module = None
-        for pipeline_module_name_i, pipeline_module_name in enumerate(
-            try_pipeline_module_names
-        ):
-            try:
-                pipeline_module = import_module(
-                    pipeline_module_name, _Pipeline.__module__.rsplit(".", 1)[0]
-                )
-                break
-            except ImportError as e:
-                if pipeline_module_name_i == 0:
-                    first_import_error = e
-
-        if pipeline_module is None:
-            raise first_import_error
-
+    def __import_pipeline_class_from_file(
+        self, file_path
+    ) -> Optional[Tuple[str, Type[_Pipeline]]]:
+        module_name = re.sub(r"\.py$", "", file_path.name)
+        spec = importlib.util.spec_from_file_location(module_name, file_path)
+        pipeline_module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(pipeline_module)
         for attr in dir(pipeline_module):
             value = getattr(pipeline_module, attr)
-            if isclass(value) and issubclass(value, _Pipeline):
-                return value
-        raise ImportError("no Pipeline in the %s module" % pipeline_module.__name__)
+            if (
+                isclass(value)
+                and issubclass(value, _Pipeline)
+                and value is not _Pipeline
+            ):
+                pipeline_name = re.sub(r"_pipeline\.py$", "", file_path.name)
+                return pipeline_name, value
+
+    def __import_pipeline_classes(self):
+        pipeline_class_dict = {}
+        etl_dir = paths.SRC_ROOT / "lib" / "etl"
+        assert etl_dir.is_dir()
+        for pipeline_dir in etl_dir.iterdir():
+            if not pipeline_dir.is_dir():
+                continue
+            for pipeline_file_path in pipeline_dir.glob("*_pipeline.py"):
+                pipeline_tuple = self.__import_pipeline_class_from_file(
+                    pipeline_file_path
+                )
+                if pipeline_tuple is not None:
+                    pipeline_name, pipeline_class = pipeline_tuple
+                    pipeline_class_dict[pipeline_name] = pipeline_class
+                else:
+                    self._logger.warn(
+                        f"No pipeline class found in file {pipeline_file_path}"
+                    )
+        return pipeline_class_dict
 
     def __instantiate_pipeline(self, args, pipeline_class, **kwds) -> _Pipeline:
         pipeline_kwds = vars(args).copy()
