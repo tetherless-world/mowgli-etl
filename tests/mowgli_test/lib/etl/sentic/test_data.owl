@@ -15,6 +15,11 @@
     <semantics rdf:resource="urn:absolute:ontosenticnet#time"/>
     <semantics rdf:resource="urn:absolute:ontosenticnet#lift"/>
     <semantics rdf:resource="urn:absolute:ontosenticnet#mask"/>
+    <pleasantness rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0</pleasantness>
+    <attention rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.1</attention>
+    <sensitivity rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.416</sensitivity>
+    <aptitude rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">-0.80</aptitude>
+    <polarity rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">-0.51</polarity>
   </owl:NamedIndividual>
 	
   <owl:NamedIndividual rdf:about="urn:absolute:ontosenticnet#half">
@@ -23,6 +28,11 @@
     <semantics rdf:resource="urn:absolute:ontosenticnet#part"/>
     <semantics rdf:resource="urn:absolute:ontosenticnet#split"/>
     <semantics rdf:resource="urn:absolute:ontosenticnet#full"/>
+    <pleasantness rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">-0.74</pleasantness>
+    <attention rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0</attention>
+    <sensitivity rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.882</sensitivity>
+    <aptitude rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.9</aptitude>
+    <polarity rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">-0.74</polarity>
   </owl:NamedIndividual>
 
   <owl:NamedIndividual rdf:about="urn:absolute:ontosenticnet#swing">
@@ -30,5 +40,10 @@
     <semantics rdf:resource="urn:absolute:ontosenticnet#dance"/>
     <semantics rdf:resource="urn:absolute:ontosenticnet#set"/>
     <semantics rdf:resource="urn:absolute:ontosenticnet#sway"/>
+    <pleasantness rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">-0.04</pleasantness>
+    <attention rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.127</attention>
+    <sensitivity rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">-0.12</sensitivity>
+    <aptitude rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.223</aptitude>
+    <polarity rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.061</polarity>
   </owl:NamedIndividual>
 </rdf:RDF>    

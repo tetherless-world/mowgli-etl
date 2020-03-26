@@ -15,12 +15,13 @@ def sentic_node(incominglabel: str) -> Node:
     )
 
 
-def sentic_edge(*, subject: Union[Node, str], object_: Union[Node, str]) -> Edge:
+def sentic_edge(*, subject: Union[Node, str], object_: Union[Node, str], weight: float = None,predicate = RELATED_TO) -> Edge:
 
     return Edge(
         datasource=SENTIC_DATASOURCE_ID,
         subject=subject if isinstance(subject, Node) else sentic_node(subject),
         object_=object_ if isinstance(object_, Node) else sentic_node(object_),
-        predicate = RELATED_TO
+        predicate = predicate,
+        weight = weight       
     )
 
