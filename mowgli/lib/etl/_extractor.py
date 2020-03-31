@@ -4,16 +4,20 @@ import os.path
 from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import Optional, Dict
-from urllib.request import urlopen
 from zipfile import ZipFile
 
 from pathvalidate import sanitize_filename
 
+from mowgli.lib.etl.http_client.etl_http_client import EtlHttpClient
+from mowgli.lib.etl.http_client.real_etl_http_client import RealEtlHttpClient
 from mowgli.lib.etl.pipeline_storage import PipelineStorage
 
 
 class _Extractor(ABC):
-    def __init__(self):
+    def __init__(self, http_client: EtlHttpClient = None):
+        if http_client is None:
+            http_client = RealEtlHttpClient()
+        self.__http_client = http_client
         self._logger = logging.getLogger(self.__class__.__name__)
 
     def _download(self, from_url: str, force: bool, storage: PipelineStorage) -> None:
@@ -29,7 +33,7 @@ class _Extractor(ABC):
             return
 
         self._logger.info("downloading %s", from_url)
-        in_f = urlopen(from_url)
+        in_f = self.__http_client.urlopen(from_url)
         with open(downloaded_file_path, "w+b") as out_f:
             out_f.write(in_f.read())
         self._logger.info("downloaded %s", from_url)
