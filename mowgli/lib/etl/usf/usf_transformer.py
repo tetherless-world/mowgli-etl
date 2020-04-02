@@ -22,14 +22,33 @@ class USFTransformer(_Transformer):
                 cueword = cuetag.getAttribute("word")
                 cuepos = cuetag.getAttribute("pos")
                 targettag = cuetag.getElementsByTagName('target')
+                cueotherdict = dict()
+                try:
+                    cueotherdict['fr'] = int(cuetag.getAttribute("fr"))
+                except:
+                    pass
+                try:
+                    cueotherdict['con'] = float(cuetag.getAttribute("con"))
+                except:
+                    pass
 
-                cuenode = usf_node(cueword, cuepos)
+                cuenode = usf_node(cueword, cuepos,cueotherdict)
 
                 for target in targettag:
                     targetword = target.getAttribute("word")
                     targetpos = target.getAttribute("pos")
-                    targetnode = usf_node(targetword, targetpos)
+                    targetotherdict = dict()
+                    try:
+                        targetotherdict['fr'] = int(target.getAttribute("fr"))
+                    except:
+                        pass
+                    try:
+                        targetotherdict['con'] = float(target.getAttribute("con"))
+                    except:
+                        pass
 
+                    targetnode = usf_node(targetword, targetpos,targetotherdict)
+            
                     yield cuenode
                     yield targetnode
                     yield usf_edge(cue=cuenode, response=targetnode, strength=float(target.getAttribute("fsg")))
