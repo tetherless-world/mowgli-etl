@@ -1,7 +1,10 @@
+import pytest
+
 from mowgli.lib.etl.usf.usf_constants import STRENGTH_FILE_KEY
 from mowgli.lib.etl.usf.usf_extractor import USFExtractor
 
 
+@pytest.mark.skip(reason="Depends on external resource that has since been changed")
 def test_usf_extractor(pipeline_storage, strengths, url):
     extractor = USFExtractor()
     extraction = extractor.extract(force=False, storage=pipeline_storage, url=url, target="usf_test_data.xml")
