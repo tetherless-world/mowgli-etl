@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, Optional
 from urllib.parse import quote
 
 from mowgli.lib.cskg.concept_net_predicates import RELATED_TO
@@ -10,18 +10,22 @@ from mowgli.lib.etl.swow.swow_constants import SWOW_DATASOURCE_ID, SWOW_NAMESPAC
 Utility methods for mapping SWOW data into MOWGLI CSKG data structures.
 """
 
-def swow_node(cueOrResponse: str) -> Node:
+
+def swow_node_id(word: str) -> str:
+    return f"{SWOW_NAMESPACE}:{quote(word)}"
+
+
+def swow_node(word: str) -> Node:
     """
     Create a cskg node from a SWOW cue or response.
-    :param cueOrResponse: a SWOW cue or response
+    :param word: a SWOW cue or response
     """
-    return Node(
-        datasource=SWOW_DATASOURCE_ID,
-        id=f'{SWOW_NAMESPACE}:{quote(cueOrResponse)}',
-        label=cueOrResponse
-    )
+    return Node(datasource=SWOW_DATASOURCE_ID, id=swow_node_id(word), label=word)
 
-def swow_edge(*, cue: Union[Node, str], response: Union[Node, str], strength: float) -> Edge:
+
+def swow_edge(
+    *, cue: Union[Node, str], response: Union[Node, str], strength: float
+) -> Edge:
     """
     Create a cskg edge from a SWOW cue, response, and strength value.
     :param cue: cue phrase
@@ -30,8 +34,8 @@ def swow_edge(*, cue: Union[Node, str], response: Union[Node, str], strength: fl
     """
     return Edge(
         datasource=SWOW_DATASOURCE_ID,
-        subject=cue if isinstance(cue, Node) else swow_node(cue),
-        object_=response if isinstance(response, Node) else swow_node(response),
+        subject=cue if isinstance(cue, Node) else swow_node_id(cue),
+        object_=response if isinstance(response, Node) else swow_node_id(response),
         predicate=RELATED_TO,
-        weight=strength
+        weight=strength,
     )
