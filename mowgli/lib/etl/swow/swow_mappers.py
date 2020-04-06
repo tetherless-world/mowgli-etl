@@ -1,4 +1,5 @@
 from typing import Union
+from urllib.parse import quote
 
 from mowgli.lib.cskg.concept_net_predicates import RELATED_TO
 from mowgli.lib.cskg.edge import Edge
@@ -16,7 +17,7 @@ def swow_node(cueOrResponse: str) -> Node:
     """
     return Node(
         datasource=SWOW_DATASOURCE_ID,
-        id=f'{SWOW_NAMESPACE}:{cueOrResponse.replace(" ", "_")}',
+        id=f'{SWOW_NAMESPACE}:{quote(cueOrResponse)}',
         label=cueOrResponse
     )
 

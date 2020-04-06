@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="urn:absolute:ontosenticnet#"
+  xml:base="urn:absolute:ontosenticnet"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns:owl="http://www.w3.org/2002/07/owl#"
+  xmlns:ontosenticnet="urn:absolute:ontosenticnet#"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+  xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+  <owl:Ontology rdf:about="urn:absolute:ontosenticnet"/>
+  
+  
+  
+  <owl:NamedIndividual rdf:about="urn:absolute:ontosenticnet#face">
+    <semantics rdf:resource="urn:absolute:ontosenticnet#book"/>
+    <semantics rdf:resource="urn:absolute:ontosenticnet#time"/>
+    <semantics rdf:resource="urn:absolute:ontosenticnet#lift"/>
+    <semantics rdf:resource="urn:absolute:ontosenticnet#mask"/>
+  </owl:NamedIndividual>
+	
+  <owl:NamedIndividual rdf:about="urn:absolute:ontosenticnet#half">
+    <semantics rdf:resource="urn:absolute:ontosenticnet#life"/>
+    <semantics rdf:resource="urn:absolute:ontosenticnet#whole"/>
+    <semantics rdf:resource="urn:absolute:ontosenticnet#part"/>
+    <semantics rdf:resource="urn:absolute:ontosenticnet#split"/>
+    <semantics rdf:resource="urn:absolute:ontosenticnet#full"/>
+  </owl:NamedIndividual>
+
+  <owl:NamedIndividual rdf:about="urn:absolute:ontosenticnet#swing">
+    <semantics rdf:resource="urn:absolute:ontosenticnet#bat"/>
+    <semantics rdf:resource="urn:absolute:ontosenticnet#dance"/>
+    <semantics rdf:resource="urn:absolute:ontosenticnet#set"/>
+    <semantics rdf:resource="urn:absolute:ontosenticnet#sway"/>
+  </owl:NamedIndividual>
+</rdf:RDF>    
