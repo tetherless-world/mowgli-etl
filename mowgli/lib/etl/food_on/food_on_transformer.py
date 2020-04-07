@@ -26,6 +26,7 @@ class FoodOnTransformer(_Transformer):
                     id="foodon:" + str(uri)[len(self._URI_PREFIX):],
                     label=label
                 )
+            self.node_yielded = False
 
     def transform(self, food_on_owl_file_path: Path):
         graph = Graph()
@@ -47,6 +48,8 @@ class FoodOnTransformer(_Transformer):
             assert label, class_uri
 
             sub_class_of = tuple(graph.objects(class_uri, RDFS.subClassOf))
+            if not sub_class_of:
+                continue
 
             class_ = self.__FoodOnClass(
                 label=label,
@@ -55,7 +58,6 @@ class FoodOnTransformer(_Transformer):
             )
             assert class_.uri not in classes_by_uri
             classes_by_uri[class_.uri] = class_
-            yield class_.node
         self._logger.info("parsed %d classes from FoodOn", len(classes_by_uri))
 
         for class_ in classes_by_uri.values():
@@ -63,6 +65,13 @@ class FoodOnTransformer(_Transformer):
                 parent_class = classes_by_uri.get(sub_class_of)
                 if not parent_class:
                     continue
+                # Only yield nodes that are part of an edge.
+                if not class_.node_yielded:
+                    yield class_.node
+                    class_.node_yielded = True
+                if not parent_class.node_yielded:
+                    yield parent_class.node
+                    parent_class.node_yielded = True
                 edge = \
                     Edge(
                         datasource=self._DATASOURCE,
