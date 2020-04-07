@@ -47,9 +47,17 @@ def test_transform():
         ('swing', 'sway', 0.2)
     ]
 
-    expected_edges = set(
-        usf_edge(cue=usf_node(c, expected_node_names[c]), response=usf_node(r, expected_node_names[r]), strength=s) for
-        (c, r, s) in expected_edge_tuples)
+    expected_edges = set()
+
+    for c,r,s in expected_edge_tuples:
+        cue= None
+        res= None
+        for el in expected_nodes:
+            if el.label == c:
+                cue = el
+            if el.label == r:
+                res = el
+        expected_edges.add(usf_edge(cue=cue,response=res, strength=s))
 
     assert nodes == expected_nodes
     assert edges == expected_edges

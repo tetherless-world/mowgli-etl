@@ -32,11 +32,12 @@ class USFTransformer(_Transformer):
                 except:
                     pass
 
-                cuenode = usf_node(cueword, cuepos,cueotherdict)
+                cuenode = usf_node(cueOrResponse=cueword,pos= cuepos,other=cueotherdict)
 
                 for target in targettag:
                     targetword = target.getAttribute("word")
                     targetpos = target.getAttribute("pos")
+                    
                     targetotherdict = dict()
                     try:
                         targetotherdict['fr'] = int(target.getAttribute("fr"))
@@ -47,8 +48,10 @@ class USFTransformer(_Transformer):
                     except:
                         pass
 
-                    targetnode = usf_node(targetword, targetpos,targetotherdict)
-            
+                    
+
+                    targetnode = usf_node(cueOrResponse=targetword, pos=targetpos,other=targetotherdict)
+        
                     yield cuenode
                     yield targetnode
                     yield usf_edge(cue=cuenode, response=targetnode, strength=float(target.getAttribute("fsg")))
