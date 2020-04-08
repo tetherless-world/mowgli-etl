@@ -1,3 +1,4 @@
+# Adapted from https://github.com/commonsense/conceptnet5/wiki/Relations
 ANTONYM = "/r/Antonym"
 AT_LOCATION = '/r/AtLocation'
 CAPABLE_OF = '/r/CapableOf'
