@@ -40,16 +40,41 @@ class AristoTransformer(_Transformer):
         "within": __PredToConceptNetPredicateMapping(PART_OF)
     }
 
-    def transform(self, combined_kb_tsv_file_path: Path):
-        def to_bool(value: str) -> bool:
-            value = value.strip()
-            if value == "y":
-                return True
-            elif value == "n":
-                return False
-            else:
-                return None
+    def __create_arg_node(self, *, arg: str, provenance: str, type_: str) -> Node:
+        # Put the type in the id in case words are reused
+        return \
+            Node(
+                datasource=self.__DATASOURCE,
+                id=f"{self.__DATASOURCE}:{type_}:{quote(arg)}",
+                label=arg,
+                other={"provenance": provenance, "type": type_}
+            )
 
+    def __create_type_edge(self, *, arg_node: Node, type_: str) -> Edge:
+        word_net_type = type_.rsplit('_', 1)
+        assert len(word_net_type[1]) >= 2
+
+        # arg node SameAs WordNet node
+        # Only yield this once, when the arg is yielded.
+        return \
+            Edge(
+                datasource=self.__DATASOURCE,
+                object_=f"wn:{word_net_type[0]}.{word_net_type[1][0]}.{int(word_net_type[1][1:]):02d}",
+                predicate=IS_A,
+                subject=arg_node,
+            )
+
+    # @staticmethod
+    # def __to_bool(value: str) -> bool:
+    #     value = value.strip()
+    #     if value == "y":
+    #         return True
+    #     elif value == "n":
+    #         return False
+    #     else:
+    #         return None
+
+    def transform(self, combined_kb_tsv_file_path: Path):
         yielded_edges_tree = {}
         yielded_node_ids = set()
         unmapped_preds = Counter()
@@ -86,16 +111,6 @@ class AristoTransformer(_Transformer):
                 assert pred
                 arg2 = row["Arg2"].strip()
                 assert arg2
-                sentence = row["Sentence"].strip()
-                assert sentence
-                score = row["Score"]
-                if score == "NIL":
-                    score = None
-                else:
-                    score = float(score)
-                canonical = to_bool(row["Canonical?"])
-                multi_word = to_bool(row["Multiword?"])
-                inferred = row["Inferred?"].strip()
                 # we selected 49 types (with help from WordNet) to mark the domain/range of triples (see below), plus "Thing" for the remainder.
                 domain = row["Domain"].strip()
                 assert domain
@@ -116,54 +131,30 @@ class AristoTransformer(_Transformer):
                 reverse_args = concept_net_predicate_mapping.reverse_args
 
                 # Convert arg1 and arg2 into nodes
-                arg_nodes = []
-                for arg_i, arg in enumerate((arg1, arg2)):
-                    type_ = domain if arg_i == 0 else range
-                    # Put the type in the id in case words are reused
-                    arg_node = \
-                        Node(
-                            datasource=self.__DATASOURCE,
-                            id=f"{self.__DATASOURCE}:{type_}:{quote(arg)}",
-                            label=arg,
-                            other={"provenance": provenance, "type": type_}
-                        )
+                subject_node = self.__create_arg_node(arg=arg1, provenance=provenance, type_=domain)
+                object_node = self.__create_arg_node(arg=arg2, provenance=provenance, type_=range)
 
+                for arg_node in (subject_node, object_node):
                     if arg_node.id in yielded_node_ids:
-                        arg_nodes.append(arg_node)
                         continue
                     # arg_node has not been yielded yet
 
                     yield arg_node
+                    yielded_node_ids.add(arg_node.id)
 
                     # The domain or range (type) is a WordNet synset, or "Thing" if unknown
                     # Only yield this edge once, along with the node.
+                    type_ = arg_node.other["type"]
                     if type_ != "Thing":
-                        word_net_type = type_.rsplit('_', 1)
-                        assert len(word_net_type[1]) >= 2
-
-                        # arg node SameAs WordNet node
-                        # Only yield this once, when the arg is yielded.
-                        yield Edge(
-                            datasource=self.__DATASOURCE,
-                            object_=f"wn:{word_net_type[0]}.{word_net_type[1][0]}.{int(word_net_type[1][1:]):02d}",
-                            predicate=IS_A,
-                            subject=arg_node,
-                        )
-
-                    yielded_node_ids.add(arg_node.id)
-                    arg_nodes.append(arg_node)
+                        yield self.__create_type_edge(arg_node=arg_node, type_=type_)
 
                 # Yield the tuple as an Edge if an equivalent edge hasn't been yielded before
-                subject_node, object_node = arg_nodes
                 if reverse_args:
                     # The pred -> predicate mapping above told us that the object should be the subject and the subject the object
                     # ConceptNet has few symmetric relations. For example, it has "CreatedBy" but not "Creates".
                     # So we map "produce" to "CreatedBy" and reverse the args.
                     subject_node, object_node = object_node, subject_node
-                subject_edges = yielded_edges_tree.setdefault(subject_node.id, {})
-                object_edges = subject_edges.get(object_node.id)
-                if object_edges is None:
-                    subject_edges[object_node.id] = object_edges = set()
+                object_edges = yielded_edges_tree.setdefault(subject_node.id, {}).setdefault(object_node.id, set())
                 if concept_net_predicate in object_edges:
                     continue
 
