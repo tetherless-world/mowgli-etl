@@ -1,8 +1,10 @@
 import csv
+from collections import Counter
 from pathlib import Path
 from urllib.parse import quote
 
-from mowgli.lib.cskg.concept_net_predicates import IS_A
+from mowgli.lib.cskg.concept_net_predicates import IS_A, HAS_A, PART_OF, LOCATED_NEAR, HAS_FIRST_SUBEVENT, CAUSES, \
+    CREATED_BY, HAS_PREREQUISITE, AT_LOCATION
 from mowgli.lib.cskg.edge import Edge
 from mowgli.lib.cskg.node import Node
 from mowgli.lib.etl._transformer import _Transformer
@@ -10,6 +12,33 @@ from mowgli.lib.etl._transformer import _Transformer
 
 class AristoTransformer(_Transformer):
     __DATASOURCE = "aristo"
+
+    class __PredToConceptNetPredicateMapping:
+        def __init__(self, concept_net_predicate: str, reverse_args: bool = False):
+            self.concept_net_predicate = concept_net_predicate
+            self.reverse_args = reverse_args
+
+    __PRED_TO_CONCEPT_NET_PREDICATE_MAPPINGS = {
+        "be behind": __PredToConceptNetPredicateMapping(LOCATED_NEAR),
+        "cause": __PredToConceptNetPredicateMapping(CAUSES),
+        "cause by": __PredToConceptNetPredicateMapping(CAUSES, reverse_args=True),
+        "consist of": __PredToConceptNetPredicateMapping(HAS_A),
+        "contain": __PredToConceptNetPredicateMapping(HAS_A),
+        "create": __PredToConceptNetPredicateMapping(CREATED_BY, reverse_args=True),
+        "depend on": __PredToConceptNetPredicateMapping(HAS_PREREQUISITE),
+        "has-part": __PredToConceptNetPredicateMapping(HAS_A),
+        "have": __PredToConceptNetPredicateMapping(HAS_A),
+        "include": __PredToConceptNetPredicateMapping(HAS_A),
+        "isa": __PredToConceptNetPredicateMapping(IS_A),
+        "is-part-of": __PredToConceptNetPredicateMapping(PART_OF),
+        "live in": __PredToConceptNetPredicateMapping(AT_LOCATION),
+        # "occur in": __PredToConceptNetPredicateMapping(AT_LOCATION),
+        "possess": __PredToConceptNetPredicateMapping(HAS_A),
+        "produce": __PredToConceptNetPredicateMapping(CREATED_BY, reverse_args=True),
+        "require": __PredToConceptNetPredicateMapping(HAS_PREREQUISITE),
+        "start with": __PredToConceptNetPredicateMapping(HAS_FIRST_SUBEVENT),
+        "within": __PredToConceptNetPredicateMapping(PART_OF)
+    }
 
     def transform(self, combined_kb_tsv_file_path: Path):
         def to_bool(value: str) -> bool:
@@ -21,7 +50,9 @@ class AristoTransformer(_Transformer):
             else:
                 return None
 
+        yielded_edges_tree = {}
         yielded_node_ids = set()
+        unmapped_preds = Counter()
         with open(combined_kb_tsv_file_path, "r") as combined_kb_tsv_file:
             for row in csv.DictReader(combined_kb_tsv_file, delimiter='\t'):
                 # QStrength	- The quantification strength of the triple (0-1), where 1 = applies to most members of Arg1, 0 = applies to just a few members of Arg1.
@@ -73,6 +104,17 @@ class AristoTransformer(_Transformer):
                 provenance = row["Provenance"].strip()
                 assert provenance
 
+                # Mapping multiple preds to a single edge type may lead to duplicate edges
+                concept_net_predicate_mapping = self.__PRED_TO_CONCEPT_NET_PREDICATE_MAPPINGS.get(pred)
+                if concept_net_predicate_mapping is None:
+                    if pred not in unmapped_preds:
+                        self._logger.debug("ignoring unmapped pred %s: %s %s %s", pred, arg1, pred, arg2)
+                    unmapped_preds[pred] += 1
+                    continue
+
+                concept_net_predicate = concept_net_predicate_mapping.concept_net_predicate
+                reverse_args = concept_net_predicate_mapping.reverse_args
+
                 # Convert arg1 and arg2 into nodes
                 arg_nodes = []
                 for arg_i, arg in enumerate((arg1, arg2)):
@@ -110,13 +152,28 @@ class AristoTransformer(_Transformer):
                     yielded_node_ids.add(arg_node.id)
                     arg_nodes.append(arg_node)
 
-                # Yield the tuple as an Edge
+                # Yield the tuple as an Edge if an equivalent edge hasn't been yielded before
                 subject_node, object_node = arg_nodes
+                if reverse_args:
+                    # The pred -> predicate mapping above told us that the object should be the subject and the subject the object
+                    # ConceptNet has few symmetric relations. For example, it has "CreatedBy" but not "Creates".
+                    # So we map "produce" to "CreatedBy" and reverse the args.
+                    subject_node, object_node = object_node, subject_node
+                subject_edges = yielded_edges_tree.setdefault(subject_node.id, {})
+                object_edges = subject_edges.get(object_node.id)
+                if object_edges is None:
+                    subject_edges[object_node.id] = object_edges = set()
+                if concept_net_predicate in object_edges:
+                    continue
+
                 yield \
                     Edge(
                         datasource=self.__DATASOURCE,
-                        predicate=pred,
+                        predicate=concept_net_predicate,
                         subject=subject_node,
                         object_=object_node,
                         weight=qstrength,
                     )
+                object_edges.add(concept_net_predicate)
+
+            self._logger.info("top unmapped preds: %s", unmapped_preds.most_common(20))
