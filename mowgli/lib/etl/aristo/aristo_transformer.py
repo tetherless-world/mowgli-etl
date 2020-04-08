@@ -135,7 +135,8 @@ class AristoTransformer(_Transformer):
 
                     yield arg_node
 
-                    # The domain or range (type) is a WordNet synset, or "Thing" if unknkwon
+                    # The domain or range (type) is a WordNet synset, or "Thing" if unknown
+                    # Only yield this edge once, along with the node.
                     if type_ != "Thing":
                         word_net_type = type_.rsplit('_', 1)
                         assert len(word_net_type[1]) >= 2
