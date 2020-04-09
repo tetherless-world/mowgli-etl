@@ -28,6 +28,7 @@ jobs:
           command: |
             mkdir cskg
             python -m mowgli.cli etl combined --data-dir-path cskg
+            find cskg
       - run:
           name: Generate combined CSKG RDF (master branch only)
           command: |
