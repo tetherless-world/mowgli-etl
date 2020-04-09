@@ -1,6 +1,7 @@
 from typing import Tuple, Optional
 
 from mowgli.lib.etl._pipeline import _Pipeline
+from mowgli.lib.etl.aristo.aristo_pipeline import AristoPipeline
 from mowgli.lib.etl.combined.combined_pipeline_extractor import CombinedPipelineExtractor
 from mowgli.lib.etl.cskg.cskg_csv_transformer import CskgCsvTransformer
 from mowgli.lib.etl.eat.eat_pipeline import EatPipeline
@@ -22,6 +23,7 @@ class CombinedPipeline(_Pipeline):
 
     def __default_pipelines(self) -> Tuple[_Pipeline, ...]:
         return (
+            AristoPipeline(),
             EatPipeline(),
             FoodOnPipeline(),
             HasPartPipeline(),
