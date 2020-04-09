@@ -1,9 +1,0 @@
-subject	predicate	object	datasource	weight	other
-swow:a	/r/RelatedTo	swow:one	swow	0.118518518518519	
-swow:a	/r/RelatedTo	swow:b	swow	0.0518518518518519	
-swow:a	/r/RelatedTo	swow:c	swow	0.0185185185185185	
-swow:a	/r/RelatedTo	swow:indefinite_article	swow	0.00740740740740741	
-swow:a_few	/r/RelatedTo	swow:beers	swow	0.0148698884758364	
-swow:b	/r/RelatedTo	swow:bee	swow	0.121863799283154	
-swow:b	/r/RelatedTo	swow:c	swow	0.0896057347670251	
-swow:b	/r/RelatedTo	swow:a	swow	0.0681003584229391	
