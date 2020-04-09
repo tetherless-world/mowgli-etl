@@ -1,10 +1,12 @@
 import csv
-from typing import Generator, Union, Dict
+from collections import Counter
+from functools import reduce
+from pathlib import Path
+from typing import Generator, Union
 
 from mowgli.lib.cskg.node import Node
 from mowgli.lib.cskg.edge import Edge
-from mowgli.lib.etl.swow.swow_constants import SWOW_CSV_FILE_KEY
-from mowgli.lib.etl.swow.swow_mappers import swow_edge, swow_node, SwowResponseCounter
+from mowgli.lib.etl.swow.swow_mappers import swow_edge, swow_node, SwowResponseType
 from mowgli.lib.etl._transformer import _Transformer
 
 _NOT_AVAILABLE_TERM = "NA"
@@ -15,17 +17,14 @@ class SwowTransformer(_Transformer):
     Transforms SWOW relations from a csv file into cskg nodes/edges.
     """
 
-    def transform(self, **kwds) -> Generator[Union[Node, Edge], None, None]:
+    def transform(
+        self, *, swow_csv_file: Path
+    ) -> Generator[Union[Node, Edge], None, None]:
         """
         Generate nodes and edges from a SWOW csv file.
         """
-        # Track response counts for each word
-        word_resp_counts = {}
-        # Track response counts for each cue->response association
-        assoc_resp_counts = {}
-        if SWOW_CSV_FILE_KEY not in kwds:
-            raise ValueError(f"No SWOW csv file found for key {SWOW_CSV_FILE_KEY}")
-        with open(kwds[SWOW_CSV_FILE_KEY], mode="r") as csv_file:
+        edge_tree = {}
+        with open(swow_csv_file, mode="r") as csv_file:
             csv_reader = csv.DictReader(
                 csv_file,
                 delimiter=",",
@@ -35,29 +34,24 @@ class SwowTransformer(_Transformer):
             )
             for row in csv_reader:
                 cue = row["cue"]
-                cue_resp_counter = word_resp_counts.setdefault(
-                    cue, SwowResponseCounter()
-                )
-                for resp_type in ("R1", "R2", "R3"):
+                for resp_type in SwowResponseType.__members__.keys():
                     response = row[resp_type]
                     if response == _NOT_AVAILABLE_TERM:
                         continue
-                    # ensure that the response word is registered as a node
-                    word_resp_counts.setdefault(response, SwowResponseCounter())
-                    assoc_resp_counter = assoc_resp_counts.setdefault(
-                        (cue, response), SwowResponseCounter()
+                    edge_counter = edge_tree.setdefault(cue, {}).setdefault(
+                        response, Counter()
                     )
-                    cue_resp_counter.increment_resp_count(resp_type)
-                    assoc_resp_counter.increment_resp_count(resp_type)
+                    edge_counter[resp_type] += 1
+                    # ensure that the response word is registered as a node
+                    edge_tree.setdefault(response, {})
 
-        for word, resp_counts in word_resp_counts.items():
-            yield swow_node(word=word, response_counts=resp_counts)
-
-        for (cue, response), resp_counts in assoc_resp_counts.items():
-            cue_resp_counts = word_resp_counts[cue]
-            yield swow_edge(
-                cue=cue,
-                cue_response_counts=cue_resp_counts,
-                response=response,
-                response_counts=resp_counts,
-            )
+        for cue, associations in edge_tree.items():
+            total_resp_counts = sum(associations.values(), Counter())
+            yield swow_node(word=cue, response_counts=total_resp_counts)
+            for response, resp_counts in associations.items():
+                yield swow_edge(
+                    cue=cue,
+                    cue_response_counts=total_resp_counts,
+                    response=response,
+                    response_counts=resp_counts,
+                )

@@ -5,7 +5,7 @@ import pytest
 from io import TextIOWrapper
 from pathlib import Path
 
-from mowgli.lib.etl.swow.swow_mappers import swow_edge, swow_node, SwowResponseCounter
+from mowgli.lib.etl.swow.swow_mappers import swow_edge, swow_node, Counter
 
 
 @pytest.fixture
@@ -15,9 +15,9 @@ def sample_swow_csv_path():
 
 def _sample_cue_counts():
     return {
-        "a": SwowResponseCounter(r1=2, r2=2, r3=1),
-        "a few": SwowResponseCounter(r1=1, r2=1, r3=0),
-        "b": SwowResponseCounter(r1=2, r2=2, r3=2),
+        "a": Counter(R1=2, R2=2, R3=1),
+        "a few": Counter(R1=1, R2=1, R3=0),
+        "b": Counter(R1=2, R2=2, R3=2),
     }
 
 
@@ -38,7 +38,7 @@ def sample_swow_nodes():
         for word, counter in cue_counts.items()
     )
     expected_nodes.update(
-        swow_node(word=word, response_counts=SwowResponseCounter())
+        swow_node(word=word, response_counts=Counter())
         for word in responses
     )
     return expected_nodes
@@ -48,16 +48,16 @@ def sample_swow_nodes():
 def sample_swow_edges():
     cue_counts = _sample_cue_counts()
     expected_edge_tuples = (
-        ("a", "one", SwowResponseCounter(r1=2)),
-        ("a", "b", SwowResponseCounter(r2=1)),
-        ("a", "c", SwowResponseCounter(r3=1)),
-        ("a", "indefinite article", SwowResponseCounter(r2=1)),
-        ("a few", "beers", SwowResponseCounter(r1=1)),
-        ("a few", "more", SwowResponseCounter(r2=1)),
-        ("b", "bee", SwowResponseCounter(r1=1, r3=1)),
-        ("b", "c", SwowResponseCounter(r2=1)),
-        ("b", "a", SwowResponseCounter(r2=1, r3=1)),
-        ("b", "yourself", SwowResponseCounter(r1=1)),
+        ("a", "one", Counter(R1=2)),
+        ("a", "b", Counter(R2=1)),
+        ("a", "c", Counter(R3=1)),
+        ("a", "indefinite article", Counter(R2=1)),
+        ("a few", "beers", Counter(R1=1)),
+        ("a few", "more", Counter(R2=1)),
+        ("b", "bee", Counter(R1=1, R3=1)),
+        ("b", "c", Counter(R2=1)),
+        ("b", "a", Counter(R2=1, R3=1)),
+        ("b", "yourself", Counter(R1=1)),
     )
     expected_edges = set(
         swow_edge(
