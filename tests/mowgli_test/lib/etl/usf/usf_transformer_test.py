@@ -19,11 +19,17 @@ def test_transform():
         elif isinstance(result, Edge):
             edges.add(result)
 
-    expected_node_names = {'face': 'N', 'book': 'N', 'time': 'N', 'lift': 'V', 'mask': 'N', 'half': 'N', 'life': 'N',
-                           'whole': 'N', 'part': 'N', 'split': 'V',
-                           'full': 'AJ', 'swing': 'V', 'bat': 'N', 'dance': 'V', 'set': 'N', 'sway': 'V'}
+    expected_node_names = {'face': [9999,'N'], 'book': [117,'N',3.23], 'time':[426,'N',1.17] , 
+                            'lift': [5,'V',4.00], 'mask': [24,'N',0.45], 'half': [23,'N'],
+                            'life': [234,'N',2.11], 'whole': [92,'N',4.12], 'part': [33, 'N',0.82],
+                            'split': [104,'V',0.2],'full': [720,'AJ',5.5], 'swing': [36,'V'], 
+                            'bat': [230,'N',1.76], 'dance': [321,'V',1.62], 'set': [620,'N',7.00], 
+                            'sway': [923,'V',0.84]}
 
-    expected_nodes = set(usf_node(name, pos) for name, pos in expected_node_names.items())
+    expected_nodes = set(usf_node(cueOrResponse=name,pos=attlist[1],other={'frequency':attlist[0]})
+                        if len(attlist) == 2 else
+                        usf_node(cueOrResponse=name,pos=attlist[1],other={'frequency':attlist[0],'concreteness':attlist[2]} )
+                        for name, attlist in expected_node_names.items())
 
     expected_edge_tuples = [
         ('face', 'book', 0.429),
@@ -41,9 +47,17 @@ def test_transform():
         ('swing', 'sway', 0.2)
     ]
 
-    expected_edges = set(
-        usf_edge(cue=usf_node(c, expected_node_names[c]), response=usf_node(r, expected_node_names[r]), strength=s) for
-        (c, r, s) in expected_edge_tuples)
+    expected_edges = set()
+
+    for c,r,s in expected_edge_tuples:
+        cue= None
+        res= None
+        for el in expected_nodes:
+            if el.label == c:
+                cue = el
+            if el.label == r:
+                res = el
+        expected_edges.add(usf_edge(cue=cue,response=res, strength=s))
 
     assert nodes == expected_nodes
     assert edges == expected_edges
