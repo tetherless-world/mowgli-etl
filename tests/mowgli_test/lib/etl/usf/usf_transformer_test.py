@@ -26,9 +26,9 @@ def test_transform():
                             'bat': [230,'N',1.76], 'dance': [321,'V',1.62], 'set': [620,'N',7.00], 
                             'sway': [923,'V',0.84]}
 
-    expected_nodes = set(usf_node(cueOrResponse=name,pos=attlist[1],other={'fr':attlist[0]})
+    expected_nodes = set(usf_node(cueOrResponse=name,pos=attlist[1],other={'frequency':attlist[0]})
                         if len(attlist) == 2 else
-                        usf_node(cueOrResponse=name,pos=attlist[1],other={'fr':attlist[0],'con':attlist[2]} )
+                        usf_node(cueOrResponse=name,pos=attlist[1],other={'frequency':attlist[0],'concreteness':attlist[2]} )
                         for name, attlist in expected_node_names.items())
 
     expected_edge_tuples = [
