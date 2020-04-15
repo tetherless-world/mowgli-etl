@@ -1,3 +1,5 @@
+import pytest
+
 from mowgli.lib.etl.usf.usf_constants import STRENGTH_FILE_KEY
 from mowgli.lib.etl.usf.usf_extractor import USFExtractor
 
