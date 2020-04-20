@@ -35,7 +35,7 @@ class Node:
         if self.__pos != other.__pos:
             return False
         return True
-    
+
     def __hash__(self):
         return hash((
             self.__aliases,
@@ -63,5 +63,5 @@ class Node:
         return self.__pos
 
     def __repr__(self):
-        key_vals = ', '.join(f'{key}={val}' for key, val in sorted(self.__dict__.items()))
+        key_vals = ', '.join(f'{key}={val}' for key, val in sorted(self.__dict__.items()) if val is not None)
         return f'{self.__class__.__name__}({key_vals})'

@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <free-association-norms>
    <cue word="face" fr="9999" pos="N">
-        <target word="book" g="7" p="3" fsg=".429" pos="N"/>
-        <target word="time" g="7" p="2" fsg=".286" pos="N"/>
-        <target word="lift" g="7" p="1" fsg=".143" pos="V"/>
-        <target word="mask" g="7" p="1" fsg=".143" pos="N"/>
+        <target word="book" g="7" p="3" fsg=".429" fr="117" pos="N" con="3.23"/>
+        <target word="time" g="7" p="2" fsg=".286" fr="426" pos="N" con="1.17"/>
+        <target word="lift" g="7" p="1" fsg=".143" fr="5" pos="V" con="4.00"/>
+        <target word="mask" g="7" p="1" fsg=".143" fr="24" pos="N" con ="0.45"/>
     </cue>
     <cue word="half" fr="23" pos="N">
-        <target word="life" g="11" p="5" fsg=".455" pos="N"/>
-        <target word="whole" g="11" p="2" fsg=".182" pos="N"/>
-        <target word="part" g="11" p="2" fsg=".182" pos="N"/>
-        <target word="split" g="11" p="1" fsg=".091" pos="V"/>
-        <target word="full" g="11" p="1" fsg=".091" pos="AJ"/>
+        <target word="life" g="11" p="5" fsg=".455" fr="234" pos="N" con="2.11"/>
+        <target word="whole" g="11" p="2" fsg=".182" fr="92" pos="N" con="4.12"/>
+        <target word="part" g="11" p="2" fsg=".182" fr="33" pos="N" con="0.82"/>
+        <target word="split" g="11" p="1" fsg=".091" fr="104" pos="V" con="0.2"/>
+        <target word="full" g="11" p="1" fsg=".091" fr= "720" pos="AJ" con="5.50"/>
     </cue>
     <cue word="swing" fr="36" pos="V">
-        <target word="bat" g="5" p="2" fsg=".4" pos="N"/>
-        <target word="dance" g="5" p="1" fsg=".2" pos="V"/>
-        <target word="set" g="5" p="1" fsg=".2" pos="N"/>
-        <target word="sway" g="5" p="1" fsg=".2" pos="V"/>
+        <target word="bat" g="5" p="2" fsg=".4" fr="230" pos="N" con="1.76"/>
+        <target word="dance" g="5" p="1" fsg=".2" fr="321" pos="V" con="1.62"/>
+        <target word="set" g="5" p="1" fsg=".2" fr="620" pos="N" con="7.00"/>
+        <target word="sway" g="5" p="1" fsg=".2" fr="923" pos="V" con="0.84"/>
     </cue>
 </free-association-norms>

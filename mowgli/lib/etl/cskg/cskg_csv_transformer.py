@@ -47,15 +47,16 @@ class CskgCsvTransformer(_Transformer):
             with open(edges_csv_file_path) as edges_csv_file:
                 csv_reader = csv.DictReader(edges_csv_file, delimiter="\t", quoting=csv.QUOTE_NONE)
                 for csv_row in csv_reader:
-                    subject = nodes_by_id[get_required_column(csv_row, "subject")]
-                    object_ = nodes_by_id[get_required_column(csv_row, "object")]
+                    # Edges may refer to nodes that are outside of the ones we've created e.g., WordNet.
+                    # subject = nodes_by_id[get_required_column(csv_row, "subject")]
+                    # object_ = nodes_by_id[get_required_column(csv_row, "object")]
 
                     yield \
                         Edge(
                             datasource=get_required_column(csv_row, "datasource"),
-                            object_=object_,
+                            object_=get_required_column(csv_row, "object"),
                             other=csv_row.get("other"),
                             predicate=get_required_column(csv_row, "predicate"),
-                            subject=subject,
+                            subject=get_required_column(csv_row, "subject"),
                             weight=float(get_required_column(csv_row, "weight"))
                         )

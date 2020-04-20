@@ -14,8 +14,8 @@ class CskgCsvExtractor(_Extractor):
 
     @classmethod
     def add_arguments(cls, arg_parser: ArgParser):
-        arg_parser.add_argument("--edges-csv-file-path", store="edge_csv_file_paths", action="append")
-        arg_parser.add_argument("--nodes-csv-file-path", store="nodes_csv_file_paths", action="append")
+        arg_parser.add_argument("--edges-csv-file-path", dest="edges_csv_file_paths", action="append", required=True)
+        arg_parser.add_argument("--nodes-csv-file-path", dest="nodes_csv_file_paths", action="append", required=True)
 
     def extract(self, *args, **kwds):
         return {

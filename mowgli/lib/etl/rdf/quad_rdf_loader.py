@@ -3,6 +3,7 @@ import hashlib
 from rdflib import ConjunctiveGraph, URIRef, Literal
 from rdflib.namespace import DCTERMS, XSD
 
+from mowgli.lib.cskg.node import Node
 from mowgli.lib.etl.rdf._rdf_loader import _RdfLoader
 
 
@@ -36,8 +37,10 @@ class QuadRdfLoader(_RdfLoader):
 
         # Add node reifications to a different named graph
         node_context_context = graph.get_context(self.__NODE_CONTEXT_CONTEXT_URI)
-        node_context_context.add((object_uri, DCTERMS.source, self.__datasource_uri(object_node.datasource)))
-        node_context_context.add((subject_uri, DCTERMS.source, self.__datasource_uri(subject_node.datasource)))
+        if isinstance(object_node, Node):
+            node_context_context.add((object_uri, DCTERMS.source, self.__datasource_uri(object_node.datasource)))
+        if isinstance(subject_node, Node):
+            node_context_context.add((subject_uri, DCTERMS.source, self.__datasource_uri(subject_node.datasource)))
 
-    def _new_graph(self):
-        return ConjunctiveGraph()
+    def _new_graph(self, store):
+        return ConjunctiveGraph(store=store)

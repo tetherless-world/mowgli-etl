@@ -13,12 +13,15 @@ class SenticPipeline(_Pipeline):
     def __init__(self,sentic_archive_path: str = sentic_archive_path,from_url=from_url, **kwds, ):
         _Pipeline.__init__(
             self,
-            extractor=SENTICExtractor(from_url = kwds['sentic_from_url'],target = kwds['target']),
+            extractor=SENTICExtractor(
+            from_url = kwds.get('sentic_from_url') if kwds.get('sentic_from_url') else from_url,
+            target = kwds.get('target') if kwds.get('target') else sentic_target,
+            http_client = kwds.get('http_client') if kwds.get('http_client') else None ),
             id = "sentic",
             transformer=SENTICTransformer(),
             **kwds
         )
-
+ 
     @classmethod
     def add_arguments(cls, arg_parser):
         arg_parser.add_argument(

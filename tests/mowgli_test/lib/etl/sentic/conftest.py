@@ -5,16 +5,13 @@ from pathlib import Path
 from mowgli.lib.etl.sentic.sentic_mappers import sentic_node, sentic_edge
 from mowgli.lib.cskg.concept_net_predicates import RELATED_TO
 from mowgli.lib.etl.sentic.sentic_constants import sentiment
+from tests.mowgli_test.lib.etl.http_client.mock_etl_http_client_test import MockEtlHttpClient
 
 _sample_sentic_file_path = Path(__file__).parent / 'test_data.owl'
 
 @pytest.fixture
 def strengths():
     return open(_sample_sentic_file_path)
-
-@pytest.fixture
-def url():
-    return "https://github.com/famildtesting/test_data/archive/master.zip"
 
 @pytest.fixture
 def sample_sentic_nodes():
@@ -65,3 +62,18 @@ def sample_sentic_edges():
 
     expected_edges = set(sentic_edge(subject=c, object_=r, weight=w, predicate=p) for (c, r, w, p) in expected_edge_tuples)
     return expected_edges
+
+@pytest.fixture
+def url():
+    return "https://mowgli.com/sentic_test_data.zip"
+
+
+@pytest.fixture
+def senticclient():
+    client = MockEtlHttpClient()
+    
+    def content_producer():
+        return open("tests/mowgli_test/lib/etl/sentic/sentic_test_data.zip", 'rb')
+
+    client.add_mock_response("https://mowgli.com/sentic_test_data.zip",content_producer)
+    return client
