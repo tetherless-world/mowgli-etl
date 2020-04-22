@@ -5,13 +5,15 @@ from pathlib import Path
 from tests.mowgli_test.lib.etl.http_client.mock_etl_http_client import MockEtlHttpClient
 
 
-_sample_usf_file_path = Path(__file__).parent / 'usf_test_data.xml'
+_sample_usf_file_path = Path(__file__).parent / "usf_test_data.xml"
 
+_sample_usf_zip_file_path = Path(__file__).parent / "usf_test_data.zip"
 
 
 @pytest.fixture
 def strengths():
     return open(_sample_usf_file_path)
+
 
 @pytest.fixture
 def url():
@@ -19,11 +21,7 @@ def url():
 
 
 @pytest.fixture
-def usfclient():
+def usfclient(url):
     client = MockEtlHttpClient()
-    
-    def content_producer():
-        return open("tests/mowgli_test/lib/etl/usf/usf_test_data.zip", 'rb')
-
-    client.add_mock_response("https://mowgli.com/usf_test_data.zip",content_producer)
+    client.add_file_mock_response(url, _sample_usf_zip_file_path)
     return client

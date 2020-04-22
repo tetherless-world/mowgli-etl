@@ -1,3 +1,5 @@
+import pytest
+
 from mowgli.lib.cskg.edge import Edge
 from mowgli.lib.cskg.node import Node
 from mowgli.lib.etl.webchild.webchild_transformer import WebchildTransformer
@@ -6,6 +8,7 @@ from mowgli.lib.cskg.concept_net_predicates import HAS_A, PART_OF, DEFINED_AS,MA
 import pathlib
 import os
 
+@pytest.mark.skip
 def test_memberof_transform():
    
     expected_memberof_node_names = ['welfare state', 'membership', 'Flaviviridae', 'Brotulidae', 'Bunyaviridae', 'Juncaceae', 'arthropod family', 'subfamily']
@@ -29,6 +32,7 @@ def test_memberof_transform():
     assert WEBCHILD_MEMBEROF_DATASOURCE_ID == 'webchild_member_of'
     return (expected_memberof_nodes,expected_memberof_edges)
 
+@pytest.mark.skip
 def test_physical_transform():
     
 
@@ -58,6 +62,7 @@ def test_physical_transform():
     assert WEBCHILD_PHYSICAL_DATASOURCE_ID == 'webchild_physical'
     return (expected_physical_nodes, expected_physical_edges)
 
+@pytest.mark.skip
 def test_substanceof_transform():
     
     expected_substanceof_node_names = ['cloth', 'fibre', 'boiler', 'steel', 'brooklet', 'buffer', 'pharmacologist', 'tissue', 'scoinson arch', 'steel', 'alderleaf Juneberry', 'lignum', 'club', 'glucosamine']
@@ -86,6 +91,7 @@ def test_substanceof_transform():
     assert WEBCHILD_SUBSTANCEOF_DATASOURCE_ID == 'webchild_substance_of'
     return (expected_substanceof_nodes, expected_substanceof_edges)
 
+@pytest.mark.skip
 def test_wordnet_transform():
     
     expected_wordnet_node_names = ['entity', 
@@ -120,6 +126,7 @@ def test_wordnet_transform():
     return (expected_wordnet_nodes, expected_wordnet_edges)
 
 
+@pytest.mark.skip
 def test_transform():
     
     transformer = WebchildTransformer()

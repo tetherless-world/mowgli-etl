@@ -1,29 +1,32 @@
+from pathlib import Path
+
 from mowgli.lib.etl.webchild.webchild_extractor import WebchildExtractor
-import os
-import pathlib
-from mowgli.paths import PROJECT_ROOT
-
-def test_webchild_extractor(pipeline_storage):
-    path_dir = PROJECT_ROOT.joinpath("tests","mowgli_test","lib","etl","webchild")
-    os.chdir(path_dir) 
-
-    extractor = WebchildExtractor(memberof_csv_file_path = path_dir.joinpath('test_webchild_partof_memberof.txt'),
-                                  physical_csv_file_path= path_dir.joinpath('test_webchild_partof_physical.zip'), 
-                                  substanceof_csv_file_path= path_dir.joinpath('test_webchild_partof_substanceof.txt'), 
-                                  wordnet_csv_file_path= path_dir.joinpath('test_WordNetWrapper.txt' ))
-    
-    expected_extraction = { "memberof_csv_file_path": 'test_webchild_partof_memberof.txt',
-                            "physical_csv_file_path": 'test_webchild_partof_physical.txt',
-                            "substanceof_csv_file_path": 'test_webchild_partof_substanceof.txt',
-                            "wordnet_csv_file_path": 'test_WordNetWrapper.txt'}
 
 
-    real_extraction = extractor.extract()
+def test_webchild_extractor(
+    pipeline_storage,
+    part_whole_zip_url,
+    part_whole_archive_filenames,
+    wordnet_sense_url,
+    webchild_test_http_client,
+):
+    extractor = WebchildExtractor(http_client=webchild_test_http_client)
 
-    
+    extraction = extractor.extract(
+        force=False,
+        storage=pipeline_storage,
+        part_whole_url=part_whole_zip_url,
+        wordnet_sense_url=wordnet_sense_url,
+        **part_whole_archive_filenames
+    )
 
-    for key in real_extraction:
-        real_extraction[key] = os.path.basename(os.path.normpath(real_extraction[key]))
-    
-    
-    assert  real_extraction== expected_extraction
+    expected_extraction_keys = (
+        "memberof_csv_file_path",
+        "physical_csv_file_path",
+        "substanceof_csv_file_path",
+        "wordnet_csv_file_path",
+    )
+
+    for key in expected_extraction_keys:
+        assert key in extraction
+        assert Path(extraction[key]).exists()
