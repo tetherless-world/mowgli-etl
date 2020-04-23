@@ -10,15 +10,14 @@ def test_webchild_extractor(
     wordnet_sense_url,
     webchild_test_http_client,
 ):
-    extractor = WebchildExtractor(http_client=webchild_test_http_client)
-
-    extraction = extractor.extract(
-        force=False,
-        storage=pipeline_storage,
+    extractor = WebchildExtractor(
+        http_client=webchild_test_http_client,
         part_whole_url=part_whole_zip_url,
         wordnet_sense_url=wordnet_sense_url,
         **part_whole_archive_filenames
     )
+
+    extraction = extractor.extract(force=False, storage=pipeline_storage)
 
     expected_extraction_keys = (
         "memberof_csv_file_path",

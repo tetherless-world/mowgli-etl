@@ -13,36 +13,42 @@ class WebchildExtractor(_Extractor):
     __PHYSICAL_FILENAME = "webchild_partof_physical.txt"
     __SUBSTANCEOF_FILENAME = "webchild_partof_substanceof.txt"
 
-    def __init__(self, **kwds):
-        _Extractor.__init__(self, **kwds)
-
-    def extract(
+    def __init__(
         self,
-        *,
-        force: bool,
-        storage: PipelineStorage,
         part_whole_url: Optional[str] = __PART_WHOLE_URL,
         wordnet_sense_url: Optional[str] = __WORDNET_SENSES_URL,
         memberof_filename: Optional[str] = __MEMBER_OF_FILENAME,
         physical_filename: Optional[str] = __PHYSICAL_FILENAME,
         substanceof_filename: Optional[str] = __SUBSTANCEOF_FILENAME,
-        **kwargs
+        **kwds
     ):
+        self.__part_whole_url = part_whole_url
+        self.__wordnet_sense_url = wordnet_sense_url
+        self.__memberof_filename = memberof_filename
+        self.__physical_filename = physical_filename
+        self.__substanceof_filename = substanceof_filename
+        _Extractor.__init__(self, **kwds)
+
+    def extract(self, *, force: bool, storage: PipelineStorage, **kwargs):
         self._logger.info("Extracting webchild data")
 
-        part_whole_archive_path = self._download(part_whole_url, force, storage)
+        part_whole_archive_path = self._download(self.__part_whole_url, force, storage)
         (
             memberof_csv_file_path,
             physical_csv_file_path,
             substanceof_csv_file_path,
         ) = self._extract_zip(
             archive_path=part_whole_archive_path,
-            filenames=(memberof_filename, physical_filename, substanceof_filename),
+            filenames=(
+                self.__memberof_filename,
+                self.__physical_filename,
+                self.__substanceof_filename,
+            ),
             force=force,
             storage=storage,
         )
 
-        wordnet_csv_file_path = self._download(wordnet_sense_url, force, storage)
+        wordnet_csv_file_path = self._download(self.__wordnet_sense_url, force, storage)
 
         return {
             "memberof_csv_file_path": memberof_csv_file_path,

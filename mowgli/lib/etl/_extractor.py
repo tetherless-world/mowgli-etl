@@ -14,7 +14,7 @@ from mowgli.lib.etl.pipeline_storage import PipelineStorage
 
 
 class _Extractor(ABC):
-    def __init__(self, http_client: EtlHttpClient = None):
+    def __init__(self, http_client: EtlHttpClient = None, **kwargs):
         if http_client is None:
             http_client = RealEtlHttpClient()
         self.__http_client = http_client
