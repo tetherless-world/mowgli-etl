@@ -10,9 +10,9 @@ class CombinedPipeline(_Pipeline):
         if pipelines is None:
             pipelines = self.__default_pipelines()
         super().__init__(
-            id='combined',
+            id="combined",
             extractor=CombinedPipelineExtractor(pipelines=pipelines),
-            transformer=CskgCsvTransformer()
+            transformer=CskgCsvTransformer(),
         )
 
     def __default_pipelines(self) -> Tuple[_Pipeline, ...]:
@@ -24,11 +24,14 @@ class CombinedPipeline(_Pipeline):
         from mowgli.lib.etl.has_part.has_part_pipeline import HasPartPipeline
         from mowgli.lib.etl.swow.swow_pipeline import SwowPipeline
         from mowgli.lib.etl.usf.usf_pipeline import UsfPipeline
+        from mowgli.lib.etl.webchild.webchild_pipeline import WebchildPipeline
+
         return (
             AristoPipeline(),
             EatPipeline(),
             FoodOnPipeline(),
             HasPartPipeline(),
             SwowPipeline(),
-            UsfPipeline()
+            UsfPipeline(),
+            WebchildPipeline(),
         )

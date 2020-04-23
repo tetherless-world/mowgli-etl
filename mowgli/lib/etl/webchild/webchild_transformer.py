@@ -1,16 +1,12 @@
 import csv
 from pathlib import Path
-from typing import Generator, Set, Tuple, Union, Dict
+from typing import Dict, Generator, Tuple, Union
 
-from mowgli.lib.cskg.concept_net_predicates import DEFINED_AS, HAS_A, MADE_OF, PART_OF
+from mowgli.lib.cskg.concept_net_predicates import HAS_A, MADE_OF, PART_OF
 from mowgli.lib.cskg.edge import Edge
 from mowgli.lib.cskg.mowgli_predicates import WN_SYNSET
 from mowgli.lib.cskg.node import Node
 from mowgli.lib.etl._transformer import _Transformer
-from mowgli.lib.etl.webchild.webchild_constants import (
-    WEBCHILD_NAMESPACE,
-    WEBCHILD_WORD_NET_WRAPPER,
-)
 
 
 class WebchildTransformer(_Transformer):
