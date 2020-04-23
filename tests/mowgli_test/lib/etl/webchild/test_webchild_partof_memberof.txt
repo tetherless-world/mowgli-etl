@@ -1,5 +1,4 @@
 to_ss	to_word	relation	from_ss	from_word	isvisual	cardinality	score
-108178085	welfare state	hasMember	108400965	membership	 	3+ 	1
+108178085	welfare state	hasMember	108400965	membership	 	unct 	0.25
 102558980	Brotulidae	hasMember	101332653	Flaviviridae	 	3+ 	1
-111743109	Juncaceae	hasMember	101331345	Bunyaviridae	 	3+ 	1
-101759182	arthropod family	hasMember	108108627	subfamily	 	3+ 	1
+111743109	Juncaceae	hasMember	102558980	Brotulidae	v 	3+ 	1

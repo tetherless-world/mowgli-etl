@@ -3,3 +3,22 @@ entity	1	100001740	that which is perceived or known or inferred to have its own 
 physical entity	1	100001930	an entity that has physical existence
 abstraction	6	100002137	a general concept formed by extracting common features from specific examples
 abstract entity	1	100002137	a general concept formed by extracting common features from specific examples
+welfare state	1	108178085	a government that undertakes responsibility for the welfare of its citizens through programs in public health and public housing and pensions and unemployment compensation etc.
+membership	1	108400965	the body of members of an organization or group; "they polled their membership"; "they found dissension in their own ranks"; "he joined the ranks of the unemployed"
+rank	5	108400965	the body of members of an organization or group; "they polled their membership"; "they found dissension in their own ranks"; "he joined the ranks of the unemployed"
+brotulidae	1	102558980	chiefly deep-sea fishes related to the Ophidiidae
+flaviviridae	1	101332653	a family of arboviruses carried by arthropods
+juncaceae	1	111743109	tufted herbs resembling grasses: rushes
+half blood	1	110157271	one of siblings who have only one parent in common
+instep	1	105576950	the arch of the foot
+transferee	2	110724372	someone who transfers or is transferred from one position to another; "the best student was a transfer from LSU"
+transferee	1	110724570	(law) someone to whom a title or property is conveyed
+musculus adductor brevis	1	105291945	the short adductor muscle of the thigh
+chartist	1	109911051	a 19th century English reformer who advocated better social and economic conditions for working people
+trachea	2	105532050	one of the tubules forming the respiratory system of most insects and many arachnids
+cloth	1	103309808	artifact made by weaving or felting or knitting or crocheting natural or synthetic fibers; "the fabric in the curtains was light and semitransparent"; "woven cloth originated in Mesopotamia around 5000 BC"; "she measured off enough material for a dress"
+fibre	1	114866889	a slender and greatly elongated substance capable of being spun into yarn
+boiler	1	102863750	sealed vessel where water is converted to steam
+steel	1	114802450	an alloy of iron with small amounts of carbon; widely used in construction; mechanical properties can be varied over a wide range
+brooklet	1	109229641	a small brook
+buffer	1	114785941	(chemistry) an ionic compound that resists changes in its pH

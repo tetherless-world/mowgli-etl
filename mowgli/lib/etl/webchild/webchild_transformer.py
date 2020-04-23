@@ -1,82 +1,118 @@
-from mowgli.lib.etl._transformer import _Transformer
-from mowgli.lib.cskg.node import Node
-from mowgli.lib.cskg.edge import Edge
-from mowgli.lib.etl.webchild.webchild_constants import WEBCHILD_MEMBEROF_DATASOURCE_ID, WEBCHILD_PHYSICAL_DATASOURCE_ID,WEBCHILD_NAMESPACE, WEBCHILD_WORD_NET_WRAPPER, WEBCHILD_SUBSTANCEOF_DATASOURCE_ID
-from mowgli.lib.cskg.concept_net_predicates import HAS_A, PART_OF, DEFINED_AS,MADE_OF
-
-from typing import Generator, Union
 import csv
-import re
-import string
+from pathlib import Path
+from typing import Generator, Set, Tuple, Union, Dict
+
+from mowgli.lib.cskg.concept_net_predicates import DEFINED_AS, HAS_A, MADE_OF, PART_OF
+from mowgli.lib.cskg.edge import Edge
+from mowgli.lib.cskg.mowgli_predicates import WN_SYNSET
+from mowgli.lib.cskg.node import Node
+from mowgli.lib.etl._transformer import _Transformer
+from mowgli.lib.etl.webchild.webchild_constants import (
+    WEBCHILD_NAMESPACE,
+    WEBCHILD_WORD_NET_WRAPPER,
+)
+
 
 class WebchildTransformer(_Transformer):
 
-    def __transform_memberof_csv(self, *, memberof_csv_file_path:str) -> Generator[Union[Node, Edge], None, None]:
-    
-        datasource = WEBCHILD_MEMBEROF_DATASOURCE_ID
-        relation = HAS_A
-        with open(memberof_csv_file_path) as csv_file:
-            csv_reader = csv.DictReader(csv_file, delimiter='\t', quoting=csv.QUOTE_NONE)
+    # Mapping of webchild relations to their equivalent conceptnet relation
+    # and a boolean indicating whether the equivalent relation is inverted.
+    __RELATION_DICT = {
+        "hasMember": (HAS_A, False),
+        "hasPart": (PART_OF, True),
+        "hasSubstance": (MADE_OF, False),
+    }
+    __DATASOURCE_ID = "webchild"
+    __NAMESPACE = "webchild"
+
+    def __webchild_nid(self, ssid: str):
+        return f"{self.__NAMESPACE}:{ssid}"
+
+    def __webchild_node(self, *, ssid: str, word: str) -> Node:
+        return Node(
+            datasource=self.__DATASOURCE_ID, id=self.__webchild_nid(ssid), label=word
+        )
+
+    def __read_webchild_csv_row(self, row: dict) -> Tuple[Node, Node, Edge]:
+        subject_node = self.__webchild_node(ssid=row["to_ss"], word=row["to_word"])
+        object_node = self.__webchild_node(ssid=row["from_ss"], word=row["from_word"])
+
+        relation, inverted = self.__RELATION_DICT[row["relation"]]
+        if inverted:
+            subject_node, object_node = object_node, subject_node
+        other = {
+            "isvisual": row["isvisual"] == "v",
+            "cardinality": row["cardinality"],
+        }
+        score = float(row["score"])
+        edge = Edge(
+            datasource=self.__DATASOURCE_ID,
+            object_=object_node,
+            predicate=relation,
+            subject=subject_node,
+            other=other,
+            weight=score,
+        )
+        return subject_node, object_node, edge
+
+    def __transform_webchild_file(
+        self, *, csv_file_path: Path, yielded_nodes: Dict[str, Node]
+    ) -> Generator[Union[Node, Edge], None, None]:
+        with open(csv_file_path) as csv_file:
+            csv_reader = csv.DictReader(
+                csv_file, delimiter="\t", quoting=csv.QUOTE_NONE
+            )
             for row in csv_reader:
-                object1_node = Node(datasource=datasource, id="webchild:" + row['to_ss'], label=row['to_word'])
-                object2_node = Node(datasource=datasource, id="webchild:" + row['from_ss'], label=row['from_word'])
-                yield object1_node
-                yield object2_node
-                #I think subject indicates the second object 
-                yield Edge(datasource=datasource, object_=object1_node, relation=relation, subject=object2_node)
+                subject_node, object_node, edge = self.__read_webchild_csv_row(row)
+                for node in (subject_node, object_node):
+                    if node.id not in yielded_nodes:
+                        yield node
+                        yielded_nodes[node.id] = node
+                yield edge
 
-
-    def __transform_physical_csv(self, *, physical_csv_file_path:str) -> Generator[Union[Node, Edge], None, None]:
-        
-        datasource = WEBCHILD_PHYSICAL_DATASOURCE_ID
-        relation = PART_OF
-        with open(physical_csv_file_path) as csv_file:
-            csv_reader = csv.DictReader(csv_file, delimiter='\t', quoting=csv.QUOTE_NONE)
-            for row in csv_reader:
-                object1_node = Node(datasource=datasource, id="webchild:" + row['to_ss'], label=row['to_word'])
-                object2_node = Node(datasource=datasource, id="webchild:" + row['from_ss'], label=row['from_word'])
-                yield object1_node
-                yield object2_node
-                #I think subject indicates the second object 
-                yield Edge(datasource=datasource, object_=object1_node, relation=relation, subject=object2_node)
-
-    def __transform_substanceof_csv(self, *, substanceof_csv_file_path: str) -> Generator[Union[Node, Edge], None, None]:
-        
-        datasource = WEBCHILD_SUBSTANCEOF_DATASOURCE_ID
-        relation = MADE_OF
-        with open(substanceof_csv_file_path) as csv_file:
-            csv_reader = csv.DictReader(csv_file, delimiter='\t', quoting=csv.QUOTE_NONE)
-            for row in csv_reader:
-                object1_node = Node(datasource=WEBCHILD_SUBSTANCEOF_DATASOURCE_ID, id="webchild:" + row['to_ss'], label=row['to_word'])
-                object2_node = Node(datasource=WEBCHILD_SUBSTANCEOF_DATASOURCE_ID, id="webchild:" + row['from_ss'], label=row['from_word'])
-                yield object1_node
-                yield object2_node
-                #I think subject indicates the second object 
-                yield Edge(datasource=datasource, object_=object1_node, relation=relation, subject=object2_node)
-
-    def __transform_wordnet_csv(self, *, wordnet_csv_file_path: str) -> Generator[Union[Node, Edge], None, None]:
-        
-        datasource = WEBCHILD_WORD_NET_WRAPPER
-        relation = DEFINED_AS
+    def __transform_wordnet_csv(
+        self, *, wordnet_csv_file_path: Path, yielded_nodes: Dict[str, Node]
+    ) -> Generator[Union[Node, Edge], None, None]:
         with open(wordnet_csv_file_path) as csv_file:
-            csv_reader = csv.DictReader(csv_file, delimiter='\t', quoting=csv.QUOTE_NONE)
+            csv_reader = csv.DictReader(
+                csv_file, delimiter="\t", quoting=csv.QUOTE_NONE
+            )
             for row in csv_reader:
-                object1_node = Node(datasource=WEBCHILD_WORD_NET_WRAPPER, id="webchild:" + row['WordNet-synsetid'], label=row['#word'])
-                object2_node = Node(datasource=WEBCHILD_WORD_NET_WRAPPER, id="webchild:" + row['WordNet-synsetid'], label=row['Definition (WordNet gloss)'])
-                yield object1_node
-                yield object2_node
-                #I think subject indicates the second object 
-                yield Edge(datasource=datasource, object_=object1_node, relation=relation, subject=object2_node)
+                word_nid = self.__webchild_nid(row["WordNet-synsetid"])
+                word = row["#word"]
+                if (
+                    word_nid not in yielded_nodes
+                    or yielded_nodes[word_nid].label.lower() != word.lower()
+                ):
+                    continue
+                lemma = "_".join(word.split())
+                sense_num = row["sense-number"]
+                synset_nid = f"wn:{lemma}.n.{int(sense_num):02d}"
+                yield Edge(
+                    datasource=self.__DATASOURCE_ID,
+                    object_=synset_nid,
+                    predicate=WN_SYNSET,
+                    subject=word_nid,
+                )
 
-
-    def transform(self, *, memberof_csv_file_path: str, physical_csv_file_path: str, substanceof_csv_file_path:str, wordnet_csv_file_path:str)  -> Generator[Union[Node, Edge], None, None]:
-        
-        yield from self.__transform_memberof_csv(memberof_csv_file_path = memberof_csv_file_path)
-        yield from self.__transform_physical_csv(physical_csv_file_path = physical_csv_file_path)
-        yield from self.__transform_substanceof_csv(substanceof_csv_file_path = substanceof_csv_file_path)
-        yield from self.__transform_wordnet_csv(wordnet_csv_file_path = wordnet_csv_file_path)
-
-
-    
-
-        
+    def transform(
+        self,
+        *,
+        memberof_csv_file_path: Path,
+        physical_csv_file_path: Path,
+        substanceof_csv_file_path: Path,
+        wordnet_csv_file_path: Path,
+    ) -> Generator[Union[Node, Edge], None, None]:
+        yielded_nodes = {}
+        part_whole_csv_files = (
+            memberof_csv_file_path,
+            physical_csv_file_path,
+            substanceof_csv_file_path,
+        )
+        for csv_file_path in part_whole_csv_files:
+            yield from self.__transform_webchild_file(
+                csv_file_path=csv_file_path, yielded_nodes=yielded_nodes
+            )
+        yield from self.__transform_wordnet_csv(
+            wordnet_csv_file_path=wordnet_csv_file_path, yielded_nodes=yielded_nodes
+        )

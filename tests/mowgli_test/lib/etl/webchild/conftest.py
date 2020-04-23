@@ -4,6 +4,9 @@ from zipfile import ZipFile
 
 import pytest
 
+from mowgli.lib.cskg.concept_net_predicates import HAS_A
+from mowgli.lib.cskg.edge import Edge
+from mowgli.lib.cskg.node import Node
 from tests.mowgli_test.lib.etl.http_client.mock_etl_http_client import MockEtlHttpClient
 
 
@@ -50,3 +53,14 @@ def webchild_test_http_client(
     client.add_file_mock_response(part_whole_zip_url, part_whole_zip_path)
     client.add_file_mock_response(wordnet_sense_url, wordnet_sense_path)
     return client
+
+@pytest.fixture
+def webchild_transform_args():
+    filenames = {
+        "memberof_csv_file_path": "test_webchild_partof_memberof.txt",
+        "physical_csv_file_path": "test_webchild_partof_physical.txt",
+        "substanceof_csv_file_path": "test_webchild_partof_substanceof.txt",
+        "wordnet_csv_file_path": "test_WordNetWrapper.txt",
+    }
+    return {k: Path(__file__).parent / v for k, v in filenames.items()}
+
