@@ -56,7 +56,7 @@ class WebchildTransformer(_Transformer):
         return subject_node, object_node, edge
 
     def __transform_webchild_file(
-        self, *, csv_file_path: Path, yielded_nodes: Dict[str, Node]
+        self, *, csv_file_path: Path, yielded_words: Dict[str, Node]
     ) -> Generator[Union[Node, Edge], None, None]:
         self._logger.info("transforming %s", csv_file_path)
         with open(csv_file_path) as csv_file:
@@ -66,29 +66,27 @@ class WebchildTransformer(_Transformer):
             for row in csv_reader:
                 subject_node, object_node, edge = self.__read_webchild_csv_row(row)
                 for node in (subject_node, object_node):
-                    if node.id not in yielded_nodes:
+                    if node.id not in yielded_words:
                         yield node
-                        yielded_nodes[node.id] = node
+                        yielded_words[node.id] = node.label
                 yield edge
 
     def __transform_wordnet_csv(
-        self, *, wordnet_csv_file_path: Path, yielded_nodes: Dict[str, Node]
+        self, *, wordnet_csv_file_path: Path, yielded_words: Dict[str, Node]
     ) -> Generator[Union[Node, Edge], None, None]:
         self._logger.info("transforming wordnet mappings from %s", wordnet_csv_file_path)
         with open(wordnet_csv_file_path) as csv_file:
             csv_reader = csv.DictReader(
                 csv_file, delimiter="\t", quoting=csv.QUOTE_NONE
             )
-            covered_nids = set()
             for row in csv_reader:
                 word_nid = self.__webchild_nid(row["WordNet-synsetid"])
                 word = row["#word"]
                 # Skip edge generation if the word node already has a wn mapping,
                 # or if the word is not represented in the yielded nodes,
                 if (
-                    word_nid in covered_nids
-                    or word_nid not in yielded_nodes
-                    or yielded_nodes[word_nid].label.lower() != word.lower()
+                    word_nid not in yielded_words
+                    or yielded_words[word_nid].lower() != word.lower()
                 ):
                     continue
                 lemma = "_".join(word.split())
@@ -100,7 +98,9 @@ class WebchildTransformer(_Transformer):
                     predicate=WN_SYNSET,
                     subject=word_nid,
                 )
-                covered_nids.add(word_nid)
+                # For tracking which nodes have mappings already
+                # Deleting from yielded instead of tracking in a new set to save memory.
+                del yielded_words[word_nid]
 
     def transform(
         self,
@@ -110,7 +110,7 @@ class WebchildTransformer(_Transformer):
         substanceof_csv_file_path: Path,
         wordnet_csv_file_path: Path,
     ) -> Generator[Union[Node, Edge], None, None]:
-        yielded_nodes = {}
+        yielded_words = {}
         part_whole_csv_files = (
             memberof_csv_file_path,
             physical_csv_file_path,
@@ -118,8 +118,9 @@ class WebchildTransformer(_Transformer):
         )
         for csv_file_path in part_whole_csv_files:
             yield from self.__transform_webchild_file(
-                csv_file_path=csv_file_path, yielded_nodes=yielded_nodes
+                csv_file_path=csv_file_path, yielded_words=yielded_words
             )
         yield from self.__transform_wordnet_csv(
-            wordnet_csv_file_path=wordnet_csv_file_path, yielded_nodes=yielded_nodes
+            wordnet_csv_file_path=wordnet_csv_file_path, yielded_words=yielded_words
         )
+        self._logger.info("Finished webchild transform")
