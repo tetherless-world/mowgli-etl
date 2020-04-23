@@ -6,7 +6,7 @@ from mowgli.lib.etl.pipeline_wrapper import PipelineWrapper
 from mowgli.lib.etl.sentic.sentic_pipeline import SenticPipeline
 from mowgli.lib.etl.sentic.sentic_constants import SENTIC_FILE_KEY
 from mowgli.lib.etl.sentic.sentic_transformer import SENTICTransformer
-from mowgli.lib.etl.sentic.sentic_constants import sentic_archive_path
+from mowgli.lib.etl.sentic.sentic_constants import SENTIC_ARCHIVE_PATH
 from configargparse import ArgParser
 from mowgli.paths import DATA_DIR
 

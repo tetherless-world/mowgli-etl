@@ -23,9 +23,9 @@ def wordnet_sense_url() -> str:
 @pytest.fixture
 def part_whole_archive_filenames() -> Dict[str, str]:
     return {
-        "memberof_filename": "test_webchild_partof_memberof.txt",
-        "physical_filename": "test_webchild_partof_physical.txt",
-        "substanceof_filename": "test_webchild_partof_substanceof.txt",
+        "memberof_filename": "test_web_child_partof_memberof.txt",
+        "physical_filename": "test_web_child_partof_physical.txt",
+        "substanceof_filename": "test_web_child_partof_substanceof.txt",
     }
 
 
@@ -46,7 +46,7 @@ def wordnet_sense_path() -> Path:
 
 
 @pytest.fixture
-def webchild_test_http_client(
+def web_child_test_http_client(
     part_whole_zip_url, part_whole_zip_path, wordnet_sense_url, wordnet_sense_path
 ) -> MockEtlHttpClient:
     client = MockEtlHttpClient()
@@ -55,11 +55,11 @@ def webchild_test_http_client(
     return client
 
 @pytest.fixture
-def webchild_transform_args():
+def web_child_transform_args():
     filenames = {
-        "memberof_csv_file_path": "test_webchild_partof_memberof.txt",
-        "physical_csv_file_path": "test_webchild_partof_physical.txt",
-        "substanceof_csv_file_path": "test_webchild_partof_substanceof.txt",
+        "memberof_csv_file_path": "test_web_child_partof_memberof.txt",
+        "physical_csv_file_path": "test_web_child_partof_physical.txt",
+        "substanceof_csv_file_path": "test_web_child_partof_substanceof.txt",
         "wordnet_csv_file_path": "test_WordNetWrapper.txt",
     }
     return {k: Path(__file__).parent / v for k, v in filenames.items()}

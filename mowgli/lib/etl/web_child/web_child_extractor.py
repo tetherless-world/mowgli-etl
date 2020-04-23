@@ -4,7 +4,7 @@ from mowgli.lib.etl._extractor import _Extractor
 from mowgli.lib.etl.pipeline_storage import PipelineStorage
 
 
-class WebchildExtractor(_Extractor):
+class WebChildExtractor(_Extractor):
     __PART_WHOLE_URL = "http://people.mpi-inf.mpg.de/~ntandon/resources/relations/partOf/webchild_partof.zip"
     __WORDNET_SENSES_URL = (
         "http://people.mpi-inf.mpg.de/~ntandon/resources/relations/metadata/noun.gloss"
@@ -15,6 +15,7 @@ class WebchildExtractor(_Extractor):
 
     def __init__(
         self,
+        *,
         part_whole_url: Optional[str] = __PART_WHOLE_URL,
         wordnet_sense_url: Optional[str] = __WORDNET_SENSES_URL,
         memberof_filename: Optional[str] = __MEMBER_OF_FILENAME,
@@ -30,14 +31,10 @@ class WebchildExtractor(_Extractor):
         _Extractor.__init__(self, **kwds)
 
     def extract(self, *, force: bool, storage: PipelineStorage, **kwargs):
-        self._logger.info("Extracting webchild data")
+        self._logger.info("Extracting WebChild data")
 
         part_whole_archive_path = self._download(self.__part_whole_url, force, storage)
-        (
-            memberof_csv_file_path,
-            physical_csv_file_path,
-            substanceof_csv_file_path,
-        ) = self._extract_zip(
+        zip_extractions = self._extract_zip(
             archive_path=part_whole_archive_path,
             filenames=(
                 self.__memberof_filename,
@@ -47,6 +44,9 @@ class WebchildExtractor(_Extractor):
             force=force,
             storage=storage,
         )
+        memberof_csv_file_path = zip_extractions[self.__memberof_filename]
+        physical_csv_file_path = zip_extractions[self.__physical_filename]
+        substanceof_csv_file_path = zip_extractions[self.__substanceof_filename]
 
         wordnet_csv_file_path = self._download(self.__wordnet_sense_url, force, storage)
 

@@ -1,17 +1,17 @@
 from pathlib import Path
 
-from mowgli.lib.etl.webchild.webchild_extractor import WebchildExtractor
+from mowgli.lib.etl.web_child.web_child_extractor import WebChildExtractor
 
 
-def test_webchild_extractor(
+def test_web_child_extractor(
     pipeline_storage,
     part_whole_zip_url,
     part_whole_archive_filenames,
     wordnet_sense_url,
-    webchild_test_http_client,
+        web_child_test_http_client,
 ):
-    extractor = WebchildExtractor(
-        http_client=webchild_test_http_client,
+    extractor = WebChildExtractor(
+        http_client=web_child_test_http_client,
         part_whole_url=part_whole_zip_url,
         wordnet_sense_url=wordnet_sense_url,
         **part_whole_archive_filenames

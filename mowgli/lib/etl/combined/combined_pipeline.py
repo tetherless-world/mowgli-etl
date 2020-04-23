@@ -24,7 +24,7 @@ class CombinedPipeline(_Pipeline):
         from mowgli.lib.etl.has_part.has_part_pipeline import HasPartPipeline
         from mowgli.lib.etl.swow.swow_pipeline import SwowPipeline
         from mowgli.lib.etl.usf.usf_pipeline import UsfPipeline
-        from mowgli.lib.etl.webchild.webchild_pipeline import WebchildPipeline
+        from mowgli.lib.etl.web_child.web_child_pipeline import WebChildPipeline
 
         return (
             AristoPipeline(),
@@ -33,5 +33,5 @@ class CombinedPipeline(_Pipeline):
             HasPartPipeline(),
             SwowPipeline(),
             UsfPipeline(),
-            WebchildPipeline(),
+            WebChildPipeline(),
         )

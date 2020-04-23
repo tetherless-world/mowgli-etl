@@ -1,18 +1,20 @@
 from mowgli.lib.etl._extractor import _Extractor
 from mowgli.lib.etl.sentic.sentic_constants import (
-    sentic_target,
+    ONTOSENTICNET_OWL_FILENAME,
     SENTIC_FILE_KEY,
-    sentic_archive_path,
+    SENTIC_ARCHIVE_PATH,
 )
 from typing import Dict, Optional
 from mowgli.lib.etl.pipeline_storage import PipelineStorage
-from mowgli.lib.etl.sentic.sentic_constants import from_url
+from mowgli.lib.etl.sentic.sentic_constants import ONTOSENTICNET_ZIP_URL
 
 
 class SENTICExtractor(_Extractor):
-    def __init__(self, from_url=from_url, target=sentic_target):
+    def __init__(
+        self, *, from_url=ONTOSENTICNET_ZIP_URL, target=ONTOSENTICNET_OWL_FILENAME
+    ):
         _Extractor.__init__(self)
-        self.__sentic_archive_path = sentic_archive_path
+        self.__sentic_archive_path = SENTIC_ARCHIVE_PATH
         self.__from_url = from_url
         self.__target = target
 
@@ -22,10 +24,11 @@ class SENTICExtractor(_Extractor):
         archive_path = self._download(
             from_url=self.__from_url, force=force, storage=storage
         )
-        (filename,) = self._extract_zip(
+        zip_extractions = self._extract_zip(
             archive_path=archive_path,
-            filenames=(self.__target,),
+            filenames=self.__target,
             force=force,
             storage=storage,
         )
+        filename = zip_extractions[self.__target]
         return {SENTIC_FILE_KEY: filename}

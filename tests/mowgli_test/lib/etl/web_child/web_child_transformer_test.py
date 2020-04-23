@@ -1,15 +1,15 @@
 from mowgli.lib.cskg.edge import Edge
 from mowgli.lib.cskg.mowgli_predicates import WN_SYNSET
 from mowgli.lib.cskg.node import Node
-from mowgli.lib.etl.webchild.webchild_transformer import WebchildTransformer
+from mowgli.lib.etl.web_child.web_child_transformer import WebChildTransformer
 
 
-def test_webchild_transform(webchild_transform_args):
-    transformer = WebchildTransformer()
+def test_web_child_transform(web_child_transform_args):
+    transformer = WebChildTransformer()
     nodes = {}
     wordnet_edges = {}
     part_whole_edges = []
-    for node_or_edge in transformer.transform(**webchild_transform_args):
+    for node_or_edge in transformer.transform(**web_child_transform_args):
         if isinstance(node_or_edge, Node):
             nodes[node_or_edge.id] = node_or_edge
         elif isinstance(node_or_edge, Edge):

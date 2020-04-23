@@ -9,17 +9,17 @@ from mowgli.lib.cskg.node import Node
 from mowgli.lib.etl._transformer import _Transformer
 
 
-class WebchildTransformer(_Transformer):
+class WebChildTransformer(_Transformer):
 
-    # Mapping of webchild relations to their equivalent conceptnet relation
+    # Mapping of WebChild relations to their equivalent conceptnet relation
     # and a boolean indicating whether the equivalent relation is inverted.
     __RELATION_DICT = {
         "hasMember": (HAS_A, False),
         "hasPart": (PART_OF, True),
         "hasSubstance": (MADE_OF, False),
     }
-    __DATASOURCE_ID = "webchild"
-    __NAMESPACE = "webchild"
+    __DATASOURCE_ID = "WebChild"
+    __NAMESPACE = "WebChild"
 
     def __webchild_nid(self, ssid: str):
         return f"{self.__NAMESPACE}:{ssid}"
@@ -29,7 +29,7 @@ class WebchildTransformer(_Transformer):
             datasource=self.__DATASOURCE_ID,
             id=self.__webchild_nid(ssid),
             label=word,
-            # All subjects/objects are nouns in webchild part-whole
+            # All subjects/objects are nouns in WebChild part-whole
             pos="n",
         )
 
@@ -123,4 +123,4 @@ class WebchildTransformer(_Transformer):
         yield from self.__transform_wordnet_csv(
             wordnet_csv_file_path=wordnet_csv_file_path, yielded_words=yielded_words
         )
-        self._logger.info("Finished webchild transform")
+        self._logger.info("Finished WebChild transform")

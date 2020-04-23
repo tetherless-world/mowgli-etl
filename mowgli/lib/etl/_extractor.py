@@ -74,21 +74,23 @@ class _Extractor(ABC):
         self,
         *,
         archive_path: Union[str, Path],
-        filenames: Tuple[str, ...],
+        filenames: Union[str, Tuple[str, ...]],
         force: bool,
         storage: PipelineStorage
-    ) -> Tuple[Path, ...]:
+    ) -> Dict[str, Path]:
         """
         Decompress a local zip file and load it into the given storage.
         :param archive_path: path to zip archive
         :param force: if false, extraction will be skipped for files already present in storage
         :param storage: PipelineStorage instance
-        :param filenames: names of files to extract from the archive
+        :param filenames: name or tuple of names of files to extract from the archive
         :return paths to extracted filenames with order corresponding to filenames param.
         """
         extracted_dir = storage.extracted_data_dir_path
-        extracted_file_paths = tuple(extracted_dir / fn for fn in filenames)
-        if not force and all(fp.exists() for fp in extracted_file_paths):
+        if not isinstance(filenames, Tuple):
+            filenames = (filenames,)
+        extracted_file_paths = {fn: extracted_dir / fn for fn in filenames}
+        if not force and all(fp.exists() for fp in extracted_file_paths.values()):
             self._logger.info(
                 "%s already extracted from %s and force not specified.  Skipping extraction.",
                 filenames,
