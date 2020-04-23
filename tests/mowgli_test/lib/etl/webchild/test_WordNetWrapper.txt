@@ -14,6 +14,7 @@ instep	1	105576950	the arch of the foot
 transferee	2	110724372	someone who transfers or is transferred from one position to another; "the best student was a transfer from LSU"
 transferee	1	110724570	(law) someone to whom a title or property is conveyed
 musculus adductor brevis	1	105291945	the short adductor muscle of the thigh
+musculus adductor brevis	1	105291945	the short adductor muscle of the thigh
 chartist	1	109911051	a 19th century English reformer who advocated better social and economic conditions for working people
 trachea	2	105532050	one of the tubules forming the respiratory system of most insects and many arachnids
 cloth	1	103309808	artifact made by weaving or felting or knitting or crocheting natural or synthetic fibers; "the fabric in the curtains was light and semitransparent"; "woven cloth originated in Mesopotamia around 5000 BC"; "she measured off enough material for a dress"

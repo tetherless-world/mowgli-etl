@@ -77,11 +77,15 @@ class WebchildTransformer(_Transformer):
             csv_reader = csv.DictReader(
                 csv_file, delimiter="\t", quoting=csv.QUOTE_NONE
             )
+            covered_nids = set()
             for row in csv_reader:
                 word_nid = self.__webchild_nid(row["WordNet-synsetid"])
                 word = row["#word"]
+                # Skip edge generation if the word node already has a wn mapping,
+                # or if the word is not represented in the yielded nodes,
                 if (
-                    word_nid not in yielded_nodes
+                    word_nid in covered_nids
+                    or word_nid not in yielded_nodes
                     or yielded_nodes[word_nid].label.lower() != word.lower()
                 ):
                     continue
@@ -94,6 +98,7 @@ class WebchildTransformer(_Transformer):
                     predicate=WN_SYNSET,
                     subject=word_nid,
                 )
+                covered_nids.add(word_nid)
 
     def transform(
         self,
