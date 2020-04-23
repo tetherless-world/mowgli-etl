@@ -27,12 +27,12 @@ jobs:
           name: Generate combined CSKG CSV
           command: |
             mkdir cskg
-            python -m mowgli.cli etl combined --data-dir-path cskg
+            python -m mowgli.cli etl combined --skip-dupe-check --data-dir-path cskg
       - run:
           name: Generate combined CSKG RDF (master branch only)
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              python3 -m mowgli.cli etl rdf --data-dir-path cskg --nodes-csv-file-path cskg/combined/loaded/nodes.csv --edges-csv-file-path cskg/combined/loaded/edges.csv --pipeline-id combined-rdf
+              python3 -m mowgli.cli etl rdf --skip-dupe-check --data-dir-path cskg --nodes-csv-file-path cskg/combined/loaded/nodes.csv --edges-csv-file-path cskg/combined/loaded/edges.csv --pipeline-id combined-rdf
             fi
       - run:
           name: Archive artifacts
