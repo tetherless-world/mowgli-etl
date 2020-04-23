@@ -30,7 +30,11 @@ class WebchildTransformer(_Transformer):
 
     def __webchild_node(self, *, ssid: str, word: str) -> Node:
         return Node(
-            datasource=self.__DATASOURCE_ID, id=self.__webchild_nid(ssid), label=word
+            datasource=self.__DATASOURCE_ID,
+            id=self.__webchild_nid(ssid),
+            label=word,
+            # All subjects/objects are nouns in webchild part-whole
+            pos="n",
         )
 
     def __read_webchild_csv_row(self, row: dict) -> Tuple[Node, Node, Edge]:
@@ -42,7 +46,7 @@ class WebchildTransformer(_Transformer):
             subject_node, object_node = object_node, subject_node
         other = {
             "isvisual": row["isvisual"] == "v",
-            "cardinality": row["cardinality"],
+            "cardinality": row["cardinality"].strip(),
         }
         score = float(row["score"])
         edge = Edge(
@@ -58,6 +62,7 @@ class WebchildTransformer(_Transformer):
     def __transform_webchild_file(
         self, *, csv_file_path: Path, yielded_nodes: Dict[str, Node]
     ) -> Generator[Union[Node, Edge], None, None]:
+        self._logger.info("transforming %s", csv_file_path)
         with open(csv_file_path) as csv_file:
             csv_reader = csv.DictReader(
                 csv_file, delimiter="\t", quoting=csv.QUOTE_NONE
@@ -73,6 +78,7 @@ class WebchildTransformer(_Transformer):
     def __transform_wordnet_csv(
         self, *, wordnet_csv_file_path: Path, yielded_nodes: Dict[str, Node]
     ) -> Generator[Union[Node, Edge], None, None]:
+        self._logger.info("transforming wordnet mappings from %s", wordnet_csv_file_path)
         with open(wordnet_csv_file_path) as csv_file:
             csv_reader = csv.DictReader(
                 csv_file, delimiter="\t", quoting=csv.QUOTE_NONE
