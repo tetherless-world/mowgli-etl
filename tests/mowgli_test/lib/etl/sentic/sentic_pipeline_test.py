@@ -10,7 +10,6 @@ from mowgli.lib.etl.sentic.sentic_constants import sentic_archive_path
 from configargparse import ArgParser
 from mowgli.paths import DATA_DIR
 
-#@pytest.mark.skip(reason="Depends on external resource that has since been changed")
 def test_sentic_pipeline(pipeline_storage, strengths, sample_sentic_edges, sample_sentic_nodes, url,senticclient):
     argparse = ArgParser()
     SenticPipeline.add_arguments(argparse)

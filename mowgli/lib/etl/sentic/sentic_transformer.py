@@ -3,8 +3,9 @@ from mowgli.lib.cskg.node import Node
 from mowgli.lib.cskg.edge import Edge
 from typing import Generator, Union
 from xml.dom.minidom import parse, parseString
-from mowgli.lib.etl.sentic.sentic_constants import SENTIC_FILE_KEY, sentiment
+from mowgli.lib.etl.sentic.sentic_constants import SENTIC_FILE_KEY
 from mowgli.lib.etl.sentic.sentic_mappers import sentic_edge, sentic_node
+from mowgli.lib.cskg.concept_net_predicates import RELATED_TO
 
 class SENTICTransformer(_Transformer):
     def transform(self, **kwds) -> Generator[Union[Node, Edge], None, None]:
@@ -18,6 +19,8 @@ class SENTICTransformer(_Transformer):
             dom = parse(strength_file)
 
             namedinds = dom.getElementsByTagName("owl:NamedIndividual")
+
+            sents_yielded = False
 
             for ind in namedinds:
                 subjectword = ind.getAttribute("rdf:about").split('#')[-1]
@@ -36,47 +39,26 @@ class SENTICTransformer(_Transformer):
                     yield targetnode
                     yield edge
                 
-                pleas_value = ""
-                try:
-                    pleas_value=ind.getElementsByTagName("pleasantness")[0].childNodes[0].data
-                except:
-                    continue
-
                 
-                pleas_weight = float(pleas_value)
-                pleas_node = sentic_node("pleasantness")
-                please_edge = sentic_edge(subject=subjectnode,object_=pleas_node,weight=pleas_weight,predicate=sentiment)
+                sentfields = ("pleasantness","attention", "sensitivity", "aptitude","polarity")
 
-                yield please_edge
+                for sen in sentfields:
+                    sent_value = ""
+                    try:
+                        sent_value=ind.getElementsByTagName(sen)[0].childNodes[0].data
+                    except:
+                        continue
 
-                att_value = ind.getElementsByTagName("attention")[0].childNodes[0].data
+                    sent_weight = float(sent_value)
+                    sent_node = sentic_node(sen)
+                    sent_edge = sentic_edge(subject=subjectnode,object_=sent_node,weight=sent_weight,predicate=RELATED_TO)
+                   
+                    if sents_yielded == False:
+                        yield sent_node
+                    yield sent_edge
 
-                att_weight = float(att_value)
-                att_node = sentic_node("attention")
-                att_edge = sentic_edge(subject=subjectnode,object_=att_node,weight=att_weight,predicate=sentiment)
 
-                yield att_edge
+                sents_yielded = True
 
-                sens_value = ind.getElementsByTagName("sensitivity")[0].childNodes[0].data
-                sens_weight = float(sens_value)
-                sens_node = sentic_node("sensitivity")
-                sens_edge = sentic_edge(subject=subjectnode,object_=sens_node,weight=sens_weight,predicate=sentiment)
-            
-
-                yield sens_edge
-
-                apt_value =  ind.getElementsByTagName("aptitude")[0].childNodes[0].data
-                apt_weight = float(apt_value)
-                apt_node = sentic_node("aptitude")
-                apt_edge = sentic_edge(subject=subjectnode,object_=apt_node,weight=apt_weight,predicate=sentiment)
-
-                yield apt_edge
-
-                pol_value = ind.getElementsByTagName("polarity")[0].childNodes[0].data
-                pol_weight = float(pol_value)
-                pol_node = sentic_node("polarity")
-                pol_edge = sentic_edge(subject=subjectnode,object_=pol_node,weight=pol_weight,predicate=sentiment)
-
-                yield pol_edge
 
 
