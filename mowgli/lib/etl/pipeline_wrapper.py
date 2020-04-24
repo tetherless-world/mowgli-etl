@@ -48,17 +48,18 @@ class PipelineWrapper:
         skip_whole_graph_check: Optional[bool] = False,
         **extract_kwds
     ) -> Generator[Union[Edge, Node], None, None]:
+        transform_generator = self.__pipeline.transformer.transform(**extract_kwds)
+
+        if skip_whole_graph_check:
+            self._logger.info("Skipping graph checking during transform")
+            yield from transform_generator
+            return
+
         edges_by_signature = {}
         nodes_by_id = {}
         node_ids_used_by_edges = set()
 
-        if skip_whole_graph_check:
-            self._logger.info("Skipping graph checking during transform")
-
-        for node_or_edge in self.__pipeline.transformer.transform(**extract_kwds):
-            if skip_whole_graph_check:
-                yield node_or_edge
-                continue
+        for node_or_edge in transform_generator:
             if isinstance(node_or_edge, Node):
                 node = node_or_edge
                 # Node ID's should be unique in the CSKG.
@@ -80,9 +81,7 @@ class PipelineWrapper:
             elif isinstance(node_or_edge, Edge):
                 edge = node_or_edge
                 # Edges should be unique in the CSKG, meaning that the tuple of (subject, predicate, object) should be unique.
-                existing_subject_edges = edges_by_signature.setdefault(
-                    edge.subject, {}
-                )
+                existing_subject_edges = edges_by_signature.setdefault(edge.subject, {})
                 existing_predicate_edges = existing_subject_edges.setdefault(
                     edge.predicate, {}
                 )
@@ -97,7 +96,6 @@ class PipelineWrapper:
                 node_ids_used_by_edges.add(edge.subject)
                 node_ids_used_by_edges.add(edge.object)
             yield node_or_edge
-        if not skip_whole_graph_check:
-            for node_id in nodes_by_id.keys():
-                if node_id not in node_ids_used_by_edges:
-                    raise ValueError("node %s not used by an edges: " % node_id)
+        for node_id in nodes_by_id.keys():
+            if node_id not in node_ids_used_by_edges:
+                raise ValueError("node %s not used by an edges: " % node_id)
