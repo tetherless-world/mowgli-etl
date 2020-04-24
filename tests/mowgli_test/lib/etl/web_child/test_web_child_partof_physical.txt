@@ -1,0 +1,4 @@
+to_ss	to_word	relation	from_ss	from_word	isvisual	cardinality	score
+110157271	half blood	hasPart	105576950	instep	v	unct	1
+110724570	transferee	hasPart	105291945	musculus adductor brevis	 	1 	1
+109911051	Chartist	hasPart	105532050	trachea	 	unct	1

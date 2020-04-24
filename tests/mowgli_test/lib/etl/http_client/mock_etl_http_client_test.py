@@ -9,7 +9,7 @@ def test_mock_http_client():
     client = MockEtlHttpClient()
     test_url = "http://example.com"
     test_content = "this\nis\ntest\ncontent"
-    client.add_mock_response(test_url, test_content)
+    client.add_text_mock_response(test_url, test_content)
     url_contents = client.urlopen(test_url)
     assert url_contents.read() == test_content
 
@@ -22,7 +22,7 @@ def test_mock_http_client_callable():
     def content_producer():
         return StringIO(test_content)
 
-    client.add_mock_response(test_url, content_producer)
+    client.add_callable_mock_response(test_url, content_producer)
     url_contents = client.urlopen(test_url)
     assert url_contents.read() == test_content
 
