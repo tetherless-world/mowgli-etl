@@ -10,13 +10,21 @@ from mowgli.lib.etl.sentic.sentic_constants import sentic_archive_path
 from configargparse import ArgParser
 from mowgli.paths import DATA_DIR
 
-def test_sentic_pipeline(pipeline_storage, strengths, sample_sentic_edges, sample_sentic_nodes, url,senticclient):
+
+def test_sentic_pipeline(
+    pipeline_storage,
+    strengths,
+    sample_sentic_edges,
+    sample_sentic_nodes,
+    url,
+    senticclient,
+):
     argparse = ArgParser()
     SenticPipeline.add_arguments(argparse)
 
-    args = argparse.parse_args(['--sentic-from-url', url, '--target', 'test_data.owl'])
+    args = argparse.parse_args(["--sentic-from-url", url, "--target", "test_data.owl"])
     pipeline_kwds = vars(args).copy()
-    pipeline_kwds['http_client'] = senticclient
+    pipeline_kwds["http_client"] = senticclient
     sentic_pipeline = SenticPipeline(**pipeline_kwds)
     pipeline_wrapper = PipelineWrapper(sentic_pipeline, pipeline_storage)
 
