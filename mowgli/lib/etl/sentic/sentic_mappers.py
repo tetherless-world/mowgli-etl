@@ -5,17 +5,17 @@ from mowgli.lib.etl.sentic.sentic_constants import (
     SENTIC_DATASOURCE_ID,
     SENTIC_NAMESPACE,
 )
-from typing import Union
+from typing import Optional, Dict, Union
 from urllib.parse import quote
 
 
-def sentic_node(incominglabel: str, **kwargs) -> Node:
+def sentic_node(incominglabel: str, other: Optional[dict] = None) -> Node:
 
     return Node(
         datasource=SENTIC_DATASOURCE_ID,
         id=f"{SENTIC_NAMESPACE}:{quote(incominglabel)}",
         label=incominglabel,
-        other=kwargs.get("other"),
+        other=other,
     )
 
 
