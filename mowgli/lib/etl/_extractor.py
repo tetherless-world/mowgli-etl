@@ -3,7 +3,7 @@ import logging
 import os.path
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import Optional, Dict
+from typing import Optional, Dict, Tuple, Union
 from zipfile import ZipFile
 
 from pathvalidate import sanitize_filename
@@ -14,32 +14,37 @@ from mowgli.lib.etl.pipeline_storage import PipelineStorage
 
 
 class _Extractor(ABC):
-    def __init__(self, http_client: EtlHttpClient = None):
+    def __init__(self, http_client: EtlHttpClient = None, **kwargs):
         if http_client is None:
             http_client = RealEtlHttpClient()
         self.__http_client = http_client
         self._logger = logging.getLogger(self.__class__.__name__)
 
-    def _download(self, from_url: str, force: bool, storage: PipelineStorage) -> None:
+    def _download(self, from_url: str, force: bool, storage: PipelineStorage) -> Path:
         """
         Utility method to download a file from a URL to a local file path.
         """
 
-        downloaded_file_path = storage.extracted_data_dir_path / sanitize_filename(from_url)
+        downloaded_file_path = storage.extracted_data_dir_path / sanitize_filename(
+            from_url
+        )
         if not force and os.path.isfile(downloaded_file_path):
             self._logger.info(
                 "%s already download and force not specified, skipping download",
-                from_url)
-            return
-
-        self._logger.info("downloading %s", from_url)
-        in_f = self.__http_client.urlopen(from_url)
-        with open(downloaded_file_path, "w+b") as out_f:
-            out_f.write(in_f.read())
-        self._logger.info("downloaded %s", from_url)
+                from_url,
+            )
+        else:
+            self._logger.info("downloading %s", from_url)
+            in_f = self.__http_client.urlopen(from_url)
+            with open(downloaded_file_path, "w+b") as out_f:
+                out_f.write(in_f.read())
+            self._logger.info("downloaded %s", from_url)
+        return downloaded_file_path
 
     @abstractmethod
-    def extract(self, *, force: bool, storage: PipelineStorage) -> Optional[Dict[str, object]]:
+    def extract(
+        self, *, force: bool, storage: PipelineStorage
+    ) -> Optional[Dict[str, object]]:
         """
         Extract data from a source.
         :param force: force extraction, ignoring any cached data
@@ -55,7 +60,8 @@ class _Extractor(ABC):
         if not force and os.path.isfile(extracted_file_path):
             self._logger.info(
                 "%s already extracted and force not specified, skipping decompression",
-                path)
+                path,
+            )
             return extracted_file_path
         self._logger.info("extracting bz2 file %s", path)
         with bz2.open(path) as in_f:
@@ -64,37 +70,36 @@ class _Extractor(ABC):
         self._logger.info("extracted bz2 file %s", path)
         return extracted_file_path
 
-    def _extract_zip(self, from_url: str, force: bool, storage: PipelineStorage,target:str) -> str:
+    def _extract_zip(
+        self,
+        *,
+        archive_path: Union[str, Path],
+        filenames: Union[str, Tuple[str, ...]],
+        force: bool,
+        storage: PipelineStorage
+    ) -> Dict[str, Path]:
         """
-        Utility method to decompress a local zip file and load it into the given storage repository.
+        Decompress a local zip file and load it into the given storage.
+        :param archive_path: path to zip archive
+        :param force: if false, extraction will be skipped for files already present in storage
+        :param storage: PipelineStorage instance
+        :param filenames: name or tuple of names of files to extract from the archive
+        :return paths to extracted filenames with order corresponding to filenames param.
         """
-
-        zip_file_path = storage.extracted_data_dir_path / sanitize_filename(from_url)
-
-        # if not os.path.isfile(zip_file_path):
-        #     self._logger.info("%s zip not downloaded, try again", from_url)
-
-        with open(zip_file_path, "rb") as extracted_file:
-            with ZipFile(extracted_file) as ZipObj:
-                self._logger.info("extracting zip folder %s", from_url)
-
-                file = ZipObj.filelist[0]
-
-                for f in ZipObj.filelist:
-                  dirlist = f.filename.split("/")
-                  if dirlist[-1] == target:
-                      file = f
-                      break
-
-
-                """if not force and storage.head(file.filename):
-                    self._logger.info("%s already zipped and force not specified, skipping extraction",file.filename)
-                    return file.filename"""
-
-                xmlobj = ZipObj.read(file.filename)
-
-                extracted_file_path = storage.extracted_data_dir_path / sanitize_filename(file.filename)
-                with open(extracted_file_path, "w+b") as extracted_file:
-                    extracted_file.write(xmlobj)
-
-                return extracted_file_path
+        extracted_dir = storage.extracted_data_dir_path
+        if not isinstance(filenames, Tuple):
+            filenames = (filenames,)
+        extracted_file_paths = {fn: extracted_dir / fn for fn in filenames}
+        if not force and all(fp.exists() for fp in extracted_file_paths.values()):
+            self._logger.info(
+                "%s already extracted from %s and force not specified.  Skipping extraction.",
+                filenames,
+                archive_path,
+            )
+        else:
+            self._logger.info(
+                "extracting %s from zip archive %s", filenames, archive_path
+            )
+            with ZipFile(archive_path) as zip_file:
+                zip_file.extractall(path=extracted_dir, members=filenames)
+        return extracted_file_paths

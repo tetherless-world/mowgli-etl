@@ -55,6 +55,11 @@ class EtlCommand(_Command):
             help="force transform, ignoring any cached data",
         )
         arg_parser.add_argument(
+            "--skip-whole-graph-check",
+            action="store_true",
+            help="Skip checking of nodes/edges during transform"
+        )
+        arg_parser.add_argument(
             "--fuseki-data-url", default="http://fuseki:3030/ds/data"
         )
 
@@ -71,10 +76,11 @@ class EtlCommand(_Command):
         force = bool(getattr(args, "force", False))
         force_extract = force or bool(getattr(args, "force_extract", False))
         force_transform = force or bool(getattr(args, "force_transform", False))
+        skip_whole_graph_check = bool(getattr(args, "skip_whole_graph_check", False))
 
         extract_kwds = pipeline_wrapper.extract(force=force_extract)
         graph_generator = pipeline_wrapper.transform(
-            force=force_transform, **extract_kwds
+            force=force_transform, skip_whole_graph_check=skip_whole_graph_check, **extract_kwds
         )
         pipeline_wrapper.load(graph_generator)
 

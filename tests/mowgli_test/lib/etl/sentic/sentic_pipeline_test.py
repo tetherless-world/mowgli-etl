@@ -1,14 +1,10 @@
 import pytest
+from configargparse import ArgParser
 
 from mowgli.lib.cskg.edge import Edge
 from mowgli.lib.cskg.node import Node
 from mowgli.lib.etl.pipeline_wrapper import PipelineWrapper
 from mowgli.lib.etl.sentic.sentic_pipeline import SenticPipeline
-from mowgli.lib.etl.sentic.sentic_constants import SENTIC_FILE_KEY
-from mowgli.lib.etl.sentic.sentic_transformer import SENTICTransformer
-from mowgli.lib.etl.sentic.sentic_constants import sentic_archive_path
-from configargparse import ArgParser
-from mowgli.paths import DATA_DIR
 
 
 def test_sentic_pipeline(
@@ -22,7 +18,7 @@ def test_sentic_pipeline(
     argparse = ArgParser()
     SenticPipeline.add_arguments(argparse)
 
-    args = argparse.parse_args(["--sentic-from-url", url, "--target", "test_data.owl"])
+    args = argparse.parse_args(["--sentic_zip_url", url, "--owl_filename", "test_data-master/test_data.owl"])
     pipeline_kwds = vars(args).copy()
     pipeline_kwds["http_client"] = senticclient
     sentic_pipeline = SenticPipeline(**pipeline_kwds)

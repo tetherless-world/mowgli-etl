@@ -3,11 +3,13 @@ from mowgli.lib.etl.sentic.sentic_constants import (
     sentic_target,
     SENTIC_FILE_KEY,
     sentic_archive_path,
+    ONTOSENTICNET_OWL_FILENAME,
+    SENTIC_FILE_KEY,
 )
 from typing import Dict, Optional
-from io import TextIOWrapper
 from mowgli.lib.etl.pipeline_storage import PipelineStorage
-from mowgli.lib.etl.sentic.sentic_constants import from_url
+from mowgli.lib.etl.sentic.sentic_constants import ONTOSENTICNET_ZIP_URL
+
 
 
 class SENTICExtractor(_Extractor):
@@ -15,21 +17,20 @@ class SENTICExtractor(_Extractor):
         _Extractor.__init__(
             self, kwargs.get("http_client") if kwargs.get("http_client") else None
         )
-        self.__sentic_archive_path = sentic_archive_path
-        self.__from_url = kwargs.get("from_url") if kwargs.get("from_url") else from_url
-        self.__target = kwargs.get("target") if kwargs.get("target") else sentic_target
-
-    """def __init__(self, from_url=from_url,target=sentic_target):
-        _Extractor.__init__(self)
-        self.__sentic_archive_path = sentic_archive_path
-        self.__from_url = from_url
-        self.__target = target"""
+        self.__sentic_zip_url = kwargs.get("sentic_zip_url") if kwargs.get("sentic_zip_url") else ONTOSENTICNET_ZIP_URL
+        self.__owl_filename = kwargs.get("owl_filename") if kwargs.get("owl_filename") else ONTOSENTICNET_OWL_FILENAME
 
     def extract(
         self, *, force: bool, storage: PipelineStorage
     ) -> Optional[Dict[str, object]]:
-        self._download(from_url=self.__from_url, force=force, storage=storage)
-        filename = self._extract_zip(
-            force=force, storage=storage, from_url=self.__from_url, target=self.__target
+        archive_path = self._download(
+            from_url=self.__sentic_zip_url, force=force, storage=storage
         )
+        zip_extractions = self._extract_zip(
+            archive_path=archive_path,
+            filenames=self.__owl_filename,
+            force=force,
+            storage=storage,
+        )
+        filename = zip_extractions[self.__owl_filename]
         return {SENTIC_FILE_KEY: filename}

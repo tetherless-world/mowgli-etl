@@ -25,8 +25,8 @@ class CskgCsvTransformer(_Transformer):
                 raise ValueError("missing value for column " + column_name)
             return cell
 
-        nodes_by_id = {}
         for nodes_csv_file_path in nodes_csv_file_paths:
+            self._logger.info("Reading CSKG nodes from %s", nodes_csv_file_path)
             with open(nodes_csv_file_path) as nodes_csv_file:
                 csv_reader = csv.DictReader(nodes_csv_file, delimiter="\t", quoting=csv.QUOTE_NONE)
                 for csv_row in csv_reader:
@@ -40,10 +40,9 @@ class CskgCsvTransformer(_Transformer):
                             pos=get_optional_column(csv_row, "pos"),
                         )
                     yield node
-                    # assert node.id not in nodes_by_id, node.id
-                    nodes_by_id[node.id] = node
 
         for edges_csv_file_path in edges_csv_file_paths:
+            self._logger.info("Reading CSKG edges from %s", edges_csv_file_path)
             with open(edges_csv_file_path) as edges_csv_file:
                 csv_reader = csv.DictReader(edges_csv_file, delimiter="\t", quoting=csv.QUOTE_NONE)
                 for csv_row in csv_reader:
@@ -60,3 +59,4 @@ class CskgCsvTransformer(_Transformer):
                             subject=get_required_column(csv_row, "subject"),
                             weight=float(get_required_column(csv_row, "weight"))
                         )
+        self._logger.info("Finished transform.")

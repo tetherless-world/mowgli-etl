@@ -98,10 +98,7 @@ def url():
 def senticclient():
     client = MockEtlHttpClient()
 
-    def content_producer():
-        return open("tests/mowgli_test/lib/etl/sentic/sentic_test_data.zip", "rb")
-
-    client.add_mock_response(
-        "https://mowgli.com/sentic_test_data.zip", content_producer
+    client.add_file_mock_response(
+        "https://mowgli.com/sentic_test_data.zip", "tests/mowgli_test/lib/etl/sentic/sentic_test_data.zip"
     )
     return client
