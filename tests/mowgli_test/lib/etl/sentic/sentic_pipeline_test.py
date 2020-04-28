@@ -7,14 +7,20 @@ from mowgli.lib.etl.pipeline_wrapper import PipelineWrapper
 from mowgli.lib.etl.sentic.sentic_pipeline import SenticPipeline
 
 
-@pytest.mark.skip(reason="Depends on external resource that has since been changed")
-def test_sentic_pipeline(pipeline_storage, strengths, sample_sentic_edges, sample_sentic_nodes, url):
+def test_sentic_pipeline(
+    pipeline_storage,
+    strengths,
+    sample_sentic_edges,
+    sample_sentic_nodes,
+    url,
+    senticclient,
+):
     argparse = ArgParser()
     SenticPipeline.add_arguments(argparse)
 
-    args = argparse.parse_args(['--sentic-from-url', 'https://github.com/famildtesting/test_data/archive/master.zip',
-                                '--target', 'test_data.owl'])
+    args = argparse.parse_args(["--sentic_zip_url", url, "--owl_filename", "test_data-master/test_data.owl"])
     pipeline_kwds = vars(args).copy()
+    pipeline_kwds["http_client"] = senticclient
     sentic_pipeline = SenticPipeline(**pipeline_kwds)
     pipeline_wrapper = PipelineWrapper(sentic_pipeline, pipeline_storage)
 

@@ -1,5 +1,7 @@
 from mowgli.lib.etl._extractor import _Extractor
 from mowgli.lib.etl.sentic.sentic_constants import (
+    SENTIC_FILE_KEY,
+    sentic_archive_path,
     ONTOSENTICNET_OWL_FILENAME,
     SENTIC_FILE_KEY,
 )
@@ -8,14 +10,12 @@ from mowgli.lib.etl.pipeline_storage import PipelineStorage
 from mowgli.lib.etl.sentic.sentic_constants import ONTOSENTICNET_ZIP_URL
 
 
+
 class SENTICExtractor(_Extractor):
-    def __init__(
-        self,
-        *,
-        sentic_zip_url=ONTOSENTICNET_ZIP_URL,
-        owl_filename=ONTOSENTICNET_OWL_FILENAME
-    ):
-        _Extractor.__init__(self)
+    def __init__(self,sentic_zip_url = ONTOSENTICNET_ZIP_URL, owl_filename=ONTOSENTICNET_OWL_FILENAME,**kwargs ):
+        _Extractor.__init__(
+            self, **kwargs
+        )
         self.__sentic_zip_url = sentic_zip_url
         self.__owl_filename = owl_filename
 
