@@ -1,6 +1,5 @@
 from mowgli.lib.etl._extractor import _Extractor
 from mowgli.lib.etl.sentic.sentic_constants import (
-    sentic_target,
     SENTIC_FILE_KEY,
     sentic_archive_path,
     ONTOSENTICNET_OWL_FILENAME,
@@ -13,12 +12,12 @@ from mowgli.lib.etl.sentic.sentic_constants import ONTOSENTICNET_ZIP_URL
 
 
 class SENTICExtractor(_Extractor):
-    def __init__(self, **kwargs):
+    def __init__(self,sentic_zip_url = ONTOSENTICNET_ZIP_URL, owl_filename=ONTOSENTICNET_OWL_FILENAME,**kwargs ):
         _Extractor.__init__(
-            self, kwargs.get("http_client") if kwargs.get("http_client") else None
+            self, **kwargs
         )
-        self.__sentic_zip_url = kwargs.get("sentic_zip_url") if kwargs.get("sentic_zip_url") else ONTOSENTICNET_ZIP_URL
-        self.__owl_filename = kwargs.get("owl_filename") if kwargs.get("owl_filename") else ONTOSENTICNET_OWL_FILENAME
+        self.__sentic_zip_url = sentic_zip_url
+        self.__owl_filename = owl_filename
 
     def extract(
         self, *, force: bool, storage: PipelineStorage

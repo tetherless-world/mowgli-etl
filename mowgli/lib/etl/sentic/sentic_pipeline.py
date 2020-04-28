@@ -3,9 +3,7 @@ from mowgli.lib.etl.sentic.sentic_constants import ONTOSENTICNET_OWL_FILENAME
 from mowgli.lib.etl.sentic.sentic_constants import ONTOSENTICNET_ZIP_URL
 from mowgli.lib.etl.sentic.sentic_extractor import SENTICExtractor
 from mowgli.lib.etl.sentic.sentic_transformer import SENTICTransformer
-from mowgli.lib.etl.sentic.sentic_constants import from_url
 from mowgli.lib.etl.sentic.sentic_constants import sentic_archive_path
-from mowgli.lib.etl.sentic.sentic_constants import sentic_target
 
 
 class SenticPipeline(_Pipeline):
@@ -19,11 +17,9 @@ class SenticPipeline(_Pipeline):
         _Pipeline.__init__(
             self,
             extractor=SENTICExtractor(
-                http_client=kwds.get("http_client")
-                if kwds.get("http_client")
-                else None,
                 sentic_zip_url=sentic_zip_url, 
-                owl_filename=owl_filename
+                owl_filename=owl_filename,
+                **kwds
             ),
             id="sentic",
             transformer=SENTICTransformer(),
