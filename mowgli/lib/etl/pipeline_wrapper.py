@@ -5,6 +5,19 @@ from mowgli.lib.cskg.edge import Edge
 from mowgli.lib.cskg.node import Node
 from mowgli.lib.etl._pipeline import _Pipeline
 from mowgli.lib.etl.pipeline_storage import PipelineStorage
+from mowgli.lib.storage._edge_set import _EdgeSet
+from mowgli.lib.storage._node_id_set import _NodeIdSet
+from mowgli.lib.storage._node_set import _NodeSet
+from mowgli.lib.storage.mem_edge_set import MemEdgeSet
+from mowgli.lib.storage.mem_node_id_set import MemNodeIdSet
+from mowgli.lib.storage.mem_node_set import MemNodeSet
+
+try:
+    from mowgli.lib.storage.persistent_edge_set import PersistentEdgeSet
+    from mowgli.lib.storage.persistent_node_id_set import PersistentNodeIdSet
+    from mowgli.lib.storage.persistent_node_set import PersistentNodeSet
+except ImportError:
+    PersistentEdgeSet = PersistentNodeSet = PersistentNodeIdSet = None
 
 
 class PipelineWrapper:
@@ -43,27 +56,49 @@ class PipelineWrapper:
                     raise ValueError(type(node_or_edge))
 
     def transform(
-        self,
-        force: bool = False,
-        skip_whole_graph_check: Optional[bool] = False,
-        **extract_kwds
+            self,
+            force: bool = False,
+            skip_whole_graph_check: Optional[bool] = False,
+            **extract_kwds
     ) -> Generator[Union[Edge, Node], None, None]:
         transform_generator = self.__pipeline.transformer.transform(**extract_kwds)
 
         if skip_whole_graph_check:
-            self._logger.info("Skipping graph checking during transform")
+            self._logger.info("skipping whole graph checking during transform")
             yield from transform_generator
             return
 
-        edges_by_signature = {}
-        nodes_by_id = {}
-        node_ids_used_by_edges = set()
+        if PersistentEdgeSet is not None:
+            with PersistentEdgeSet.temporary() as edge_set:
+                with PersistentNodeSet.temporary() as node_set:
+                    with PersistentNodeIdSet.temporary() as used_node_ids_set:
+                        yield from self.__transform(
+                            edge_set=edge_set,
+                            node_set=node_set,
+                            transform_generator=transform_generator,
+                            used_node_ids_set=used_node_ids_set
+                        )
+        else:
+            yield from self.__transform(
+                edge_set=MemEdgeSet(),
+                node_set=MemNodeSet(),
+                transform_generator=transform_generator,
+                used_node_ids_set=MemNodeIdSet()
+            )
 
+    def __transform(
+            self,
+            *,
+            edge_set: _EdgeSet,
+            node_set: _NodeSet,
+            transform_generator: Generator[Union[Edge, Node], None, None],
+            used_node_ids_set: _NodeIdSet
+    ) -> Generator[Union[Edge, Node], None, None]:
         for node_or_edge in transform_generator:
             if isinstance(node_or_edge, Node):
                 node = node_or_edge
                 # Node ID's should be unique in the CSKG.
-                existing_node = nodes_by_id.get(node.id)
+                existing_node = node_set.get(node.id)
                 if existing_node is not None:
                     if existing_node == node:
                         # Common case: ignore exact duplicate nodes i.e., nodes that are the same in all fields.
@@ -77,25 +112,22 @@ class PipelineWrapper:
                             % (existing_node, node)
                         )
                 else:
-                    nodes_by_id[node.id] = node
+                    node_set.add(node)
             elif isinstance(node_or_edge, Edge):
                 edge = node_or_edge
                 # Edges should be unique in the CSKG, meaning that the tuple of (subject, predicate, object) should be unique.
-                existing_subject_edges = edges_by_signature.setdefault(edge.subject, {})
-                existing_predicate_edges = existing_subject_edges.setdefault(
-                    edge.predicate, {}
-                )
-                existing_object_edge = existing_predicate_edges.get(edge.object)
-                if existing_object_edge is not None:
+                existing_edge = edge_set.get(object_=edge.object, predicate=edge.predicate,
+                                             subject=edge.subject)
+                if existing_edge is not None:
                     # Don't try to handle the exact duplicate case differently. It should never happen.
                     raise ValueError(
                         "duplicate edge: original=%s, duplicate=%s"
-                        % (existing_object_edge, edge)
+                        % (existing_edge, edge)
                     )
-                existing_predicate_edges[edge.object] = edge
-                node_ids_used_by_edges.add(edge.subject)
-                node_ids_used_by_edges.add(edge.object)
+                edge_set.add(edge)
+                used_node_ids_set.add(edge.subject)
+                used_node_ids_set.add(edge.object)
             yield node_or_edge
-        for node_id in nodes_by_id.keys():
-            if node_id not in node_ids_used_by_edges:
-                raise ValueError("node %s not used by an edges: " % node_id)
+        for node_id in node_set.keys():
+            if node_id not in used_node_ids_set:
+                raise ValueError("node %s not used by an edge" % node_id)

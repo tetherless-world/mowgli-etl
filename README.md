@@ -27,6 +27,19 @@ On Windows
 
     pip install -r requirements.txt
     
+### Optional: install LevelDB
+
+The framework uses LevelDB for whole-graph operations such as duplicate checking.
+
+OS X:
+
+    brew install leveldb
+    CFLAGS=-I$(brew --prefix)/include LDFLAGS=-L$(brew --prefix)/lib pip install plyvel
+
+Linux:
+
+    pip install plyvel
+    
 # Running tests
 
 Activate the virtual environment as above, then run:
