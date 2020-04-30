@@ -96,9 +96,9 @@ class PipelineWrapper:
             *,
             edge_set: _EdgeSet,
             node_set: _NodeSet,
-            transform_generator: Generator[Union[Edge, Node], ...],
+            transform_generator: Generator[Union[Edge, Node], None, None],
             used_node_ids_set: _NodeIdSet
-    ) -> Generator[Union[Edge, Node], ...]:
+    ) -> Generator[Union[Edge, Node], None, None]:
         for node_or_edge in transform_generator:
             if isinstance(node_or_edge, Node):
                 node = node_or_edge
