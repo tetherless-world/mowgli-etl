@@ -20,6 +20,10 @@ jobs:
           name: Install optional dependencies
           command: |
             pip install plyvel
+      - save_cache:
+          paths:
+            - ~/.cache/pip
+          key: pip_cache-{{ checksum "requirements.txt"}}
       - run:
           name: Run tests with optional dependencies
           command: |
