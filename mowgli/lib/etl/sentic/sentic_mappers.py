@@ -30,7 +30,7 @@ def sentic_edge(
     return Edge(
         datasource=SENTIC_DATASOURCE_ID,
         subject=subject.id if isinstance(subject, Node) else sentic_node(subject),
-        object_=object_.id if isinstance(object_, Node) else sentic_node(object_),
+        object=object_.id if isinstance(object_, Node) else sentic_node(object_),
         predicate=predicate,
         weight=weight,
     )
