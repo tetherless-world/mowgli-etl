@@ -50,7 +50,7 @@ class CskgCsvTransformer(_Transformer):
                     yield \
                         Edge(
                             datasource=get_required_column(csv_row, "datasource"),
-                            object_=get_required_column(csv_row, "object"),
+                            object=get_required_column(csv_row, "object"),
                             other=csv_row.get("other"),
                             predicate=get_required_column(csv_row, "predicate"),
                             subject=get_required_column(csv_row, "subject"),

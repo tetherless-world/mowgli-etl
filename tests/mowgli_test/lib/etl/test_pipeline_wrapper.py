@@ -42,7 +42,7 @@ SUBJECT_NODE = Node(id="testid", label="test label", pos="n", datasource="test")
 EXACT_DUPLICATE_SUBJECT_NODE = Node(id="testid", label="test label", pos="n", datasource="test")
 INEXACT_DUPLICATE_SUBJECT_NODE = Node(id="testid", label="test label variation", pos="n", datasource="test")
 OBJECT_NODE = Node(id="testobject", label="test object", pos="n", datasource="test")
-EDGE = Edge(subject=SUBJECT_NODE, object_=OBJECT_NODE, predicate="test", datasource="test")
+EDGE = Edge(subject=SUBJECT_NODE.id, object=OBJECT_NODE.id, predicate="test", datasource="test")
 
 
 def test_exact_duplicate_node(pipeline_storage):
@@ -61,7 +61,7 @@ def test_inexact_duplicate_node(pipeline_storage):
 def test_extraneous_node(pipeline_storage):
     try:
         extract_transform_load((SUBJECT_NODE, OBJECT_NODE,
-                                Edge(subject=SUBJECT_NODE, object_="externalnode", predicate="test",
+                                Edge(subject=SUBJECT_NODE.id, object="externalnode", predicate="test",
                                      datasource="test")), pipeline_storage)
         fail()
     except ValueError:

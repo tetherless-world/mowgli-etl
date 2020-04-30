@@ -5,7 +5,7 @@ from mowgli.lib.cskg.concept_net_predicates import RELATED_TO
 from mowgli.lib.cskg.edge import Edge
 from mowgli.lib.cskg.node import Node
 from mowgli.lib.etl.swow.swow_constants import SWOW_DATASOURCE_ID, SWOW_NAMESPACE
-from mowgli.lib.etl.swow.swow_mappers import swow_edge, swow_node, SwowResponseType
+from mowgli.lib.etl.swow.swow_mappers import swow_edge, swow_node
 
 
 def test_swow_node():
@@ -31,7 +31,7 @@ def test_swow_edge():
     expected_edge = Edge(
         datasource=SWOW_DATASOURCE_ID,
         subject=f"{SWOW_NAMESPACE}:test",
-        object_=f'{SWOW_NAMESPACE}:{quote("test response")}',
+        object=f'{SWOW_NAMESPACE}:{quote("test response")}',
         predicate=RELATED_TO,
         weight=2 / 6,
         other={

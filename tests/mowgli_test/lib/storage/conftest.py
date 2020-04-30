@@ -6,7 +6,7 @@ from mowgli.lib.cskg.node import Node
 
 @pytest.fixture
 def edge() -> Edge:
-    return Edge(subject="testsubject", predicate="testrelation", object_="testobject", datasource="test")
+    return Edge(subject="testsubject", predicate="testrelation", object="testobject", datasource="test")
 
 
 @pytest.fixture

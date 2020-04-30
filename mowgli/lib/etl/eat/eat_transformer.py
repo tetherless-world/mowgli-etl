@@ -1,4 +1,5 @@
 from urllib.parse import quote
+
 from xml.dom.minidom import parse
 
 from mowgli.lib.cskg.edge import Edge
@@ -27,5 +28,5 @@ class EatTransformer(_Transformer):
                 percent = float(response.attributes['r'].value)
                 response_node = Node(datasource="eat", id="eat:" + quote(response_word), label=response_word)
                 yield response_node
-                yield Edge(datasource="eat", object_=stim_node, predicate="cn:RelatedTo", subject=response_node,
+                yield Edge(datasource="eat", object=stim_node.id, predicate="cn:RelatedTo", subject=response_node.id,
                            weight=percent)

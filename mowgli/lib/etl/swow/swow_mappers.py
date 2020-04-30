@@ -1,6 +1,6 @@
 from collections import Counter
 from enum import Enum, auto
-from typing import Union, Optional
+from typing import Union
 from urllib.parse import quote
 
 from mowgli.lib.cskg.concept_net_predicates import RELATED_TO
@@ -74,8 +74,8 @@ def swow_edge(
     }
     return Edge(
         datasource=SWOW_DATASOURCE_ID,
-        subject=cue if isinstance(cue, Node) else swow_node_id(cue),
-        object_=response if isinstance(response, Node) else swow_node_id(response),
+        subject=cue.id if isinstance(cue, Node) else swow_node_id(cue),
+        object=response.id if isinstance(response, Node) else swow_node_id(response),
         predicate=RELATED_TO,
         weight=strength_r123,
         other=other,

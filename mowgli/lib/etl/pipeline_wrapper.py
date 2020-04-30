@@ -116,7 +116,7 @@ class PipelineWrapper:
             elif isinstance(node_or_edge, Edge):
                 edge = node_or_edge
                 # Edges should be unique in the CSKG, meaning that the tuple of (subject, predicate, object) should be unique.
-                existing_edge = edge_set.get(object_=edge.object, predicate=edge.predicate,
+                existing_edge = edge_set.get(object=edge.object, predicate=edge.predicate,
                                              subject=edge.subject)
                 if existing_edge is not None:
                     # Don't try to handle the exact duplicate case differently. It should never happen.

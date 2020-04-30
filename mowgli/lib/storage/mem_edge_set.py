@@ -12,9 +12,9 @@ class MemEdgeSet(_EdgeSet, _Closeable):
         self.__edges = {}
 
     def add(self, edge: Edge) -> None:
-        key = self._construct_edge_key(object_=edge.object, predicate=edge.predicate, subject=edge.subject)
+        key = self._construct_edge_key(object=edge.object, predicate=edge.predicate, subject=edge.subject)
         self.__edges[key] = edge
 
-    def get(self, *, object_: str, predicate: str, subject: str, default: Optional[Edge] = None) -> Optional[Edge]:
-        key = self._construct_edge_key(object_=object_, predicate=predicate, subject=subject)
+    def get(self, *, object: str, predicate: str, subject: str, default: Optional[Edge] = None) -> Optional[Edge]:
+        key = self._construct_edge_key(object=object, predicate=predicate, subject=subject)
         return self.__edges.get(key, default)

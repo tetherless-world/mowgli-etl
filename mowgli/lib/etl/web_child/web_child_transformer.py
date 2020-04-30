@@ -47,9 +47,9 @@ class WebChildTransformer(_Transformer):
         score = float(row["score"])
         edge = Edge(
             datasource=self.__DATASOURCE_ID,
-            object_=object_node,
+            object=object_node.id,
             predicate=relation,
-            subject=subject_node,
+            subject=subject_node.id,
             other=other,
             weight=score,
         )
@@ -94,7 +94,7 @@ class WebChildTransformer(_Transformer):
                 synset_nid = f"wn:{lemma}.n.{int(sense_num):02d}"
                 yield Edge(
                     datasource=self.__DATASOURCE_ID,
-                    object_=synset_nid,
+                    object=synset_nid,
                     predicate=WN_SYNSET,
                     subject=word_nid,
                 )

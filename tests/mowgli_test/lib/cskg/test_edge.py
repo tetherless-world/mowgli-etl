@@ -1,5 +1,17 @@
+import pytest
+
 from mowgli.lib.cskg.edge import Edge
 
 
-def test_edge():
-    Edge(subject="testsubject", predicate="testrelation", object_="testobject", datasource="test")
+@pytest.fixture
+def edge():
+    return Edge(subject="testsubject", predicate="testrelation", object="testobject", datasource="test",
+                other={"test": 1})
+
+
+def test_construction(edge: Edge):
+    pass
+
+
+def test_hash(edge: Edge):
+    hash(edge)
