@@ -58,8 +58,8 @@ class PipelineWrapper:
                     raise ValueError(type(node_or_edge))
 
     def transform(
-        self,
-        force: bool = False,
+            self,
+            force: bool = False,
             skip_whole_graph_check: Optional[bool] = False,
             **extract_kwds
     ) -> Generator[Union[Edge, Node], None, None]:
@@ -133,6 +133,6 @@ class PipelineWrapper:
                 used_node_ids_set.add(edge.subject)
                 used_node_ids_set.add(edge.object)
             yield node_or_edge
-            for node_id in node_set.keys():
-                if node_id not in used_node_ids_set:
-                    raise ValueError("node %s not used by an edges: " % node_id)
+        for node_id in node_set.keys():
+            if node_id not in used_node_ids_set:
+                raise ValueError("node %s not used by an edge" % node_id)

@@ -12,7 +12,8 @@ class PersistentNodeIdSet(_NodeIdSet, _Leveldb):
         value = b''
         self._db.put(key, value)
 
-    def __construct_node_key(self, *, node_id: str) -> bytes:
+    @staticmethod
+    def __construct_node_key(node_id: str) -> bytes:
         return node_id.encode("utf-8")
 
     def __contains__(self, node_id: str):
