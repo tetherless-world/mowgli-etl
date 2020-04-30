@@ -1,9 +1,11 @@
+from mowgli.lib.storage._closeable import _Closeable
 from mowgli.lib.storage._node_id_set import _NodeIdSet
 
 
-class MemNodeIdSet(_NodeIdSet):
+class MemNodeIdSet(_NodeIdSet, _Closeable):
     def __init__(self):
         _NodeIdSet.__init__(self)
+        _Closeable.__init__(self)
         self.__node_ids = set()
 
     def add(self, node_id: str) -> None:

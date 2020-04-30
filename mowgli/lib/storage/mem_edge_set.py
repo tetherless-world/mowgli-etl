@@ -1,12 +1,14 @@
 from typing import Optional
 
 from mowgli.lib.cskg.edge import Edge
+from mowgli.lib.storage._closeable import _Closeable
 from mowgli.lib.storage._edge_set import _EdgeSet
 
 
-class MemEdgeSet(_EdgeSet):
+class MemEdgeSet(_EdgeSet, _Closeable):
     def __init__(self):
         _EdgeSet.__init__(self)
+        _Closeable.__init__(self)
         self.__edges = {}
 
     def add(self, edge: Edge) -> None:

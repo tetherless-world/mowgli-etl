@@ -1,6 +1,4 @@
 import logging
-from pathlib import Path
-from tempfile import TemporaryDirectory
 from typing import Generator, Union, Dict, Optional
 
 from mowgli.lib.cskg.edge import Edge
@@ -71,18 +69,15 @@ class PipelineWrapper:
             return
 
         if PersistentEdgeSet is not None:
-            with TemporaryDirectory() as temp_dir:
-                temp_dir_path = Path(temp_dir)
-                with PersistentEdgeSet(name=temp_dir_path / "edges", create_if_missing=True) as edge_set:
-                    with PersistentNodeSet(name=temp_dir_path / "nodes", create_if_missing=True) as node_set:
-                        with PersistentNodeIdSet(name=temp_dir_path / "used_node_ids",
-                                                 create_if_missing=True) as used_node_ids_set:
-                            yield from self.__transform(
-                                edge_set=edge_set,
-                                node_set=node_set,
-                                transform_generator=transform_generator,
-                                used_node_ids_set=used_node_ids_set
-                            )
+            with PersistentEdgeSet.temporary() as edge_set:
+                with PersistentNodeSet.temporary() as node_set:
+                    with PersistentNodeIdSet.temporary() as used_node_ids_set:
+                        yield from self.__transform(
+                            edge_set=edge_set,
+                            node_set=node_set,
+                            transform_generator=transform_generator,
+                            used_node_ids_set=used_node_ids_set
+                        )
         else:
             yield from self.__transform(
                 edge_set=MemEdgeSet(),
