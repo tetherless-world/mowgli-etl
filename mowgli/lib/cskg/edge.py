@@ -2,9 +2,9 @@ from typing import Optional, Dict, NamedTuple
 
 
 class Edge(NamedTuple):
-    datasource: str
-    object: str
-    predicate: str
     subject: str
-    other: Optional[Dict[str, object]] = None
+    predicate: str
+    object: str
+    datasource: str
     weight: Optional[float] = None
+    other: Optional[Dict[str, object]] = None
