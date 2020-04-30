@@ -1,6 +1,5 @@
 from csv import DictWriter
-from types import FunctionType
-from typing import Dict
+from typing import Dict, Callable
 
 from mowgli.lib.cskg.edge import Edge
 from mowgli.lib.cskg.node import Node
@@ -39,14 +38,14 @@ class CskgCsvLoader(_Loader):
         self.__node_file.close()
 
     def load_edge(self, edge: Edge):
-        self.__class__._write_csv_line(self.__edge_writer, self.__EDGE_CSV_FIELDS, edge)
+        self._write_csv_line(self.__edge_writer, self.__EDGE_CSV_FIELDS, edge)
 
     def load_node(self, node: Node):
-        self.__class__._write_csv_line(self.__node_writer, self.__NODE_CSV_FIELDS, node)
+        self._write_csv_line(self.__node_writer, self.__NODE_CSV_FIELDS, node)
 
     # Internal methods
     @staticmethod
-    def _write_csv_line(writer: DictWriter, field_dict: Dict[str, FunctionType], obj):
+    def _write_csv_line(writer: DictWriter, field_dict: Dict[str, Callable[[str], object]], obj):
         """
         Write a line with a writer using serialization methods from the given field_dict
         """
