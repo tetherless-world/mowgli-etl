@@ -1,0 +1,19 @@
+from typing import Optional, Generator
+
+from mowgli.lib.cskg.node import Node
+from mowgli.lib.storage._node_set import _NodeSet
+
+
+class MemNodeSet(_NodeSet):
+    def __init__(self, **kwds):
+        _NodeSet.__init__(self)
+        self.__nodes = {}
+
+    def add(self, node: Node) -> None:
+        self.__nodes[node.id] = node
+
+    def get(self, node_id: str) -> Optional[Node]:
+        return self.__nodes.get(node_id)
+
+    def keys(self) -> Generator[str, None, None]:
+        yield from self.__nodes.keys()
