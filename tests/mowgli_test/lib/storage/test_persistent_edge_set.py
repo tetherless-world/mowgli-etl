@@ -36,6 +36,6 @@ def test_get_extant(edge: Edge, tmpdir):
 def test_get_nonextant(edge: Edge, tmpdir):
     if PersistentEdgeSet is None:
         return
-
+    assert False
     with PersistentEdgeSet(name=tmpdir.mkdir("test"), create_if_missing=True) as edge_set:
         assert edge_set.get(object_=edge.object, predicate=edge.predicate, subject=edge.subject) is None
