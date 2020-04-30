@@ -11,10 +11,6 @@ class PersistentEdgeSet(_Leveldb):
         value = pickle.dumps(edge)
         self._db.put(key, value)
 
-    @property
-    def closed(self):
-        return self._db.closed
-
     def get(self, *, object_: str, predicate: str, subject: str) -> Optional[Edge]:
         key = self.__key(object_=object_, predicate=predicate, subject=subject)
         value = self._db.get(key)
