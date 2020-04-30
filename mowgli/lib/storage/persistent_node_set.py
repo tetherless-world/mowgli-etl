@@ -20,13 +20,18 @@ class PersistentNodeSet(_NodeSet, _Leveldb):
     def __construct_node_key(node_id: str) -> bytes:
         return node_id.encode("utf-8")
 
-    def get(self, node_id: str) -> Optional[Node]:
+    def __contains__(self, node_id: str):
+        key = self.__construct_node_key(node_id)
+        value = self._db.get(key)
+        return value is not None
+
+    def get(self, node_id: str, default: Optional[Node] = None) -> Optional[Node]:
         key = self.__construct_node_key(node_id)
         value = self._db.get(key)
         if value is not None:
             return pickle.loads(value)
         else:
-            return None
+            return default
 
     def keys(self) -> Generator[str, None, None]:
         with self._db.iterator() as it:

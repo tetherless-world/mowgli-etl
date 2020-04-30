@@ -19,7 +19,7 @@ class _EdgeSet(ABC):
         return f"{subject}\t{predicate}\t{object_}"
 
     @abstractmethod
-    def get(self, *, object_: str, predicate: str, subject: str) -> Optional[Edge]:
+    def get(self, *, object_: str, predicate: str, subject: str, default: Optional[Edge] = None) -> Optional[Edge]:
         """
         Get an edge by its "signature" parameters.
         :return: the edge if it's part of the set, otherwise None

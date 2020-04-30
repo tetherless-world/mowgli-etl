@@ -10,6 +10,12 @@ from rdflib import URIRef
 from mowgli.lib.cskg.edge import Edge
 from mowgli.lib.cskg.node import Node
 from mowgli.lib.etl._loader import _Loader
+from mowgli.lib.storage.mem_node_set import MemNodeSet
+
+try:
+    from mowgli.lib.storage.persistent_node_set import PersistentNodeSet
+except ImportError:
+    PersistentNodeSet = None
 
 
 class _RdfLoader(_Loader):
@@ -24,11 +30,12 @@ class _RdfLoader(_Loader):
         self.__graph.close()
         if os.path.isdir(self.__graph_store_dir_path):
             shutil.rmtree(self.__graph_store_dir_path)
+        self.__nodes.close()
 
     def load_edge(self, edge):
         # Assumes edges are loaded after the nodes they refer to, if they're going to be loaded at all
-        subject_node = self.__nodes_by_id.get(edge.subject, edge.subject)
-        object_node = self.__nodes_by_id.get(edge.object, edge.object)
+        subject_node = self.__nodes.get(edge.subject, default=edge.subject)
+        object_node = self.__nodes.get(edge.object, default=edge.object)
         self._load_edge(edge=edge, graph=self.__graph, object_node=object_node, subject_node=subject_node)
 
     @abstractmethod
@@ -36,8 +43,8 @@ class _RdfLoader(_Loader):
         pass
 
     def load_node(self, node):
-        assert node.id not in self.__nodes_by_id, node.id
-        self.__nodes_by_id[node.id] = node
+        assert node.id not in self.__nodes, node.id
+        self.__nodes.add(node)
 
     @abstractmethod
     def _new_graph(self, store):
@@ -58,7 +65,10 @@ class _RdfLoader(_Loader):
         rt = self.__graph.open(str(self.__graph_store_dir_path), create=True)
         assert rt == rdflib.store.VALID_STORE
 
-        self.__nodes_by_id = {}
+        if PersistentNodeSet is not None:
+            self.__nodes = PersistentNodeSet.temporary()
+        else:
+            self.__nodes = MemNodeSet()
 
         return self
 

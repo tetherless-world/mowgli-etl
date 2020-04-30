@@ -10,7 +10,10 @@ class _NodeSet(ABC):
         Add a node to the set.
         """
 
-    def get(self, node_id: str) -> Optional[Node]:
+    def __contains__(self, node_id):
+        return self.get(node_id) is not None
+
+    def get(self, node_id: str, default: Optional[Node] = None) -> Optional[Node]:
         """
         Get a node by id from the set.
         :return: the node corresponding to the id if the former is in the set, otherwise None
