@@ -12,17 +12,17 @@ class PersistentEdgeSet(_EdgeSet, _Leveldb):
         _Leveldb.__init__(self, **kwds)
 
     def add(self, edge: Edge) -> None:
-        key = self.__key(object_=edge.object, predicate=edge.predicate, subject=edge.subject)
+        key = self.__construct_edge_key(object_=edge.object, predicate=edge.predicate, subject=edge.subject)
         value = pickle.dumps(edge)
         self._db.put(key, value)
 
+    def __construct_edge_key(self, *, object_: str, predicate: str, subject: str) -> bytes:
+        return self._construct_edge_key(object_=object_, predicate=predicate, subject=subject).encode("utf-8")
+
     def get(self, *, object_: str, predicate: str, subject: str) -> Optional[Edge]:
-        key = self.__key(object_=object_, predicate=predicate, subject=subject)
+        key = self.__construct_edge_key(object_=object_, predicate=predicate, subject=subject)
         value = self._db.get(key)
         if value is not None:
             return pickle.loads(value)
         else:
             return None
-
-    def __key(self, *, object_: str, predicate: str, subject: str) -> bytes:
-        return f"{subject}\t{predicate}\t{object_}".encode("utf-8")

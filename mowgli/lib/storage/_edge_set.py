@@ -15,6 +15,9 @@ class _EdgeSet(ABC):
         Add an edge to the set.
         """
 
+    def _construct_edge_key(self, *, object_: str, predicate: str, subject: str) -> str:
+        return f"{subject}\t{predicate}\t{object_}"
+
     @abstractmethod
     def get(self, *, object_: str, predicate: str, subject: str) -> Optional[Edge]:
         """
