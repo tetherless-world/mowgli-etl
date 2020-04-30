@@ -47,7 +47,7 @@ def test_eat_tranform():
     expected_nodes = expected_stimulus_nodes | expected_response_nodes
 
     expected_edges = set(
-        Edge(datasource="eat", object_="eat:" + stim_node, predicate="cn:RelatedTo", subject="eat:" + response_node,
+        Edge(datasource="eat", object="eat:" + stim_node, predicate="cn:RelatedTo", subject="eat:" + response_node,
              weight=response_weight) for (stim_node, response_node, response_weight) in [
             ('SPECIAL', 'TRAIN', 0.07),
             ('SPECIAL', 'PARTICULAR', 0.05),

@@ -62,8 +62,8 @@ class HasPartTransformer(_Transformer):
         # arg1 HasA arg2
         yield Edge(
             datasource=self.__DATASOURCE,
-            subject=arg1_node,
-            object_=arg2_node,
+            subject=arg1_node.id,
+            object=arg2_node.id,
             predicate=HAS_A,
             weight=average_score,
         )
@@ -71,8 +71,8 @@ class HasPartTransformer(_Transformer):
         # Inverse, arg2 PartOf arg2
         yield Edge(
             datasource=self.__DATASOURCE,
-            subject=arg2_node,
-            object_=arg1_node,
+            subject=arg2_node.id,
+            object=arg1_node.id,
             predicate=PART_OF,
             weight=average_score,
         )
@@ -100,9 +100,9 @@ class HasPartTransformer(_Transformer):
                     continue
                 yield Edge(
                     datasource=self.__DATASOURCE,
-                    object_=wn_node_id,
+                    object=wn_node_id,
                     predicate=SAME_AS,
-                    subject=arg_node,
+                    subject=arg_node.id,
                 )
                 node_same_as_edges_yielded.add(wn_node_id)
 
@@ -113,8 +113,8 @@ class HasPartTransformer(_Transformer):
                     continue
                 yield Edge(
                     datasource=self.__DATASOURCE,
-                    object_=wikipedia_node_id,
+                    object=wikipedia_node_id,
                     predicate=SAME_AS,
-                    subject=arg_node,
+                    subject=arg_node.id,
                 )
                 node_same_as_edges_yielded.add(wikipedia_node_id)

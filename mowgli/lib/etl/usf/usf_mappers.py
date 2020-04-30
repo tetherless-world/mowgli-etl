@@ -22,7 +22,7 @@ def usf_edge(*, cue: Union[Node, str], response: Union[Node, str], strength: flo
     return Edge(
         datasource=USF_DATASOURCE_ID,
         subject=cue if isinstance(cue, Node) else usf_node(cue, "", ),
-        object_=response if isinstance(response, Node) else usf_node(response, ""),
+        object=response.id if isinstance(response, Node) else usf_node(response, ""),
         predicate=RELATED_TO,
         weight=strength
     )

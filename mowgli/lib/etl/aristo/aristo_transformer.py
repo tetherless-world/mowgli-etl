@@ -59,9 +59,9 @@ class AristoTransformer(_Transformer):
         return \
             Edge(
                 datasource=self.__DATASOURCE,
-                object_=f"wn:{word_net_type[0]}.{word_net_type[1][0]}.{int(word_net_type[1][1:]):02d}",
+                object=f"wn:{word_net_type[0]}.{word_net_type[1][0]}.{int(word_net_type[1][1:]):02d}",
                 predicate=IS_A,
-                subject=arg_node,
+                subject=arg_node.id,
             )
 
     # @staticmethod
@@ -162,8 +162,8 @@ class AristoTransformer(_Transformer):
                     Edge(
                         datasource=self.__DATASOURCE,
                         predicate=concept_net_predicate,
-                        subject=subject_node,
-                        object_=object_node,
+                        subject=subject_node.id,
+                        object=object_node.id,
                         weight=qstrength,
                     )
                 object_edges.add(concept_net_predicate)

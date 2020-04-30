@@ -1,11 +1,13 @@
-from mowgli.lib.etl._transformer import _Transformer
-from mowgli.lib.cskg.node import Node
-from mowgli.lib.cskg.edge import Edge
 from typing import Generator, Union
-from xml.dom.minidom import parse, parseString
+
+from xml.dom.minidom import parse
+
+from mowgli.lib.cskg.concept_net_predicates import RELATED_TO
+from mowgli.lib.cskg.edge import Edge
+from mowgli.lib.cskg.node import Node
+from mowgli.lib.etl._transformer import _Transformer
 from mowgli.lib.etl.sentic.sentic_constants import SENTIC_FILE_KEY
 from mowgli.lib.etl.sentic.sentic_mappers import sentic_edge, sentic_node
-from mowgli.lib.cskg.concept_net_predicates import RELATED_TO
 
 
 class SENTICTransformer(_Transformer):
@@ -65,9 +67,9 @@ class SENTICTransformer(_Transformer):
 
                     sent_weight = float(sent_value)
                     sent_node = sentnodes[sen]
-                    sent_edge = sentic_edge(
-                        subject=subjectnode,
-                        object_=sent_node,
+                    sent_edge = sentic_edge.id(
+                        subject=subjectnode.id,
+                        object=sent_node,
                         weight=sent_weight,
                         predicate=RELATED_TO,
                     )

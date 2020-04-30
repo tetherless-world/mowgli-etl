@@ -1,9 +1,9 @@
 import os.path
-from itertools import count
 from pathlib import Path
 from typing import Generator, Union
 
 import pytest
+from itertools import count
 
 from mowgli.lib.cskg.edge import Edge
 from mowgli.lib.cskg.node import Node
@@ -47,8 +47,8 @@ def graph_generator() -> Generator[Union[Node, Edge], None, None]:
             yield from nodes
             yield Edge(
                 datasource='test_datasource',
-                object_=nodes[1],
+                object=nodes[1].id,
                 predicate='test_predicate',
-                subject=nodes[0]
+                subject=nodes[0].id
             )
     return _generator()

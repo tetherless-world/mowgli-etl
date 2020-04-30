@@ -36,7 +36,7 @@ def test_load_missing_node(pipeline_storage: PipelineStorage):
     with QuadRdfLoader(format="ttl", pipeline_id="test").open(pipeline_storage) as loader:
         loader.load_edge(Edge(
             datasource="test",
-            object_="missing_object",
+            object="missing_object",
             predicate="predicate",
             subject="missing_subject",
         ))

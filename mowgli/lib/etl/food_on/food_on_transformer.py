@@ -75,8 +75,8 @@ class FoodOnTransformer(_Transformer):
                 edge = \
                     Edge(
                         datasource=self._DATASOURCE,
-                        subject=class_.node,
+                        subject=class_.node.id,
                         predicate=concept_net_predicates.IS_A,
-                        object_=parent_class.node
+                        object=parent_class.node.id
                     )
                 yield edge

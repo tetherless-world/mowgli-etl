@@ -47,9 +47,9 @@ class WebChildTransformer(_Transformer):
         score = float(row["score"])
         edge = Edge(
             datasource=self.__DATASOURCE_ID,
-            object_=object_node,
+            object=object_node.id,
             predicate=relation,
-            subject=subject_node,
+            subject=subject_node.id,
             other=other,
             weight=score,
         )

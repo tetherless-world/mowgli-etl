@@ -37,7 +37,7 @@ def test_write_node(pipeline_storage):
 def test_write_edge(pipeline_storage):
     test_edge = Edge(
         datasource='test_datasource',
-        object_='test_obj',
+        object='test_obj',
         predicate='test_rel',
         subject='test_subject',
         other={'datasets': ['test_dataset', 'other_test_dataset']},
