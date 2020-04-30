@@ -10,6 +10,11 @@ from mowgli.lib.etl._transformer import _Transformer
 from mowgli.lib.etl.pipeline_storage import PipelineStorage
 from mowgli.lib.etl.pipeline_wrapper import PipelineWrapper
 
+try:
+    from mowgli.lib.storage.persistent_edge_set import PersistentEdgeSet
+except ImportError:
+    PersistentEdgeSet = None
+
 
 class NopExtractor(_Extractor):
     def extract(self, *args, **kwds):
@@ -45,24 +50,25 @@ OBJECT_NODE = Node(id="testobject", label="test object", pos="n", datasource="te
 EDGE = Edge(subject=SUBJECT_NODE, object_=OBJECT_NODE, predicate="test", datasource="test")
 
 
-def test_exact_duplicate_node(pipeline_storage):
-    # Exact duplicates are ignored
-    extract_transform_load((SUBJECT_NODE, OBJECT_NODE, EDGE, EXACT_DUPLICATE_SUBJECT_NODE), pipeline_storage)
+if PersistentEdgeSet is not None:
+    def test_exact_duplicate_node(pipeline_storage):
+        # Exact duplicates are ignored
+        extract_transform_load((SUBJECT_NODE, OBJECT_NODE, EDGE, EXACT_DUPLICATE_SUBJECT_NODE), pipeline_storage)
 
 
-def test_inexact_duplicate_node(pipeline_storage):
-    try:
-        extract_transform_load((SUBJECT_NODE, OBJECT_NODE, EDGE, INEXACT_DUPLICATE_SUBJECT_NODE), pipeline_storage)
-        fail()
-    except ValueError:
-        pass
+    def test_inexact_duplicate_node(pipeline_storage):
+        try:
+            extract_transform_load((SUBJECT_NODE, OBJECT_NODE, EDGE, INEXACT_DUPLICATE_SUBJECT_NODE), pipeline_storage)
+            fail()
+        except ValueError:
+            pass
 
 
-def test_extraneous_node(pipeline_storage):
-    try:
-        extract_transform_load((SUBJECT_NODE, OBJECT_NODE,
-                                Edge(subject=SUBJECT_NODE, object_="externalnode", predicate="test",
-                                     datasource="test")), pipeline_storage)
-        fail()
-    except ValueError:
-        pass
+    def test_extraneous_node(pipeline_storage):
+        try:
+            extract_transform_load((SUBJECT_NODE, OBJECT_NODE,
+                                    Edge(subject=SUBJECT_NODE, object_="externalnode", predicate="test",
+                                         datasource="test")), pipeline_storage)
+            fail()
+        except ValueError:
+            pass
