@@ -17,4 +17,4 @@ class MemEdgeSet(_EdgeSet, _Closeable):
 
     def get(self, *, object_: str, predicate: str, subject: str, default: Optional[Edge] = None) -> Optional[Edge]:
         key = self._construct_edge_key(object_=object_, predicate=predicate, subject=subject)
-        return self.__edges.get(key, default=default)
+        return self.__edges.get(key, default)
