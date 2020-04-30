@@ -2,10 +2,15 @@ import pickle
 from typing import Optional
 
 from mowgli.lib.cskg.edge import Edge
+from mowgli.lib.storage._edge_set import _EdgeSet
 from mowgli.lib.storage._leveldb import _Leveldb
 
 
-class PersistentEdgeSet(_Leveldb):
+class PersistentEdgeSet(_EdgeSet, _Leveldb):
+    def __init__(self, **kwds):
+        _EdgeSet.__init__(self)
+        _Leveldb.__init__(self, **kwds)
+
     def add(self, edge: Edge) -> None:
         key = self.__key(object_=edge.object, predicate=edge.predicate, subject=edge.subject)
         value = pickle.dumps(edge)

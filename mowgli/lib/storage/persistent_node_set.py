@@ -3,9 +3,14 @@ from typing import Optional, Generator
 
 from mowgli.lib.cskg.node import Node
 from mowgli.lib.storage._leveldb import _Leveldb
+from mowgli.lib.storage._node_set import _NodeSet
 
 
-class PersistentNodeSet(_Leveldb):
+class PersistentNodeSet(_NodeSet, _Leveldb):
+    def __init__(self, **kwds):
+        _NodeSet.__init__(self)
+        _Leveldb.__init__(self, **kwds)
+
     def add(self, node: Node) -> None:
         key = self.__key(node.id)
         value = pickle.dumps(node)

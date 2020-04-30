@@ -1,7 +1,12 @@
 from mowgli.lib.storage._leveldb import _Leveldb
+from mowgli.lib.storage._node_id_set import _NodeIdSet
 
 
-class PersistentNodeIdSet(_Leveldb):
+class PersistentNodeIdSet(_NodeIdSet, _Leveldb):
+    def __init__(self, **kwds):
+        _NodeIdSet.__init__(self)
+        _Leveldb.__init__(self, **kwds)
+
     def add(self, node_id: str) -> None:
         key = self.__key(node_id=node_id)
         value = b''
