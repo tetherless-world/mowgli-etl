@@ -61,7 +61,7 @@ def test_inexact_duplicate_node(pipeline_storage):
 def test_extraneous_node(pipeline_storage):
     try:
         extract_transform_load((SUBJECT_NODE, OBJECT_NODE,
-                                Edge(subject=SUBJECT_NODE, object="externalnode", predicate="test",
+                                Edge(subject=SUBJECT_NODE.id, object="externalnode", predicate="test",
                                      datasource="test")), pipeline_storage)
         fail()
     except ValueError:
