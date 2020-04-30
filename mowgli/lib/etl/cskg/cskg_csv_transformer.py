@@ -47,9 +47,6 @@ class CskgCsvTransformer(_Transformer):
                 csv_reader = csv.DictReader(edges_csv_file, delimiter="\t", quoting=csv.QUOTE_NONE)
                 for csv_row in csv_reader:
                     # Edges may refer to nodes that are outside of the ones we've created e.g., WordNet.
-                    # subject = nodes_by_id[get_required_column(csv_row, "subject")]
-                    # object_ = nodes_by_id[get_required_column(csv_row, "object")]
-
                     yield \
                         Edge(
                             datasource=get_required_column(csv_row, "datasource"),
