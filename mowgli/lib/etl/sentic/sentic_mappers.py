@@ -11,6 +11,7 @@ from mowgli.lib.etl.sentic.sentic_constants import (
 
 
 def sentic_node(incominglabel: str, other: Optional[dict] = None) -> Node:
+    # assert not incominglabel.startswith(SENTIC_NAMESPACE + ":")
     return Node(
         datasource=SENTIC_DATASOURCE_ID,
         id=f"{SENTIC_NAMESPACE}:{quote(incominglabel)}",
@@ -29,8 +30,8 @@ def sentic_edge(
 
     return Edge(
         datasource=SENTIC_DATASOURCE_ID,
-        subject=subject.id if isinstance(subject, Node) else sentic_node(subject),
-        object=object_.id if isinstance(object_, Node) else sentic_node(object_),
+        subject=subject.id if isinstance(subject, Node) else sentic_node(subject).id,
+        object=object_.id if isinstance(object_, Node) else sentic_node(object_).id,
         predicate=predicate,
         weight=weight,
     )

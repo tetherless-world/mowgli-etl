@@ -68,7 +68,7 @@ class SENTICTransformer(_Transformer):
                     sent_weight = float(sent_value)
                     sent_node = sentnodes[sen]
                     sent_edge = sentic_edge(
-                        subject=subjectnode.id,
+                        subject=subjectnode,
                         object_=sent_node,
                         weight=sent_weight,
                         predicate=RELATED_TO,

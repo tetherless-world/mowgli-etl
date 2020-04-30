@@ -1,9 +1,9 @@
-import bz2
-import pytest
-from io import TextIOWrapper
 from pathlib import Path
-from mowgli.lib.etl.sentic.sentic_mappers import sentic_node, sentic_edge
+
+import pytest
+
 from mowgli.lib.cskg.concept_net_predicates import RELATED_TO
+from mowgli.lib.etl.sentic.sentic_mappers import sentic_node, sentic_edge
 from tests.mowgli_test.lib.etl.http_client.mock_etl_http_client_test import (
     MockEtlHttpClient,
 )
@@ -99,6 +99,6 @@ def senticclient():
     client = MockEtlHttpClient()
 
     client.add_file_mock_response(
-        "https://mowgli.com/sentic_test_data.zip", "tests/mowgli_test/lib/etl/sentic/sentic_test_data.zip"
+        "https://mowgli.com/sentic_test_data.zip", str(Path(__file__).parent / "sentic_test_data.zip")
     )
     return client
