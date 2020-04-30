@@ -34,15 +34,15 @@ jobs:
       - run:
           name: Generate combined CSKG CSV (master branch only)
           command: |
-            #            if [ "${CIRCLE_BRANCH}" == "master" ]; then
-                     mkdir cskg
-                     python -m mowgli.cli etl combined --data-dir-path cskg
-      #            fi
-      - run:
-          name: Generate combined CSKG RDF (master branch only)
-          command: |
-            #            if [ "${CIRCLE_BRANCH}" == "master" ]; then
-                     python3 -m mowgli.cli etl rdf --data-dir-path cskg --nodes-csv-file-path cskg/combined/loaded/nodes.csv --edges-csv-file-path cskg/combined/loaded/edges.csv --pipeline-id combined-rdf
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              mkdir cskg
+              python -m mowgli.cli etl combined --data-dir-path cskg
+            fi
+      #      - run:
+      #          name: Generate combined CSKG RDF (master branch only)
+      #          command: |
+      #            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+      #              python3 -m mowgli.cli etl rdf --data-dir-path cskg --nodes-csv-file-path cskg/combined/loaded/nodes.csv --edges-csv-file-path cskg/combined/loaded/edges.csv --pipeline-id combined-rdf
       #            fi
       - run:
           name: Archive artifacts (master branch only)
