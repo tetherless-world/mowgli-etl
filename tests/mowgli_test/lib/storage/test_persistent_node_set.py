@@ -22,9 +22,9 @@ if PersistentNodeSet is not None:
     def test_get_extant(node: Node, tmpdir):
         with PersistentNodeSet(name=tmpdir.mkdir("test"), create_if_missing=True) as node_set:
             node_set.add(node)
-            assert node_set.get(object_=node.object, predicate=node.predicate, subject=node.subject) == node
+            assert node_set.get(node_id=node.id) == node
 
 
     def test_get_nonextant(node: Node, tmpdir):
         with PersistentNodeSet(name=tmpdir.mkdir("test"), create_if_missing=True) as node_set:
-            assert node_set.get(object_=node.object, predicate=node.predicate, subject=node.subject) is None
+            assert node_set.get(node_id=node.id) is None
