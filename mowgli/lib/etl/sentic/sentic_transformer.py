@@ -69,7 +69,7 @@ class SENTICTransformer(_Transformer):
                     sent_node = sentnodes[sen]
                     sent_edge = sentic_edge(
                         subject=subjectnode.id,
-                        object=sent_node,
+                        object_=sent_node,
                         weight=sent_weight,
                         predicate=RELATED_TO,
                     )
