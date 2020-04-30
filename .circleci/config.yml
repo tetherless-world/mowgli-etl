@@ -28,10 +28,12 @@ jobs:
       - store_test_results:
           path: test-results
       - run:
-          name: Generate combined CSKG CSV
+          name: Generate combined CSKG CSV (master branch only)
           command: |
-            mkdir cskg
-            python -m mowgli.cli etl combined --skip-whole-graph-check --data-dir-path cskg
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              mkdir cskg
+              python -m mowgli.cli etl combined --skip-whole-graph-check --data-dir-path cskg
+            fi
       #      - run:
       #          name: Generate combined CSKG RDF (master branch only)
       #          command: |
@@ -39,19 +41,23 @@ jobs:
       #              python3 -m mowgli.cli etl rdf --skip-whole-graph-check --data-dir-path cskg --nodes-csv-file-path cskg/combined/loaded/nodes.csv --edges-csv-file-path cskg/combined/loaded/edges.csv --pipeline-id combined-rdf
       #            fi
       - run:
-          name: Archive artifacts
+          name: Archive artifacts (master branch only)
           command: |
-            cd cskg
-            for dir in `ls`; do
-              mv "$dir/loaded/"*.csv "$dir/" || true
-              mv "$dir/loaded/"*.trig "$dir/" || true
-              mv "$dir/loaded/"*.ttl "$dir/" || true
-              rm -fr "$dir/extracted" "$dir/transformed" "$dir/loaded"
-            done
-            cd ..
-            tar -cvjSf cskg.tar.bz2 cskg
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              cd cskg
+              for dir in `ls`; do
+                mv "$dir/loaded/"*.csv "$dir/" || true
+                mv "$dir/loaded/"*.trig "$dir/" || true
+                mv "$dir/loaded/"*.ttl "$dir/" || true
+                rm -fr "$dir/extracted" "$dir/transformed" "$dir/loaded"
+              done
+              cd ..
+              tar -cvjSf cskg.tar.bz2 cskg
+            else
+              touch cskg.tar.bz2
+            fi
       - run:
-          name: Upload CSKG to Drive
+          name: Upload CSKG to Drive (master branch only)
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               service_file_path="service_file_key.json"
