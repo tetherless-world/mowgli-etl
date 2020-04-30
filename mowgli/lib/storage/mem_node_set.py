@@ -15,7 +15,7 @@ class MemNodeSet(_NodeSet, _Closeable):
         self.__nodes[node.id] = node
 
     def get(self, node_id: str, default: Optional[Node] = None) -> Optional[Node]:
-        return self.__nodes.get(node_id, default=default)
+        return self.__nodes.get(node_id, default)
 
     def keys(self) -> Generator[str, None, None]:
         yield from self.__nodes.keys()
