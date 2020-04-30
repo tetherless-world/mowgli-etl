@@ -1,7 +1,7 @@
 from mowgli.lib.cskg.node import Node
 
 try:
-    from mowgli.lib.storage.node_set import PersistentNodeSet
+    from mowgli.lib.storage.persistent_node_set import PersistentNodeSet
 except ImportError:
     PersistentNodeSet = None
 
