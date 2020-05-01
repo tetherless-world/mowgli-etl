@@ -1,4 +1,3 @@
-import os.path
 from pathlib import Path
 from typing import Generator, Union
 
@@ -12,12 +11,12 @@ from mowgli.lib.etl.pipeline_storage import PipelineStorage
 
 @pytest.fixture
 def cskg_edges_csv_file_path() -> Path:
-    return os.path.dirname(__file__) / Path("cskg") / Path("edges.csv")
+    return Path(__file__).parent / "pipeline" / "cskg" / "edges.csv"
 
 
 @pytest.fixture
 def cskg_nodes_csv_file_path() -> Path:
-    return os.path.dirname(__file__) / Path("cskg") / Path("nodes.csv")
+    return Path(__file__).parent / "pipeline" / "cskg" / "nodes.csv"
 
 
 @pytest.fixture
