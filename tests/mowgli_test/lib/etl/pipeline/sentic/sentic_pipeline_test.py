@@ -1,10 +1,9 @@
-import pytest
 from configargparse import ArgParser
 
 from mowgli.lib.cskg.edge import Edge
 from mowgli.lib.cskg.node import Node
+from mowgli.lib.etl.pipeline.sentic.sentic_pipeline import SenticPipeline
 from mowgli.lib.etl.pipeline_wrapper import PipelineWrapper
-from mowgli.lib.etl.sentic.sentic_pipeline import SenticPipeline
 
 
 def test_sentic_pipeline(

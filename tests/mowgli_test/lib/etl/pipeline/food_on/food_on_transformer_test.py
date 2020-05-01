@@ -1,7 +1,7 @@
 from mowgli.lib.cskg.concept_net_predicates import IS_A
 from mowgli.lib.cskg.edge import Edge
-from mowgli.lib.etl.food_on.food_on_extractor import FoodOnExtractor
-from mowgli.lib.etl.food_on.food_on_transformer import FoodOnTransformer
+from mowgli.lib.etl.pipeline.food_on.food_on_extractor import FoodOnExtractor
+from mowgli.lib.etl.pipeline.food_on.food_on_transformer import FoodOnTransformer
 
 
 def test_food_on_transformer(pipeline_storage):

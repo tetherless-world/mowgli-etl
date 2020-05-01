@@ -1,5 +1,5 @@
+from mowgli.lib.etl.pipeline.web_child.web_child_pipeline import WebChildPipeline
 from mowgli.lib.etl.pipeline_wrapper import PipelineWrapper
-from mowgli.lib.etl.web_child.web_child_pipeline import WebChildPipeline
 
 
 def test_web_child_pipeline(

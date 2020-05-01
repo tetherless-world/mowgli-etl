@@ -2,9 +2,9 @@ import pathlib
 
 from mowgli.lib.cskg.edge import Edge
 from mowgli.lib.cskg.node import Node
-from mowgli.lib.etl.usf.usf_constants import STRENGTH_FILE_KEY
-from mowgli.lib.etl.usf.usf_mappers import usf_edge, usf_node
-from mowgli.lib.etl.usf.usf_transformer import USFTransformer
+from mowgli.lib.etl.pipeline.usf.usf_constants import STRENGTH_FILE_KEY
+from mowgli.lib.etl.pipeline.usf.usf_mappers import usf_edge, usf_node
+from mowgli.lib.etl.pipeline.usf.usf_transformer import USFTransformer
 
 
 def test_transform():
@@ -19,11 +19,11 @@ def test_transform():
         elif isinstance(result, Edge):
             edges.add(result)
 
-    expected_node_names = {'face': [9999,'N'], 'book': [117,'N',3.23], 'time':[426,'N',1.17] , 
+    expected_node_names = {'face': [9999,'N'], 'book': [117,'N',3.23], 'time':[426,'N',1.17] ,
                             'lift': [5,'V',4.00], 'mask': [24,'N',0.45], 'half': [23,'N'],
                             'life': [234,'N',2.11], 'whole': [92,'N',4.12], 'part': [33, 'N',0.82],
-                            'split': [104,'V',0.2],'full': [720,'AJ',5.5], 'swing': [36,'V'], 
-                            'bat': [230,'N',1.76], 'dance': [321,'V',1.62], 'set': [620,'N',7.00], 
+                            'split': [104,'V',0.2],'full': [720,'AJ',5.5], 'swing': [36,'V'],
+                            'bat': [230,'N',1.76], 'dance': [321,'V',1.62], 'set': [620,'N',7.00],
                             'sway': [923,'V',0.84]}
 
     expected_nodes = set(usf_node(cueOrResponse=name,pos=attlist[1],other={'frequency':attlist[0]})

@@ -1,10 +1,7 @@
-from pathlib import Path
-
 from mowgli.lib.cskg.edge import Edge
 from mowgli.lib.cskg.node import Node
-from mowgli.lib.etl.pipeline_storage import PipelineStorage
+from mowgli.lib.etl.pipeline.swow.swow_pipeline import SwowPipeline
 from mowgli.lib.etl.pipeline_wrapper import PipelineWrapper
-from mowgli.lib.etl.swow.swow_pipeline import SwowPipeline
 
 
 def test_swow_pipeline(pipeline_storage, sample_archive_path, sample_swow_edges, sample_swow_nodes):

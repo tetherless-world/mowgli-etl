@@ -3,7 +3,7 @@ import pathlib
 
 from mowgli.lib.cskg.edge import Edge
 from mowgli.lib.cskg.node import Node
-from mowgli.lib.etl.eat.eat_transformer import EatTransformer
+from mowgli.lib.etl.pipeline.eat.eat_transformer import EatTransformer
 
 
 def test_eat_tranform():

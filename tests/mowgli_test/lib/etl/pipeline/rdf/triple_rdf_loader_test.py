@@ -2,10 +2,10 @@ import pytest
 import rdflib
 
 from mowgli.lib.cskg.edge import Edge
+from mowgli.lib.etl.pipeline.rdf.triple_rdf_loader import TripleRdfLoader
 from mowgli.lib.etl.pipeline_storage import PipelineStorage
 from mowgli.lib.etl.pipeline_wrapper import PipelineWrapper
-from mowgli.lib.etl.rdf.triple_rdf_loader import TripleRdfLoader
-from tests.mowgli_test.lib.etl.rdf.rdf_loader_test_pipeline import RdfLoaderTestPipeline
+from tests.mowgli_test.lib.etl.pipeline.rdf.rdf_loader_test_pipeline import RdfLoaderTestPipeline
 
 
 @pytest.fixture

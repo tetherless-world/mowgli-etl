@@ -3,7 +3,7 @@ from pathlib import Path
 import pytest
 
 from mowgli.lib.cskg.concept_net_predicates import RELATED_TO
-from mowgli.lib.etl.sentic.sentic_mappers import sentic_node, sentic_edge
+from mowgli.lib.etl.pipeline.sentic.sentic_mappers import sentic_node, sentic_edge
 from tests.mowgli_test.lib.etl.http_client.mock_etl_http_client_test import (
     MockEtlHttpClient,
 )

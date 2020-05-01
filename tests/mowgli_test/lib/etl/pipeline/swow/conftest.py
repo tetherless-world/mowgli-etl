@@ -2,10 +2,8 @@ import bz2
 from pathlib import Path
 
 import pytest
-from io import TextIOWrapper
-from pathlib import Path
 
-from mowgli.lib.etl.swow.swow_mappers import swow_edge, swow_node, Counter
+from mowgli.lib.etl.pipeline.swow.swow_mappers import swow_edge, swow_node, Counter
 
 
 @pytest.fixture

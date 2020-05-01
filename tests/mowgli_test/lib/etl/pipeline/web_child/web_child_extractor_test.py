@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from mowgli.lib.etl.web_child.web_child_extractor import WebChildExtractor
+from mowgli.lib.etl.pipeline.web_child.web_child_extractor import WebChildExtractor
 
 
 def test_web_child_extractor(

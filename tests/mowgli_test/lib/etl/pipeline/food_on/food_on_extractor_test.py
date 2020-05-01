@@ -1,6 +1,6 @@
 import os.path
 
-from mowgli.lib.etl.food_on.food_on_extractor import FoodOnExtractor
+from mowgli.lib.etl.pipeline.food_on.food_on_extractor import FoodOnExtractor
 
 
 def test_food_on_extractor(pipeline_storage):

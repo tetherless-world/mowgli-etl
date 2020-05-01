@@ -1,7 +1,7 @@
 from mowgli.lib.cskg.edge import Edge
 from mowgli.lib.cskg.mowgli_predicates import WN_SYNSET
 from mowgli.lib.cskg.node import Node
-from mowgli.lib.etl.web_child.web_child_transformer import WebChildTransformer
+from mowgli.lib.etl.pipeline.web_child.web_child_transformer import WebChildTransformer
 
 
 def test_web_child_transform(web_child_transform_args):

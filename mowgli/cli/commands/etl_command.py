@@ -121,7 +121,7 @@ class EtlCommand(_Command):
 
     def __import_pipeline_classes(self):
         pipeline_class_dict = {}
-        etl_dir = paths.SRC_ROOT / "lib" / "etl"
+        etl_dir = paths.SRC_ROOT / "lib" / "etl" / "pipeline"
         assert etl_dir.is_dir()
         for pipeline_dir in etl_dir.iterdir():
             if not pipeline_dir.is_dir():

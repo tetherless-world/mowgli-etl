@@ -1,7 +1,5 @@
-import pytest
-
-from mowgli.lib.etl.usf.usf_constants import STRENGTH_FILE_KEY
-from mowgli.lib.etl.usf.usf_extractor import USFExtractor
+from mowgli.lib.etl.pipeline.usf.usf_constants import STRENGTH_FILE_KEY
+from mowgli.lib.etl.pipeline.usf.usf_extractor import USFExtractor
 
 
 def test_usf_extractor(pipeline_storage, strengths, url, usfclient):

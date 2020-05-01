@@ -1,4 +1,4 @@
-from mowgli.lib.etl.has_part.has_part_pipeline import HasPartPipeline
+from mowgli.lib.etl.pipeline.has_part.has_part_pipeline import HasPartPipeline
 from mowgli.lib.etl.pipeline_wrapper import PipelineWrapper
 
 

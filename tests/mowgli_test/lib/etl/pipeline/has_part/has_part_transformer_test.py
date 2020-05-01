@@ -1,8 +1,8 @@
 from mowgli.lib.cskg.concept_net_predicates import HAS_A, PART_OF
 from mowgli.lib.cskg.edge import Edge
 from mowgli.lib.cskg.mowgli_predicates import SAME_AS
-from mowgli.lib.etl.has_part.has_part_extractor import HasPartExtractor
-from mowgli.lib.etl.has_part.has_part_transformer import HasPartTransformer
+from mowgli.lib.etl.pipeline.has_part.has_part_extractor import HasPartExtractor
+from mowgli.lib.etl.pipeline.has_part.has_part_transformer import HasPartTransformer
 
 
 def test_has_part_transformer(pipeline_storage):

@@ -1,6 +1,6 @@
 import os.path
 
-from mowgli.lib.etl.has_part.has_part_extractor import HasPartExtractor
+from mowgli.lib.etl.pipeline.has_part.has_part_extractor import HasPartExtractor
 
 
 def test_has_part_extractor(pipeline_storage):

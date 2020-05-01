@@ -1,6 +1,6 @@
 from mowgli.lib.cskg.edge import Edge
 from mowgli.lib.cskg.node import Node
-from mowgli.lib.etl.swow.swow_transformer import SwowTransformer
+from mowgli.lib.etl.pipeline.swow.swow_transformer import SwowTransformer
 
 
 def test_transform(sample_swow_csv_path, sample_swow_edges, sample_swow_nodes):

@@ -1,5 +1,5 @@
-from mowgli.lib.etl.swow.swow_constants import SWOW_CSV_FILE_KEY
-from mowgli.lib.etl.swow.swow_extractor import SwowExtractor
+from mowgli.lib.etl.pipeline.swow.swow_constants import SWOW_CSV_FILE_KEY
+from mowgli.lib.etl.pipeline.swow.swow_extractor import SwowExtractor
 
 
 def test_swow_extractor(pipeline_storage, sample_swow_csv_path, sample_archive_path):
