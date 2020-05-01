@@ -6,9 +6,9 @@ from configargparse import ArgParser
 from mowgli.lib.etl._extractor import _Extractor
 from mowgli.lib.etl._loader import _Loader
 from mowgli.lib.etl._transformer import _Transformer
-from mowgli.lib.etl.cskg.cskg_csv_loader import CskgCsvLoader
-from mowgli.lib.etl.rdf.quad_rdf_loader import QuadRdfLoader
-from mowgli.lib.etl.rdf.triple_rdf_loader import TripleRdfLoader
+from mowgli.lib.etl.pipeline.cskg.cskg_csv_loader import CskgCsvLoader
+from mowgli.lib.etl.pipeline.rdf.quad_rdf_loader import QuadRdfLoader
+from mowgli.lib.etl.pipeline.rdf.triple_rdf_loader import TripleRdfLoader
 
 
 class _Pipeline(ABC):
