@@ -6,4 +6,4 @@ def test_has_part_pipeline(pipeline_storage):
     pipeline = HasPartPipeline()
     pipeline_wrapper = PipelineWrapper(pipeline, pipeline_storage)
 
-    pipeline_wrapper.extract_transform_load(force=False)
+    pipeline_wrapper.run(force=False)

@@ -26,7 +26,7 @@ class CombinedPipelineExtractor(_Extractor):
                 storage = PipelineStorage(pipeline_id=pipeline.id, root_data_dir_path=storage.root_data_dir_path)
                 pipeline_wrapper = PipelineWrapper(pipeline, storage)
 
-                pipeline_wrapper.extract_transform_load(force=force)
+                pipeline_wrapper.run(force=force)
 
                 node_file_path = storage.loaded_data_dir_path / 'nodes.csv'
                 edge_file_path = storage.loaded_data_dir_path / 'edges.csv'
