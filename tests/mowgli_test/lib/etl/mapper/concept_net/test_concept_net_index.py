@@ -9,7 +9,7 @@ except ImportError:
 
 if ConceptNetIndex is not None and (paths.DATA_DIR / "cskg_release" / "extracted").is_dir():
     def concept_net_index(tmpdir):
-        return ConceptNetIndex(Path(tmpdir), limit=10000, report_progress=True)
+        return ConceptNetIndex.create(Path(tmpdir), limit=10000, report_progress=True)
 
 
     def test_get(tmpdir):
