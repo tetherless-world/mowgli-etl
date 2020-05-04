@@ -1,5 +1,8 @@
+import bz2
 import logging
+import os.path
 import pickle
+from io import TextIOWrapper
 from pathlib import Path
 from shutil import rmtree
 from typing import Optional, Union, TextIO
@@ -10,12 +13,12 @@ from tqdm import tqdm
 from mowgli import paths
 from mowgli.lib.etl.pipeline.cskg.cskg_nodes_csv_transformer import CskgNodesCsvTransformer
 from mowgli.lib.storage._closeable import _Closeable
-from mowgli.lib.storage.cskg_release_archive import CskgReleaseArchive
 from mowgli.lib.storage.level_db import LevelDb
 
 
 class ConceptNetIndex(_Closeable):
-    __NAME_DEFAULT = paths.DATA_DIR / "cskg_release" / "indexed" / "concept_net"
+    __NAME_DEFAULT = paths.DATA_DIR / "concept_net" / "indexed"
+    __NODES_CSV_FILE_DEFAULT = paths.DATA_DIR / "concept_net" / "extracted" / "nodes.csv.bz2"
 
     def __init__(self, db: LevelDb):
         self.__db = db
@@ -60,15 +63,16 @@ class ConceptNetIndex(_Closeable):
         logger.info("built ConceptNet index")
 
     def close(self):
+
         self.__db.close()
 
     @classmethod
     def create(
             cls,
-            name: Optional[Union[str, Path]] = __NAME_DEFAULT,
             *,
             limit: Optional[int] = None,
-            nodes_csv_file: Optional[Union[Path, TextIO]] = None,  # Primarily for testing
+            name: Optional[Union[str, Path]] = __NAME_DEFAULT,
+            nodes_csv_file: Union[Path, TextIO] = __NODES_CSV_FILE_DEFAULT,
             report_progress: bool = False
     ):
         if not isinstance(name, Path):
@@ -78,12 +82,25 @@ class ConceptNetIndex(_Closeable):
         name.mkdir(parents=True)
         db = LevelDb(name=name, create_if_missing=True)
 
-        if nodes_csv_file is not None:
-            cls.__build(db=db, nodes_csv_file=nodes_csv_file, limit=limit, report_progress=report_progress)
+        build_kwds = {
+            "db": db,
+            "limit": limit,
+            "report_progress": report_progress
+        }
+
+        if isinstance(nodes_csv_file, TextIO):
+            cls.__build(nodes_csv_file=nodes_csv_file, **build_kwds)
+        elif isinstance(nodes_csv_file, Path):
+            nodes_csv_file_path = nodes_csv_file
+            nodes_csv_file_ext = os.path.splitext(nodes_csv_file_path.name)[-1].lower()
+            if nodes_csv_file_ext == ".bz2":
+                with bz2.BZ2File(nodes_csv_file_path) as nodes_csv_file:
+                    cls.__build(nodes_csv_file=TextIOWrapper(nodes_csv_file), **build_kwds)
+            else:
+                with open(nodes_csv_file_path) as nodes_csv_file:
+                    cls.__build(nodes_csv_file=nodes_csv_file, **build_kwds)
         else:
-            with CskgReleaseArchive() as cskg_release_archive:
-                with cskg_release_archive.open_nodes_csv("conceptnet") as nodes_csv_file:
-                    cls.__build(db=db, nodes_csv_file=nodes_csv_file, limit=limit, report_progress=report_progress)
+            raise ValueError(nodes_csv_file)
 
         return cls(db)
 

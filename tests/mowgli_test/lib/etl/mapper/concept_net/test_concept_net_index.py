@@ -7,8 +7,7 @@ except ImportError:
 
 if ConceptNetIndex is not None:
     def concept_net_index(tmpdir):
-        return ConceptNetIndex.create(Path(tmpdir), limit=10000,
-                                      nodes_csv_file=Path(__file__).parent / "concept_net_nodes_sample.csv",
+        return ConceptNetIndex.create(name=Path(tmpdir), limit=10000,
                                       report_progress=True)
 
 
