@@ -1,8 +1,9 @@
 import logging
-from typing import Generator, Union, Dict, Optional
+from typing import Generator, Union, Dict, Optional, Tuple
 
 from mowgli.lib.cskg.edge import Edge
 from mowgli.lib.cskg.node import Node
+from mowgli.lib.etl._mapper import _Mapper
 from mowgli.lib.etl._pipeline import _Pipeline
 from mowgli.lib.etl.pipeline_storage import PipelineStorage
 from mowgli.lib.storage._edge_set import _EdgeSet
@@ -21,8 +22,9 @@ except ImportError:
 
 
 class PipelineWrapper:
-    def __init__(self, pipeline: _Pipeline, storage: PipelineStorage):
+    def __init__(self, pipeline: _Pipeline, storage: PipelineStorage, mappers: Tuple[_Mapper, ...] = ()):
         self._logger = logging.getLogger(self.__class__.__name__)
+        self.__mappers = mappers
         self.__pipeline = pipeline
         self.__storage = storage
 
@@ -113,6 +115,9 @@ class PipelineWrapper:
                         )
                 else:
                     node_set.add(node)
+
+                for mapper in self.__mappers:
+                    yield from mapper.map(node)
             elif isinstance(node_or_edge, Edge):
                 edge = node_or_edge
                 # Edges should be unique in the CSKG, meaning that the tuple of (subject, predicate, object) should be unique.
