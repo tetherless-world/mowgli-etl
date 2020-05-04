@@ -144,4 +144,4 @@ class ConceptNetIndex(_Closeable):
 
     @staticmethod
     def __label_to_key(label: str):
-        return label.encode("utf-8")
+        return label.lower().encode("utf-8")
