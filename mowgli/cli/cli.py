@@ -1,10 +1,10 @@
 import logging
-import sys
 
 from configargparse import ArgParser
 
 from mowgli.cli.commands.drive_upload_command import DriveUploadCommand
 from mowgli.cli.commands.etl_command import EtlCommand
+from mowgli.cli.commands.index_concept_net_command import IndexConceptNetCommand
 
 
 class Cli:
@@ -12,6 +12,7 @@ class Cli:
         self.__commands = {
             "etl": EtlCommand(),
             "drive-upload": DriveUploadCommand(),
+            "index-concept-net": IndexConceptNetCommand(),
         }
 
     @staticmethod

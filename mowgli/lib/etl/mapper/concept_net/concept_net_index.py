@@ -56,7 +56,7 @@ class ConceptNetIndex(_Closeable):
 
             if limit is not None and node_i + 1 == limit:
                 break
-            logger.info("built ConceptNet index")
+        logger.info("built ConceptNet index")
 
     def close(self):
         self.__db.close()
@@ -67,13 +67,14 @@ class ConceptNetIndex(_Closeable):
             name: Optional[Union[str, Path]] = __NAME_DEFAULT,
             *,
             limit: Optional[int] = None,
-            nodes_csv_file: Optional[Union[Path, TextIO]],  # Primarily for testing
+            nodes_csv_file: Optional[Union[Path, TextIO]] = None,  # Primarily for testing
             report_progress: bool = False
     ):
         if not isinstance(name, Path):
             name = Path(name)
-        if name.exists:
+        if name.exists():
             rmtree(name)
+        name.mkdir(parents=True)
         db = LevelDb(name=name, create_if_missing=True)
 
         if nodes_csv_file is not None:
