@@ -1,4 +1,4 @@
-from mowgli.lib.storage._closeable import _Closeable
+from mowgli.lib._closeable import _Closeable
 from mowgli.lib.storage._node_id_set import _NodeIdSet
 
 

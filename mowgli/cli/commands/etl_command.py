@@ -10,6 +10,7 @@ from configargparse import ArgParser
 from mowgli import paths
 from mowgli.cli.commands._command import _Command
 from mowgli.lib.etl._pipeline import _Pipeline
+from mowgli.lib.etl.mapper.mappers import Mappers
 from mowgli.lib.etl.pipeline_storage import PipelineStorage
 from mowgli.lib.etl.pipeline_wrapper import PipelineWrapper
 
@@ -64,6 +65,11 @@ class EtlCommand(_Command):
         )
 
     def __call__(self, args):
+        force = bool(getattr(args, "force", False))
+        force_extract = force or bool(getattr(args, "force_extract", False))
+        force_transform = force or bool(getattr(args, "force_transform", False))
+        skip_whole_graph_check = bool(getattr(args, "skip_whole_graph_check", False))
+
         pipeline_class = self.__pipeline_class_dict[args.pipeline_module]
 
         pipeline = self.__instantiate_pipeline(args, pipeline_class)
@@ -73,16 +79,14 @@ class EtlCommand(_Command):
         )
         pipeline_wrapper = PipelineWrapper(pipeline=pipeline, storage=pipeline_storage)
 
-        force = bool(getattr(args, "force", False))
-        force_extract = force or bool(getattr(args, "force_extract", False))
-        force_transform = force or bool(getattr(args, "force_transform", False))
-        skip_whole_graph_check = bool(getattr(args, "skip_whole_graph_check", False))
-
         extract_kwds = pipeline_wrapper.extract(force=force_extract)
         graph_generator = pipeline_wrapper.transform(
             force=force_transform, skip_whole_graph_check=skip_whole_graph_check, **extract_kwds
         )
-        pipeline_wrapper.load(graph_generator)
+        with Mappers() as mappers:
+            if mappers:
+                graph_generator = pipeline_wrapper.map(graph_generator, mappers)
+            pipeline_wrapper.load(graph_generator)
 
     def __create_data_dir_path(self, args) -> str:
         data_dir_path = args.data_dir_path
