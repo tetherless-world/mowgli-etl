@@ -5,7 +5,7 @@ from typing import Union
 
 import plyvel
 
-from mowgli.lib.storage._closeable import _Closeable
+from mowgli.lib._closeable import _Closeable
 
 
 class LevelDb(_Closeable):

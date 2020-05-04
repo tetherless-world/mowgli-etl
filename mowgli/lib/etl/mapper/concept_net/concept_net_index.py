@@ -11,8 +11,8 @@ import plyvel
 from tqdm import tqdm
 
 from mowgli import paths
+from mowgli.lib._closeable import _Closeable
 from mowgli.lib.etl.pipeline.cskg.cskg_nodes_csv_transformer import CskgNodesCsvTransformer
-from mowgli.lib.storage._closeable import _Closeable
 from mowgli.lib.storage.level_db import LevelDb
 
 

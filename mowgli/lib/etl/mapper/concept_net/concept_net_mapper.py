@@ -1,14 +1,18 @@
 from typing import Generator
 
+from mowgli.lib._closeable import _Closeable
 from mowgli.lib.cskg import mowgli_predicates
 from mowgli.lib.cskg.edge import Edge
 from mowgli.lib.cskg.node import Node
 from mowgli.lib.etl.mapper.concept_net.concept_net_index import ConceptNetIndex
 
 
-class ConceptNetMapper:
+class ConceptNetMapper(_Closeable):
     def __init__(self, concept_net_index: ConceptNetIndex):
         self.__concept_net_index = concept_net_index
+
+    def close(self):
+        self.__concept_net_index.close()
 
     def map(self, node: Node) -> Generator[Edge, None, None]:
         """

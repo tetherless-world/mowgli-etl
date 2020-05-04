@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from collections import Generator
+from typing import Generator
 
 from mowgli.lib.cskg.edge import Edge
 from mowgli.lib.cskg.node import Node
