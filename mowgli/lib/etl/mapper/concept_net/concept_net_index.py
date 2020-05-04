@@ -62,17 +62,26 @@ class ConceptNetIndex(_Closeable):
         self.__db.close()
 
     @classmethod
-    def create(cls, name: Optional[Union[str, Path]] = __NAME_DEFAULT, *, limit: Optional[int] = None,
-               report_progress: bool = False):
+    def create(
+            cls,
+            name: Optional[Union[str, Path]] = __NAME_DEFAULT,
+            *,
+            limit: Optional[int] = None,
+            nodes_csv_file: Optional[Union[Path, TextIO]],  # Primarily for testing
+            report_progress: bool = False
+    ):
         if not isinstance(name, Path):
             name = Path(name)
         if name.exists:
             rmtree(name)
         db = LevelDb(name=name, create_if_missing=True)
 
-        with CskgReleaseArchive() as cskg_release_archive:
-            with cskg_release_archive.open_nodes_csv("conceptnet") as nodes_csv_file:
-                cls.__build(db=db, nodes_csv_file=nodes_csv_file, limit=limit, report_progress=report_progress)
+        if nodes_csv_file is not None:
+            cls.__build(db=db, nodes_csv_file=nodes_csv_file, limit=limit, report_progress=report_progress)
+        else:
+            with CskgReleaseArchive() as cskg_release_archive:
+                with cskg_release_archive.open_nodes_csv("conceptnet") as nodes_csv_file:
+                    cls.__build(db=db, nodes_csv_file=nodes_csv_file, limit=limit, report_progress=report_progress)
 
         return cls(db)
 

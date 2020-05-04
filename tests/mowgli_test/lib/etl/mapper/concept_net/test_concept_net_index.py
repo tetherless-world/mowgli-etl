@@ -1,15 +1,15 @@
 from pathlib import Path
 
-from mowgli import paths
-
 try:
     from mowgli.lib.etl.mapper.concept_net.concept_net_index import ConceptNetIndex
 except ImportError:
     ConceptNetIndex = None
 
-if ConceptNetIndex is not None and (paths.DATA_DIR / "cskg_release" / "extracted").is_dir():
+if ConceptNetIndex is not None:
     def concept_net_index(tmpdir):
-        return ConceptNetIndex.create(Path(tmpdir), limit=10000, report_progress=True)
+        return ConceptNetIndex.create(Path(tmpdir), limit=10000,
+                                      nodes_csv_file=Path(__file__).parent / "concept_net_nodes_sample.csv",
+                                      report_progress=True)
 
 
     def test_get(tmpdir):
