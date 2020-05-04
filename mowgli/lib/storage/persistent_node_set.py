@@ -34,6 +34,6 @@ class PersistentNodeSet(_NodeSet, _Leveldb):
             return default
 
     def keys(self) -> Generator[str, None, None]:
-        with self._db.iterator() as it:
-            for key, _ in it:
+        with self._db.iterator(include_value=False) as it:
+            for key in it:
                 yield key.decode("utf-8")
