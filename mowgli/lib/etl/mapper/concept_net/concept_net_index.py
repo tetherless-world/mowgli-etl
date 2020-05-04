@@ -56,6 +56,7 @@ class ConceptNetIndex(_Closeable):
 
             if limit is not None and node_i + 1 == limit:
                 break
+        db.db.compact_range()  # Compact the underlying storage
         logger.info("built ConceptNet index")
 
     def close(self):
