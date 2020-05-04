@@ -63,7 +63,7 @@ class EtlCommand(_Command):
         pipeline_wrapper = PipelineWrapper(pipeline=pipeline, storage=pipeline_storage)
         run_kwds = {"force": bool(getattr(args, "force", False)),
                     "skip_whole_graph_check": bool(getattr(args, "skip_whole_graph_check", False))}
-        if isinstance(pipeline, CombinedPipeline):
+        if pipeline_class.__name__ == CombinedPipeline.__name__:  # The odd imports make this necessary
             # Combined pipeline does its own mapping
             pipeline_wrapper.run(**run_kwds)
         else:
@@ -130,8 +130,6 @@ class EtlCommand(_Command):
         pipeline_kwds.pop("c")
         pipeline_kwds.pop("data_dir_path")
         pipeline_kwds.pop("force")
-        pipeline_kwds.pop("force_extract")
-        pipeline_kwds.pop("force_transform")
         pipeline_kwds.pop("logging_level")
         pipeline_kwds.pop("pipeline_module")
         pipeline_kwds.update(kwds)
