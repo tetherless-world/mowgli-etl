@@ -33,15 +33,6 @@ class PipelineWrapper:
         )
         return extract_kwds if extract_kwds is not None else {}
 
-    def extract_transform_load(
-        self, force: bool = False, skip_whole_graph_check: Optional[bool] = False
-    ):
-        extract_kwds = self.extract(force=force)
-        graph_generator = self.transform(
-            force=force, skip_whole_graph_check=skip_whole_graph_check, **extract_kwds
-        )
-        self.load(graph_generator)
-
     @property
     def id(self) -> str:
         return self.__pipeline.id
@@ -64,6 +55,23 @@ class PipelineWrapper:
                     loader.load_edge(node_or_edge)
                 else:
                     raise ValueError(type(node_or_edge))
+
+    def run(
+            self, *,
+            force: bool = False,
+            mappers: Tuple[_Mapper, ...] = (),
+            skip_whole_graph_check: Optional[bool] = False
+    ):
+        """
+        Run the entire pipeline.
+        """
+        extract_kwds = self.extract(force=force)
+        graph_generator = self.transform(
+            force=force, skip_whole_graph_check=skip_whole_graph_check, **extract_kwds
+        )
+        if mappers:
+            graph_generator = self.map(graph_generator, mappers)
+        self.load(graph_generator)
 
     def transform(
             self,
