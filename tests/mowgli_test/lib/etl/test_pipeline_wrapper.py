@@ -34,8 +34,8 @@ class MockPipeline(_Pipeline):
         )
 
 
-def extract_transform_load(node_edge_sequence: Tuple[Union[Node, Edge], ...], pipeline_storage: PipelineStorage):
-    return PipelineWrapper(MockPipeline(node_edge_sequence), pipeline_storage).extract_transform_load()
+def run(node_edge_sequence: Tuple[Union[Node, Edge], ...], pipeline_storage: PipelineStorage):
+    return PipelineWrapper(MockPipeline(node_edge_sequence), pipeline_storage).run()
 
 
 SUBJECT_NODE = Node(id="testid", label="test label", pos="n", datasource="test")
@@ -47,12 +47,12 @@ EDGE = Edge(subject=SUBJECT_NODE.id, object=OBJECT_NODE.id, predicate="test", da
 
 def test_exact_duplicate_node(pipeline_storage):
     # Exact duplicates are ignored
-    extract_transform_load((SUBJECT_NODE, OBJECT_NODE, EDGE, EXACT_DUPLICATE_SUBJECT_NODE), pipeline_storage)
+    run((SUBJECT_NODE, OBJECT_NODE, EDGE, EXACT_DUPLICATE_SUBJECT_NODE), pipeline_storage)
 
 
 def test_inexact_duplicate_node(pipeline_storage):
     try:
-        extract_transform_load((SUBJECT_NODE, OBJECT_NODE, EDGE, INEXACT_DUPLICATE_SUBJECT_NODE), pipeline_storage)
+        run((SUBJECT_NODE, OBJECT_NODE, EDGE, INEXACT_DUPLICATE_SUBJECT_NODE), pipeline_storage)
         fail()
     except ValueError:
         pass
@@ -60,9 +60,9 @@ def test_inexact_duplicate_node(pipeline_storage):
 
 def test_extraneous_node(pipeline_storage):
     try:
-        extract_transform_load((SUBJECT_NODE, OBJECT_NODE,
-                                Edge(subject=SUBJECT_NODE.id, object="externalnode", predicate="test",
-                                     datasource="test")), pipeline_storage)
+        run((SUBJECT_NODE, OBJECT_NODE,
+             Edge(subject=SUBJECT_NODE.id, object="externalnode", predicate="test",
+                  datasource="test")), pipeline_storage)
         fail()
     except ValueError:
         pass

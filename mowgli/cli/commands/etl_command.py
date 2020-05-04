@@ -11,6 +11,7 @@ from mowgli import paths
 from mowgli.cli.commands._command import _Command
 from mowgli.lib.etl._pipeline import _Pipeline
 from mowgli.lib.etl.mapper.mappers import Mappers
+from mowgli.lib.etl.pipeline.combined.combined_pipeline import CombinedPipeline
 from mowgli.lib.etl.pipeline_storage import PipelineStorage
 from mowgli.lib.etl.pipeline_wrapper import PipelineWrapper
 
@@ -46,30 +47,12 @@ class EtlCommand(_Command):
             help="force extract and transform, ignoring any cached data",
         )
         arg_parser.add_argument(
-            "--force-extract",
-            action="store_true",
-            help="force extract, ignoring any cached data",
-        )
-        arg_parser.add_argument(
-            "--force-transform",
-            action="store_true",
-            help="force transform, ignoring any cached data",
-        )
-        arg_parser.add_argument(
             "--skip-whole-graph-check",
             action="store_true",
             help="Skip checking of nodes/edges during transform"
         )
-        arg_parser.add_argument(
-            "--fuseki-data-url", default="http://fuseki:3030/ds/data"
-        )
 
     def __call__(self, args):
-        force = bool(getattr(args, "force", False))
-        force_extract = force or bool(getattr(args, "force_extract", False))
-        force_transform = force or bool(getattr(args, "force_transform", False))
-        skip_whole_graph_check = bool(getattr(args, "skip_whole_graph_check", False))
-
         pipeline_class = self.__pipeline_class_dict[args.pipeline_module]
 
         pipeline = self.__instantiate_pipeline(args, pipeline_class)
@@ -78,15 +61,14 @@ class EtlCommand(_Command):
             root_data_dir_path=self.__create_data_dir_path(args),
         )
         pipeline_wrapper = PipelineWrapper(pipeline=pipeline, storage=pipeline_storage)
-
-        extract_kwds = pipeline_wrapper.extract(force=force_extract)
-        graph_generator = pipeline_wrapper.transform(
-            force=force_transform, skip_whole_graph_check=skip_whole_graph_check, **extract_kwds
-        )
-        with Mappers() as mappers:
-            if mappers:
-                graph_generator = pipeline_wrapper.map(graph_generator, mappers)
-            pipeline_wrapper.load(graph_generator)
+        run_kwds = {"force": bool(getattr(args, "force", False)),
+                    "skip_whole_graph_check": bool(getattr(args, "skip_whole_graph_check", False))}
+        if pipeline_class.__name__ == CombinedPipeline.__name__:  # The odd imports make this necessary
+            # Combined pipeline does its own mapping
+            pipeline_wrapper.run(**run_kwds)
+        else:
+            with Mappers() as mappers:
+                pipeline_wrapper.run(mappers=mappers, **run_kwds)
 
     def __create_data_dir_path(self, args) -> str:
         data_dir_path = args.data_dir_path
@@ -148,8 +130,6 @@ class EtlCommand(_Command):
         pipeline_kwds.pop("c")
         pipeline_kwds.pop("data_dir_path")
         pipeline_kwds.pop("force")
-        pipeline_kwds.pop("force_extract")
-        pipeline_kwds.pop("force_transform")
         pipeline_kwds.pop("logging_level")
         pipeline_kwds.pop("pipeline_module")
         pipeline_kwds.update(kwds)

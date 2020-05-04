@@ -21,12 +21,12 @@ class CombinedPipelineExtractor(_Extractor):
         self._logger.info("Starting combined extraction")
         node_file_paths, edge_file_paths = [], []
 
-        with Mappers() as mappers:
+        with Mappers() as mappers:  # #88 run mappers in each pipeline rather than on final combined transform
             for pipeline in self.__pipelines:
                 storage = PipelineStorage(pipeline_id=pipeline.id, root_data_dir_path=storage.root_data_dir_path)
                 pipeline_wrapper = PipelineWrapper(pipeline, storage)
 
-                pipeline_wrapper.extract_transform_load(force=force)
+                pipeline_wrapper.run(force=force, mappers=mappers)
 
                 node_file_path = storage.loaded_data_dir_path / 'nodes.csv'
                 edge_file_path = storage.loaded_data_dir_path / 'edges.csv'
