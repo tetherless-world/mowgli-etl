@@ -2,16 +2,15 @@ import pytest
 
 from mowgli.lib.cskg import mowgli_predicates
 from mowgli.lib.cskg.node import Node
-from mowgli.lib.etl.mapper.concept_net.concept_net_mapper import ConceptNetMapper
 
 try:
-    from mowgli.lib.etl.mapper.concept_net.concept_net_index import ConceptNetIndex
+    from mowgli.lib.etl.mapper.concept_net.concept_net_mapper import ConceptNetMapper
 except ImportError:
-    ConceptNetIndex = None
+    ConceptNetMapper = None
 
-if ConceptNetIndex is not None:
+if ConceptNetMapper is not None:
     @pytest.fixture
-    def concept_net_mapper(concept_net_index: ConceptNetIndex):
+    def concept_net_mapper(concept_net_index):
         return ConceptNetMapper(concept_net_index)
 
 
