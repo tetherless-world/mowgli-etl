@@ -2,6 +2,8 @@ from mowgli.lib._closeable import _Closeable
 
 
 class Mappers:
+    def __init__(self, concept_net_index_path: Optional[Union[str, Path]]):
+
     def __enter__(self):
         mappers = []
         mappers.append(self.__new_concept_net_mapper())
