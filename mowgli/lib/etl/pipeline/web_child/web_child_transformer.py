@@ -105,7 +105,7 @@ class WebChildTransformer(_Transformer):
                 )
                 # For tracking which nodes have mappings already
                 # Deleting from yielded instead of tracking in a new set to save memory.
-                del yielded_words[word_nid]
+                yielded_words.delete(word_nid)
 
     def transform(
             self,

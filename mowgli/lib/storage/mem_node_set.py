@@ -14,6 +14,9 @@ class MemNodeSet(_NodeSet, _Closeable):
     def add(self, node: Node) -> None:
         self.__nodes[node.id] = node
 
+    def delete(self, node_id: str) -> None:
+        del self.__nodes[node_id]
+
     def get(self, node_id: str, default: Optional[Node] = None) -> Optional[Node]:
         return self.__nodes.get(node_id, default)
 

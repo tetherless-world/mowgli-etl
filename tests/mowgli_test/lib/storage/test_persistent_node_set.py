@@ -19,6 +19,14 @@ if PersistentNodeSet is not None:
             node_set.add(node)
 
 
+    def test_delete(node: Node, tmpdir):
+        with PersistentNodeSet(directory_path=tmpdir.mkdir("test"), create_if_missing=True) as node_set:
+            node_set.add(node)
+            assert node.id in node_set
+            node_set.delete(node.id)
+            assert node.id not in node_set
+
+
     def test_get_extant(node: Node, tmpdir):
         with PersistentNodeSet(directory_path=tmpdir.mkdir("test"), create_if_missing=True) as node_set:
             node_set.add(node)

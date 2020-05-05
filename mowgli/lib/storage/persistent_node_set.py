@@ -16,6 +16,10 @@ class PersistentNodeSet(_NodeSet, LevelDb):
         value = pickle.dumps(node)
         self._db.put(key, value)
 
+    def delete(self, node_id: str) -> None:
+        key = self.__construct_node_key(node_id)
+        self._db.delete(key)
+
     @staticmethod
     def __construct_node_key(node_id: str) -> bytes:
         return node_id.encode("utf-8")
