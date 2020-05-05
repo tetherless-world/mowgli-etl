@@ -34,7 +34,7 @@ class Cli:
         else:
             logging_level = logging.INFO
         logging.basicConfig(
-            format="%(asctime)s:%(module)s:%(lineno)s:%(name)s:%(levelname)s: %(message)s",
+            format="%(asctime)s:%(processName)s:%(module)s:%(lineno)s:%(name)s:%(levelname)s: %(message)s",
             level=logging_level,
         )
 
