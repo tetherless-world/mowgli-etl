@@ -2,8 +2,6 @@ import csv
 from pathlib import Path
 from typing import Generator, Tuple, Union
 
-from tqdm import tqdm
-
 from mowgli.lib._closeable import _Closeable
 from mowgli.lib.cskg.concept_net_predicates import HAS_A, MADE_OF, PART_OF
 from mowgli.lib.cskg.edge import Edge
@@ -72,7 +70,7 @@ class WebChildTransformer(_Transformer):
             csv_reader = csv.DictReader(
                 csv_file, delimiter="\t", quoting=csv.QUOTE_NONE
             )
-            for row in tqdm(csv_reader):
+            for row in csv_reader:
                 subject_node, object_node, edge = self.__read_webchild_csv_row(row)
                 for node in (subject_node, object_node):
                     if node.id not in yielded_words:
