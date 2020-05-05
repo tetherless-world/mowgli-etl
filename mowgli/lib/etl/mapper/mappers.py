@@ -1,7 +1,13 @@
+from pathlib import Path
+from typing import Optional
+
 from mowgli.lib._closeable import _Closeable
 
 
 class Mappers:
+    def __init__(self, *, concept_net_index_directory_path: Optional[Path] = None):
+        self.__concept_net_index_directory_path = concept_net_index_directory_path
+
     def __enter__(self):
         mappers = []
         mappers.append(self.__new_concept_net_mapper())
@@ -21,8 +27,12 @@ class Mappers:
         except ImportError:
             return None
 
+        concept_net_index_kwds = {}
+        if self.__concept_net_index_directory_path is not None:
+            concept_net_index_kwds["directory_path"] = self.__concept_net_index_directory_path
+
         try:
-            concept_net_index = ConceptNetIndex.open()
+            concept_net_index = ConceptNetIndex.open(**concept_net_index_kwds)
         except FileNotFoundError:
-            concept_net_index = ConceptNetIndex.create()
+            concept_net_index = ConceptNetIndex.create(**concept_net_index_kwds)
         return ConceptNetMapper(concept_net_index)

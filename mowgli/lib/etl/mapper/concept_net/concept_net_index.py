@@ -17,16 +17,17 @@ from mowgli.lib.storage.level_db import LevelDb
 
 
 class ConceptNetIndex(_Closeable):
-    __NAME_DEFAULT = paths.DATA_DIR / "concept_net" / "indexed"
+    __DIRECTORY_PATH_DEFAULT = paths.DATA_DIR / "concept_net" / "indexed"
     __NODES_CSV_FILE_DEFAULT = paths.DATA_DIR / "concept_net" / "extracted" / "nodes.csv.bz2"
 
     def __init__(self, db: LevelDb):
         self.__db = db
 
     @classmethod
-    def __build(cls, *, db: LevelDb, nodes_csv_file: TextIO, limit: Optional[int], report_progress: bool):
+    def __build(cls, *, db: LevelDb, directory_path: Path, nodes_csv_file: TextIO, limit: Optional[int],
+                report_progress: bool):
         logger = logging.getLogger(cls.__name__)
-        logger.info("building ConceptNet index")
+        logger.info("building ConceptNet index at %s", directory_path)
         nodes = CskgNodesCsvTransformer().transform(nodes_csv_file=nodes_csv_file)
         if report_progress:
             nodes = tqdm(nodes)
@@ -63,27 +64,25 @@ class ConceptNetIndex(_Closeable):
         logger.info("built ConceptNet index")
 
     def close(self):
-
         self.__db.close()
 
     @classmethod
     def create(
             cls,
             *,
+            directory_path: Optional[Path] = __DIRECTORY_PATH_DEFAULT,
             limit: Optional[int] = None,
-            name: Optional[Union[str, Path]] = __NAME_DEFAULT,
             nodes_csv_file: Union[Path, TextIO] = __NODES_CSV_FILE_DEFAULT,
             report_progress: bool = False
     ):
-        if not isinstance(name, Path):
-            name = Path(name)
-        if name.exists():
-            rmtree(name)
-        name.mkdir(parents=True)
-        db = LevelDb(name=name, create_if_missing=True)
+        if directory_path.exists():
+            rmtree(directory_path)
+        directory_path.mkdir(parents=True)
+        db = LevelDb(directory_path=directory_path, create_if_missing=True, error_if_exists=True)
 
         build_kwds = {
             "db": db,
+            "directory_path": directory_path,
             "limit": limit,
             "report_progress": report_progress
         }
@@ -105,9 +104,9 @@ class ConceptNetIndex(_Closeable):
         return cls(db)
 
     @classmethod
-    def open(cls, name: Optional[Union[str, Path]] = __NAME_DEFAULT):
+    def open(cls, directory_path: Optional[Path] = __DIRECTORY_PATH_DEFAULT):
         try:
-            return cls(LevelDb(name=name, create_if_missing=False))
+            return cls(LevelDb(directory_path=directory_path, create_if_missing=False))
         except plyvel.Error:
             raise FileNotFoundError
 

@@ -7,7 +7,7 @@ except ImportError:
 
 if ConceptNetIndex is not None:
     def create(tmpdir):
-        return ConceptNetIndex.create(name=Path(tmpdir), limit=10000,
+        return ConceptNetIndex.create(directory_path=Path(tmpdir), limit=10000,
                                       report_progress=True)
 
 

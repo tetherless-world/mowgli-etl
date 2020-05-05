@@ -1,4 +1,5 @@
 import os
+
 from itertools import islice
 
 from mowgli.lib.etl.pipeline.combined.combined_pipeline_extractor import CombinedPipelineExtractor
@@ -7,11 +8,11 @@ from tests.mowgli_test.lib.etl.etl_mocks import MockPipeline, MockTransformer
 
 def test_combined_pipeline_extractor(pipeline_storage, graph_generator):
     pipelines = tuple(
-        MockPipeline(id=f'pipe_{pipe_num}', transformer=MockTransformer(islice(graph_generator, 6)))
+        MockPipeline(id=f'pipe_{pipe_num}', transformer=MockTransformer(tuple(islice(graph_generator, 6))))
         for pipe_num in range(1, 4)
     )
 
-    pipeline_extractor = CombinedPipelineExtractor(pipelines=pipelines)
+    pipeline_extractor = CombinedPipelineExtractor(pipelines=pipelines, parallel=False)
     extract_kwds = pipeline_extractor.extract(force=False, storage=pipeline_storage)
 
     node_paths = extract_kwds['nodes_csv_file_paths']

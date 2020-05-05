@@ -1,7 +1,6 @@
 from pathlib import Path
 from shutil import rmtree
 from tempfile import mkdtemp
-from typing import Union
 
 import plyvel
 
@@ -9,10 +8,10 @@ from mowgli.lib._closeable import _Closeable
 
 
 class LevelDb(_Closeable):
-    def __init__(self, *, name: Union[str, Path], create_if_missing=True, delete_on_close=False, **kwds):
-        self._db = plyvel.DB(name=str(name), create_if_missing=create_if_missing, **kwds)
+    def __init__(self, *, directory_path: Path, create_if_missing=True, delete_on_close=False, **kwds):
+        self._db = plyvel.DB(name=str(directory_path), create_if_missing=create_if_missing, **kwds)
         self.__delete_on_close = delete_on_close
-        self.__name = name
+        self.__directory_path = directory_path
 
     @property
     def db(self) -> plyvel.DB:
@@ -21,7 +20,7 @@ class LevelDb(_Closeable):
     def close(self):
         self._db.close()
         if self.__delete_on_close:
-            rmtree(self.__name)
+            rmtree(self.__directory_path)
 
     @property
     def closed(self):
@@ -29,4 +28,4 @@ class LevelDb(_Closeable):
 
     @classmethod
     def temporary(cls):
-        return cls(name=mkdtemp(), delete_on_close=True)
+        return cls(directory_path=Path(mkdtemp()), delete_on_close=True)
