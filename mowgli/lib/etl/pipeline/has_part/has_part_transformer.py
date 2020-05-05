@@ -8,6 +8,7 @@ from mowgli.lib.cskg.edge import Edge
 from mowgli.lib.cskg.mowgli_predicates import SAME_AS
 from mowgli.lib.cskg.node import Node
 from mowgli.lib.etl._transformer import _Transformer
+from mowgli.lib.etl.word_net_id import WordNetId
 
 
 class HasPartTransformer(_Transformer):
@@ -18,11 +19,26 @@ class HasPartTransformer(_Transformer):
         # Will do sameAs WordNet or Wikipedia nodes in the transform instead of reusing their id's here.
         # Don't include metadata as "other", since the data set contains multiple normalized args with different metadata,
         # which violates our duplicate node id checks.
+        metadata = normalized_arg.get("metadata", {})
+        if "synset" in metadata:
+            synset = metadata["synset"]
+            assert synset.startswith("wn.")
+            word_net_id = WordNetId.parse(synset[len("wn."):])
+            pos = word_net_id.pos
+        else:
+            pos = None
+
+        label = normalized_arg["normalized"]
+        id_ = f"{self.__DATASOURCE}:{quote(label)}"
+        if pos is not None:
+            id_ += ":" + pos
+
         return \
             Node(
                 datasource=self.__DATASOURCE,
-                id=self.__DATASOURCE + ":" + quote(normalized_arg["normalized"]),
-                label=normalized_arg["normalized"],
+                id=id_,
+                label=label,
+                pos=pos,
                 # other=normalized_arg.get("metadata")
             )
 
