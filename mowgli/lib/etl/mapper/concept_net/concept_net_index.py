@@ -24,9 +24,10 @@ class ConceptNetIndex(_Closeable):
         self.__db = db
 
     @classmethod
-    def __build(cls, *, db: LevelDb, nodes_csv_file: TextIO, limit: Optional[int], report_progress: bool):
+    def __build(cls, *, db: LevelDb, directory_path: Path, nodes_csv_file: TextIO, limit: Optional[int],
+                report_progress: bool):
         logger = logging.getLogger(cls.__name__)
-        logger.info("building ConceptNet index")
+        logger.info("building ConceptNet index at %s", directory_path)
         nodes = CskgNodesCsvTransformer().transform(nodes_csv_file=nodes_csv_file)
         if report_progress:
             nodes = tqdm(nodes)
@@ -81,6 +82,7 @@ class ConceptNetIndex(_Closeable):
 
         build_kwds = {
             "db": db,
+            "directory_path": directory_path,
             "limit": limit,
             "report_progress": report_progress
         }
