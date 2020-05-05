@@ -1,7 +1,6 @@
 from itertools import islice
 
 from mowgli.lib.etl.pipeline.combined.combined_pipeline import CombinedPipeline
-from mowgli.lib.etl.pipeline_storage import PipelineStorage
 from mowgli.lib.etl.pipeline_wrapper import PipelineWrapper
 from tests.mowgli_test.lib.etl.etl_mocks import MockTransformer, MockPipeline
 
@@ -10,7 +9,8 @@ def test_combined_pipeline(pipeline_storage, graph_generator):
     rows_per_pipeline = 6
 
     pipelines = tuple(
-        MockPipeline(id=f'pipe_{pipe_num}', transformer=MockTransformer(islice(graph_generator, rows_per_pipeline)))
+        MockPipeline(id=f'pipe_{pipe_num}',
+                     transformer=MockTransformer(tuple(islice(graph_generator, rows_per_pipeline))))
         for pipe_num in range(1, 4)
     )
 

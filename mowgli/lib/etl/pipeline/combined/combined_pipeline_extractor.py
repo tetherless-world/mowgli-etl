@@ -38,12 +38,14 @@ class CombinedPipelineExtractor(_Extractor):
         self._logger.info("Starting combined extraction")
         nodes_csv_file_paths, edges_csv_file_paths = [], []
 
+        worker_args = []
+        for pipeline in self.__pipelines:
+            worker_args.append((force, pipeline, storage.root_data_dir_path))
+            # pickle.dumps(worker_args[-1])
+
         with multiprocessing.Pool() as multiprocessing_pool:
             for edges_csv_file_path, nodes_csv_file_path in \
-                    multiprocessing_pool.starmap(worker, tuple(
-                        (force, pipeline, storage.root_data_dir_path)
-                        for pipeline in self.__pipelines
-                    )):
+                    multiprocessing_pool.starmap(worker, worker_args):
                 edges_csv_file_paths.append(edges_csv_file_path)
                 nodes_csv_file_paths.append(nodes_csv_file_path)
         self._logger.info("Finished combined extraction")
