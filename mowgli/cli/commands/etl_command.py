@@ -128,6 +128,7 @@ class EtlCommand(_Command):
     def __instantiate_pipeline(self, args, pipeline_class, **kwds) -> _Pipeline:
         pipeline_kwds = vars(args).copy()
         pipeline_kwds.pop("c")
+        pipeline_kwds.pop("command")
         pipeline_kwds.pop("data_dir_path")
         pipeline_kwds.pop("force")
         pipeline_kwds.pop("logging_level")

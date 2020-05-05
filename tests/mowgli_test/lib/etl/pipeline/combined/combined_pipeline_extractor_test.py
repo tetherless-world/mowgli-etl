@@ -12,7 +12,7 @@ def test_combined_pipeline_extractor(pipeline_storage, graph_generator):
         for pipe_num in range(1, 4)
     )
 
-    pipeline_extractor = CombinedPipelineExtractor(pipelines=pipelines)
+    pipeline_extractor = CombinedPipelineExtractor(pipelines=pipelines, parallel=False)
     extract_kwds = pipeline_extractor.extract(force=False, storage=pipeline_storage)
 
     node_paths = extract_kwds['nodes_csv_file_paths']
