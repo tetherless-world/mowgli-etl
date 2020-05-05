@@ -8,6 +8,7 @@ from mowgli.lib.cskg.concept_net_predicates import IS_A, HAS_A, PART_OF, LOCATED
 from mowgli.lib.cskg.edge import Edge
 from mowgli.lib.cskg.node import Node
 from mowgli.lib.etl._transformer import _Transformer
+from mowgli.lib.etl.word_net_id import WordNetId
 
 
 class AristoTransformer(_Transformer):
@@ -40,29 +41,37 @@ class AristoTransformer(_Transformer):
         "within": __PredToConceptNetPredicateMapping(PART_OF)
     }
 
-    def __create_arg_node(self, *, arg: str, provenance: str, type_: str) -> Node:
-        # Put the type in the id in case words are reused
-        return \
-            Node(
-                datasource=self.__DATASOURCE,
-                id=f"{self.__DATASOURCE}:{type_}:{quote(arg)}",
-                label=arg,
-                other={"provenance": provenance, "type": type_}
-            )
-
-    def __create_type_edge(self, *, arg_node: Node, type_: str) -> Edge:
-        word_net_type = type_.rsplit('_', 1)
-        assert len(word_net_type[1]) >= 2
-
-        # arg node SameAs WordNet node
+    def __create_type_edge(self, *, arg_node: Node, type_word_net_id: WordNetId) -> Edge:
+        # arg node IsA WordNet node
         # Only yield this once, when the arg is yielded.
         return \
             Edge(
                 datasource=self.__DATASOURCE,
-                object=f"wn:{word_net_type[0]}.{word_net_type[1][0]}.{int(word_net_type[1][1:]):02d}",
+                object="wn:" + str(type_word_net_id),
                 predicate=IS_A,
                 subject=arg_node.id,
             )
+
+    def __parse_arg(self, *, arg: str, provenance: str, type_: str) -> Node:
+        # Put the type in the id in case words are reused
+        if type_ != "Thing":
+            word_net_type = type_.rsplit('_', 1)
+            assert len(word_net_type[1]) >= 2
+            type_word_net_id = WordNetId(word=word_net_type[0], pos=word_net_type[1][0],
+                                         offset=int(word_net_type[1][1:]))
+        else:
+            type_word_net_id = None
+
+        node = \
+            Node(
+                datasource=self.__DATASOURCE,
+                id=f"{self.__DATASOURCE}:{type_}:{quote(arg)}",
+                label=arg,
+                # Assume the part of speech of the arg is the same as the part of speech of the type
+                pos=type_word_net_id.pos if type_word_net_id is not None else None,
+                other={"provenance": provenance, "type": type_}
+            )
+        return node, type_word_net_id
 
     # @staticmethod
     # def __to_bool(value: str) -> bool:
@@ -131,10 +140,13 @@ class AristoTransformer(_Transformer):
                 reverse_args = concept_net_predicate_mapping.reverse_args
 
                 # Convert arg1 and arg2 into nodes
-                subject_node = self.__create_arg_node(arg=arg1, provenance=provenance, type_=domain)
-                object_node = self.__create_arg_node(arg=arg2, provenance=provenance, type_=range)
+                subject_node, subject_type_word_net_id = self.__parse_arg(arg=arg1, provenance=provenance, type_=domain)
+                object_node, object_type_word_net_id = self.__parse_arg(arg=arg2, provenance=provenance, type_=range)
 
-                for arg_node in (subject_node, object_node):
+                for arg_node, type_word_net_id in (
+                        (subject_node, subject_type_word_net_id),
+                        (object_node, object_type_word_net_id)
+                ):
                     if arg_node.id in yielded_node_ids:
                         continue
                     # arg_node has not been yielded yet
@@ -144,9 +156,8 @@ class AristoTransformer(_Transformer):
 
                     # The domain or range (type) is a WordNet synset, or "Thing" if unknown
                     # Only yield this edge once, along with the node.
-                    type_ = arg_node.other["type"]
-                    if type_ != "Thing":
-                        yield self.__create_type_edge(arg_node=arg_node, type_=type_)
+                    if type_word_net_id is not None:
+                        yield self.__create_type_edge(arg_node=arg_node, type_word_net_id=type_word_net_id)
 
                 # Yield the tuple as an Edge if an equivalent edge hasn't been yielded before
                 if reverse_args:
