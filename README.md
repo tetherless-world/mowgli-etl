@@ -46,7 +46,7 @@ The RDF loader can use the rdflib "Sleepycat" store if the `bsddb3` module is pr
     
 Linux:
 
-    apt-get install python3-bsddb
+    pip install bsddb3
     
 # Running tests
 
