@@ -3,7 +3,7 @@ from typing import Tuple, Optional
 from configargparse import ArgParser
 
 from mowgli.lib.etl._pipeline import _Pipeline
-from mowgli.lib.etl.pipeline.cskg.cskg_csv_transformer import CskgCsvTransformer
+from mowgli.lib.etl.pipeline.cskg_csv.cskg_csv_transformer import CskgCsvTransformer
 from mowgli.lib.etl.pipeline.rpi_combined.rpi_combined_extractor import RpiCombinedExtractor
 
 
