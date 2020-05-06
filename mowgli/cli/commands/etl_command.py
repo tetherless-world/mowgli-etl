@@ -26,8 +26,7 @@ class EtlCommand(_Command):
         subparsers = arg_parser.add_subparsers(
             title="pipeline modules",
             help="module name for the pipeline implementation",
-            dest="pipeline_module",
-            required=True
+            dest="pipeline_module"
         )
         for pipeline_name, pipeline_class in self.__pipeline_class_dict.items():
             subparser = subparsers.add_parser(pipeline_name)
@@ -53,6 +52,8 @@ class EtlCommand(_Command):
         )
 
     def __call__(self, args):
+        if args.pipeline_module is None:
+            raise ValueError("must specify a pipeline module")
         pipeline_class = self.__pipeline_class_dict[args.pipeline_module]
 
         pipeline = self.__instantiate_pipeline(args, pipeline_class)

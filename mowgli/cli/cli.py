@@ -1,4 +1,5 @@
 import logging
+import sys
 
 from configargparse import ArgParser
 
@@ -61,6 +62,9 @@ class Cli:
             command.add_arguments(subparser, self.__add_global_args)
 
         parsed_args = arg_parser.parse_args()
+        if parsed_args.command is None:
+            arg_parser.print_usage()
+            sys.exit(1)
 
         return parsed_args
 
