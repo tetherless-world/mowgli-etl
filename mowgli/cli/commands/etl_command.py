@@ -11,7 +11,7 @@ from mowgli import paths
 from mowgli.cli.commands._command import _Command
 from mowgli.lib.etl._pipeline import _Pipeline
 from mowgli.lib.etl.mapper.mappers import Mappers
-from mowgli.lib.etl.pipeline.combined.combined_pipeline import CombinedPipeline
+from mowgli.lib.etl.pipeline.rpi_combined.rpi_combined_pipeline import RpiCombinedPipeline
 from mowgli.lib.etl.pipeline_storage import PipelineStorage
 from mowgli.lib.etl.pipeline_wrapper import PipelineWrapper
 
@@ -63,7 +63,7 @@ class EtlCommand(_Command):
         pipeline_wrapper = PipelineWrapper(pipeline=pipeline, storage=pipeline_storage)
         run_kwds = {"force": bool(getattr(args, "force", False)),
                     "skip_whole_graph_check": bool(getattr(args, "skip_whole_graph_check", False))}
-        if pipeline_class.__name__ == CombinedPipeline.__name__:  # The odd imports make this necessary
+        if pipeline_class.__name__ == RpiCombinedPipeline.__name__:  # The odd imports make this necessary
             # Combined pipeline does its own mapping
             pipeline_wrapper.run(**run_kwds)
         else:

@@ -31,7 +31,7 @@ def serial_worker(force: bool, pipeline: _Pipeline, mappers: Tuple[_Mapper, ...]
     return edges_csv_file_path, nodes_csv_file_path
 
 
-class CombinedPipelineExtractor(_Extractor):
+class RpiCombinedExtractor(_Extractor):
     """
     Extracts the CSKG formatted result of one or more pipelines
     """

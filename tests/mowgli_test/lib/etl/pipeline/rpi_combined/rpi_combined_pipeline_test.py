@@ -1,11 +1,11 @@
 from itertools import islice
 
-from mowgli.lib.etl.pipeline.combined.combined_pipeline import CombinedPipeline
+from mowgli.lib.etl.pipeline.rpi_combined.rpi_combined_pipeline import RpiCombinedPipeline
 from mowgli.lib.etl.pipeline_wrapper import PipelineWrapper
 from tests.mowgli_test.lib.etl.etl_mocks import MockTransformer, MockPipeline
 
 
-def test_combined_pipeline(pipeline_storage, graph_generator):
+def test_rpi_combined_pipeline(pipeline_storage, graph_generator):
     rows_per_pipeline = 6
 
     pipelines = tuple(
@@ -14,7 +14,7 @@ def test_combined_pipeline(pipeline_storage, graph_generator):
         for pipe_num in range(1, 4)
     )
 
-    combined_pipeline = CombinedPipeline(pipelines=pipelines, serial=True)
+    combined_pipeline = RpiCombinedPipeline(pipelines=pipelines, serial=True)
 
     wrapper = PipelineWrapper(combined_pipeline, pipeline_storage)
     extract_kwds = wrapper.extract()
