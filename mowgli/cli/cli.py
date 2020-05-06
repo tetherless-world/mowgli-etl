@@ -2,6 +2,7 @@ import logging
 
 from configargparse import ArgParser
 
+from mowgli.cli.commands.augment_cskg_release_command import AugmentCskgReleaseCommand
 from mowgli.cli.commands.drive_upload_command import DriveUploadCommand
 from mowgli.cli.commands.etl_command import EtlCommand
 from mowgli.cli.commands.index_concept_net_command import IndexConceptNetCommand
@@ -10,6 +11,7 @@ from mowgli.cli.commands.index_concept_net_command import IndexConceptNetCommand
 class Cli:
     def __init__(self):
         self.__commands = {
+            "augment-cskg-release": AugmentCskgReleaseCommand(),
             "etl": EtlCommand(),
             "drive-upload": DriveUploadCommand(),
             "index-concept-net": IndexConceptNetCommand(),
