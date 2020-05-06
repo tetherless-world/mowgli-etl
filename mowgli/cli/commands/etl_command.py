@@ -73,14 +73,7 @@ class EtlCommand(_Command):
     def __create_data_dir_path(self, args) -> str:
         data_dir_path = args.data_dir_path
         if data_dir_path is None:
-            for data_dir_path in (
-                # In the container
-                "/data",
-                # In the checkout
-                paths.DATA_DIR,
-            ):
-                if os.path.isdir(data_dir_path):
-                    break
+            data_dir_path = paths.DATA_DIR
         if not os.path.isdir(data_dir_path):
             raise ValueError("data dir path %s does not exist" % data_dir_path)
         if not os.path.isdir(data_dir_path):
