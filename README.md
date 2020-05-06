@@ -40,6 +40,14 @@ Linux:
 
     pip install plyvel
     
+### Optional: install bsddb3
+
+The RDF loader can use the rdflib "Sleepycat" store if the `bsddb3` module is present.    
+    
+Linux:
+
+    apt-get install python3-bsddb
+    
 # Running tests
 
 Activate the virtual environment as above, then run:
@@ -50,7 +58,7 @@ Activate the virtual environment as above, then run:
 
 Activate the virtual environment as above, then run:
 
-    python3 -m mowgli.cli etl combined
+    python3 -m mowgli.cli etl rpi_combined
     
 to run all of the available pipelines as well as combine their output.
 
@@ -58,4 +66,18 @@ to run all of the available pipelines as well as combine their output.
 
 The extract, transform, and load stages of the pipelines write data to the `data` directory. (The path to this directory can be changed on the command line). The structure of the `data` directory is `data/<pipeline id>/<stage>`. For example, `data/swow/loaded` for the final products of the `swow` pipeline.
 
-The `combined` pipeline "loads" the outputs of the other pipelines into its `data/combined/loaded` directory in the CSKG CSV format.
+The `rpi_combined` pipeline "loads" the outputs of the other pipelines into its `data/rpi_combined/loaded` directory in the CSKG CSV format.
+
+# Augmenting a CSKG release
+
+Activate the virtual environment as above, then run:
+
+    python3 -m mowgli.cli etl rpi_combined
+
+Download the latest CSKG release .zip file (e.g., `cskg_v004.zip`) into `data/cskg_release/extracted`. You can also pass an existing path to the command below as `--cskg-release-zip-file-path`.
+
+Run
+
+    python3 -m mowgli.cli augment-cskg-release
+
+This produces an augmented .zip file in the same directory as the CSKG release .zip.
