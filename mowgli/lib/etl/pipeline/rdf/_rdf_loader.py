@@ -27,8 +27,8 @@ class _RdfLoader(_Loader):
         with open(self.__storage.loaded_data_dir_path / (self.__pipeline_id + "." + self.__format),
                   "w+b") as loaded_file:
             self.__graph.serialize(destination=loaded_file, format=self.__format)
-        self.__graph.close()
-        if os.path.isdir(self.__graph_store_dir_path):
+        if self.__graph_store_dir_path is not None and os.path.isdir(self.__graph_store_dir_path):
+            self.__graph.close()
             shutil.rmtree(self.__graph_store_dir_path)
         self.__nodes.close()
 
@@ -53,17 +53,25 @@ class _RdfLoader(_Loader):
     def open(self, storage):
         self.__storage = storage
 
-        self.__graph_store_dir_path = storage.loaded_data_dir_path / "bsddb"
-        if os.path.isdir(self.__graph_store_dir_path):
-            shutil.rmtree(self.__graph_store_dir_path)
-        os.makedirs(self.__graph_store_dir_path)
+        try:
+            import bsddb3
+        except ImportError:
+            bsddb3 = None
+        if bsddb3 is not None:
+            self.__graph_store_dir_path = storage.loaded_data_dir_path / "bsddb"
+            if os.path.isdir(self.__graph_store_dir_path):
+                shutil.rmtree(self.__graph_store_dir_path)
+            os.makedirs(self.__graph_store_dir_path)
 
-        rdflib.plugin.get('Sleepycat', rdflib.store.Store)(str(self.__graph_store_dir_path))
+            rdflib.plugin.get('Sleepycat', rdflib.store.Store)(str(self.__graph_store_dir_path))
 
-        self.__graph = self._new_graph(store="Sleepycat")
-
-        rt = self.__graph.open(str(self.__graph_store_dir_path), create=True)
-        assert rt == rdflib.store.VALID_STORE
+            self.__graph = self._new_graph(store="Sleepycat")
+            rt = self.__graph.open(str(self.__graph_store_dir_path), create=True)
+            assert rt == rdflib.store.VALID_STORE
+        else:
+            self._logger.warn("bsddb3 module not available, using in-memory rdflib store")
+            self.__graph_store_dir_path = None
+            self.__graph = self._new_graph(store="default")
 
         if PersistentNodeSet is not None:
             self.__nodes = PersistentNodeSet.temporary()
