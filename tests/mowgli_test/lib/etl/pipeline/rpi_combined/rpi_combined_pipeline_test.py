@@ -14,7 +14,7 @@ def test_rpi_combined_pipeline(pipeline_storage, graph_generator):
         for pipe_num in range(1, 4)
     )
 
-    combined_pipeline = RpiCombinedPipeline(pipelines=pipelines, serial=True)
+    combined_pipeline = RpiCombinedPipeline(pipelines=pipelines, parallel=False)
 
     wrapper = PipelineWrapper(combined_pipeline, pipeline_storage)
     extract_kwds = wrapper.extract()
