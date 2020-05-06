@@ -20,6 +20,7 @@ except ImportError:
 
 class _RdfLoader(_Loader):
     def __init__(self, *, format: str, pipeline_id: str):
+        _Loader.__init__(self)
         self.__format = format
         self.__pipeline_id = pipeline_id
 
