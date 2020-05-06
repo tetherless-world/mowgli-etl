@@ -26,8 +26,7 @@ class EtlCommand(_Command):
         subparsers = arg_parser.add_subparsers(
             title="pipeline modules",
             help="module name for the pipeline implementation",
-            dest="pipeline_module",
-            required=True
+            dest="pipeline_module"
         )
         for pipeline_name, pipeline_class in self.__pipeline_class_dict.items():
             subparser = subparsers.add_parser(pipeline_name)
@@ -53,6 +52,8 @@ class EtlCommand(_Command):
         )
 
     def __call__(self, args):
+        if args.pipeline_module is None:
+            raise ValueError("must specify a pipeline module")
         pipeline_class = self.__pipeline_class_dict[args.pipeline_module]
 
         pipeline = self.__instantiate_pipeline(args, pipeline_class)
@@ -73,14 +74,7 @@ class EtlCommand(_Command):
     def __create_data_dir_path(self, args) -> str:
         data_dir_path = args.data_dir_path
         if data_dir_path is None:
-            for data_dir_path in (
-                # In the container
-                "/data",
-                # In the checkout
-                paths.DATA_DIR,
-            ):
-                if os.path.isdir(data_dir_path):
-                    break
+            data_dir_path = paths.DATA_DIR
         if not os.path.isdir(data_dir_path):
             raise ValueError("data dir path %s does not exist" % data_dir_path)
         if not os.path.isdir(data_dir_path):

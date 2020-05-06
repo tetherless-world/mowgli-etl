@@ -36,7 +36,7 @@ class RpiCombinedExtractor(_Extractor):
     Extracts the CSKG formatted result of one or more pipelines
     """
 
-    def __init__(self, *, pipelines: Tuple[_Pipeline, ...], parallel=True):
+    def __init__(self, *, pipelines: Tuple[_Pipeline, ...], parallel=False):
         super().__init__()
         self.__parallel = parallel
         self.__pipelines = pipelines

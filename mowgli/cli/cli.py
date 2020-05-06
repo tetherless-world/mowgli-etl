@@ -1,19 +1,26 @@
 import logging
+import sys
 
 from configargparse import ArgParser
 
+from mowgli.cli.commands.augment_cskg_release_command import AugmentCskgReleaseCommand
 from mowgli.cli.commands.drive_upload_command import DriveUploadCommand
 from mowgli.cli.commands.etl_command import EtlCommand
-from mowgli.cli.commands.index_concept_net_command import IndexConceptNetCommand
+try:
+    from mowgli.cli.commands.index_concept_net_command import IndexConceptNetCommand
+except ImportError:
+    IndexConceptNetCommand = None
 
 
 class Cli:
     def __init__(self):
         self.__commands = {
+            "augment-cskg-release": AugmentCskgReleaseCommand(),
             "etl": EtlCommand(),
-            "drive-upload": DriveUploadCommand(),
-            "index-concept-net": IndexConceptNetCommand(),
+            "drive-upload": DriveUploadCommand()
         }
+        if IndexConceptNetCommand is not None:
+            self.__commands["index-concept-net"] = IndexConceptNetCommand()
 
     @staticmethod
     def __add_global_args(arg_parser: ArgParser):
@@ -46,7 +53,7 @@ class Cli:
     def __parse_args(self):
         arg_parser = ArgParser()
         subparsers = arg_parser.add_subparsers(
-            title="commands", dest="command", required=True
+            title="commands", dest="command"
         )
         self.__add_global_args(arg_parser)
         for command_name, command in self.__commands.items():
@@ -55,6 +62,9 @@ class Cli:
             command.add_arguments(subparser, self.__add_global_args)
 
         parsed_args = arg_parser.parse_args()
+        if parsed_args.command is None:
+            arg_parser.print_usage()
+            sys.exit(1)
 
         return parsed_args
 
