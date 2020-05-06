@@ -8,12 +8,12 @@ from mowgli.lib.etl.pipeline.rpi_combined.rpi_combined_extractor import RpiCombi
 
 
 class RpiCombinedPipeline(_Pipeline):
-    def __init__(self, *, pipelines: Optional[Tuple[_Pipeline, ...]] = None, serial: Optional[bool], **kwds):
+    def __init__(self, *, pipelines: Optional[Tuple[_Pipeline, ...]] = None, parallel: Optional[bool], **kwds):
         if pipelines is None:
             pipelines = self.__default_pipelines()
         super().__init__(
             id="combined",
-            extractor=RpiCombinedExtractor(pipelines=pipelines, parallel=not bool(serial)),
+            extractor=RpiCombinedExtractor(pipelines=pipelines, parallel=bool(parallel)),
             transformer=CskgCsvTransformer(),
             **kwds
         )
@@ -21,7 +21,7 @@ class RpiCombinedPipeline(_Pipeline):
     @classmethod
     def add_arguments(cls, arg_parser: ArgParser) -> None:
         _Pipeline.add_arguments(arg_parser)
-        arg_parser.add_argument("--serial", action="store_true", help="run serially, for testing")
+        arg_parser.add_argument("--parallel", action="store_true", help="run pipelines in parallel")
 
     def __default_pipelines(self) -> Tuple[_Pipeline, ...]:
         # Import these here instead of above so that RpiCombinedPipeline is the only _Pipeline subclass at the top level of the module.
