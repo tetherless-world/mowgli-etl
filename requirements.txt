@@ -1,5 +1,4 @@
 attrs==19.3.0
-bsddb3==6.2.7
 ConfigArgParse==1.0
 google-api-python-client==1.8.0
 importlib-metadata==1.4.0
