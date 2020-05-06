@@ -11,12 +11,12 @@ from mowgli.lib.etl.pipeline_storage import PipelineStorage
 
 @pytest.fixture
 def cskg_edges_csv_file_path() -> Path:
-    return Path(__file__).parent / "pipeline" / "cskg" / "edges.csv"
+    return Path(__file__).parent / "pipeline" / "cskg_csv" / "edges.csv"
 
 
 @pytest.fixture
 def cskg_nodes_csv_file_path() -> Path:
-    return Path(__file__).parent / "pipeline" / "cskg" / "nodes.csv"
+    return Path(__file__).parent / "pipeline" / "cskg_csv" / "nodes.csv"
 
 
 @pytest.fixture
