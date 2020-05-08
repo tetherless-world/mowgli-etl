@@ -1,8 +1,9 @@
 import logging
-from typing import Generator, Union, Dict, Optional
+from typing import Generator, Union, Dict, Optional, Tuple
 
 from mowgli.lib.cskg.edge import Edge
 from mowgli.lib.cskg.node import Node
+from mowgli.lib.etl._mapper import _Mapper
 from mowgli.lib.etl._pipeline import _Pipeline
 from mowgli.lib.etl.pipeline_storage import PipelineStorage
 from mowgli.lib.storage._edge_set import _EdgeSet
@@ -32,18 +33,18 @@ class PipelineWrapper:
         )
         return extract_kwds if extract_kwds is not None else {}
 
-    def extract_transform_load(
-        self, force: bool = False, skip_whole_graph_check: Optional[bool] = False
-    ):
-        extract_kwds = self.extract(force=force)
-        graph_generator = self.transform(
-            force=force, skip_whole_graph_check=skip_whole_graph_check, **extract_kwds
-        )
-        self.load(graph_generator)
-
     @property
     def id(self) -> str:
         return self.__pipeline.id
+
+    def map(self, graph_generator: Generator[Union[Node, Edge], None, None], mappers: Tuple[_Mapper, ...]) -> Generator[
+        Union[Node, Edge], None, None]:
+        for node_or_edge in graph_generator:
+            yield node_or_edge
+            if isinstance(node_or_edge, Node):
+                node = node_or_edge
+                for mapper in mappers:
+                    yield from mapper.map(node)
 
     def load(self, graph_generator: Generator[Union[Node, Edge], None, None]) -> None:
         with self.__pipeline.loader.open(storage=self.__storage) as loader:
@@ -54,6 +55,23 @@ class PipelineWrapper:
                     loader.load_edge(node_or_edge)
                 else:
                     raise ValueError(type(node_or_edge))
+
+    def run(
+            self, *,
+            force: bool = False,
+            mappers: Tuple[_Mapper, ...] = (),
+            skip_whole_graph_check: Optional[bool] = False
+    ):
+        """
+        Run the entire pipeline.
+        """
+        extract_kwds = self.extract(force=force)
+        graph_generator = self.transform(
+            force=force, skip_whole_graph_check=skip_whole_graph_check, **extract_kwds
+        )
+        if mappers:
+            graph_generator = self.map(graph_generator, mappers)
+        self.load(graph_generator)
 
     def transform(
             self,

@@ -1,16 +1,23 @@
 import csv
 from pathlib import Path
-from typing import Dict, Generator, Tuple, Union
+from typing import Generator, Tuple, Union
 
+from mowgli.lib._closeable import _Closeable
 from mowgli.lib.cskg.concept_net_predicates import HAS_A, MADE_OF, PART_OF
 from mowgli.lib.cskg.edge import Edge
 from mowgli.lib.cskg.mowgli_predicates import WN_SYNSET
 from mowgli.lib.cskg.node import Node
 from mowgli.lib.etl._transformer import _Transformer
+from mowgli.lib.storage._node_set import _NodeSet
+from mowgli.lib.storage.mem_node_set import MemNodeSet
+
+try:
+    from mowgli.lib.storage.persistent_node_set import PersistentNodeSet
+except ImportError:
+    PersistentNodeSet = None
 
 
 class WebChildTransformer(_Transformer):
-
     # Mapping of WebChild relations to their equivalent conceptnet relation
     # and a boolean indicating whether the equivalent relation is inverted.
     __RELATION_DICT = {
@@ -56,7 +63,7 @@ class WebChildTransformer(_Transformer):
         return subject_node, object_node, edge
 
     def __transform_webchild_file(
-        self, *, csv_file_path: Path, yielded_words: Dict[str, Node]
+            self, *, csv_file_path: Path, yielded_words: _NodeSet
     ) -> Generator[Union[Node, Edge], None, None]:
         self._logger.info("transforming %s", csv_file_path)
         with open(csv_file_path) as csv_file:
@@ -68,11 +75,11 @@ class WebChildTransformer(_Transformer):
                 for node in (subject_node, object_node):
                     if node.id not in yielded_words:
                         yield node
-                        yielded_words[node.id] = node.label
+                        yielded_words.add(node)
                 yield edge
 
     def __transform_wordnet_csv(
-        self, *, wordnet_csv_file_path: Path, yielded_words: Dict[str, Node]
+            self, *, wordnet_csv_file_path: Path, yielded_words: _NodeSet
     ) -> Generator[Union[Node, Edge], None, None]:
         self._logger.info("transforming wordnet mappings from %s", wordnet_csv_file_path)
         with open(wordnet_csv_file_path) as csv_file:
@@ -84,10 +91,8 @@ class WebChildTransformer(_Transformer):
                 word = row["#word"]
                 # Skip edge generation if the word node already has a wn mapping,
                 # or if the word is not represented in the yielded nodes,
-                if (
-                    word_nid not in yielded_words
-                    or yielded_words[word_nid].lower() != word.lower()
-                ):
+                yielded_word = yielded_words.get(word_nid)
+                if yielded_word is None or yielded_word.label.lower() != word.lower():
                     continue
                 lemma = "_".join(word.split())
                 sense_num = row["sense-number"]
@@ -100,27 +105,34 @@ class WebChildTransformer(_Transformer):
                 )
                 # For tracking which nodes have mappings already
                 # Deleting from yielded instead of tracking in a new set to save memory.
-                del yielded_words[word_nid]
+                yielded_words.delete(word_nid)
 
     def transform(
-        self,
-        *,
-        memberof_csv_file_path: Path,
-        physical_csv_file_path: Path,
-        substanceof_csv_file_path: Path,
-        wordnet_csv_file_path: Path,
+            self,
+            *,
+            memberof_csv_file_path: Path,
+            physical_csv_file_path: Path,
+            substanceof_csv_file_path: Path,
+            wordnet_csv_file_path: Path,
     ) -> Generator[Union[Node, Edge], None, None]:
-        yielded_words = {}
-        part_whole_csv_files = (
-            memberof_csv_file_path,
-            physical_csv_file_path,
-            substanceof_csv_file_path,
-        )
-        for csv_file_path in part_whole_csv_files:
-            yield from self.__transform_webchild_file(
-                csv_file_path=csv_file_path, yielded_words=yielded_words
+        if PersistentNodeSet is not None:
+            yielded_words = PersistentNodeSet.temporary()
+        else:
+            yielded_words = MemNodeSet()
+        try:
+            part_whole_csv_files = (
+                memberof_csv_file_path,
+                physical_csv_file_path,
+                substanceof_csv_file_path,
             )
-        yield from self.__transform_wordnet_csv(
-            wordnet_csv_file_path=wordnet_csv_file_path, yielded_words=yielded_words
-        )
+            for csv_file_path in part_whole_csv_files:
+                yield from self.__transform_webchild_file(
+                    csv_file_path=csv_file_path, yielded_words=yielded_words
+                )
+            yield from self.__transform_wordnet_csv(
+                wordnet_csv_file_path=wordnet_csv_file_path, yielded_words=yielded_words
+            )
+        finally:
+            if isinstance(yielded_words, _Closeable):
+                yielded_words.close()
         self._logger.info("Finished WebChild transform")

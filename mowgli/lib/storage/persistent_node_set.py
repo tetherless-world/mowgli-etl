@@ -2,19 +2,23 @@ import pickle
 from typing import Optional, Generator
 
 from mowgli.lib.cskg.node import Node
-from mowgli.lib.storage._leveldb import _Leveldb
 from mowgli.lib.storage._node_set import _NodeSet
+from mowgli.lib.storage.level_db import LevelDb
 
 
-class PersistentNodeSet(_NodeSet, _Leveldb):
+class PersistentNodeSet(_NodeSet, LevelDb):
     def __init__(self, **kwds):
         _NodeSet.__init__(self)
-        _Leveldb.__init__(self, **kwds)
+        LevelDb.__init__(self, **kwds)
 
     def add(self, node: Node) -> None:
         key = self.__construct_node_key(node.id)
         value = pickle.dumps(node)
         self._db.put(key, value)
+
+    def delete(self, node_id: str) -> None:
+        key = self.__construct_node_key(node_id)
+        self._db.delete(key)
 
     @staticmethod
     def __construct_node_key(node_id: str) -> bytes:
@@ -34,6 +38,6 @@ class PersistentNodeSet(_NodeSet, _Leveldb):
             return default
 
     def keys(self) -> Generator[str, None, None]:
-        with self._db.iterator() as it:
-            for key, _ in it:
+        with self._db.iterator(include_value=False) as it:
+            for key in it:
                 yield key.decode("utf-8")

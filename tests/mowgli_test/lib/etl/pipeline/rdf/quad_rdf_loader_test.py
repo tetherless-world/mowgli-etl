@@ -18,7 +18,7 @@ def pipeline(cskg_edges_csv_file_path, cskg_nodes_csv_file_path,
 
 
 def test_load(pipeline: PipelineWrapper, pipeline_storage: PipelineStorage):
-    pipeline.extract_transform_load()
+    pipeline.run()
     trig_file_path = pipeline_storage.loaded_data_dir_path / (
             pipeline.id + ".trig")
     conjunctive_graph = rdflib.ConjunctiveGraph()

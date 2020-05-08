@@ -1,5 +1,4 @@
 attrs==19.3.0
-bsddb3==6.2.7
 ConfigArgParse==1.0
 google-api-python-client==1.8.0
 importlib-metadata==1.4.0
@@ -13,5 +12,6 @@ pyparsing==2.4.6
 pytest==5.3.4
 rdflib==4.2.2
 six==1.14.0
+tqdm==4.46.0
 wcwidth==0.1.8
 zipp==2.0.1
