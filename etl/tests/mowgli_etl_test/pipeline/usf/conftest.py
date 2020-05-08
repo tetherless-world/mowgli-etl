@@ -2,7 +2,7 @@ import bz2
 import pytest
 from io import TextIOWrapper
 from pathlib import Path
-from tests.mowgli_etl_test.lib.etl.http_client.mock_etl_http_client import MockEtlHttpClient
+from tests.mowgli_etl_test.http_client.mock_etl_http_client import MockEtlHttpClient
 
 
 _sample_usf_file_path = Path(__file__).parent / "usf_test_data.xml"
