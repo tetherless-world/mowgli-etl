@@ -1,4 +1,4 @@
-from mowgli_etl.lib.cskg.node import Node
+from mowgli_etl.cskg.node import Node
 from mowgli_etl.storage.mem_node_set import MemNodeSet
 
 

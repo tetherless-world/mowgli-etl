@@ -1,8 +1,8 @@
 import logging
 from typing import Generator, Union, Dict, Optional, Tuple
 
-from mowgli_etl.lib.cskg.edge import Edge
-from mowgli_etl.lib.cskg.node import Node
+from mowgli_etl.cskg.edge import Edge
+from mowgli_etl.cskg.node import Node
 from mowgli_etl._mapper import _Mapper
 from mowgli_etl._pipeline import _Pipeline
 from mowgli_etl.pipeline_storage import PipelineStorage

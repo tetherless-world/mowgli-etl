@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Optional, Generator
 
-from mowgli_etl.lib.cskg.node import Node
+from mowgli_etl.cskg.node import Node
 
 
 class _NodeSet(ABC):

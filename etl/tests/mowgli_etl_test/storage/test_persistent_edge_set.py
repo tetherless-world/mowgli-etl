@@ -1,4 +1,4 @@
-from mowgli_etl.lib.cskg.edge import Edge
+from mowgli_etl.cskg.edge import Edge
 
 try:
     from mowgli_etl.storage.persistent_edge_set import PersistentEdgeSet

@@ -1,9 +1,9 @@
 from typing import Generator
 
 from mowgli_etl._closeable import _Closeable
-from mowgli_etl.lib.cskg import mowgli_predicates
-from mowgli_etl.lib.cskg.edge import Edge
-from mowgli_etl.lib.cskg.node import Node
+from mowgli_etl.cskg import mowgli_predicates
+from mowgli_etl.cskg.edge import Edge
+from mowgli_etl.cskg.node import Node
 from mowgli_etl.mapper.concept_net.concept_net_index import ConceptNetIndex
 
 

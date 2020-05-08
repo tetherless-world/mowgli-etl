@@ -3,10 +3,10 @@ from pathlib import Path
 from typing import Generator, Set, Dict
 from urllib.parse import quote
 
-from mowgli_etl.lib.cskg.concept_net_predicates import HAS_A, PART_OF
-from mowgli_etl.lib.cskg.edge import Edge
-from mowgli_etl.lib.cskg.mowgli_predicates import SAME_AS
-from mowgli_etl.lib.cskg.node import Node
+from mowgli_etl.cskg.concept_net_predicates import HAS_A, PART_OF
+from mowgli_etl.cskg.edge import Edge
+from mowgli_etl.cskg.mowgli_predicates import SAME_AS
+from mowgli_etl.cskg.node import Node
 from mowgli_etl._transformer import _Transformer
 from mowgli_etl.word_net_id import WordNetId
 

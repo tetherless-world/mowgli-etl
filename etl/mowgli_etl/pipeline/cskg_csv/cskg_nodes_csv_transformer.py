@@ -2,7 +2,7 @@ import csv
 from pathlib import Path
 from typing import Union, TextIO, Generator
 
-from mowgli_etl.lib.cskg.node import Node
+from mowgli_etl.cskg.node import Node
 from mowgli_etl.pipeline._csv_transformer import _CsvTransformer
 
 

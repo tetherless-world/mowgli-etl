@@ -1,9 +1,9 @@
 from typing import Union
 from urllib.parse import quote
 
-from mowgli_etl.lib.cskg.concept_net_predicates import RELATED_TO
-from mowgli_etl.lib.cskg.edge import Edge
-from mowgli_etl.lib.cskg.node import Node
+from mowgli_etl.cskg.concept_net_predicates import RELATED_TO
+from mowgli_etl.cskg.edge import Edge
+from mowgli_etl.cskg.node import Node
 from mowgli_etl.pipeline.usf.usf_constants import USF_DATASOURCE_ID, USF_NAMESPACE
 
 

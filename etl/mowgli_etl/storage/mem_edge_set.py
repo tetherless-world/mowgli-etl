@@ -1,7 +1,7 @@
 from typing import Optional
 
 from mowgli_etl._closeable import _Closeable
-from mowgli_etl.lib.cskg.edge import Edge
+from mowgli_etl.cskg.edge import Edge
 from mowgli_etl.storage._edge_set import _EdgeSet
 
 
