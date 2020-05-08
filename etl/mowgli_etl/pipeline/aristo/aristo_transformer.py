@@ -7,8 +7,8 @@ from mowgli_etl.lib.cskg.concept_net_predicates import IS_A, HAS_A, PART_OF, LOC
     CREATED_BY, HAS_PREREQUISITE, AT_LOCATION
 from mowgli_etl.lib.cskg.edge import Edge
 from mowgli_etl.lib.cskg.node import Node
-from mowgli_etl.lib.etl._transformer import _Transformer
-from mowgli_etl.lib.etl.word_net_id import WordNetId
+from mowgli_etl._transformer import _Transformer
+from mowgli_etl.word_net_id import WordNetId
 
 
 class AristoTransformer(_Transformer):

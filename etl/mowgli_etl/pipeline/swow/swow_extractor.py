@@ -2,7 +2,7 @@ from typing import Dict, Optional
 
 from pathvalidate import sanitize_filename
 
-from mowgli_etl.lib.etl._extractor import _Extractor
+from mowgli_etl._extractor import _Extractor
 from mowgli_etl.pipeline.swow.swow_constants import SWOW_CSV_FILE_KEY
 from mowgli_etl.pipeline_storage import PipelineStorage
 

@@ -1,6 +1,6 @@
 from typing import Dict, Optional
 
-from mowgli_etl.lib.etl._extractor import _Extractor
+from mowgli_etl._extractor import _Extractor
 from mowgli_etl.pipeline.sentic.sentic_constants import (
     ONTOSENTICNET_OWL_FILENAME,
     SENTIC_FILE_KEY,

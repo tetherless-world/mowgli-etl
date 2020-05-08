@@ -6,7 +6,7 @@ from rdflib import Graph, RDF, OWL, RDFS, URIRef
 from mowgli_etl.lib.cskg import concept_net_predicates
 from mowgli_etl.lib.cskg.edge import Edge
 from mowgli_etl.lib.cskg.node import Node
-from mowgli_etl.lib.etl._transformer import _Transformer
+from mowgli_etl._transformer import _Transformer
 
 
 class FoodOnTransformer(_Transformer):

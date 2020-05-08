@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from mowgli_etl.lib.etl._transformer import _Transformer
+from mowgli_etl._transformer import _Transformer
 
 
 class CskgReleaseAugmentationTransformer(_Transformer):

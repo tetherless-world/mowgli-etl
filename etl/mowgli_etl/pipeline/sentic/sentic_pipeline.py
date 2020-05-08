@@ -1,4 +1,4 @@
-from mowgli_etl.lib.etl._pipeline import _Pipeline
+from mowgli_etl._pipeline import _Pipeline
 from mowgli_etl.pipeline.sentic.sentic_constants import ONTOSENTICNET_OWL_FILENAME
 from mowgli_etl.pipeline.sentic.sentic_constants import ONTOSENTICNET_ZIP_URL
 from mowgli_etl.pipeline.sentic.sentic_extractor import SENTICExtractor

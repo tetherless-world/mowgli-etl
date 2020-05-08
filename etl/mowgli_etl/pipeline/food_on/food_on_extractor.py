@@ -1,4 +1,4 @@
-from mowgli_etl.lib.etl._extractor import _Extractor
+from mowgli_etl._extractor import _Extractor
 from mowgli_etl.pipeline_storage import PipelineStorage
 from mowgli_etl.paths import DATA_DIR
 

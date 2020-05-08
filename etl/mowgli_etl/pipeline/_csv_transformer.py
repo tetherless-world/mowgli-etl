@@ -1,6 +1,6 @@
 from typing import Dict, Optional
 
-from mowgli_etl.lib.etl._transformer import _Transformer
+from mowgli_etl._transformer import _Transformer
 
 
 class _CsvTransformer(_Transformer):

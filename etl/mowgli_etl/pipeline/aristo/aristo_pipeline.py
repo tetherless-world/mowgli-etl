@@ -1,4 +1,4 @@
-from mowgli_etl.lib.etl._pipeline import _Pipeline
+from mowgli_etl._pipeline import _Pipeline
 from mowgli_etl.pipeline.aristo.aristo_extractor import AristoExtractor
 from mowgli_etl.pipeline.aristo.aristo_transformer import AristoTransformer
 

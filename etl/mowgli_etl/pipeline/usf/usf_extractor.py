@@ -1,6 +1,6 @@
 from typing import Dict, Optional
 
-from mowgli_etl.lib.etl._extractor import _Extractor
+from mowgli_etl._extractor import _Extractor
 from mowgli_etl.pipeline.usf.usf_constants import (
     USF_CUE_TARGET_URL,
     STRENGTH_FILE_KEY,

@@ -1,4 +1,4 @@
-from mowgli_etl.lib.etl._extractor import _Extractor
+from mowgli_etl._extractor import _Extractor
 
 
 class EatExtractor(_Extractor):

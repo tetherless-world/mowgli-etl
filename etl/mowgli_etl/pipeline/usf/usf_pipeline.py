@@ -1,4 +1,4 @@
-from mowgli_etl.lib.etl._pipeline import _Pipeline
+from mowgli_etl._pipeline import _Pipeline
 from mowgli_etl.pipeline.usf.usf_extractor import USFExtractor
 from mowgli_etl.pipeline.usf.usf_transformer import USFTransformer
 

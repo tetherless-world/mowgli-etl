@@ -7,7 +7,7 @@ from mowgli_etl.lib.cskg.concept_net_predicates import HAS_A, MADE_OF, PART_OF
 from mowgli_etl.lib.cskg.edge import Edge
 from mowgli_etl.lib.cskg.mowgli_predicates import WN_SYNSET
 from mowgli_etl.lib.cskg.node import Node
-from mowgli_etl.lib.etl._transformer import _Transformer
+from mowgli_etl._transformer import _Transformer
 from mowgli_etl.storage._node_set import _NodeSet
 from mowgli_etl.storage.mem_node_set import MemNodeSet
 

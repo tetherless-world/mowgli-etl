@@ -1,4 +1,4 @@
-from mowgli_etl.lib.etl._pipeline import _Pipeline
+from mowgli_etl._pipeline import _Pipeline
 from mowgli_etl.pipeline.food_on.food_on_extractor import FoodOnExtractor
 from mowgli_etl.pipeline.food_on.food_on_transformer import FoodOnTransformer
 

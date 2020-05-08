@@ -1,4 +1,4 @@
-from mowgli_etl.lib.etl._pipeline import _Pipeline
+from mowgli_etl._pipeline import _Pipeline
 from mowgli_etl.pipeline.eat.eat_extractor import EatExtractor
 from mowgli_etl.pipeline.eat.eat_transformer import EatTransformer
 from mowgli_etl.paths import DATA_DIR

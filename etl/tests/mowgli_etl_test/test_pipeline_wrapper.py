@@ -4,9 +4,9 @@ from pytest import fail
 
 from mowgli_etl.cskg.edge import Edge
 from mowgli_etl.cskg.node import Node
-from mowgli_etl.lib.etl._extractor import _Extractor
-from mowgli_etl.lib.etl._pipeline import _Pipeline
-from mowgli_etl.lib.etl._transformer import _Transformer
+from mowgli_etl._extractor import _Extractor
+from mowgli_etl._pipeline import _Pipeline
+from mowgli_etl._transformer import _Transformer
 from mowgli_etl.pipeline_storage import PipelineStorage
 from mowgli_etl.pipeline_wrapper import PipelineWrapper
 

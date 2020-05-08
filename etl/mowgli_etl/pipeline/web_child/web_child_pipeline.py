@@ -1,4 +1,4 @@
-from mowgli_etl.lib.etl._pipeline import _Pipeline
+from mowgli_etl._pipeline import _Pipeline
 from mowgli_etl.pipeline.web_child.web_child_extractor import WebChildExtractor
 from mowgli_etl.pipeline.web_child.web_child_transformer import WebChildTransformer
 

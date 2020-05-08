@@ -1,4 +1,4 @@
-from mowgli_etl.lib.etl._pipeline import _Pipeline
+from mowgli_etl._pipeline import _Pipeline
 from mowgli_etl.pipeline.has_part.has_part_extractor import HasPartExtractor
 from mowgli_etl.pipeline.has_part.has_part_transformer import HasPartTransformer
 

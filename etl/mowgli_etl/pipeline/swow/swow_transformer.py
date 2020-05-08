@@ -5,7 +5,7 @@ from typing import Generator, Union
 
 from mowgli_etl.lib.cskg.edge import Edge
 from mowgli_etl.lib.cskg.node import Node
-from mowgli_etl.lib.etl._transformer import _Transformer
+from mowgli_etl._transformer import _Transformer
 from mowgli_etl.pipeline.swow.swow_mappers import swow_edge, swow_node, SwowResponseType
 
 _NOT_AVAILABLE_TERM = "NA"

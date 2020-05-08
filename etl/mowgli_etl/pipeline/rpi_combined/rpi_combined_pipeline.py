@@ -2,7 +2,7 @@ from typing import Tuple, Optional
 
 from configargparse import ArgParser
 
-from mowgli_etl.lib.etl._pipeline import _Pipeline
+from mowgli_etl._pipeline import _Pipeline
 from mowgli_etl.pipeline.cskg_csv.cskg_csv_transformer import CskgCsvTransformer
 from mowgli_etl.pipeline.rpi_combined.rpi_combined_extractor import RpiCombinedExtractor
 

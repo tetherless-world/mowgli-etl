@@ -3,7 +3,7 @@ from typing import Dict, Callable
 
 from mowgli_etl.lib.cskg.edge import Edge
 from mowgli_etl.lib.cskg.node import Node
-from mowgli_etl.lib.etl._loader import _Loader
+from mowgli_etl._loader import _Loader
 
 
 class CskgCsvLoader(_Loader):

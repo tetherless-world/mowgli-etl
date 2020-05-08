@@ -3,9 +3,9 @@ from typing import Optional
 
 from configargparse import ArgParser
 
-from mowgli_etl.lib.etl._extractor import _Extractor
-from mowgli_etl.lib.etl._loader import _Loader
-from mowgli_etl.lib.etl._transformer import _Transformer
+from mowgli_etl._extractor import _Extractor
+from mowgli_etl._loader import _Loader
+from mowgli_etl._transformer import _Transformer
 from mowgli_etl.pipeline.cskg_csv.cskg_csv_loader import CskgCsvLoader
 from mowgli_etl.pipeline.rdf.quad_rdf_loader import QuadRdfLoader
 from mowgli_etl.pipeline.rdf.triple_rdf_loader import TripleRdfLoader

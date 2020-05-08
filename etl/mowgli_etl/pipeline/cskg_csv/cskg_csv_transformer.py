@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Tuple
 
-from mowgli_etl.lib.etl._transformer import _Transformer
+from mowgli_etl._transformer import _Transformer
 from mowgli_etl.pipeline.cskg_csv.cskg_edges_csv_transformer import CskgEdgesCsvTransformer
 from mowgli_etl.pipeline.cskg_csv.cskg_nodes_csv_transformer import CskgNodesCsvTransformer
 

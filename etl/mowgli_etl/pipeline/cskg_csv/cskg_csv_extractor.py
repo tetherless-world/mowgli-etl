@@ -2,7 +2,7 @@ from pathlib import Path
 
 from configargparse import ArgParser
 
-from mowgli_etl.lib.etl._extractor import _Extractor
+from mowgli_etl._extractor import _Extractor
 
 
 class CskgCsvExtractor(_Extractor):

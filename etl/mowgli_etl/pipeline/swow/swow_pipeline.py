@@ -1,4 +1,4 @@
-from mowgli_etl.lib.etl._pipeline import _Pipeline
+from mowgli_etl._pipeline import _Pipeline
 from mowgli_etl.pipeline.swow.swow_constants import SWOW_ARCHIVE_PATH
 from mowgli_etl.pipeline.swow.swow_extractor import SwowExtractor
 from mowgli_etl.pipeline.swow.swow_transformer import SwowTransformer
