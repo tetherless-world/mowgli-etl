@@ -1,6 +1,13 @@
 from urllib.request import urlopen, urlretrieve
 from io import BytesIO
 from zipfile import ZipFile
+try:
+    import mowgli_etl
+except ImportError:
+    import os.path
+    import sys
+    sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..")))
+
 from mowgli_etl.pipeline.web_child.web_child_transformer import WebChildTransformer
 from mowgli_etl.cskg.edge import Edge
 from mowgli_etl.cskg.node import Node
