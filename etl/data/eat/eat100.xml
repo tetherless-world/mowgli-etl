@@ -1,0 +1,1111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eat100>
+    <!-- extrait des 100 premiers stimuli de eat avec les 10 premières réponses: 
+         
+         Produit avec la "simple" commande suivante:
+         java -cp saxon9he.jar:ExamineXML.jar ca.umontreal.iro.rali.Examine \ 
+             -xp '/eat-stimulus-response/stimulus' -max 100 -r eat100 \
+             -xsl /Users/glapalme/Desktop/eat/responses.xsl  \
+             /Users/glapalme/Desktop/eat/eat-stimulus-response.xml >eat100.xml
+    -->
+    <stimulus all="100" diff="68" word="SPECIAL">
+        <response n="7" r="0.07" word="TRAIN"/>
+        <response n="5" r="0.05" word="PARTICULAR"/>
+        <response n="4" r="0.04" word="EXTRA"/>
+        <response n="4" r="0.04" word="ORDINARY"/>
+        <response n="3" r="0.03" word="CASE"/>
+        <response n="3" r="0.03" word="PERSON"/>
+        <response n="2" r="0.02" word="BEER"/>
+        <response n="2" r="0.02" word="CAR"/>
+        <response n="2" r="0.02" word="CONSTABLE"/>
+    </stimulus>
+    <stimulus all="100" diff="65" word="SET">
+        <response n="6" r="0.06" word="TELEVISION"/>
+        <response n="5" r="0.05" word="UP"/>
+        <response n="4" r="0.04" word="OUT"/>
+        <response n="4" r="0.04" word="TO"/>
+        <response n="3" r="0.03" word="DOWN"/>
+        <response n="3" r="0.03" word="GAME"/>
+        <response n="3" r="0.03" word="GROUP"/>
+        <response n="3" r="0.03" word="T.V."/>
+        <response n="3" r="0.03" word="TEA"/>
+    </stimulus>
+    <stimulus all="100" diff="63" word="PROOF">
+        <response n="13" r="0.13" word="EVIDENCE"/>
+        <response n="10" r="0.10" word="PUDDING"/>
+        <response n="5" r="0.05" word="WHISKY"/>
+        <response n="4" r="0.04" word="THEORY"/>
+        <response n="2" r="0.02" word="COPY"/>
+        <response n="2" r="0.02" word="DETECTIVE"/>
+        <response n="2" r="0.02" word="IDENTITY"/>
+        <response n="2" r="0.02" word="LAW"/>
+        <response n="2" r="0.02" word="MATHS"/>
+    </stimulus>
+    <stimulus all="100" diff="63" word="VICIOUS">
+        <response n="11" r="0.11" word="CIRCLE"/>
+        <response n="11" r="0.11" word="NASTY"/>
+        <response n="7" r="0.07" word="CRUEL"/>
+        <response n="7" r="0.07" word="DOG"/>
+        <response n="3" r="0.03" word="FIERCE"/>
+        <response n="2" r="0.02" word="DOGS"/>
+        <response n="2" r="0.02" word="EVIL"/>
+        <response n="2" r="0.02" word="MEAN"/>
+        <response n="1" r="0.01" word="AGGRESSIVE"/>
+    </stimulus>
+    <stimulus all="100" diff="59" word="LEGAL">
+        <response n="16" r="0.16" word="LAW"/>
+        <response n="7" r="0.07" word="ILLEGAL"/>
+        <response n="7" r="0.07" word="LAWYER"/>
+        <response n="3" r="0.03" word="AID"/>
+        <response n="3" r="0.03" word="COURT"/>
+        <response n="3" r="0.03" word="COURTS"/>
+        <response n="2" r="0.02" word="BATTLE"/>
+        <response n="2" r="0.02" word="DOCUMENT"/>
+        <response n="2" r="0.02" word="FINE"/>
+    </stimulus>
+    <stimulus all="100" diff="59" word="TRACKS">
+        <response n="12" r="0.12" word="RAILWAY"/>
+        <response n="4" r="0.04" word="CAR"/>
+        <response n="4" r="0.04" word="TRACTOR"/>
+        <response n="3" r="0.03" word="ROAD"/>
+        <response n="3" r="0.03" word="SNOW"/>
+        <response n="3" r="0.03" word="TRAIN"/>
+        <response n="3" r="0.03" word="TYRES"/>
+        <response n="2" r="0.02" word="DEER"/>
+        <response n="2" r="0.02" word="DOG"/>
+    </stimulus>
+    <stimulus all="100" diff="58" word="ENERGETIC">
+        <response n="9" r="0.09" word="LIVELY"/>
+        <response n="6" r="0.06" word="FIT"/>
+        <response n="6" r="0.06" word="LAZY"/>
+        <response n="4" r="0.04" word="EXERCISE"/>
+        <response n="4" r="0.04" word="TIRED"/>
+        <response n="4" r="0.04" word="VITAL"/>
+        <response n="3" r="0.03" word="GAMES"/>
+        <response n="3" r="0.03" word="SWEAT"/>
+        <response n="2" r="0.02" word="ACTIVE"/>
+    </stimulus>
+    <stimulus all="100" diff="56" word="DEATH">
+        <response n="19" r="0.19" word="LIFE"/>
+        <response n="10" r="0.10" word="END"/>
+        <response n="5" r="0.05" word="COFFIN"/>
+        <response n="4" r="0.04" word="BLACK"/>
+        <response n="3" r="0.03" word="PART"/>
+        <response n="2" r="0.02" word="ALIVE"/>
+        <response n="2" r="0.02" word="DIE"/>
+        <response n="2" r="0.02" word="ETERNITY"/>
+        <response n="2" r="0.02" word="GOOD"/>
+    </stimulus>
+    <stimulus all="100" diff="56" word="SOUNDING">
+        <response n="7" r="0.07" word="DEPTH"/>
+        <response n="6" r="0.06" word="NOISE"/>
+        <response n="5" r="0.05" word="BELL"/>
+        <response n="5" r="0.05" word="ECHO"/>
+        <response n="5" r="0.05" word="LOUD"/>
+        <response n="5" r="0.05" word="OUT"/>
+        <response n="4" r="0.04" word="BRASS"/>
+        <response n="4" r="0.04" word="HEARING"/>
+        <response n="3" r="0.03" word="SUBMARINE"/>
+    </stimulus>
+    <stimulus all="100" diff="56" word="SURPRISE">
+        <response n="12" r="0.12" word="SHOCK"/>
+        <response n="9" r="0.09" word="PRESENT"/>
+        <response n="6" r="0.06" word="PLEASANT"/>
+        <response n="4" r="0.04" word="JOY"/>
+        <response n="4" r="0.04" word="SURPRISE"/>
+        <response n="3" r="0.03" word="ASTONISHMENT"/>
+        <response n="3" r="0.03" word="FRIGHT"/>
+        <response n="3" r="0.03" word="PACKAGE"/>
+        <response n="3" r="0.03" word="PARTY"/>
+    </stimulus>
+    <stimulus all="100" diff="55" word="ALONE">
+        <response n="13" r="0.13" word="LONELY"/>
+        <response n="13" r="0.13" word="TOGETHER"/>
+        <response n="4" r="0.04" word="MYSELF"/>
+        <response n="4" r="0.04" word="SAD"/>
+        <response n="4" r="0.04" word="SINGLE"/>
+        <response n="3" r="0.03" word="ONE"/>
+        <response n="3" r="0.03" word="SOLE"/>
+        <response n="3" r="0.03" word="WITH"/>
+        <response n="2" r="0.02" word="AGAIN"/>
+    </stimulus>
+    <stimulus all="100" diff="55" word="BELOVED">
+        <response n="10" r="0.10" word="ONE"/>
+        <response n="8" r="0.08" word="DEAR"/>
+        <response n="8" r="0.08" word="WIFE"/>
+        <response n="4" r="0.04" word="DARLING"/>
+        <response n="4" r="0.04" word="LOVED"/>
+        <response n="4" r="0.04" word="LOVER"/>
+        <response n="3" r="0.03" word="DEARLY"/>
+        <response n="3" r="0.03" word="HATED"/>
+        <response n="3" r="0.03" word="LOVE"/>
+    </stimulus>
+    <stimulus all="100" diff="55" word="GUARD">
+        <response n="19" r="0.19" word="DOG"/>
+        <response n="5" r="0.05" word="AGAINST"/>
+        <response n="5" r="0.05" word="PROTECT"/>
+        <response n="5" r="0.05" word="SOLDIER"/>
+        <response n="3" r="0.03" word="KEEP"/>
+        <response n="3" r="0.03" word="LIFE"/>
+        <response n="3" r="0.03" word="ON"/>
+        <response n="3" r="0.03" word="PALACE"/>
+        <response n="3" r="0.03" word="POLICE"/>
+    </stimulus>
+    <stimulus all="100" diff="55" word="SEA">
+        <response n="8" r="0.08" word="WAVES"/>
+        <response n="7" r="0.07" word="SHORE"/>
+        <response n="7" r="0.07" word="SIDE"/>
+        <response n="4" r="0.04" word="WATER"/>
+        <response n="3" r="0.03" word="BOAT"/>
+        <response n="3" r="0.03" word="GREEN"/>
+        <response n="3" r="0.03" word="NAVY"/>
+        <response n="3" r="0.03" word="OCEAN"/>
+        <response n="3" r="0.03" word="WAVE"/>
+    </stimulus>
+    <stimulus all="100" diff="55" word="SORE">
+        <response n="10" r="0.10" word="HURT"/>
+        <response n="8" r="0.08" word="THROAT"/>
+        <response n="6" r="0.06" word="PAIN"/>
+        <response n="4" r="0.04" word="THUMB"/>
+        <response n="4" r="0.04" word="WOUND"/>
+        <response n="3" r="0.03" word="PLACE"/>
+        <response n="2" r="0.02" word="ANKLE"/>
+        <response n="2" r="0.02" word="ARM"/>
+        <response n="2" r="0.02" word="ARSE"/>
+    </stimulus>
+    <stimulus all="100" diff="55" word="STREETS">
+        <response n="25" r="0.25" word="ROADS"/>
+        <response n="7" r="0.07" word="HOUSES"/>
+        <response n="5" r="0.05" word="LIGHTS"/>
+        <response n="3" r="0.03" word="LAMPS"/>
+        <response n="3" r="0.03" word="TOWN"/>
+        <response n="2" r="0.02" word="ALLEYS"/>
+        <response n="2" r="0.02" word="CARS"/>
+        <response n="2" r="0.02" word="PAVED"/>
+        <response n="2" r="0.02" word="PEOPLE"/>
+    </stimulus>
+    <stimulus all="100" diff="55" word="TRUST">
+        <response n="8" r="0.08" word="NATIONAL"/>
+        <response n="7" r="0.07" word="FAITH"/>
+        <response n="5" r="0.05" word="BELIEVE"/>
+        <response n="5" r="0.05" word="LOVE"/>
+        <response n="4" r="0.04" word="BANK"/>
+        <response n="4" r="0.04" word="FRIEND"/>
+        <response n="3" r="0.03" word="GOD"/>
+        <response n="3" r="0.03" word="HELP"/>
+        <response n="3" r="0.03" word="HOUSE"/>
+    </stimulus>
+    <stimulus all="100" diff="55" word="WIRE">
+        <response n="7" r="0.07" word="FENCE"/>
+        <response n="6" r="0.06" word="LIVE"/>
+        <response n="5" r="0.05" word="ELECTRICITY"/>
+        <response n="5" r="0.05" word="TELEPHONE"/>
+        <response n="4" r="0.04" word="COPPER"/>
+        <response n="4" r="0.04" word="LESS"/>
+        <response n="4" r="0.04" word="WOOL"/>
+        <response n="3" r="0.03" word="BRUSH"/>
+        <response n="3" r="0.03" word="CUTTERS"/>
+    </stimulus>
+    <stimulus all="100" diff="54" word="CHAMPIONSHIP">
+        <response n="9" r="0.09" word="CUP"/>
+        <response n="6" r="0.06" word="RACE"/>
+        <response n="6" r="0.06" word="WIN"/>
+        <response n="6" r="0.06" word="WINNER"/>
+        <response n="5" r="0.05" word="TENNIS"/>
+        <response n="3" r="0.03" word="EVENT"/>
+        <response n="3" r="0.03" word="FIGHT"/>
+        <response n="3" r="0.03" word="FOOTBALL"/>
+        <response n="3" r="0.03" word="GAMES"/>
+    </stimulus>
+    <stimulus all="100" diff="54" word="JUST">
+        <response n="11" r="0.11" word="NOW"/>
+        <response n="7" r="0.07" word="SO"/>
+        <response n="6" r="0.06" word="UNJUST"/>
+        <response n="5" r="0.05" word="ONLY"/>
+        <response n="5" r="0.05" word="RIGHT"/>
+        <response n="4" r="0.04" word="ALMOST"/>
+        <response n="4" r="0.04" word="FAIR"/>
+        <response n="3" r="0.03" word="WILLIAM"/>
+        <response n="2" r="0.02" word="ABOUT"/>
+    </stimulus>
+    <stimulus all="100" diff="54" word="MEASURE">
+        <response n="12" r="0.12" word="RULER"/>
+        <response n="10" r="0.10" word="INCH"/>
+        <response n="6" r="0.06" word="WEIGHT"/>
+        <response n="4" r="0.04" word="PINT"/>
+        <response n="4" r="0.04" word="TAPE"/>
+        <response n="4" r="0.04" word="YARD"/>
+        <response n="3" r="0.03" word="LENGTH"/>
+        <response n="3" r="0.03" word="RULE"/>
+        <response n="2" r="0.02" word="CYLINDER"/>
+    </stimulus>
+    <stimulus all="100" diff="54" word="SCREEN">
+        <response n="15" r="0.15" word="FILM"/>
+        <response n="8" r="0.08" word="TELEVISION"/>
+        <response n="7" r="0.07" word="TEST"/>
+        <response n="4" r="0.04" word="PICTURE"/>
+        <response n="4" r="0.04" word="STAR"/>
+        <response n="3" r="0.03" word="T.V."/>
+        <response n="3" r="0.03" word="WIND"/>
+        <response n="2" r="0.02" word="BLANK"/>
+        <response n="2" r="0.02" word="CAR"/>
+    </stimulus>
+    <stimulus all="100" diff="54" word="SOCIAL">
+        <response n="18" r="0.18" word="SCIENCE"/>
+        <response n="6" r="0.06" word="CLUB"/>
+        <response n="6" r="0.06" word="EVENT"/>
+        <response n="5" r="0.05" word="LIFE"/>
+        <response n="4" r="0.04" word="PARTY"/>
+        <response n="3" r="0.03" word="INTERCOURSE"/>
+        <response n="3" r="0.03" word="STUDIES"/>
+        <response n="3" r="0.03" word="WORKER"/>
+        <response n="2" r="0.02" word="ANTI-"/>
+    </stimulus>
+    <stimulus all="100" diff="54" word="SUBSTANCE">
+        <response n="12" r="0.12" word="MATTER"/>
+        <response n="9" r="0.09" word="MATERIAL"/>
+        <response n="6" r="0.06" word="CHEMICAL"/>
+        <response n="5" r="0.05" word="THING"/>
+        <response n="4" r="0.04" word="STUFF"/>
+        <response n="3" r="0.03" word="CHEMISTRY"/>
+        <response n="3" r="0.03" word="ELEMENT"/>
+        <response n="3" r="0.03" word="FOOD"/>
+        <response n="3" r="0.03" word="METAL"/>
+    </stimulus>
+    <stimulus all="100" diff="53" word="ARGUMENT">
+        <response n="12" r="0.12" word="ROW"/>
+        <response n="10" r="0.10" word="DISCUSSION"/>
+        <response n="9" r="0.09" word="FIGHT"/>
+        <response n="8" r="0.08" word="QUARREL"/>
+        <response n="3" r="0.03" word="DISAGREE"/>
+        <response n="3" r="0.03" word="NOISE"/>
+        <response n="2" r="0.02" word="ANGER"/>
+        <response n="2" r="0.02" word="ANGRY"/>
+        <response n="2" r="0.02" word="DEBATE"/>
+    </stimulus>
+    <stimulus all="100" diff="53" word="BOXES">
+        <response n="13" r="0.13" word="LITTLE"/>
+        <response n="7" r="0.07" word="CARDBOARD"/>
+        <response n="5" r="0.05" word="SQUARE"/>
+        <response n="4" r="0.04" word="CARTONS"/>
+        <response n="4" r="0.04" word="MATCHES"/>
+        <response n="3" r="0.03" word="BAGS"/>
+        <response n="3" r="0.03" word="CUBES"/>
+        <response n="3" r="0.03" word="EGGS"/>
+        <response n="3" r="0.03" word="MATCH"/>
+    </stimulus>
+    <stimulus all="100" diff="53" word="BREATHLESS">
+        <response n="11" r="0.11" word="RUNNING"/>
+        <response n="10" r="0.10" word="RUN"/>
+        <response n="10" r="0.10" word="TIRED"/>
+        <response n="6" r="0.06" word="PANT"/>
+        <response n="5" r="0.05" word="WIND"/>
+        <response n="4" r="0.04" word="WINDED"/>
+        <response n="3" r="0.03" word="LUNGS"/>
+        <response n="2" r="0.02" word="LUNG"/>
+        <response n="2" r="0.02" word="PARTING"/>
+    </stimulus>
+    <stimulus all="100" diff="53" word="BRITAIN">
+        <response n="23" r="0.23" word="GREAT"/>
+        <response n="6" r="0.06" word="COUNTRY"/>
+        <response n="6" r="0.06" word="ISLAND"/>
+        <response n="4" r="0.04" word="ENGLAND"/>
+        <response n="4" r="0.04" word="HOME"/>
+        <response n="3" r="0.03" word="FRANCE"/>
+        <response n="3" r="0.03" word="SCOTLAND"/>
+        <response n="2" r="0.02" word="AMERICA"/>
+        <response n="2" r="0.02" word="BRITISH"/>
+    </stimulus>
+    <stimulus all="100" diff="53" word="CITIZEN">
+        <response n="14" r="0.14" word="KANE"/>
+        <response n="9" r="0.09" word="MAN"/>
+        <response n="8" r="0.08" word="PERSON"/>
+        <response n="4" r="0.04" word="TOWN"/>
+        <response n="3" r="0.03" word="CITY"/>
+        <response n="3" r="0.03" word="COUNTRY"/>
+        <response n="3" r="0.03" word="ME"/>
+        <response n="2" r="0.02" word="AMERICA"/>
+        <response n="2" r="0.02" word="AMERICAN"/>
+    </stimulus>
+    <stimulus all="100" diff="53" word="DISHONEST">
+        <response n="17" r="0.17" word="THIEF"/>
+        <response n="10" r="0.10" word="HONEST"/>
+        <response n="6" r="0.06" word="LIAR"/>
+        <response n="5" r="0.05" word="BAD"/>
+        <response n="3" r="0.03" word="CHEAT"/>
+        <response n="3" r="0.03" word="JOE"/>
+        <response n="3" r="0.03" word="MEAN"/>
+        <response n="3" r="0.03" word="WRONG"/>
+        <response n="2" r="0.02" word="CRIMINAL"/>
+    </stimulus>
+    <stimulus all="100" diff="53" word="THRUST">
+        <response n="18" r="0.18" word="PUSH"/>
+        <response n="6" r="0.06" word="FORWARD"/>
+        <response n="6" r="0.06" word="PARRY"/>
+        <response n="5" r="0.05" word="FORCE"/>
+        <response n="4" r="0.04" word="SWORD"/>
+        <response n="3" r="0.03" word="PENIS"/>
+        <response n="3" r="0.03" word="SPEAR"/>
+        <response n="3" r="0.03" word="UP"/>
+        <response n="2" r="0.02" word="BLOW"/>
+    </stimulus>
+    <stimulus all="100" diff="52" word="CLEAR">
+        <response n="9" r="0.09" word="WATER"/>
+        <response n="7" r="0.07" word="BRIGHT"/>
+        <response n="6" r="0.06" word="CRYSTAL"/>
+        <response n="6" r="0.06" word="SKY"/>
+        <response n="5" r="0.05" word="DAY"/>
+        <response n="3" r="0.03" word="CLOUDY"/>
+        <response n="3" r="0.03" word="COOL"/>
+        <response n="3" r="0.03" word="DARK"/>
+        <response n="3" r="0.03" word="HEAD"/>
+    </stimulus>
+    <stimulus all="100" diff="52" word="EXAMINATION">
+        <response n="21" r="0.21" word="TEST"/>
+        <response n="9" r="0.09" word="PASS"/>
+        <response n="6" r="0.06" word="PAPER"/>
+        <response n="4" r="0.04" word="WORK"/>
+        <response n="3" r="0.03" word="QUESTION"/>
+        <response n="3" r="0.03" word="RESULTS"/>
+        <response n="2" r="0.02" word="DESK"/>
+        <response n="2" r="0.02" word="FAILURE"/>
+        <response n="2" r="0.02" word="HELL"/>
+    </stimulus>
+    <stimulus all="100" diff="52" word="HARDSHIP">
+        <response n="15" r="0.15" word="POVERTY"/>
+        <response n="7" r="0.07" word="WORK"/>
+        <response n="6" r="0.06" word="PAIN"/>
+        <response n="6" r="0.06" word="POOR"/>
+        <response n="5" r="0.05" word="MONEY"/>
+        <response n="3" r="0.03" word="DIFFICULTY"/>
+        <response n="3" r="0.03" word="EASE"/>
+        <response n="3" r="0.03" word="TOIL"/>
+        <response n="3" r="0.03" word="TOUGH"/>
+    </stimulus>
+    <stimulus all="100" diff="52" word="LUCKY">
+        <response n="8" r="0.08" word="JIM"/>
+        <response n="7" r="0.07" word="CHANCE"/>
+        <response n="6" r="0.06" word="DIP"/>
+        <response n="5" r="0.05" word="HAPPY"/>
+        <response n="5" r="0.05" word="UNLUCKY"/>
+        <response n="4" r="0.04" word="NUMBER"/>
+        <response n="3" r="0.03" word="CHARM"/>
+        <response n="3" r="0.03" word="FORTUNATE"/>
+        <response n="3" r="0.03" word="STAR"/>
+    </stimulus>
+    <stimulus all="100" diff="52" word="SOOTHE">
+        <response n="19" r="0.19" word="CALM"/>
+        <response n="8" r="0.08" word="COMFORT"/>
+        <response n="6" r="0.06" word="HEAL"/>
+        <response n="4" r="0.04" word="ACHE"/>
+        <response n="4" r="0.04" word="BALM"/>
+        <response n="3" r="0.03" word="RELAX"/>
+        <response n="3" r="0.03" word="STROKE"/>
+        <response n="2" r="0.02" word="BROW"/>
+        <response n="2" r="0.02" word="CARESS"/>
+    </stimulus>
+    <stimulus all="100" diff="51" word="BAN">
+        <response n="27" r="0.27" word="BOMB"/>
+        <response n="7" r="0.07" word="STOP"/>
+        <response n="5" r="0.05" word="THE BOMB"/>
+        <response n="4" r="0.04" word="BANNER"/>
+        <response n="4" r="0.04" word="FORBID"/>
+        <response n="3" r="0.03" word="MARRIAGE"/>
+        <response n="3" r="0.03" word="WAR"/>
+        <response n="2" r="0.02" word="BANISH"/>
+        <response n="2" r="0.02" word="BAR"/>
+    </stimulus>
+    <stimulus all="100" diff="51" word="BREAK">
+        <response n="9" r="0.09" word="FAST"/>
+        <response n="8" r="0.08" word="UP"/>
+        <response n="5" r="0.05" word="SMASH"/>
+        <response n="4" r="0.04" word="CUP"/>
+        <response n="4" r="0.04" word="DOWN"/>
+        <response n="4" r="0.04" word="MEND"/>
+        <response n="4" r="0.04" word="SHATTER"/>
+        <response n="3" r="0.03" word="CRACK"/>
+        <response n="3" r="0.03" word="FINISH"/>
+    </stimulus>
+    <stimulus all="100" diff="51" word="DEFINITE">
+        <response n="15" r="0.15" word="CERTAIN"/>
+        <response n="10" r="0.10" word="SURE"/>
+        <response n="7" r="0.07" word="INDEFINITE"/>
+        <response n="7" r="0.07" word="POSITIVE"/>
+        <response n="5" r="0.05" word="ARTICLE"/>
+        <response n="3" r="0.03" word="INTEGRAL"/>
+        <response n="2" r="0.02" word="END"/>
+        <response n="2" r="0.02" word="EXACT"/>
+        <response n="2" r="0.02" word="FACT"/>
+    </stimulus>
+    <stimulus all="100" diff="51" word="KILL">
+        <response n="14" r="0.14" word="MURDER"/>
+        <response n="9" r="0.09" word="DIE"/>
+        <response n="5" r="0.05" word="NO"/>
+        <response n="4" r="0.04" word="DEATH"/>
+        <response n="4" r="0.04" word="HATE"/>
+        <response n="4" r="0.04" word="ME"/>
+        <response n="3" r="0.03" word="BLOOD"/>
+        <response n="3" r="0.03" word="GUN"/>
+        <response n="3" r="0.03" word="JOY"/>
+    </stimulus>
+    <stimulus all="100" diff="51" word="QUITE">
+        <response n="13" r="0.13" word="ALMOST"/>
+        <response n="9" r="0.09" word="RIGHT"/>
+        <response n="6" r="0.06" word="NICE"/>
+        <response n="6" r="0.06" word="QUIET"/>
+        <response n="5" r="0.05" word="SO"/>
+        <response n="4" r="0.04" word="GOOD"/>
+        <response n="3" r="0.03" word="ENOUGH"/>
+        <response n="3" r="0.03" word="OFTEN"/>
+        <response n="2" r="0.02" word="HOT"/>
+    </stimulus>
+    <stimulus all="100" diff="50" word="BINDING">
+        <response n="27" r="0.27" word="BOOK"/>
+        <response n="5" r="0.05" word="TAPE"/>
+        <response n="4" r="0.04" word="CONTRACT"/>
+        <response n="4" r="0.04" word="ENERGY"/>
+        <response n="4" r="0.04" word="TYING"/>
+        <response n="3" r="0.03" word="BOOKS"/>
+        <response n="3" r="0.03" word="ROPE"/>
+        <response n="3" r="0.03" word="STRING"/>
+        <response n="2" r="0.02" word="BANDAGE"/>
+    </stimulus>
+    <stimulus all="100" diff="50" word="BRITISH">
+        <response n="11" r="0.11" word="ENGLISH"/>
+        <response n="8" r="0.08" word="ISLES"/>
+        <response n="7" r="0.07" word="SUBJECT"/>
+        <response n="5" r="0.05" word="NATIONALITY"/>
+        <response n="5" r="0.05" word="YES"/>
+        <response n="4" r="0.04" word="BEST"/>
+        <response n="4" r="0.04" word="EMPIRE"/>
+        <response n="4" r="0.04" word="GREAT"/>
+        <response n="4" r="0.04" word="SCOTTISH"/>
+    </stimulus>
+    <stimulus all="100" diff="50" word="DISCOVER">
+        <response n="40" r="0.40" word="FIND"/>
+        <response n="5" r="0.05" word="AMERICA"/>
+        <response n="4" r="0.04" word="COLUMBUS"/>
+        <response n="2" r="0.02" word="EXPLORE"/>
+        <response n="2" r="0.02" word="ISLAND"/>
+        <response n="2" r="0.02" word="SOMETHING"/>
+        <response n="2" r="0.02" word="TREASURE"/>
+        <response n="1" r="0.01" word="AGAIN"/>
+        <response n="1" r="0.01" word="AMAZON"/>
+    </stimulus>
+    <stimulus all="100" diff="50" word="FEED">
+        <response n="24" r="0.24" word="EAT"/>
+        <response n="15" r="0.15" word="FOOD"/>
+        <response n="3" r="0.03" word="BACK"/>
+        <response n="3" r="0.03" word="CATTLE"/>
+        <response n="2" r="0.02" word="ANIMAL"/>
+        <response n="2" r="0.02" word="BABY"/>
+        <response n="2" r="0.02" word="DRINK"/>
+        <response n="2" r="0.02" word="HUNGRY"/>
+        <response n="2" r="0.02" word="ME"/>
+    </stimulus>
+    <stimulus all="100" diff="50" word="RATHER">
+        <response n="18" r="0.18" word="THAN"/>
+        <response n="11" r="0.11" word="NOT"/>
+        <response n="10" r="0.10" word="PREFER"/>
+        <response n="4" r="0.04" word="QUITE"/>
+        <response n="3" r="0.03" word="MORE"/>
+        <response n="2" r="0.02" word="DO"/>
+        <response n="2" r="0.02" word="FUNNY"/>
+        <response n="2" r="0.02" word="NICE"/>
+        <response n="2" r="0.02" word="NOW"/>
+    </stimulus>
+    <stimulus all="100" diff="50" word="SICKLY">
+        <response n="19" r="0.19" word="ILL"/>
+        <response n="10" r="0.10" word="PALE"/>
+        <response n="10" r="0.10" word="SWEET"/>
+        <response n="6" r="0.06" word="WEAK"/>
+        <response n="4" r="0.04" word="SICK"/>
+        <response n="3" r="0.03" word="GREEN"/>
+        <response n="2" r="0.02" word="BED"/>
+        <response n="2" r="0.02" word="NAUSEATING"/>
+        <response n="2" r="0.02" word="POORLY"/>
+    </stimulus>
+    <stimulus all="100" diff="50" word="YELLOW">
+        <response n="9" r="0.09" word="RED"/>
+        <response n="6" r="0.06" word="BLACK"/>
+        <response n="6" r="0.06" word="GREEN"/>
+        <response n="6" r="0.06" word="SUN"/>
+        <response n="5" r="0.05" word="BANANA"/>
+        <response n="5" r="0.05" word="BIRD"/>
+        <response n="5" r="0.05" word="BLUE"/>
+        <response n="3" r="0.03" word="COLOUR"/>
+        <response n="3" r="0.03" word="FLOWER"/>
+    </stimulus>
+    <stimulus all="100" diff="49" word="CAPABLE">
+        <response n="27" r="0.27" word="ABLE"/>
+        <response n="12" r="0.12" word="INCAPABLE"/>
+        <response n="5" r="0.05" word="BROWN"/>
+        <response n="3" r="0.03" word="CLEVER"/>
+        <response n="3" r="0.03" word="GOOD"/>
+        <response n="2" r="0.02" word="ABILITY"/>
+        <response n="2" r="0.02" word="CAN"/>
+        <response n="2" r="0.02" word="EFFICIENT"/>
+        <response n="2" r="0.02" word="PERSON"/>
+    </stimulus>
+    <stimulus all="100" diff="49" word="DRESS">
+        <response n="10" r="0.10" word="COAT"/>
+        <response n="7" r="0.07" word="CLOTHES"/>
+        <response n="6" r="0.06" word="UP"/>
+        <response n="5" r="0.05" word="GIRL"/>
+        <response n="5" r="0.05" word="SUIT"/>
+        <response n="5" r="0.05" word="UNDRESS"/>
+        <response n="3" r="0.03" word="SENSE"/>
+        <response n="3" r="0.03" word="SKIRT"/>
+        <response n="3" r="0.03" word="WEAR"/>
+    </stimulus>
+    <stimulus all="100" diff="49" word="FILE">
+        <response n="17" r="0.17" word="PAPER"/>
+        <response n="11" r="0.11" word="NAIL"/>
+        <response n="10" r="0.10" word="CABINET"/>
+        <response n="6" r="0.06" word="WORK"/>
+        <response n="3" r="0.03" word="HAMMER"/>
+        <response n="3" r="0.03" word="METAL"/>
+        <response n="2" r="0.02" word="BASTARD"/>
+        <response n="2" r="0.02" word="BOOK"/>
+        <response n="2" r="0.02" word="NOTES"/>
+    </stimulus>
+    <stimulus all="100" diff="49" word="FIRE">
+        <response n="10" r="0.10" word="ENGINE"/>
+        <response n="10" r="0.10" word="WATER"/>
+        <response n="7" r="0.07" word="FLAME"/>
+        <response n="6" r="0.06" word="HOT"/>
+        <response n="4" r="0.04" word="BURN"/>
+        <response n="4" r="0.04" word="FLAMES"/>
+        <response n="4" r="0.04" word="HEAT"/>
+        <response n="4" r="0.04" word="SMOKE"/>
+        <response n="3" r="0.03" word="ALARM"/>
+    </stimulus>
+    <stimulus all="100" diff="49" word="FOUL">
+        <response n="10" r="0.10" word="SMELL"/>
+        <response n="8" r="0.08" word="WEATHER"/>
+        <response n="6" r="0.06" word="FOOTBALL"/>
+        <response n="6" r="0.06" word="PLAY"/>
+        <response n="5" r="0.05" word="DIRTY"/>
+        <response n="4" r="0.04" word="CHICKEN"/>
+        <response n="4" r="0.04" word="PEST"/>
+        <response n="3" r="0.03" word="BIRD"/>
+        <response n="3" r="0.03" word="FAIR"/>
+    </stimulus>
+    <stimulus all="100" diff="49" word="GAME">
+        <response n="17" r="0.17" word="PLAY"/>
+        <response n="12" r="0.12" word="SPORT"/>
+        <response n="6" r="0.06" word="BALL"/>
+        <response n="5" r="0.05" word="BIRD"/>
+        <response n="4" r="0.04" word="FOOTBALL"/>
+        <response n="4" r="0.04" word="FUN"/>
+        <response n="4" r="0.04" word="RUGBY"/>
+        <response n="3" r="0.03" word="OVER"/>
+        <response n="3" r="0.03" word="TENNIS"/>
+    </stimulus>
+    <stimulus all="100" diff="49" word="HOLLOW">
+        <response n="22" r="0.22" word="EMPTY"/>
+        <response n="17" r="0.17" word="TREE"/>
+        <response n="4" r="0.04" word="HOLE"/>
+        <response n="4" r="0.04" word="LOG"/>
+        <response n="3" r="0.03" word="DIP"/>
+        <response n="2" r="0.02" word="DELL"/>
+        <response n="2" r="0.02" word="FLAT"/>
+        <response n="2" r="0.02" word="GROUND"/>
+        <response n="2" r="0.02" word="HILL"/>
+    </stimulus>
+    <stimulus all="100" diff="49" word="MARKETING">
+        <response n="15" r="0.15" word="BOARD"/>
+        <response n="15" r="0.15" word="RESEARCH"/>
+        <response n="9" r="0.09" word="SELLING"/>
+        <response n="5" r="0.05" word="GARDEN"/>
+        <response n="4" r="0.04" word="MILK"/>
+        <response n="3" r="0.03" word="SALES"/>
+        <response n="2" r="0.02" word="BUSINESS"/>
+        <response n="2" r="0.02" word="GOODS"/>
+        <response n="2" r="0.02" word="MANAGER"/>
+    </stimulus>
+    <stimulus all="100" diff="49" word="PRESS">
+        <response n="9" r="0.09" word="HARD"/>
+        <response n="8" r="0.08" word="ON"/>
+        <response n="7" r="0.07" word="NEWSPAPER"/>
+        <response n="5" r="0.05" word="DOWN"/>
+        <response n="5" r="0.05" word="PAPER"/>
+        <response n="5" r="0.05" word="STOP"/>
+        <response n="4" r="0.04" word="PRINT"/>
+        <response n="3" r="0.03" word="BUTTON"/>
+        <response n="3" r="0.03" word="GANG"/>
+    </stimulus>
+    <stimulus all="100" diff="49" word="RIGHTEOUS">
+        <response n="17" r="0.17" word="GOOD"/>
+        <response n="8" r="0.08" word="BROTHERS"/>
+        <response n="8" r="0.08" word="SELF"/>
+        <response n="5" r="0.05" word="GOD"/>
+        <response n="4" r="0.04" word="INDIGNATION"/>
+        <response n="4" r="0.04" word="PIOUS"/>
+        <response n="3" r="0.03" word="POMPOUS"/>
+        <response n="3" r="0.03" word="RELIGIOUS"/>
+        <response n="2" r="0.02" word="CHRISTIAN"/>
+    </stimulus>
+    <stimulus all="100" diff="48" word="FAIRNESS">
+        <response n="12" r="0.12" word="JUSTICE"/>
+        <response n="7" r="0.07" word="BLONDE"/>
+        <response n="6" r="0.06" word="JUST"/>
+        <response n="5" r="0.05" word="EQUAL"/>
+        <response n="4" r="0.04" word="BEAUTY"/>
+        <response n="4" r="0.04" word="BLOND"/>
+        <response n="4" r="0.04" word="EQUALITY"/>
+        <response n="4" r="0.04" word="FAIR"/>
+        <response n="4" r="0.04" word="JUDGE"/>
+    </stimulus>
+    <stimulus all="100" diff="48" word="FERTILE">
+        <response n="14" r="0.14" word="LAND"/>
+        <response n="10" r="0.10" word="SOIL"/>
+        <response n="7" r="0.07" word="BARREN"/>
+        <response n="6" r="0.06" word="INFERTILE"/>
+        <response n="6" r="0.06" word="WOMAN"/>
+        <response n="4" r="0.04" word="STERILE"/>
+        <response n="3" r="0.03" word="EGG"/>
+        <response n="3" r="0.03" word="FIELD"/>
+        <response n="2" r="0.02" word="DRUG"/>
+    </stimulus>
+    <stimulus all="100" diff="48" word="POLICE">
+        <response n="17" r="0.17" word="CAR"/>
+        <response n="10" r="0.10" word="MAN"/>
+        <response n="9" r="0.09" word="FORCE"/>
+        <response n="5" r="0.05" word="STATION"/>
+        <response n="3" r="0.03" word="AUTHORITY"/>
+        <response n="3" r="0.03" word="BLUE"/>
+        <response n="3" r="0.03" word="CONSTABLE"/>
+        <response n="3" r="0.03" word="DOG"/>
+        <response n="3" r="0.03" word="LAW"/>
+    </stimulus>
+    <stimulus all="100" diff="48" word="TAIL">
+        <response n="14" r="0.14" word="END"/>
+        <response n="10" r="0.10" word="DOG"/>
+        <response n="9" r="0.09" word="CAT"/>
+        <response n="7" r="0.07" word="HEAD"/>
+        <response n="5" r="0.05" word="HORSE"/>
+        <response n="4" r="0.04" word="PIECE"/>
+        <response n="4" r="0.04" word="WAG"/>
+        <response n="3" r="0.03" word="TOP"/>
+        <response n="2" r="0.02" word="ANIMAL"/>
+    </stimulus>
+    <stimulus all="100" diff="48" word="WIGGLE">
+        <response n="11" r="0.11" word="HIPS"/>
+        <response n="8" r="0.08" word="BOTTOM"/>
+        <response n="8" r="0.08" word="WALK"/>
+        <response n="8" r="0.08" word="WORM"/>
+        <response n="5" r="0.05" word="GIRL"/>
+        <response n="5" r="0.05" word="WAGGLE"/>
+        <response n="3" r="0.03" word="DANCE"/>
+        <response n="3" r="0.03" word="SQUIRM"/>
+        <response n="2" r="0.02" word="SEXY"/>
+    </stimulus>
+    <stimulus all="100" diff="47" word="BROKEN">
+        <response n="10" r="0.10" word="DOWN"/>
+        <response n="8" r="0.08" word="GLASS"/>
+        <response n="5" r="0.05" word="BOTTLE"/>
+        <response n="5" r="0.05" word="CRACKED"/>
+        <response n="5" r="0.05" word="MENDED"/>
+        <response n="5" r="0.05" word="SMASHED"/>
+        <response n="4" r="0.04" word="ARM"/>
+        <response n="4" r="0.04" word="HOME"/>
+        <response n="3" r="0.03" word="HEART"/>
+    </stimulus>
+    <stimulus all="100" diff="47" word="BROWN">
+        <response n="27" r="0.27" word="BLACK"/>
+        <response n="4" r="0.04" word="WHITE"/>
+        <response n="3" r="0.03" word="ALE"/>
+        <response n="3" r="0.03" word="BLUE"/>
+        <response n="3" r="0.03" word="BREAD"/>
+        <response n="3" r="0.03" word="COLOUR"/>
+        <response n="3" r="0.03" word="COW"/>
+        <response n="3" r="0.03" word="EARTH"/>
+        <response n="3" r="0.03" word="SHOES"/>
+    </stimulus>
+    <stimulus all="100" diff="47" word="EDGE">
+        <response n="22" r="0.22" word="CLIFF"/>
+        <response n="15" r="0.15" word="KNIFE"/>
+        <response n="6" r="0.06" word="OF"/>
+        <response n="4" r="0.04" word="SHARP"/>
+        <response n="3" r="0.03" word="SIDE"/>
+        <response n="2" r="0.02" word="BLADE"/>
+        <response n="2" r="0.02" word="BORDER"/>
+        <response n="2" r="0.02" word="CORNER"/>
+        <response n="2" r="0.02" word="HILL"/>
+    </stimulus>
+    <stimulus all="100" diff="47" word="FAGS">
+        <response n="21" r="0.21" word="CIGARETTES"/>
+        <response n="16" r="0.16" word="SMOKE"/>
+        <response n="5" r="0.05" word="CANCER"/>
+        <response n="4" r="0.04" word="CIGGIES"/>
+        <response n="4" r="0.04" word="CIGS"/>
+        <response n="2" r="0.02" word="CIGARETTE"/>
+        <response n="2" r="0.02" word="ENDS"/>
+        <response n="2" r="0.02" word="ETON"/>
+        <response n="2" r="0.02" word="MATCHES"/>
+    </stimulus>
+    <stimulus all="100" diff="47" word="FALL">
+        <response n="12" r="0.12" word="DOWN"/>
+        <response n="11" r="0.11" word="HURT"/>
+        <response n="11" r="0.11" word="RISE"/>
+        <response n="8" r="0.08" word="DROP"/>
+        <response n="5" r="0.05" word="OUT"/>
+        <response n="4" r="0.04" word="GROUND"/>
+        <response n="4" r="0.04" word="WATER"/>
+        <response n="3" r="0.03" word="AUTUMN"/>
+        <response n="2" r="0.02" word="FEAR"/>
+    </stimulus>
+    <stimulus all="100" diff="47" word="HURT">
+        <response n="32" r="0.32" word="PAIN"/>
+        <response n="6" r="0.06" word="SORE"/>
+        <response n="4" r="0.04" word="HARM"/>
+        <response n="4" r="0.04" word="WOUND"/>
+        <response n="3" r="0.03" word="BLOOD"/>
+        <response n="3" r="0.03" word="FALL"/>
+        <response n="3" r="0.03" word="ME"/>
+        <response n="2" r="0.02" word="HELP"/>
+        <response n="2" r="0.02" word="ILL"/>
+    </stimulus>
+    <stimulus all="100" diff="47" word="LEATHER">
+        <response n="11" r="0.11" word="SHOES"/>
+        <response n="10" r="0.10" word="SHOE"/>
+        <response n="9" r="0.09" word="JACKET"/>
+        <response n="6" r="0.06" word="BOOTS"/>
+        <response n="5" r="0.05" word="COAT"/>
+        <response n="4" r="0.04" word="CHAIR"/>
+        <response n="3" r="0.03" word="BAG"/>
+        <response n="3" r="0.03" word="GLOVE"/>
+        <response n="3" r="0.03" word="GOODS"/>
+    </stimulus>
+    <stimulus all="100" diff="47" word="PIER">
+        <response n="14" r="0.14" word="SEA"/>
+        <response n="11" r="0.11" word="BRIGHTON"/>
+        <response n="8" r="0.08" word="SOUTHEND"/>
+        <response n="7" r="0.07" word="BLACKPOOL"/>
+        <response n="5" r="0.05" word="BOAT"/>
+        <response n="4" r="0.04" word="SEASIDE"/>
+        <response n="3" r="0.03" word="SHIP"/>
+        <response n="3" r="0.03" word="WATER"/>
+        <response n="2" r="0.02" word="BEACH"/>
+    </stimulus>
+    <stimulus all="100" diff="47" word="PROVIDE">
+        <response n="27" r="0.27" word="GIVE"/>
+        <response n="11" r="0.11" word="FOR"/>
+        <response n="6" r="0.06" word="FOOD"/>
+        <response n="4" r="0.04" word="EARN"/>
+        <response n="4" r="0.04" word="SUPPLY"/>
+        <response n="2" r="0.02" word="BREAD"/>
+        <response n="2" r="0.02" word="DONATE"/>
+        <response n="2" r="0.02" word="HAVE"/>
+        <response n="2" r="0.02" word="KEEP"/>
+    </stimulus>
+    <stimulus all="100" diff="47" word="ROLL">
+        <response n="16" r="0.16" word="OVER"/>
+        <response n="11" r="0.11" word="ON"/>
+        <response n="8" r="0.08" word="BREAD"/>
+        <response n="5" r="0.05" word="CALL"/>
+        <response n="4" r="0.04" word="BUTTER"/>
+        <response n="4" r="0.04" word="UP"/>
+        <response n="3" r="0.03" word="PAPER"/>
+        <response n="3" r="0.03" word="ROCK"/>
+        <response n="2" r="0.02" word="BUN"/>
+    </stimulus>
+    <stimulus all="100" diff="47" word="SAND">
+        <response n="18" r="0.18" word="SEA"/>
+        <response n="17" r="0.17" word="BEACH"/>
+        <response n="9" r="0.09" word="CASTLE"/>
+        <response n="4" r="0.04" word="DUNES"/>
+        <response n="4" r="0.04" word="SHORE"/>
+        <response n="3" r="0.03" word="DUNE"/>
+        <response n="2" r="0.02" word="CASTLES"/>
+        <response n="2" r="0.02" word="GRAIN"/>
+        <response n="2" r="0.02" word="GRAVEL"/>
+    </stimulus>
+    <stimulus all="100" diff="47" word="WONDER">
+        <response n="19" r="0.19" word="WHY"/>
+        <response n="8" r="0.08" word="THINK"/>
+        <response n="7" r="0.07" word="AT"/>
+        <response n="7" r="0.07" word="BOY"/>
+        <response n="4" r="0.04" word="AMAZEMENT"/>
+        <response n="3" r="0.03" word="AMAZE"/>
+        <response n="3" r="0.03" word="LAND"/>
+        <response n="3" r="0.03" word="WANDER"/>
+        <response n="3" r="0.03" word="WHAT"/>
+    </stimulus>
+    <stimulus all="100" diff="46" word="BEATER">
+        <response n="23" r="0.23" word="EGG"/>
+        <response n="11" r="0.11" word="CARPET"/>
+        <response n="6" r="0.06" word="BUSH"/>
+        <response n="4" r="0.04" word="GROUSE"/>
+        <response n="4" r="0.04" word="SHOOT"/>
+        <response n="3" r="0.03" word="EGGS"/>
+        <response n="3" r="0.03" word="SADIST"/>
+        <response n="3" r="0.03" word="STICK"/>
+        <response n="2" r="0.02" word="BATTER"/>
+    </stimulus>
+    <stimulus all="100" diff="46" word="FLAVOUR">
+        <response n="31" r="0.31" word="TASTE"/>
+        <response n="6" r="0.06" word="STRAWBERRY"/>
+        <response n="5" r="0.05" word="ORANGE"/>
+        <response n="5" r="0.05" word="RASPBERRY"/>
+        <response n="4" r="0.04" word="FOOD"/>
+        <response n="4" r="0.04" word="SWEET"/>
+        <response n="2" r="0.02" word="AROMA"/>
+        <response n="2" r="0.02" word="FRUIT"/>
+        <response n="2" r="0.02" word="ICE-CREAM"/>
+    </stimulus>
+    <stimulus all="100" diff="46" word="FUTURE">
+        <response n="42" r="0.42" word="PAST"/>
+        <response n="5" r="0.05" word="PRESENT"/>
+        <response n="5" r="0.05" word="TIME"/>
+        <response n="4" r="0.04" word="LIFE"/>
+        <response n="3" r="0.03" word="BRIGHT"/>
+        <response n="1" r="0.01" word="AHEAD"/>
+        <response n="1" r="0.01" word="BLACK"/>
+        <response n="1" r="0.01" word="BLUE"/>
+        <response n="1" r="0.01" word="CLAIRVOYANT"/>
+    </stimulus>
+    <stimulus all="100" diff="46" word="GARDEN">
+        <response n="15" r="0.15" word="FLOWERS"/>
+        <response n="8" r="0.08" word="FLOWER"/>
+        <response n="5" r="0.05" word="GATE"/>
+        <response n="5" r="0.05" word="LAWN"/>
+        <response n="5" r="0.05" word="SEAT"/>
+        <response n="4" r="0.04" word="HOSE"/>
+        <response n="4" r="0.04" word="ROSE"/>
+        <response n="3" r="0.03" word="FENCE"/>
+        <response n="3" r="0.03" word="GRASS"/>
+    </stimulus>
+    <stimulus all="100" diff="46" word="PREGNANT">
+        <response n="29" r="0.29" word="WOMAN"/>
+        <response n="14" r="0.14" word="BABY"/>
+        <response n="4" r="0.04" word="SWOLLEN"/>
+        <response n="3" r="0.03" word="FAT"/>
+        <response n="3" r="0.03" word="MOTHER"/>
+        <response n="2" r="0.02" word="ABORTION"/>
+        <response n="2" r="0.02" word="CHILD"/>
+        <response n="2" r="0.02" word="EWE"/>
+        <response n="2" r="0.02" word="FULL"/>
+    </stimulus>
+    <stimulus all="100" diff="46" word="TEST">
+        <response n="16" r="0.16" word="EXAM"/>
+        <response n="13" r="0.13" word="MATCH"/>
+        <response n="10" r="0.10" word="TUBE"/>
+        <response n="6" r="0.06" word="TRY"/>
+        <response n="4" r="0.04" word="CRICKET"/>
+        <response n="3" r="0.03" word="SCORE"/>
+        <response n="3" r="0.03" word="TIME"/>
+        <response n="2" r="0.02" word="CAR"/>
+        <response n="2" r="0.02" word="DRIVE"/>
+    </stimulus>
+    <stimulus all="100" diff="46" word="WEEKLY">
+        <response n="18" r="0.18" word="MAGAZINE"/>
+        <response n="13" r="0.13" word="NEWS"/>
+        <response n="9" r="0.09" word="PAPER"/>
+        <response n="6" r="0.06" word="DAILY"/>
+        <response n="5" r="0.05" word="NEWSPAPER"/>
+        <response n="4" r="0.04" word="MONTHLY"/>
+        <response n="3" r="0.03" word="ONCE"/>
+        <response n="2" r="0.02" word="JOURNAL"/>
+        <response n="2" r="0.02" word="PAY"/>
+    </stimulus>
+    <stimulus all="100" diff="46" word="WITHOUT">
+        <response n="20" r="0.20" word="WITHIN"/>
+        <response n="15" r="0.15" word="WITH"/>
+        <response n="5" r="0.05" word="IT"/>
+        <response n="4" r="0.04" word="ME"/>
+        <response n="4" r="0.04" word="NOTHING"/>
+        <response n="3" r="0.03" word="DOUBT"/>
+        <response n="3" r="0.03" word="MONEY"/>
+        <response n="2" r="0.02" word="FOOD"/>
+        <response n="2" r="0.02" word="INSIDE"/>
+    </stimulus>
+    <stimulus all="100" diff="45" word="BABY">
+        <response n="13" r="0.13" word="BOY"/>
+        <response n="8" r="0.08" word="FACE"/>
+        <response n="7" r="0.07" word="CRY"/>
+        <response n="6" r="0.06" word="GIRL"/>
+        <response n="5" r="0.05" word="NAPPIES"/>
+        <response n="4" r="0.04" word="CHILD"/>
+        <response n="4" r="0.04" word="MOTHER"/>
+        <response n="3" r="0.03" word="BLUE"/>
+        <response n="3" r="0.03" word="DOLL"/>
+    </stimulus>
+    <stimulus all="100" diff="45" word="BLOW">
+        <response n="23" r="0.23" word="WIND"/>
+        <response n="10" r="0.10" word="UP"/>
+        <response n="7" r="0.07" word="PUFF"/>
+        <response n="6" r="0.06" word="HARD"/>
+        <response n="4" r="0.04" word="LAMP"/>
+        <response n="3" r="0.03" word="HIT"/>
+        <response n="3" r="0.03" word="HORN"/>
+        <response n="2" r="0.02" word="COLD"/>
+        <response n="2" r="0.02" word="FOOTBALL"/>
+    </stimulus>
+    <stimulus all="100" diff="45" word="CAUGHT">
+        <response n="14" r="0.14" word="OUT"/>
+        <response n="8" r="0.08" word="FISH"/>
+        <response n="7" r="0.07" word="CATCH"/>
+        <response n="7" r="0.07" word="TRAPPED"/>
+        <response n="6" r="0.06" word="UP"/>
+        <response n="5" r="0.05" word="BALL"/>
+        <response n="5" r="0.05" word="TRAP"/>
+        <response n="4" r="0.04" word="NAPPING"/>
+        <response n="3" r="0.03" word="HELD"/>
+    </stimulus>
+    <stimulus all="100" diff="45" word="FLEE">
+        <response n="31" r="0.31" word="RUN"/>
+        <response n="8" r="0.08" word="AWAY"/>
+        <response n="5" r="0.05" word="ESCAPE"/>
+        <response n="4" r="0.04" word="BITE"/>
+        <response n="4" r="0.04" word="FLY"/>
+        <response n="2" r="0.02" word="ARMY"/>
+        <response n="2" r="0.02" word="BUG"/>
+        <response n="2" r="0.02" word="CIRCUS"/>
+        <response n="2" r="0.02" word="FAST"/>
+    </stimulus>
+    <stimulus all="100" diff="45" word="FORMER">
+        <response n="20" r="0.20" word="LATTER"/>
+        <response n="11" r="0.11" word="BEFORE"/>
+        <response n="8" r="0.08" word="PREVIOUS"/>
+        <response n="7" r="0.07" word="PUPIL"/>
+        <response n="5" r="0.05" word="FIRST"/>
+        <response n="4" r="0.04" word="SCHOOL"/>
+        <response n="3" r="0.03" word="LATER"/>
+        <response n="3" r="0.03" word="SELF"/>
+        <response n="2" r="0.02" word="FRIEND"/>
+    </stimulus>
+    <stimulus all="100" diff="45" word="LEISURE">
+        <response n="21" r="0.21" word="TIME"/>
+        <response n="8" r="0.08" word="PLAY"/>
+        <response n="7" r="0.07" word="PLEASURE"/>
+        <response n="6" r="0.06" word="RELAXATION"/>
+        <response n="4" r="0.04" word="HOURS"/>
+        <response n="4" r="0.04" word="RELAX"/>
+        <response n="3" r="0.03" word="SLEEP"/>
+        <response n="2" r="0.02" word="BOOK"/>
+        <response n="2" r="0.02" word="ENJOYMENT"/>
+    </stimulus>
+    <stimulus all="100" diff="45" word="SLEEP">
+        <response n="16" r="0.16" word="BED"/>
+        <response n="8" r="0.08" word="DREAM"/>
+        <response n="7" r="0.07" word="AWAKE"/>
+        <response n="7" r="0.07" word="NIGHT"/>
+        <response n="7" r="0.07" word="REST"/>
+        <response n="3" r="0.03" word="PEACE"/>
+        <response n="3" r="0.03" word="SOUND"/>
+        <response n="3" r="0.03" word="TIRED"/>
+        <response n="2" r="0.02" word="DEATH"/>
+    </stimulus>
+    <stimulus all="100" diff="45" word="SMACK">
+        <response n="21" r="0.21" word="HIT"/>
+        <response n="8" r="0.08" word="BOTTOM"/>
+        <response n="7" r="0.07" word="LIPS"/>
+        <response n="6" r="0.06" word="KISS"/>
+        <response n="5" r="0.05" word="HURT"/>
+        <response n="4" r="0.04" word="SLAP"/>
+        <response n="3" r="0.03" word="HARD"/>
+        <response n="3" r="0.03" word="NAUGHTY"/>
+        <response n="2" r="0.02" word="BOAT"/>
+    </stimulus>
+    <stimulus all="100" diff="45" word="TITLE">
+        <response n="27" r="0.27" word="BOOK"/>
+        <response n="8" r="0.08" word="NAME"/>
+        <response n="7" r="0.07" word="LORD"/>
+        <response n="7" r="0.07" word="SIR"/>
+        <response n="3" r="0.03" word="KING"/>
+        <response n="3" r="0.03" word="PAGE"/>
+        <response n="2" r="0.02" word="AUTHOR"/>
+        <response n="2" r="0.02" word="EARL"/>
+        <response n="2" r="0.02" word="NOBILITY"/>
+    </stimulus>
+    <stimulus all="100" diff="44" word="BEND">
+        <response n="13" r="0.13" word="TWIST"/>
+        <response n="10" r="0.10" word="ROAD"/>
+        <response n="7" r="0.07" word="IT"/>
+        <response n="7" r="0.07" word="OVER"/>
+        <response n="6" r="0.06" word="STRETCH"/>
+        <response n="5" r="0.05" word="ROUND"/>
+        <response n="4" r="0.04" word="CURVE"/>
+        <response n="3" r="0.03" word="DOWN"/>
+        <response n="3" r="0.03" word="SHAPE"/>
+    </stimulus>
+    <stimulus all="100" diff="44" word="BOTTOM">
+        <response n="32" r="0.32" word="TOP"/>
+        <response n="7" r="0.07" word="UP"/>
+        <response n="5" r="0.05" word="END"/>
+        <response n="4" r="0.04" word="PIT"/>
+        <response n="4" r="0.04" word="SEA"/>
+        <response n="3" r="0.03" word="ARSE"/>
+        <response n="3" r="0.03" word="BEHIND"/>
+        <response n="2" r="0.02" word="BACKSIDE"/>
+        <response n="2" r="0.02" word="DRAWER"/>
+    </stimulus>
+    <stimulus all="100" diff="44" word="BUNS">
+        <response n="13" r="0.13" word="CAKES"/>
+        <response n="7" r="0.07" word="FOOD"/>
+        <response n="7" r="0.07" word="TEA"/>
+        <response n="6" r="0.06" word="CURRANT"/>
+        <response n="6" r="0.06" word="CURRANTS"/>
+        <response n="5" r="0.05" word="BREAD"/>
+        <response n="4" r="0.04" word="CREAM"/>
+        <response n="3" r="0.03" word="CAKE"/>
+        <response n="3" r="0.03" word="HAIR"/>
+    </stimulus>
+    <stimulus all="100" diff="44" word="DOLLS">
+        <response n="30" r="0.30" word="HOUSE"/>
+        <response n="7" r="0.07" word="GUYS"/>
+        <response n="5" r="0.05" word="GIRLS"/>
+        <response n="4" r="0.04" word="BABY"/>
+        <response n="4" r="0.04" word="BIRDS"/>
+        <response n="3" r="0.03" word="RAG"/>
+        <response n="2" r="0.02" word="CHILD"/>
+        <response n="2" r="0.02" word="CHILDHOOD"/>
+        <response n="2" r="0.02" word="CHINA"/>
+    </stimulus>
+    <stimulus all="100" diff="44" word="DRAWING">
+        <response n="15" r="0.15" word="BOARD"/>
+        <response n="10" r="0.10" word="PAINTING"/>
+        <response n="9" r="0.09" word="PICTURE"/>
+        <response n="6" r="0.06" word="ART"/>
+        <response n="6" r="0.06" word="SKETCH"/>
+        <response n="4" r="0.04" word="PAPER"/>
+        <response n="3" r="0.03" word="PEN"/>
+        <response n="3" r="0.03" word="PENCIL"/>
+        <response n="3" r="0.03" word="PICTURES"/>
+    </stimulus>
+    <stimulus all="100" diff="44" word="HEART">
+        <response n="18" r="0.18" word="TRANSPLANT"/>
+        <response n="11" r="0.11" word="BEAT"/>
+        <response n="7" r="0.07" word="LOVE"/>
+        <response n="7" r="0.07" word="SOUL"/>
+        <response n="5" r="0.05" word="ACHE"/>
+        <response n="5" r="0.05" word="THROB"/>
+        <response n="3" r="0.03" word="ATTACK"/>
+        <response n="3" r="0.03" word="PUMP"/>
+        <response n="3" r="0.03" word="RED"/>
+    </stimulus>
+    <stimulus all="100" diff="44" word="INJURY">
+        <response n="31" r="0.31" word="HURT"/>
+        <response n="6" r="0.06" word="BLOOD"/>
+        <response n="6" r="0.06" word="HARM"/>
+        <response n="6" r="0.06" word="PAIN"/>
+        <response n="4" r="0.04" word="LEG"/>
+        <response n="3" r="0.03" word="ACCIDENT"/>
+        <response n="3" r="0.03" word="DAMAGE"/>
+        <response n="2" r="0.02" word="FATAL"/>
+        <response n="2" r="0.02" word="FOOT"/>
+    </stimulus>
+    <stimulus all="100" diff="44" word="MARRIED">
+        <response n="23" r="0.23" word="SINGLE"/>
+        <response n="7" r="0.07" word="WIFE"/>
+        <response n="6" r="0.06" word="WOMAN"/>
+        <response n="5" r="0.05" word="MAN"/>
+        <response n="5" r="0.05" word="YES"/>
+        <response n="4" r="0.04" word="NO"/>
+        <response n="3" r="0.03" word="COUPLE"/>
+        <response n="3" r="0.03" word="DIVORCED"/>
+        <response n="3" r="0.03" word="LIFE"/>
+    </stimulus>
+</eat100>

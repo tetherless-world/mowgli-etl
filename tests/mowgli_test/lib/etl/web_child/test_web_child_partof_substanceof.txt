@@ -1,5 +1,0 @@
-to_ss	to_word	relation	from_ss	from_word	isvisual	cardinality	score
-103309808	cloth	hasSubstance	114866889	fibre	 	 	0.8
-102863750	boiler	hasSubstance	114802450	steel	 	 	0.8
-109229641	brooklet	hasSubstance	114785941	buffer	 	""	0.8
-

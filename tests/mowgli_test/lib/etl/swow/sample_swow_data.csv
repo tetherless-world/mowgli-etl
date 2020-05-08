@@ -1,6 +1,0 @@
-"","id","participantID","age","gender","nativeLanguage","country","education","created_at","cue","R1","R2","R3"
-"1",29,3,33,"Fe","United States","Australia",NA,2011-08-12 02:19:38, "a","one","b","c"
-"2",29,3,33,"Fe","United States","Australia",NA,2011-08-12 02:19:38, "a","one","indefinite article",NA
-"3",29,3,33,"Fe","United States","Australia",NA,2011-08-12 02:19:38, "a few", "beers", "more", NA
-"4",29,3,33,"Fe","United States","Australia",NA,2011-08-12 02:19:38, "b", "bee", "c", "a"
-"5",29,3,33,"Fe","United States","Australia",NA,2011-08-12 02:19:38, "b", "yourself", "a", "bee"
