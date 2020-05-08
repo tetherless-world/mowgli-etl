@@ -2,7 +2,7 @@ from itertools import islice
 
 from mowgli_etl.lib.etl.pipeline.rpi_combined.rpi_combined_pipeline import RpiCombinedPipeline
 from mowgli_etl.lib.etl.pipeline_wrapper import PipelineWrapper
-from tests.mowgli_test.lib.etl.etl_mocks import MockTransformer, MockPipeline
+from tests.mowgli_etl_test.lib.etl.etl_mocks import MockTransformer, MockPipeline
 
 
 def test_rpi_combined_pipeline(pipeline_storage, graph_generator):

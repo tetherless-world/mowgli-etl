@@ -2,7 +2,7 @@ from io import StringIO
 
 import pytest
 
-from tests.mowgli_test.lib.etl.http_client.mock_etl_http_client import MockEtlHttpClient
+from tests.mowgli_etl_test.lib.etl.http_client.mock_etl_http_client import MockEtlHttpClient
 
 
 def test_mock_http_client():

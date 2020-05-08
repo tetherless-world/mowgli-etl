@@ -41,13 +41,13 @@ jobs:
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               cd etl
               mkdir cskg
-              python -m mowgli.cli etl rpi_combined --data-dir-path cskg
+              python -m mowgli_etl.cli etl rpi_combined --data-dir-path cskg
             fi
       #      - run:
       #          name: Generate RPI combined CSKG RDF (master branch only)
       #          command: |
       #            if [ "${CIRCLE_BRANCH}" == "master" ]; then
-      #              python3 -m mowgli.cli etl rdf --data-dir-path cskg --nodes-csv-file-path cskg/rpi_combined/loaded/nodes.csv --edges-csv-file-path cskg/rpi_combined/loaded/edges.csv --pipeline-id rpi-combined-rdf
+      #              python3 -m mowgli_etl.cli etl rdf --data-dir-path cskg --nodes-csv-file-path cskg/rpi_combined/loaded/nodes.csv --edges-csv-file-path cskg/rpi_combined/loaded/edges.csv --pipeline-id rpi-combined-rdf
       #            fi
       - run:
           name: Archive artifacts (master branch only)
@@ -72,7 +72,7 @@ jobs:
               cd etl
               service_file_path="service_file_key.json"
               cat <<< "$GCLOUD_SERVICE_KEY" > "$service_file_path"
-              python3 -m mowgli.cli drive-upload --file-path=cskg.tar.bz2  --file-id="$CSKG_FILE_ID" --service-account-file="$service_file_path"
+              python3 -m mowgli_etl.cli drive-upload --file-path=cskg.tar.bz2  --file-id="$CSKG_FILE_ID" --service-account-file="$service_file_path"
             fi
       - store_artifacts:
           path: cskg.tar.bz2
