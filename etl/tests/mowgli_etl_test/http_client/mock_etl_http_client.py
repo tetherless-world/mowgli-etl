@@ -2,7 +2,7 @@ from io import StringIO
 from pathlib import Path
 from typing import IO, Callable, Union
 
-from mowgli_etl.lib.etl.http_client.etl_http_client import EtlHttpClient
+from mowgli_etl.http_client.etl_http_client import EtlHttpClient
 
 
 class MockEtlHttpClient(EtlHttpClient):

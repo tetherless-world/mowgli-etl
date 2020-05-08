@@ -1,7 +1,7 @@
 from typing import IO
 from urllib.request import urlopen
 
-from mowgli_etl.lib.etl.http_client.etl_http_client import EtlHttpClient
+from mowgli_etl.http_client.etl_http_client import EtlHttpClient
 
 
 class RealEtlHttpClient(EtlHttpClient):

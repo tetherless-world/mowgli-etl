@@ -8,8 +8,8 @@ from zipfile import ZipFile
 
 from pathvalidate import sanitize_filename
 
-from mowgli_etl.lib.etl.http_client.etl_http_client import EtlHttpClient
-from mowgli_etl.lib.etl.http_client.real_etl_http_client import RealEtlHttpClient
+from mowgli_etl.http_client.etl_http_client import EtlHttpClient
+from mowgli_etl.http_client.real_etl_http_client import RealEtlHttpClient
 from mowgli_etl.lib.etl.pipeline_storage import PipelineStorage
 
 
