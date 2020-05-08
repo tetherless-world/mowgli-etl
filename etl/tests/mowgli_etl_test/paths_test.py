@@ -1,4 +1,4 @@
-from mowgli import paths
+from mowgli_etl import paths
 from os.path import isdir
 
 def test_src_root_exists():

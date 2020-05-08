@@ -10,7 +10,7 @@ from typing import Optional, Union, TextIO
 import plyvel
 from tqdm import tqdm
 
-from mowgli import paths
+from mowgli_etl import paths
 from mowgli_etl.lib._closeable import _Closeable
 from mowgli_etl.lib.etl.pipeline.cskg_csv.cskg_nodes_csv_transformer import CskgNodesCsvTransformer
 from mowgli_etl.lib.storage.level_db import LevelDb

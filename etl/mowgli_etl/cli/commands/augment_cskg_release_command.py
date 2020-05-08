@@ -7,7 +7,7 @@ from zipfile import ZipFile
 
 from configargparse import ArgParser
 
-from mowgli import paths
+from mowgli_etl import paths
 from mowgli_etl.cli.commands._command import _Command
 
 

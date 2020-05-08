@@ -7,7 +7,7 @@ from typing import Type, Tuple, Optional
 
 from configargparse import ArgParser
 
-from mowgli import paths
+from mowgli_etl import paths
 from mowgli_etl.cli.commands._command import _Command
 from mowgli_etl.lib.etl._pipeline import _Pipeline
 from mowgli_etl.lib.etl.mapper.mappers import Mappers
