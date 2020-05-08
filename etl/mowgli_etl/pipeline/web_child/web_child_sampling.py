@@ -1,17 +1,17 @@
 from urllib.request import urlopen, urlretrieve
 from io import BytesIO
 from zipfile import ZipFile
-from mowgli.lib.etl.web_child.web_child_transformer import WebChildTransformer
-from mowgli.lib.cskg.edge import Edge
-from mowgli.lib.cskg.node import Node
-from mowgli.lib.cskg.mowgli_predicates import WN_SYNSET
+from mowgli_etl.pipeline.web_child.web_child_transformer import WebChildTransformer
+from mowgli_etl.cskg.edge import Edge
+from mowgli_etl.cskg.node import Node
+from mowgli_etl.cskg.mowgli_predicates import WN_SYNSET
 from random import sample
 import csv
-from mowgli.lib.etl.pipeline_wrapper import PipelineWrapper
-from mowgli.lib.etl.web_child.web_child_pipeline import WebChildPipeline
-from mowgli.lib.etl.pipeline_storage import PipelineStorage
-from mowgli.lib.etl.web_child.web_child_extractor import WebChildExtractor
-from mowgli.paths import DATA_DIR, PROJECT_ROOT
+from mowgli_etl.pipeline_wrapper import PipelineWrapper
+from mowgli_etl.pipeline.web_child.web_child_pipeline import WebChildPipeline
+from mowgli_etl.pipeline_storage import PipelineStorage
+from mowgli_etl.pipeline.web_child.web_child_extractor import WebChildExtractor
+from mowgli_etl.paths import DATA_DIR, PROJECT_ROOT
 from os import listdir
 
 
@@ -45,8 +45,8 @@ def loadcsv():
     predicates = set()
 
     print('Mapping edges and nodes')
-    for node_or_edge in triplegen:    
-        
+    for node_or_edge in triplegen:
+
         if isinstance(node_or_edge, Node):
             node = node_or_edge
             nodes[node.id] = node
@@ -61,7 +61,7 @@ def loadcsv():
                     part_whole_edges[edge.predicate].append(edge)
         else:
             raise TypeError
-    
+
     selected_edges =list()
     for prededges in part_whole_edges.values():
         selected_edges.extend(sample(prededges, k= 67))
