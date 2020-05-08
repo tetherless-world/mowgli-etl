@@ -6,7 +6,7 @@ from typing import Dict, Tuple
 from mowgli_etl.lib.etl._extractor import _Extractor
 from mowgli_etl.lib.etl._mapper import _Mapper
 from mowgli_etl.lib.etl._pipeline import _Pipeline
-from mowgli_etl.lib.etl.mapper.mappers import Mappers
+from mowgli_etl.mapper.mappers import Mappers
 from mowgli_etl.lib.etl.pipeline_storage import PipelineStorage
 from mowgli_etl.lib.etl.pipeline_wrapper import PipelineWrapper
 

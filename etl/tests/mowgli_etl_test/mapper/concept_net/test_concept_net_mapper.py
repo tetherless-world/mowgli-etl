@@ -4,7 +4,7 @@ from mowgli_etl.cskg import mowgli_predicates
 from mowgli_etl.cskg.node import Node
 
 try:
-    from mowgli_etl.lib.etl.mapper.concept_net.concept_net_mapper import ConceptNetMapper
+    from mowgli_etl.mapper.concept_net.concept_net_mapper import ConceptNetMapper
 except ImportError:
     ConceptNetMapper = None
 

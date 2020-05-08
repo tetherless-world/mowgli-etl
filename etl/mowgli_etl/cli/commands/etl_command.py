@@ -10,7 +10,7 @@ from configargparse import ArgParser
 from mowgli_etl import paths
 from mowgli_etl.cli.commands._command import _Command
 from mowgli_etl.lib.etl._pipeline import _Pipeline
-from mowgli_etl.lib.etl.mapper.mappers import Mappers
+from mowgli_etl.mapper.mappers import Mappers
 from mowgli_etl.lib.etl.pipeline.rpi_combined.rpi_combined_pipeline import RpiCombinedPipeline
 from mowgli_etl.lib.etl.pipeline_storage import PipelineStorage
 from mowgli_etl.lib.etl.pipeline_wrapper import PipelineWrapper

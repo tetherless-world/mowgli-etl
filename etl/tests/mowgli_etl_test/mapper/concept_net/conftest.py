@@ -3,7 +3,7 @@ from pathlib import Path
 import pytest
 
 try:
-    from mowgli_etl.lib.etl.mapper.concept_net.concept_net_index import ConceptNetIndex
+    from mowgli_etl.mapper.concept_net.concept_net_index import ConceptNetIndex
 except ImportError:
     ConceptNetIndex = None
 

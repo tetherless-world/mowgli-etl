@@ -1,7 +1,7 @@
 from configargparse import ArgParser
 
 from mowgli_etl.cli.commands._command import _Command
-from mowgli_etl.lib.etl.mapper.concept_net.concept_net_index import ConceptNetIndex
+from mowgli_etl.mapper.concept_net.concept_net_index import ConceptNetIndex
 
 
 class IndexConceptNetCommand(_Command):
