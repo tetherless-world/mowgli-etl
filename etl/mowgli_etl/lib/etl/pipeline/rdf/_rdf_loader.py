@@ -10,10 +10,10 @@ from rdflib import URIRef
 from mowgli_etl.lib.cskg.edge import Edge
 from mowgli_etl.lib.cskg.node import Node
 from mowgli_etl.lib.etl._loader import _Loader
-from mowgli_etl.lib.storage.mem_node_set import MemNodeSet
+from mowgli_etl.storage.mem_node_set import MemNodeSet
 
 try:
-    from mowgli_etl.lib.storage.persistent_node_set import PersistentNodeSet
+    from mowgli_etl.storage.persistent_node_set import PersistentNodeSet
 except ImportError:
     PersistentNodeSet = None
 

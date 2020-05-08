@@ -2,8 +2,8 @@ import pickle
 from typing import Optional
 
 from mowgli_etl.lib.cskg.edge import Edge
-from mowgli_etl.lib.storage._edge_set import _EdgeSet
-from mowgli_etl.lib.storage.level_db import LevelDb
+from mowgli_etl.storage._edge_set import _EdgeSet
+from mowgli_etl.storage.level_db import LevelDb
 
 
 class PersistentEdgeSet(_EdgeSet, LevelDb):

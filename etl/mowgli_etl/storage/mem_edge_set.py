@@ -1,8 +1,8 @@
 from typing import Optional
 
-from mowgli_etl.lib._closeable import _Closeable
+from mowgli_etl._closeable import _Closeable
 from mowgli_etl.lib.cskg.edge import Edge
-from mowgli_etl.lib.storage._edge_set import _EdgeSet
+from mowgli_etl.storage._edge_set import _EdgeSet
 
 
 class MemEdgeSet(_EdgeSet, _Closeable):

@@ -2,8 +2,8 @@ import pickle
 from typing import Optional, Generator
 
 from mowgli_etl.lib.cskg.node import Node
-from mowgli_etl.lib.storage._node_set import _NodeSet
-from mowgli_etl.lib.storage.level_db import LevelDb
+from mowgli_etl.storage._node_set import _NodeSet
+from mowgli_etl.storage.level_db import LevelDb
 
 
 class PersistentNodeSet(_NodeSet, LevelDb):

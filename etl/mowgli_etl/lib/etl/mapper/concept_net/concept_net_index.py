@@ -11,9 +11,9 @@ import plyvel
 from tqdm import tqdm
 
 from mowgli_etl import paths
-from mowgli_etl.lib._closeable import _Closeable
+from mowgli_etl._closeable import _Closeable
 from mowgli_etl.lib.etl.pipeline.cskg_csv.cskg_nodes_csv_transformer import CskgNodesCsvTransformer
-from mowgli_etl.lib.storage.level_db import LevelDb
+from mowgli_etl.storage.level_db import LevelDb
 
 
 class ConceptNetIndex(_Closeable):

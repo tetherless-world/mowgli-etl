@@ -1,5 +1,5 @@
-from mowgli_etl.lib.storage._node_id_set import _NodeIdSet
-from mowgli_etl.lib.storage.level_db import LevelDb
+from mowgli_etl.storage._node_id_set import _NodeIdSet
+from mowgli_etl.storage.level_db import LevelDb
 
 
 class PersistentNodeIdSet(_NodeIdSet, LevelDb):

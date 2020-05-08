@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Optional
 
-from mowgli_etl.lib._closeable import _Closeable
+from mowgli_etl._closeable import _Closeable
 
 
 class Mappers:

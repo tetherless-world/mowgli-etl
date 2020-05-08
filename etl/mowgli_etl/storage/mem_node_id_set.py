@@ -1,5 +1,5 @@
-from mowgli_etl.lib._closeable import _Closeable
-from mowgli_etl.lib.storage._node_id_set import _NodeIdSet
+from mowgli_etl._closeable import _Closeable
+from mowgli_etl.storage._node_id_set import _NodeIdSet
 
 
 class MemNodeIdSet(_NodeIdSet, _Closeable):

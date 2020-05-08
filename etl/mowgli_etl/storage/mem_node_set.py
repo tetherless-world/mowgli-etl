@@ -1,8 +1,8 @@
 from typing import Optional, Generator
 
-from mowgli_etl.lib._closeable import _Closeable
+from mowgli_etl._closeable import _Closeable
 from mowgli_etl.lib.cskg.node import Node
-from mowgli_etl.lib.storage._node_set import _NodeSet
+from mowgli_etl.storage._node_set import _NodeSet
 
 
 class MemNodeSet(_NodeSet, _Closeable):

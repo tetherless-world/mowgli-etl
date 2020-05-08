@@ -6,17 +6,17 @@ from mowgli_etl.lib.cskg.node import Node
 from mowgli_etl.lib.etl._mapper import _Mapper
 from mowgli_etl.lib.etl._pipeline import _Pipeline
 from mowgli_etl.lib.etl.pipeline_storage import PipelineStorage
-from mowgli_etl.lib.storage._edge_set import _EdgeSet
-from mowgli_etl.lib.storage._node_id_set import _NodeIdSet
-from mowgli_etl.lib.storage._node_set import _NodeSet
-from mowgli_etl.lib.storage.mem_edge_set import MemEdgeSet
-from mowgli_etl.lib.storage.mem_node_id_set import MemNodeIdSet
-from mowgli_etl.lib.storage.mem_node_set import MemNodeSet
+from mowgli_etl.storage._edge_set import _EdgeSet
+from mowgli_etl.storage._node_id_set import _NodeIdSet
+from mowgli_etl.storage._node_set import _NodeSet
+from mowgli_etl.storage.mem_edge_set import MemEdgeSet
+from mowgli_etl.storage.mem_node_id_set import MemNodeIdSet
+from mowgli_etl.storage.mem_node_set import MemNodeSet
 
 try:
-    from mowgli_etl.lib.storage.persistent_edge_set import PersistentEdgeSet
-    from mowgli_etl.lib.storage.persistent_node_id_set import PersistentNodeIdSet
-    from mowgli_etl.lib.storage.persistent_node_set import PersistentNodeSet
+    from mowgli_etl.storage.persistent_edge_set import PersistentEdgeSet
+    from mowgli_etl.storage.persistent_node_id_set import PersistentNodeIdSet
+    from mowgli_etl.storage.persistent_node_set import PersistentNodeSet
 except ImportError:
     PersistentEdgeSet = PersistentNodeSet = PersistentNodeIdSet = None
 

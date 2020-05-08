@@ -1,7 +1,7 @@
 from mowgli_etl.lib.cskg.edge import Edge
 
 try:
-    from mowgli_etl.lib.storage.persistent_edge_set import PersistentEdgeSet
+    from mowgli_etl.storage.persistent_edge_set import PersistentEdgeSet
 except ImportError:
     PersistentEdgeSet = None
 

@@ -1,5 +1,5 @@
 from mowgli_etl.lib.cskg.node import Node
-from mowgli_etl.lib.storage.mem_node_id_set import MemNodeIdSet
+from mowgli_etl.storage.mem_node_id_set import MemNodeIdSet
 
 
 def test_add(node: Node):
