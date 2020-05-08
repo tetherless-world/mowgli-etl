@@ -24,13 +24,7 @@ from os import listdir
 
 def loadcsv():
 
-    part_whole_zip_url = 'http://people.mpi-inf.mpg.de/~ntandon/resources/relations/partOf/webchild_partof.zip'
-    wordnet_sense_url = 'http://people.mpi-inf.mpg.de/~ntandon/resources/relations/metadata/noun.gloss'
-
-    extractor = WebChildExtractor(
-        part_whole_url=part_whole_zip_url,
-        wordnet_sense_url=wordnet_sense_url
-    )
+    extractor = WebChildExtractor()
 
     print("Extracting Zip")
     webchildstorage = PipelineStorage(pipeline_id='webchildsampling',root_data_dir_path=DATA_DIR)
@@ -38,13 +32,8 @@ def loadcsv():
 
     transformer = WebChildTransformer()
 
-
     print('Transforming')
-    triplegen = transformer.transform(memberof_csv_file_path =extraction.get("memberof_csv_file_path"),
-        physical_csv_file_path=extraction.get("physical_csv_file_path"),
-        substanceof_csv_file_path=extraction.get("substanceof_csv_file_path"),
-        wordnet_csv_file_path=extraction.get("wordnet_csv_file_path"))
-
+    triplegen = transformer.transform(**extraction)
 
     part_whole_edges = {}
     nodes = dict()
