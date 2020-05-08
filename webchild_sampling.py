@@ -10,37 +10,41 @@ import csv
 from mowgli.lib.etl.pipeline_wrapper import PipelineWrapper
 from mowgli.lib.etl.web_child.web_child_pipeline import WebChildPipeline
 from mowgli.lib.etl.pipeline_storage import PipelineStorage
-
+from mowgli.lib.etl.web_child.web_child_extractor import WebChildExtractor
+from mowgli.paths import DATA_DIR, PROJECT_ROOT
+from os import listdir
 
 
 def loadcsv():
 
-    print("Downloading Zip")
-    url = urlopen('http://people.mpi-inf.mpg.de/~ntandon/resources/relations/partOf/webchild_partof.zip')
-    urlstream = BytesIO(url.read())
+    part_whole_zip_url = 'http://people.mpi-inf.mpg.de/~ntandon/resources/relations/partOf/webchild_partof.zip'
+    wordnet_sense_url = 'http://people.mpi-inf.mpg.de/~ntandon/resources/relations/metadata/noun.gloss'
 
-    z = ZipFile(urlstream)
+    extractor = WebChildExtractor(
+        part_whole_url=part_whole_zip_url,
+        wordnet_sense_url=wordnet_sense_url
+    )
+
     print("Extracting Zip")
-    z.extractall()
-    
-    print("Downloading Glossary")
-    wordnet = urlretrieve('http://people.mpi-inf.mpg.de/~ntandon/resources/relations/metadata/noun.gloss','noun.gloss')
+    webchildstorage = PipelineStorage(pipeline_id='webchildsampling',root_data_dir_path=DATA_DIR)
+    extraction = extractor.extract(force=False,storage=webchildstorage)
 
     transformer = WebChildTransformer()
 
-    print('transforming')
-    triplegen = transformer.transform(memberof_csv_file_path ="webchild_partof_memberof.txt",
-        physical_csv_file_path="webchild_partof_physical.txt",
-        substanceof_csv_file_path="webchild_partof_substanceof.txt",
-        wordnet_csv_file_path="noun.gloss")
+
+    print('Transforming')
+    triplegen = transformer.transform(memberof_csv_file_path =extraction.get("memberof_csv_file_path"),
+        physical_csv_file_path=extraction.get("physical_csv_file_path"),
+        substanceof_csv_file_path=extraction.get("substanceof_csv_file_path"),
+        wordnet_csv_file_path=extraction.get("wordnet_csv_file_path"))
 
 
-    nodemap = dict()
-    edgemap = dict()
-    part_whole_edges = list()
+    part_whole_edges = {}
     nodes = dict()
 
-    print('mapping edges and nodes')
+    predicates = set()
+
+    print('Mapping edges and nodes')
     for node_or_edge in triplegen:    
         
         if isinstance(node_or_edge, Node):
@@ -51,15 +55,21 @@ def loadcsv():
             if edge.predicate == WN_SYNSET:
                 continue
             else:
-                part_whole_edges.append(edge)
+                if part_whole_edges.get(edge.predicate) == None:
+                    part_whole_edges[edge.predicate] = [edge]
+                else:
+                    part_whole_edges[edge.predicate].append(edge)
         else:
             raise TypeError
+    
+    selected_edges =list()
+    for prededges in part_whole_edges.values():
+        selected_edges.extend(sample(prededges, k= 67))
 
-    selected_edges = sample(part_whole_edges, k= 200)
-
-    print('parsing definitions')
+    print('Parsing definitions')
     definitions = dict()
-    with open('noun.gloss') as csv_file:
+    glossfile = [f for f in listdir( webchildstorage.extracted_data_dir_path ) if f.endswith('.gloss')]
+    with open(webchildstorage.extracted_data_dir_path / glossfile[0]) as csv_file:
             csv_reader = csv.DictReader(
                 csv_file, delimiter="\t", quoting=csv.QUOTE_NONE
             )
@@ -68,9 +78,9 @@ def loadcsv():
                 defin = row["Definition (WordNet gloss)"]
                 definitions[word_nid] = defin
 
-    print('writing to csv')
+    print('Writing to csv')
 
-    with open('sampling.csv', 'w', newline='') as file:
+    with open( webchildstorage.loaded_data_dir_path / 'sampling.csv', 'w', newline='') as file:
         writer = csv.writer(file)
         writer.writerow(["Subject ID", "Subject word", "Subject definition","Object ID",
          "Object Word", "Object Defnition","Predicate","Annotation"])
@@ -79,10 +89,10 @@ def loadcsv():
             result = ["" for i in range(7)]
             result[0]= el.subject
             result[1]= nodes[el.subject].label
-            result[2]= definitions.get(el.subject) if definitions.get(el.subject) else 'None'
+            result[2]= definitions.get(el.subject,'None')
             result[3]= el.object
             result[4]= nodes[el.object].label
-            result[5]= definitions.get(el.object) if definitions.get(el.object) else 'None'
+            result[5]= definitions.get(el.object,'None')
             result[6] = el.predicate
             writer.writerow(result)
 
