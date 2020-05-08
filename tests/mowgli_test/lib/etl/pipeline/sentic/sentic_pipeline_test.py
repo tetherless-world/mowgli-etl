@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from configargparse import ArgParser
 
 from mowgli.lib.cskg.edge import Edge
@@ -17,7 +19,8 @@ def test_sentic_pipeline(
     argparse = ArgParser()
     SenticPipeline.add_arguments(argparse)
 
-    args = argparse.parse_args(["--sentic_zip_url", url, "--owl_filename", "test_data-master/test_data.owl"])
+    args = argparse.parse_args(
+        ["--sentic_zip_url", url, "--owl_filename", str(Path(__file__).parent / "test_data.owl")])
     pipeline_kwds = vars(args).copy()
     pipeline_kwds["http_client"] = senticclient
     sentic_pipeline = SenticPipeline(**pipeline_kwds)
