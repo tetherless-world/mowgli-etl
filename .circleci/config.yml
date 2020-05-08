@@ -7,14 +7,15 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - pip_cache-{{ checksum "requirements.txt" }}
+            - pip_cache-{{ checksum "etl/requirements.txt" }}
             - pip_cache
       - run:
           name: Install mandatory dependencies
-          command: pip install -r requirements.txt
+          command: pip install -r etl/requirements.txt
       - run:
           name: Run tests without optional dependencies
           command: |
+            cd etl
             mkdir test-results
             # In a stable build results will be overwritten by the run with optional dependencies,
             # but if one of these tests fails, we still want them.
@@ -26,10 +27,11 @@ jobs:
       - save_cache:
           paths:
             - ~/.cache/pip
-          key: pip_cache-{{ checksum "requirements.txt"}}
+          key: pip_cache-{{ checksum "etl/requirements.txt"}}
       - run:
           name: Run tests with optional dependencies
           command: |
+            cd etl
             pytest --junitxml=test-results/junit.xml
       - store_test_results:
           path: test-results
@@ -37,20 +39,21 @@ jobs:
           name: Generate RPI combined CSKG CSV (master branch only)
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              cd etl
               mkdir cskg
-              python -m mowgli.cli etl rpi_combined --data-dir-path cskg
+              python -m mowgli_etl.cli etl rpi_combined --data-dir-path cskg
             fi
       #      - run:
       #          name: Generate RPI combined CSKG RDF (master branch only)
       #          command: |
       #            if [ "${CIRCLE_BRANCH}" == "master" ]; then
-      #              python3 -m mowgli.cli etl rdf --data-dir-path cskg --nodes-csv-file-path cskg/rpi_combined/loaded/nodes.csv --edges-csv-file-path cskg/rpi_combined/loaded/edges.csv --pipeline-id rpi-combined-rdf
+      #              python3 -m mowgli_etl.cli etl rdf --data-dir-path cskg --nodes-csv-file-path cskg/rpi_combined/loaded/nodes.csv --edges-csv-file-path cskg/rpi_combined/loaded/edges.csv --pipeline-id rpi-combined-rdf
       #            fi
       - run:
           name: Archive artifacts (master branch only)
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              cd cskg
+              cd etl/cskg
               for dir in `ls`; do
                 mv "$dir/loaded/"*.csv "$dir/" || true
                 mv "$dir/loaded/"*.trig "$dir/" || true
@@ -66,9 +69,10 @@ jobs:
           name: Upload CSKG to Drive (master branch only)
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              cd etl
               service_file_path="service_file_key.json"
               cat <<< "$GCLOUD_SERVICE_KEY" > "$service_file_path"
-              python3 -m mowgli.cli drive-upload --file-path=cskg.tar.bz2  --file-id="$CSKG_FILE_ID" --service-account-file="$service_file_path"
+              python3 -m mowgli_etl.cli drive-upload --file-path=cskg.tar.bz2  --file-id="$CSKG_FILE_ID" --service-account-file="$service_file_path"
             fi
       - store_artifacts:
           path: cskg.tar.bz2

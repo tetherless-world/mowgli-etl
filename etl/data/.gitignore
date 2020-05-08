@@ -1,0 +1,11 @@
+# The root .gitignore ignores /data/
+# Create exceptions here.
+!/aristo/extracted/COMBINED-KB.tsv.bz2
+!/aristo/extracted/Creative Commons - Attribution-ShareAlike 4.0 International - CC BY-SA 4.pdf
+!/aristo/extracted/README.txt
+!/concept_net/extracted/
+!/eat/eat100.xml
+!/food_on/extracted/food_on.owl.bz2
+!/has_part/extracted/hasPartKB.jsonl.bz2
+!/has_part/extracted/README.txt
+!/wdc/extracted/
