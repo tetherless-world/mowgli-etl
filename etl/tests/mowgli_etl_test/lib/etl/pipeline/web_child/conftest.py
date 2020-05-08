@@ -4,9 +4,9 @@ from zipfile import ZipFile
 
 import pytest
 
-from mowgli_etl.lib.cskg.concept_net_predicates import HAS_A
-from mowgli_etl.lib.cskg.edge import Edge
-from mowgli_etl.lib.cskg.node import Node
+from mowgli_etl.cskg.concept_net_predicates import HAS_A
+from mowgli_etl.cskg.edge import Edge
+from mowgli_etl.cskg.node import Node
 from tests.mowgli_etl_test.lib.etl.http_client.mock_etl_http_client import MockEtlHttpClient
 
 

@@ -1,5 +1,5 @@
-from mowgli_etl.lib.cskg.concept_net_predicates import IS_A
-from mowgli_etl.lib.cskg.edge import Edge
+from mowgli_etl.cskg.concept_net_predicates import IS_A
+from mowgli_etl.cskg.edge import Edge
 from mowgli_etl.lib.etl.pipeline.food_on.food_on_extractor import FoodOnExtractor
 from mowgli_etl.lib.etl.pipeline.food_on.food_on_transformer import FoodOnTransformer
 

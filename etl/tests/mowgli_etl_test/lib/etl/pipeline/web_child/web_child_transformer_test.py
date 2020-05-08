@@ -1,6 +1,6 @@
-from mowgli_etl.lib.cskg.edge import Edge
-from mowgli_etl.lib.cskg.mowgli_predicates import WN_SYNSET
-from mowgli_etl.lib.cskg.node import Node
+from mowgli_etl.cskg.edge import Edge
+from mowgli_etl.cskg.mowgli_predicates import WN_SYNSET
+from mowgli_etl.cskg.node import Node
 from mowgli_etl.lib.etl.pipeline.web_child.web_child_transformer import WebChildTransformer
 
 

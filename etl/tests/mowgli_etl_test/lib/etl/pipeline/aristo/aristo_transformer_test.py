@@ -1,4 +1,4 @@
-from mowgli_etl.lib.cskg.edge import Edge
+from mowgli_etl.cskg.edge import Edge
 from mowgli_etl.lib.etl.pipeline.aristo.aristo_extractor import AristoExtractor
 from mowgli_etl.lib.etl.pipeline.aristo.aristo_transformer import AristoTransformer
 

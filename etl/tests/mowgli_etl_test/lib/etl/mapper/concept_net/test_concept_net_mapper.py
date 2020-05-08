@@ -1,7 +1,7 @@
 import pytest
 
-from mowgli_etl.lib.cskg import mowgli_predicates
-from mowgli_etl.lib.cskg.node import Node
+from mowgli_etl.cskg import mowgli_predicates
+from mowgli_etl.cskg.node import Node
 
 try:
     from mowgli_etl.lib.etl.mapper.concept_net.concept_net_mapper import ConceptNetMapper

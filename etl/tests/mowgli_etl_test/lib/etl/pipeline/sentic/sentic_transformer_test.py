@@ -1,7 +1,7 @@
 import pathlib
 
-from mowgli_etl.lib.cskg.edge import Edge
-from mowgli_etl.lib.cskg.node import Node
+from mowgli_etl.cskg.edge import Edge
+from mowgli_etl.cskg.node import Node
 from mowgli_etl.lib.etl.pipeline.sentic.sentic_constants import SENTIC_FILE_KEY
 from mowgli_etl.lib.etl.pipeline.sentic.sentic_transformer import SENTICTransformer
 

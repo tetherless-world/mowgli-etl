@@ -1,8 +1,8 @@
 import os
 import pathlib
 
-from mowgli_etl.lib.cskg.edge import Edge
-from mowgli_etl.lib.cskg.node import Node
+from mowgli_etl.cskg.edge import Edge
+from mowgli_etl.cskg.node import Node
 from mowgli_etl.lib.etl.pipeline.eat.eat_transformer import EatTransformer
 
 

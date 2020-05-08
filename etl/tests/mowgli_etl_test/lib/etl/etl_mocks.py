@@ -1,7 +1,7 @@
 from typing import Optional, Dict, List, Generator, Union, Iterable
 
-from mowgli_etl.lib.cskg.edge import Edge
-from mowgli_etl.lib.cskg.node import Node
+from mowgli_etl.cskg.edge import Edge
+from mowgli_etl.cskg.node import Node
 from mowgli_etl.lib.etl._extractor import _Extractor
 from mowgli_etl.lib.etl._pipeline import _Pipeline
 from mowgli_etl.lib.etl._transformer import _Transformer

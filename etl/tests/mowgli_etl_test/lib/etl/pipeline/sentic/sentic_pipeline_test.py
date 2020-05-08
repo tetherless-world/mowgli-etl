@@ -2,8 +2,8 @@ from pathlib import Path
 
 from configargparse import ArgParser
 
-from mowgli_etl.lib.cskg.edge import Edge
-from mowgli_etl.lib.cskg.node import Node
+from mowgli_etl.cskg.edge import Edge
+from mowgli_etl.cskg.node import Node
 from mowgli_etl.lib.etl.pipeline.sentic.sentic_pipeline import SenticPipeline
 from mowgli_etl.lib.etl.pipeline_wrapper import PipelineWrapper
 
