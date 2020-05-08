@@ -27,7 +27,7 @@ def loadcsv():
     extractor = WebChildExtractor()
 
     print("Extracting Zip")
-    webchildstorage = PipelineStorage(pipeline_id='webchildsampling',root_data_dir_path=DATA_DIR)
+    webchildstorage = PipelineStorage(pipeline_id='web_child',root_data_dir_path=DATA_DIR)
     extraction = extractor.extract(force=False,storage=webchildstorage)
 
     transformer = WebChildTransformer()
