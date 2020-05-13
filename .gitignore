@@ -1,2 +1,5 @@
 *.pyc
+/project/project/
+/project/target/
+/target/
 /venv/
