@@ -1,0 +1,13 @@
+version: "3"
+services:
+  mowgli-gui-app:
+    build:
+      context: ..
+      dockerfile: gui/Dockerfile
+    container_name: mowgli-gui-app
+#  mowgli-gui-gui:
+#    build:
+#      context: ./gui
+#    container_name: mowgli-gui-gui
+#    ports:
+#      - 127.0.0.1:8081:80

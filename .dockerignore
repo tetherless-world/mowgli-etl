@@ -1,0 +1,9 @@
+/.circleci/
+/etl/
+/.git/
+/.idea/
+LICENSE/
+**/.pytest_cache/
+README.md
+**/node_modules/
+**/target/
