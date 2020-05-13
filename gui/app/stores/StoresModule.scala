@@ -1,7 +1,6 @@
 package stores
 
 import com.google.inject.AbstractModule
-import org.paradicms.lib.generic.stores.UserStore
 
 final class StoresModule extends AbstractModule {
   override def configure(): Unit = {
