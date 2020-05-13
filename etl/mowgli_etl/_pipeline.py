@@ -1,5 +1,5 @@
 from abc import ABC
-from typing import Optional
+from typing import Optional, Union
 
 from configargparse import ArgParser
 
@@ -12,7 +12,7 @@ from mowgli_etl.pipeline.rdf.triple_rdf_loader import TripleRdfLoader
 
 
 class _Pipeline(ABC):
-    def __init__(self, *, extractor: _Extractor, id: str, transformer: _Transformer, **kwds):
+    def __init__(self, *, extractor: _Extractor, id: str, transformer: _Transformer, loader: Optional[Union[_Loader, str]] = None, **kwds):
         """
         Construct an extract-transform pipeline.
         :param extractor: extractor implementation
@@ -22,7 +22,9 @@ class _Pipeline(ABC):
         """
         self.__extractor = extractor
         self.__id = id
-        self.__loader = self.__create_loader(id=id, **kwds)
+        if not isinstance(loader, _Loader):
+            loader = self.__create_loader(id=id, loader=loader, **kwds)
+        self.__loader = loader
         self.__transformer = transformer
 
     @classmethod
