@@ -76,7 +76,7 @@ jobs:
             fi
       - store_artifacts:
           path: cskg.tar.bz2
-  scala:
+  gui-scala:
     docker:
       # First image is used to execute the steps
       - image: circleci/openjdk:11
