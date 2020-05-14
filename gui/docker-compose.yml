@@ -16,6 +16,7 @@ services:
     image: neo4j:4.0.4
     environment:
       NEO4J_AUTH: neo4j/nC1aB4mji623s2Zs
+      NEO4JLABS_PLUGINS: "[\"apoc\"]"
     ports:
       - 127.0.0.1:7473:7473 # HTTPS
       - 127.0.0.1:7474:7474 # HTTP
