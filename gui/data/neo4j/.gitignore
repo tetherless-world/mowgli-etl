@@ -1,0 +1,5 @@
+/data/databases/
+/data/dbms/
+/import/*.csv
+/logs/*.log
+
