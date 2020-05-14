@@ -78,7 +78,7 @@ jobs:
           path: cskg.tar.bz2
   gui-scala:
     docker:
-      - image:
+      - image: circleci/openjdk:11
       - image: neo4j:4.0.4
         name: neo4j
     steps:
