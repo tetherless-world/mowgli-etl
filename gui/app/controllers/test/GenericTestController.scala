@@ -17,13 +17,4 @@ class GenericTestController @Inject()(assets: Assets, assetsFinder: AssetsFinder
       assets.at("/public", "index.html", aggressiveCaching = false)
     }
   }
-
-  def reset = Action { request =>
-    if (!store.isInstanceOf[TestStore]) {
-      InternalServerError("test store not enabled");
-    } else {
-      store.asInstanceOf[TestStore].reset()
-      Ok("OK")
-    }
-  }
 }

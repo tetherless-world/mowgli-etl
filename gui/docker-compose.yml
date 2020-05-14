@@ -11,3 +11,18 @@ services:
 #    container_name: mowgli-gui-gui
 #    ports:
 #      - 127.0.0.1:8081:80
+  neo4j:
+    container_name: neo4j
+    image: neo4j:4.0.4
+    environment:
+      NEO4J_AUTH: neo4j/nC1aB4mji623s2Zs
+    ports:
+      - 127.0.0.1:7473:7473 # HTTPS
+      - 127.0.0.1:7474:7474 # HTTP
+      - 127.0.0.1:7687:7687 # Bolt
+    volumes:
+      - ./data/neo4j/data:/data
+      - ./data/neo4j/logs:/logs
+      - ./data/neo4j/import:/var/lib/neo4j/import
+      - ./data/neo4j/plugins:/plugins
+
