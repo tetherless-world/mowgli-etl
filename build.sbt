@@ -8,7 +8,9 @@ lazy val guiApp = (project in file("gui"))
   .enablePlugins(PlayScala)
   .settings(
     libraryDependencies ++= Seq(
-      "io.github.tetherless-world" %% "twxplore-base" % "1.0.0-SNAPSHOT"
+      "com.github.tototoshi" %% "scala-csv" % "1.3.6",
+      "io.github.tetherless-world" %% "twxplore-base" % "1.0.0-SNAPSHOT",
+      "org.scalatestplus.play" %% "scalatestplus-play" % "4.0.3" % Test
     ),
     maintainer := "gordom6@rpi.edu",
     name := "mowgli-gui-app",
