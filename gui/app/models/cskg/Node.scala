@@ -4,7 +4,7 @@ final case class Node(
                        datasource: String,
                        id: String,
                        label: String,
-                       aliases: List[String] = List(),
+                       aliases: Option[List[String]] = None,
                        other: Option[String] = None,
                        pos: Option[String] = None,
                      )
