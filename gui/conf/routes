@@ -4,10 +4,6 @@ POST        /api/graphql                    controllers.graphql.GraphQlControlle
 GET         /api/graphql-schema             controllers.graphql.GraphQlController.renderSchema
 
 
-# Integration testing
-GET         /api/test/reset controllers.test.GenericTestController.reset
-
-
 # Assets
 GET         /             controllers.Assets.at(path="/public", file="index.html")
 GET         /$path<.*>    controllers.test.GenericTestController.frontEndPath(path)
