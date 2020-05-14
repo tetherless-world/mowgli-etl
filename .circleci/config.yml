@@ -87,6 +87,10 @@ jobs:
       - restore_cache:
           key: sbt-cache-v1
       - run:
+          name: Bootstrap neo4j
+          command: |
+            gui/script/bootstrap-neo4j
+      - run:
           name: Build and test
           command: |
             sbt test
