@@ -78,18 +78,18 @@ jobs:
           path: cskg.tar.bz2
   gui-scala:
     docker:
-      # First image is used to execute the steps
-      - image: circleci/openjdk:11
+      - image:
       - image: neo4j:4.0.4
         name: neo4j
     steps:
       - checkout
       - restore_cache:
           key: sbt-cache-v1
-      - run:
-          name: Bootstrap neo4j
-          command: |
-            gui/script/bootstrap-neo4j
+# Can't call docker-exec on secondary images.
+#      - run:
+#          name: Bootstrap neo4j
+#          command: |
+#            gui/script/bootstrap-neo4j
       - run:
           name: Build and test
           command: |
