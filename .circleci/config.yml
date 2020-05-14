@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  etl:
+  etl-py:
     docker:
       - image: circleci/python:3.8
     steps:
@@ -76,8 +76,33 @@ jobs:
             fi
       - store_artifacts:
           path: cskg.tar.bz2
+  scala:
+    docker:
+      # First image is used to execute the steps
+      - image: circleci/openjdk:11
+      - image: neo4j:4.0.4
+        name: neo4j
+    steps:
+      - checkout
+      - restore_cache:
+          key: sbt-cache-v1
+      - run:
+          name: Build and test
+          command: |
+            sbt test
+      - store_test_results:
+          path: gui/target/test-reports
+      - save_cache:
+          key: sbt-cache-v1
+          paths:
+            - "~/.ivy2/cache"
+            - "~/.m2"
+            - "~/.sbt"
 workflows:
   version: 2
   etl:
     jobs:
-      - etl
+      - etl-py
+  gui:
+    jobs:
+      - gui-scala
