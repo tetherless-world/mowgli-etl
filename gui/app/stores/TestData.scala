@@ -1,23 +1,28 @@
 package stores
 
+import java.io.InputStreamReader
+
 import models.cskg.{Edge, Node}
 
-import scala.util.Random
-
 object TestData {
-  private val random = new Random()
+  val edges = readEdges()
+  val nodes = readNodes()
 
-  val nodes: List[Node] = (0 to 1000).map(i => Node(datasource="test", id=s"node${i}", label=s"Node ${i}", pos=Some("n"))).toList
-
-  val edges: List[Edge] = (0 to 10000).map(_ => {
-    var edge: Edge = null
-    while (edge == null) {
-      val subjectNode = nodes(random.nextInt(nodes.length))
-      val objectNode = nodes(random.nextInt(nodes.length))
-      if (subjectNode.id != objectNode.id) {
-        edge = Edge(datasource = "test", `object` = objectNode.id, predicate = "/r/RelatedTo", subject = subjectNode.id)
-      }
+  private def readEdges(): List[Edge] = {
+    val edgesCsvInputStream = getClass.getResourceAsStream("/test_data/edges.csv")
+    try {
+      new CskgEdgesCsvReader().read(new InputStreamReader(edgesCsvInputStream)).toList
+    } finally {
+      edgesCsvInputStream.close()
     }
-    edge
-  }).toList
+  }
+
+  private def readNodes(): List[Node] = {
+    val nodesCsvInputStream = getClass.getResourceAsStream("/test_data/nodes.csv")
+    try {
+      new CskgNodesCsvReader().read(new InputStreamReader(nodesCsvInputStream)).toList
+    } finally {
+      nodesCsvInputStream.close()
+    }
+  }
 }
