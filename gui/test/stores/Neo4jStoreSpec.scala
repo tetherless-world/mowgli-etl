@@ -14,9 +14,19 @@ class Neo4jStoreSpec extends WordSpec with BeforeAndAfterAll with Matchers {
     }
     sut.clear()
     sut.putNodes(TestData.nodes)
+    sut.putEdges(TestData.edges)
   }
 
   "The neo4j store" can {
+    "get edges by subject" in {
+      val node = TestData.nodes(0)
+      val edges = sut.getEdgesBySubject(node.id)
+      edges should not be empty
+      for (edge <- edges) {
+        edge.subject should equal(node.id)
+      }
+    }
+
     "get a node by ID" in {
       val expected = TestData.nodes(0)
       val actual = sut.getNodeById(expected.id)

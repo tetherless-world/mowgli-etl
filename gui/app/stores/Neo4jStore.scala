@@ -8,8 +8,10 @@ import scala.collection.JavaConverters._
 
 class Neo4jStore @Inject()(configuration: Neo4jStoreConfiguration) extends Store with WithResource {
   private val driver = GraphDatabase.driver(configuration.uri, AuthTokens.basic(configuration.user, configuration.password))
+  private val edgePropertyNames = List("datasource", "other", "weight")
+  private val nodePropertyNames = List("aliases", "datasource", "id", "label", "other", "pos")
 
-  def bootstrap(): Unit = {
+  final def bootstrap(): Unit = {
     val bootstrapCypherString =
       withResource(getClass.getResourceAsStream("/cypher/bootstrap.cypher")) { inputStream =>
         Source.fromInputStream(inputStream).mkString
@@ -23,7 +25,7 @@ class Neo4jStore @Inject()(configuration: Neo4jStoreConfiguration) extends Store
     }
   }
 
-  def clear(): Unit = {
+  final def clear(): Unit = {
     val clearCypherString =
       withResource(getClass.getResourceAsStream("/cypher/clear.cypher")) { inputStream =>
         Source.fromInputStream(inputStream).mkString
@@ -37,14 +39,37 @@ class Neo4jStore @Inject()(configuration: Neo4jStoreConfiguration) extends Store
     }
   }
 
-  override def getEdgesBySubject(subjectNodeId: String): List[Edge] = throw new UnsupportedOperationException
-
-  override def getNodeById(id: String): Node = {
+  override final def getEdgesBySubject(subjectNodeId: String): List[Edge] = {
     withSession { session =>
       session.readTransaction { transaction => {
         val result =
           transaction.run(
-            "MATCH (node:Node {id: $id}) RETURN node.aliases, node.datasource, node.label, node.other, node.pos;",
+            s"MATCH (subject:Node {id: $$subjectNodeId})-[edge]->(object) RETURN type(edge), object.id, ${edgePropertyNames.map(edgePropertyName => "edge." + edgePropertyName).mkString(", ")};",
+            Map(
+              "subjectNodeId" -> subjectNodeId
+            ).asJava.asInstanceOf[java.util.Map[String, Object]]
+          )
+        result.asScala.toList.map(record => record.asMap().asScala).map(recordMap =>
+          Edge(
+            datasource = recordMap("edge.datasource").asInstanceOf[String],
+            `object` = recordMap("object.id").asInstanceOf[String],
+            other = Option(recordMap("edge.other")).map(other => other.asInstanceOf[String]),
+            predicate = recordMap("type(edge)").asInstanceOf[String],
+            subject = subjectNodeId,
+            weight = Option(recordMap("edge.weight")).map(weight => weight.asInstanceOf[Double].floatValue())
+          )
+        )
+      }
+      }
+    }
+  }
+
+  override final def getNodeById(id: String): Node = {
+    withSession { session =>
+      session.readTransaction { transaction => {
+        val result =
+          transaction.run(
+            s"MATCH (node:Node {id: $$id}) RETURN ${nodePropertyNames.filter(nodePropertyName => nodePropertyName != "id").map(nodePropertyName => "node." + nodePropertyName).mkString(", ")};",
             Map("id" -> id).asJava.asInstanceOf[java.util.Map[String, Object]]
           )
         val record = result.single()
@@ -62,7 +87,33 @@ class Neo4jStore @Inject()(configuration: Neo4jStoreConfiguration) extends Store
     }
   }
 
-  def putNodes(nodes: List[Node]): Unit = {
+  final def putEdges(edges: List[Edge]): Unit = {
+    withSession { session =>
+      session.writeTransaction { transaction =>
+        for (edge <- edges) {
+          //          CREATE (:Node { id: node.id, label: node.label, aliases: node.aliases, pos: node.pos, datasource: node.datasource, other: node.other });
+          transaction.run(
+            """MATCH (subject:Node {id: $subject}), (object:Node {id: $object})
+              |CALL apoc.create.relationship(subject, $predicate, {datasource: $datasource, weight: toFloat($weight), other: $other}, object) YIELD rel
+              |REMOVE rel.noOp
+              |""".stripMargin,
+            Map(
+              "datasource" -> edge.datasource,
+              "object" -> edge.`object`,
+              "other" -> edge.other.getOrElse(null),
+              "predicate" -> edge.predicate,
+              "subject" -> edge.subject,
+              "weight" -> edge.weight.getOrElse(null)
+            ).asJava.asInstanceOf[java.util.Map[String, Object]]
+          )
+        }
+        transaction.commit()
+      }
+    }
+  }
+
+
+  final def putNodes(nodes: List[Node]): Unit = {
     withSession { session =>
       session.writeTransaction { transaction =>
         for (node <- nodes) {
@@ -70,11 +121,11 @@ class Neo4jStore @Inject()(configuration: Neo4jStoreConfiguration) extends Store
           transaction.run(
             "CREATE (:Node { id: $id, label: $label, aliases: $aliases, pos: $pos, datasource: $datasource, other: $other });",
             Map(
+              "aliases" -> node.aliases.map(aliases => aliases.mkString(" ")).getOrElse(null),
+              "datasource" -> node.datasource,
               "id" -> node.id,
               "label" -> node.label,
-              "aliases" -> node.aliases.map(aliases => aliases.mkString(" ")).getOrElse(null),
               "pos" -> node.pos.getOrElse(null),
-              "datasource" -> node.datasource,
               "other" -> node.other.getOrElse(null)
             ).asJava.asInstanceOf[java.util.Map[String, Object]]
           )
