@@ -79,7 +79,7 @@ class Neo4jStore @Inject()(configuration: Neo4jStoreConfiguration) extends Store
     }
   }
 
-  override def searchNodes(limit: Int, offset: Int, text: String): List[Node] =
+  final override def getMatchingNodes(limit: Int, offset: Int, text: String): List[Node] =
     withSession { session =>
       session.readTransaction { transaction =>
         val result =
@@ -94,6 +94,23 @@ class Neo4jStore @Inject()(configuration: Neo4jStoreConfiguration) extends Store
             ).asJava.asInstanceOf[java.util.Map[String, Object]]
           )
           getNodesFromRecords(result)
+      }
+    }
+
+  final override def getMatchingNodesCount(text: String): Int =
+    withSession { session =>
+      session.readTransaction { transaction =>
+        val result =
+          transaction.run(
+            s"""CALL db.index.fulltext.queryNodes("nodeLabel", $$nodeLabel) YIELD node, score
+               |RETURN COUNT(node)
+               |""".stripMargin,
+            Map(
+              "nodeLabel" -> text
+            ).asJava.asInstanceOf[java.util.Map[String, Object]]
+          )
+        val record = result.single()
+        record.get("COUNT(node)").asInt()
       }
     }
 

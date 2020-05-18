@@ -11,12 +11,16 @@ class MemStoreSpec extends StoreSpec with BeforeAndAfterAll {
       getEdgesBySubject()
     }
 
-    "get a node by ID" in {
-      getNodeById()
+    "get matching nodes" in {
+      getMatchingNodes()
     }
 
-    "search nodes" in {
-      searchNodes()
+    "get matching nodes count" in {
+      getMatchingNodesCount()
+    }
+
+    "get a node by ID" in {
+      getNodeById()
     }
   }
 }

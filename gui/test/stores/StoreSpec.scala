@@ -14,16 +14,22 @@ abstract class StoreSpec extends WordSpec with Matchers {
     }
   }
 
+  protected def getMatchingNodes(): Unit = {
+    val expected = TestData.nodes(0)
+    val actual = sut.getMatchingNodes(limit = 10, offset = 0, text = expected.label)
+    actual should not be empty
+    actual(0) should equal(expected)
+  }
+
+  protected def getMatchingNodesCount(): Unit = {
+    val expected = TestData.nodes(0)
+    val actual = sut.getMatchingNodesCount(text = expected.label)
+    actual should be >= 1
+  }
+
   protected def getNodeById() = {
     val expected = TestData.nodes(0)
     val actual = sut.getNodeById(expected.id)
     actual should equal(expected)
-  }
-
-  protected def searchNodes(): Unit = {
-    val expected = TestData.nodes(0)
-    val actual = sut.searchNodes(limit = 10, offset = 0, text = expected.label)
-    actual should not be empty
-    actual(0) should equal(expected)
   }
 }

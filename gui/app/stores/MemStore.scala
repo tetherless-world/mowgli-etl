@@ -9,6 +9,9 @@ class MemStore(val edges: List[Edge], val nodes: List[Node]) extends Store {
   final override def getNodeById(id: String): Node =
     nodes.find(node => node.id == id).getOrElse(throw new NoSuchElementException)
 
-  final override def searchNodes(limit: Int, offset: Int, text: String): List[Node] =
+  final override def getMatchingNodes(limit: Int, offset: Int, text: String): List[Node] =
     nodes.filter(node => node.label.contains(text)).drop(offset).take(limit)
+
+  final override def getMatchingNodesCount(text: String): Int =
+    getMatchingNodes(limit = Integer.MAX_VALUE, offset = 0, text = text).size
 }
