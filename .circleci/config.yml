@@ -81,6 +81,9 @@ jobs:
       - image: circleci/openjdk:11
       - image: neo4j:4.0.4
         name: neo4j
+        environment:
+          NEO4J_AUTH: neo4j/nC1aB4mji623s2Zs
+          NEO4JLABS_PLUGINS: "[\"apoc\"]"
     steps:
       - checkout
       - restore_cache:
