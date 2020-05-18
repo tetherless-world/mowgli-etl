@@ -10,9 +10,9 @@ final class CskgEdgesCsvReader extends CskgCsvReader[Edge] {
       Edge(
         datasource = row("datasource"),
         `object` = row("object"),
-        other = row.get("other"),
+        other = row.getNonBlank("other"),
         predicate = row("predicate"),
         subject = row("subject"),
-        weight = row.get("weight").map(weight => weight.toFloat)
+        weight = row.getNonBlank("weight").map(weight => weight.toFloat)
     ))
 }
