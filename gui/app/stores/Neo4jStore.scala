@@ -12,14 +12,16 @@ class Neo4jStore @Inject()(configuration: Neo4jStoreConfiguration) extends Store
   private val nodePropertyNames = List("aliases", "datasource", "id", "label", "other", "pos")
 
   final def bootstrap(): Unit = {
-    val bootstrapCypherString =
+    val bootstrapCypherStatements =
       withResource(getClass.getResourceAsStream("/cypher/bootstrap.cypher")) { inputStream =>
-        Source.fromInputStream(inputStream).mkString
+        Source.fromInputStream(inputStream).getLines().toList
       }
 
     withSession { session =>
       session.writeTransaction { transaction =>
-        transaction.run(bootstrapCypherString)
+        for (bootstrapCypherStatement <- bootstrapCypherStatements) {
+          transaction.run(bootstrapCypherStatement)
+        }
         transaction.commit()
       }
     }
