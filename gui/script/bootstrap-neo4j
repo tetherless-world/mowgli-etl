@@ -1,0 +1,3 @@
+#!/bin/bash
+cd `dirname "$0"`/..
+cat conf/cypher/bootstrap.cypher | docker exec --interactive neo4j cypher-shell -u neo4j -p nC1aB4mji623s2Zs --non-interactive

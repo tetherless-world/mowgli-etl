@@ -1,7 +1,8 @@
 package stores
 
-class TestStore extends Store {
-  def reset(): Unit = {
-    // Nop for now, since the store is read-only
-  }
+import java.io.InputStreamReader
+
+import models.cskg.{Edge, Node}
+
+final class TestStore extends MemStore(TestData.edges, TestData.nodes) {
 }

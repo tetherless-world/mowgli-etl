@@ -8,7 +8,7 @@ final class StoresModule extends AbstractModule {
       if (System.getProperty("testIntegration") != null)
         classOf[TestStore]
       else
-        classOf[PlaceholderStore]
+        classOf[Neo4jStore]
     bind(classOf[Store]).to(storeClass)
   }
 }
