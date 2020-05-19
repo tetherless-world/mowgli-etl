@@ -1,7 +1,7 @@
 package stores
 import com.google.inject.Inject
 import models.cskg.{Edge, Node}
-import org.neo4j.driver.{AuthTokens, GraphDatabase, Session}
+import org.neo4j.driver.{AuthTokens, GraphDatabase, Record, Result, Session}
 
 import scala.io.Source
 import scala.collection.JavaConverters._
@@ -12,14 +12,16 @@ class Neo4jStore @Inject()(configuration: Neo4jStoreConfiguration) extends Store
   private val nodePropertyNames = List("aliases", "datasource", "id", "label", "other", "pos")
 
   final def bootstrap(): Unit = {
-    val bootstrapCypherString =
+    val bootstrapCypherStatements =
       withResource(getClass.getResourceAsStream("/cypher/bootstrap.cypher")) { inputStream =>
-        Source.fromInputStream(inputStream).mkString
+        Source.fromInputStream(inputStream).getLines().toList
       }
 
     withSession { session =>
       session.writeTransaction { transaction =>
-        transaction.run(bootstrapCypherString)
+        for (bootstrapCypherStatement <- bootstrapCypherStatements) {
+          transaction.run(bootstrapCypherStatement)
+        }
         transaction.commit()
       }
     }
@@ -69,23 +71,65 @@ class Neo4jStore @Inject()(configuration: Neo4jStoreConfiguration) extends Store
       session.readTransaction { transaction => {
         val result =
           transaction.run(
-            s"MATCH (node:Node {id: $$id}) RETURN ${nodePropertyNames.filter(nodePropertyName => nodePropertyName != "id").map(nodePropertyName => "node." + nodePropertyName).mkString(", ")};",
+            s"MATCH (node:Node {id: $$id}) RETURN ${nodePropertyNames.map(nodePropertyName => "node." + nodePropertyName).mkString(", ")};",
             Map("id" -> id).asJava.asInstanceOf[java.util.Map[String, Object]]
           )
-        val record = result.single()
-        val recordMap = record.asMap().asScala.toMap.asInstanceOf[Map[String, String]]
-        Node(
-          aliases = Option(recordMap("node.aliases")).map(aliases => aliases.split(' ').toList),
-          datasource = recordMap("node.datasource"),
-          id = id,
-          label = recordMap("node.label"),
-          other = Option(recordMap("node.other")),
-          pos = Option(recordMap("node.pos"))
-        )
+        val nodes = getNodesFromRecords(result)
+        nodes(0)
       }
       }
     }
   }
+
+  final override def getMatchingNodes(limit: Int, offset: Int, text: String): List[Node] =
+    withSession { session =>
+      session.readTransaction { transaction =>
+        val result =
+          transaction.run(
+            s"""CALL db.index.fulltext.queryNodes("nodeLabel", $$nodeLabel) YIELD node, score
+              |RETURN ${nodePropertyNames.map(nodePropertyName => "node." + nodePropertyName).mkString(", ")}
+              |SKIP ${offset}
+              |LIMIT ${limit}
+              |""".stripMargin,
+            Map(
+              "nodeLabel" -> text
+            ).asJava.asInstanceOf[java.util.Map[String, Object]]
+          )
+          getNodesFromRecords(result)
+      }
+    }
+
+  final override def getMatchingNodesCount(text: String): Int =
+    withSession { session =>
+      session.readTransaction { transaction =>
+        val result =
+          transaction.run(
+            s"""CALL db.index.fulltext.queryNodes("nodeLabel", $$nodeLabel) YIELD node, score
+               |RETURN COUNT(node)
+               |""".stripMargin,
+            Map(
+              "nodeLabel" -> text
+            ).asJava.asInstanceOf[java.util.Map[String, Object]]
+          )
+        val record = result.single()
+        record.get("COUNT(node)").asInt()
+      }
+    }
+
+  private def getNodeFromRecord(record: Record): Node = {
+    val recordMap = record.asMap().asScala.toMap.asInstanceOf[Map[String, String]]
+    Node(
+      aliases = Option(recordMap("node.aliases")).map(aliases => aliases.split(' ').toList),
+      datasource = recordMap("node.datasource"),
+      id = recordMap("node.id"),
+      label = recordMap("node.label"),
+      other = Option(recordMap("node.other")),
+      pos = Option(recordMap("node.pos"))
+    )
+  }
+
+  private def getNodesFromRecords(result: Result): List[Node] =
+    result.asScala.toList.map(record => getNodeFromRecord(record))
 
   final def putEdges(edges: List[Edge]): Unit = {
     withSession { session =>
@@ -111,7 +155,6 @@ class Neo4jStore @Inject()(configuration: Neo4jStoreConfiguration) extends Store
       }
     }
   }
-
 
   final def putNodes(nodes: List[Node]): Unit = {
     withSession { session =>
