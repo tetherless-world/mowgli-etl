@@ -76,6 +76,49 @@ jobs:
             fi
       - store_artifacts:
           path: cskg.tar.bz2
+  gui-docker:
+    docker:
+      - image: circleci/python:3.8
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Build
+          command: |
+            cd gui
+            docker-compose build
+      - run:
+          name: Run
+          background: true
+          command: |
+            cd gui
+            docker-compose up --abort-on-container-exit
+      - run:
+          name: Wait for the server to start
+          command: |
+            sleep 60
+      - run:
+          name: Bootstrap the database
+          command: |
+            cd gui
+            script/bootstrap-neo4j
+      - run:
+          name: Load the database
+          command: |
+            cd gui
+            # Can't do volume mounts in CircleCI Docker, so have to copy
+            docker cp conf/test_data/edges.csv neo4j:/var/lib/neo4j/import/edges.csv
+            docker cp conf/test_data/nodes.csv neo4j:/var/lib/neo4j/import/nodes.csv
+            script/load-neo4j
+      - run:
+          name: Test that the database is loaded
+          command: |
+            cd gui
+            # Copy a file in in order to use -f
+            # If we cat the Cypher into the docker exec then the cypher-shell doesn't print anything.
+            echo "MATCH (n) RETURN COUNT(n);" >test-neo4j.cypher
+            docker cp test-neo4j.cypher neo4j:/var/lib/neo4j
+            docker exec --interactive neo4j cypher-shell -u neo4j -p nC1aB4mji623s2Zs --non-interactive -f test-neo4j.cypher
   gui-scala:
     docker:
       - image: circleci/openjdk:11
@@ -112,4 +155,5 @@ workflows:
       - etl-py
   gui:
     jobs:
+      - gui-docker
       - gui-scala
