@@ -107,7 +107,8 @@ jobs:
           name: Load the database
           command: |
             cd gui
-            cp conf/test_data/*.csv data/neo4j/import
+            cp conf/test_data/edges.csv data/neo4j/import/edges.csv
+            cp conf/test_data/nodes.csv data/neo4j/import/nodes.csv
             script/load-neo4j
   gui-scala:
     docker:
