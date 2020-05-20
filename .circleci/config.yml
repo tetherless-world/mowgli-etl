@@ -96,7 +96,7 @@ jobs:
       - run:
           name: Wait for the server to start
           command: |
-            sleep 30
+            sleep 60
       - run:
           name: Bootstrap the database
           command: |
