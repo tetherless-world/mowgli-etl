@@ -92,7 +92,6 @@ jobs:
           background: true
           command: |
             cd gui
-            mkdir -p data/neo4j/import
             docker-compose up --abort-on-container-exit
       - run:
           name: Wait for the server to start
@@ -107,8 +106,9 @@ jobs:
           name: Load the database
           command: |
             cd gui
-            cp conf/test_data/edges.csv data/neo4j/import/edges.csv
-            cp conf/test_data/nodes.csv data/neo4j/import/nodes.csv
+            # Can't do volume mounts in CircleCI Docker, so have to copy
+            docker cp conf/test_data/edges.csv neo4j:/var/lib/neo4j/import/edges.csv
+            docker cp conf/test_data/nodes.csv neo4j:/var/lib/neo4j/import/nodes.csv
             script/load-neo4j
   gui-scala:
     docker:
