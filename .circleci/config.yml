@@ -76,6 +76,33 @@ jobs:
             fi
       - store_artifacts:
           path: cskg.tar.bz2
+  gui-docker:
+    docker:
+      - image: circleci/python:3.8
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Build
+          command: |
+            cd gui
+            docker-compose build
+      - run:
+          name: Run
+          command: |
+            cd gui
+            docker-compose up
+      - run:
+          name: Bootstrap the database
+          command: |
+            cd gui
+            script/bootstrap-neo4j
+      - run:
+          name: Load the database
+          command: |
+            cd gui
+            cp conf/test_data/*.csv data/neo4j/import
+            script/load-neo4j
   gui-scala:
     docker:
       - image: circleci/openjdk:11
@@ -112,4 +139,5 @@ workflows:
       - etl-py
   gui:
     jobs:
+      - gui-docker
       - gui-scala
