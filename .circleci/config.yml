@@ -92,6 +92,7 @@ jobs:
           background: true
           command: |
             cd gui
+            mkdir -p data/neo4j/import
             docker-compose up --abort-on-container-exit
       - run:
           name: Wait for the server to start
