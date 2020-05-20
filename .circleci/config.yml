@@ -93,10 +93,10 @@ jobs:
           command: |
             cd gui
             docker-compose up --abort-on-container-exit
-#      - run:
-#          name: Wait for the server to come up
-#          command: |
-#            docker exec -it curl --retry 5 --retry-connrefused http://neo4j
+      - run:
+          name: Wait for the server to start
+          command: |
+            sleep 30
       - run:
           name: Bootstrap the database
           command: |
