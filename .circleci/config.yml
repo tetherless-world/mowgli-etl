@@ -119,6 +119,10 @@ jobs:
             echo "MATCH (n) RETURN COUNT(n);" >test-neo4j.cypher
             docker cp test-neo4j.cypher neo4j:/var/lib/neo4j
             docker exec --interactive neo4j cypher-shell -u neo4j -p nC1aB4mji623s2Zs --non-interactive -f test-neo4j.cypher
+      - run:
+          name: Test that the user interface is up
+          command: |
+            docker exec mowgli-gui-gui curl --retry 5 --retry-connrefused http://localhost &>/dev/null
   gui-scala:
     docker:
       - image: circleci/openjdk:11
