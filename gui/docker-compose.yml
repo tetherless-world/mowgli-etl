@@ -7,10 +7,12 @@ services:
     container_name: mowgli-gui-app
   mowgli-gui-gui:
     build:
-      context: ./gui
+      # Use the same context to share a .dockerignore
+      context: ..
+      dockerfile: gui/gui/Dockerfile
     container_name: mowgli-gui-gui
     ports:
-      - 127.0.0.1:8081:80
+      - 127.0.0.1:8080:80
   neo4j:
     container_name: neo4j
     image: neo4j:4.0.4
