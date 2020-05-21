@@ -32,6 +32,27 @@ class GraphQlSchemaDefinitionSpec extends PlaySpec {
            |""".stripMargin))
     }
 
+    "get edges the node is a subject of" in {
+      val node = TestData.nodes(0)
+      val query =
+        graphql"""
+         query EdgesQuery($$nodeId: String!) {
+           nodeById(id: $$nodeId) {
+             subjectOfEdges {
+               predicate
+               object
+             }
+           }
+         }
+       """
+
+      val result = Json.stringify(executeQuery(query, vars = Json.obj("nodeId" -> node.id)))
+      for (edge <- TestData.edges.filter(edge => edge.subject == node.id)) {
+        result must include(s"""{"predicate":"${edge.predicate}","object":"${edge.`object`}"}""")
+      }
+    }
+
+
     "search nodes" in {
       val node = TestData.nodes(0)
       val query =
