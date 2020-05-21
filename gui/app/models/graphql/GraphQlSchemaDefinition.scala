@@ -8,12 +8,16 @@ import sangria.macros.derive._
 object GraphQlSchemaDefinition extends BaseGraphQlSchemaDefinition {
   // Object types
   implicit val EdgeType = deriveObjectType[GraphQlSchemaContext, Edge]()
-  implicit val NodeType = deriveObjectType[GraphQlSchemaContext, Node]()
+  implicit val NodeType = deriveObjectType[GraphQlSchemaContext, Node](
+  )
+
+  val IdArgument = Argument("id", StringType)
 
   // Query types
   val RootQueryType = ObjectType("RootQuery",  fields[GraphQlSchemaContext, Unit](
     Field("matchingNodes", ListType(NodeType), arguments = LimitArgument :: OffsetArgument :: TextArgument :: Nil, resolve = ctx => ctx.ctx.store.getMatchingNodes(limit = ctx.args.arg(LimitArgument), offset = ctx.args.arg(OffsetArgument), text = ctx.args.arg(TextArgument))),
-    Field("matchingNodesCount", IntType, arguments = TextArgument :: Nil, resolve = ctx => ctx.ctx.store.getMatchingNodesCount(text = ctx.args.arg(TextArgument)))
+    Field("matchingNodesCount", IntType, arguments = TextArgument :: Nil, resolve = ctx => ctx.ctx.store.getMatchingNodesCount(text = ctx.args.arg(TextArgument))),
+    Field("nodeById", OptionType(NodeType), arguments = IdArgument :: Nil, resolve = ctx => ctx.ctx.store.getNodeById(ctx.args.arg(IdArgument)))
   ))
 
   // Schema

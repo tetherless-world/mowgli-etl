@@ -15,6 +15,23 @@ import scala.concurrent.duration._
 
 class GraphQlSchemaDefinitionSpec extends PlaySpec {
   "GraphQL schema" must {
+    "get a node by id" in {
+      val node = TestData.nodes(0)
+      val query =
+        graphql"""
+         query NodeByIdQuery($$id: String!) {
+           nodeById(id: $$id) {
+            label
+           }
+         }
+       """
+
+      executeQuery(query, vars = Json.obj("id" -> node.id)) must be(Json.parse(
+        s"""
+           |{"data":{"nodeById":{"label":"${node.label}"}}}
+           |""".stripMargin))
+    }
+
     "search nodes" in {
       val node = TestData.nodes(0)
       val query =
