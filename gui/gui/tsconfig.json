@@ -1,0 +1,6 @@
+{
+  "compilerOptions": {
+    "baseUrl": "src/ts"
+  },
+  "extends": "./node_modules/@tetherless-world/twxplore-base/tsconfig.base.json"
+}
