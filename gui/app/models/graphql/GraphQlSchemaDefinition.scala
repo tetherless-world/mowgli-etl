@@ -10,6 +10,7 @@ object GraphQlSchemaDefinition extends BaseGraphQlSchemaDefinition {
   implicit val EdgeType = deriveObjectType[GraphQlSchemaContext, Edge]()
   implicit val NodeType = deriveObjectType[GraphQlSchemaContext, Node](
     AddFields(
+      Field("objectOfEdges", ListType(EdgeType), resolve = ctx => ctx.ctx.store.getEdgesByObject(ctx.value.id)),
       Field("subjectOfEdges", ListType(EdgeType), resolve = ctx => ctx.ctx.store.getEdgesBySubject(ctx.value.id))
     )
   )

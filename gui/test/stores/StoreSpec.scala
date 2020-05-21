@@ -5,6 +5,18 @@ import org.scalatest.{Matchers, WordSpec}
 abstract class StoreSpec extends WordSpec with Matchers {
   val sut: Store
 
+  protected def getEdgesByObject(): Unit = {
+    for (node <- TestData.nodes) {
+      val edges = sut.getEdgesByObject(node.id)
+      if (!edges.isEmpty) {
+        for (edge <- edges) {
+          edge.`object` should equal(node.id)
+          return
+        }
+      }
+    }
+  }
+
   protected def getEdgesBySubject() = {
     val node = TestData.nodes(0)
     val edges = sut.getEdgesBySubject(node.id)
@@ -13,6 +25,7 @@ abstract class StoreSpec extends WordSpec with Matchers {
       edge.subject should equal(node.id)
     }
   }
+
 
   protected def getMatchingNodes(): Unit = {
     val expected = TestData.nodes(0)
