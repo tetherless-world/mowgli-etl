@@ -35,6 +35,10 @@ After starting the application, copy a CSKG `nodes.csv` and `edges.csv` into `da
 After starting the application, run
 
     script/clear-neo4j
+    
+## Viewing the application
+
+After starting the application and loading the data, open your browser to [http://localhost:8080](http://localhost:8080).
 
 # Developing
 
