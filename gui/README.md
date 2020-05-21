@@ -26,7 +26,9 @@ After starting the application, run
 
 ## Loading the database
 
-After starting the application, copy a CSKG `nodes.csv` and `edges.csv` into `data/neo4j/import`, then run
+After starting the application, copy a CSKG `nodes.csv` and `edges.csv` into `data/neo4j/import`. There is a small test data set in `conf/test_data`.
+ 
+Then run:
 
     script/load-neo4j
 
