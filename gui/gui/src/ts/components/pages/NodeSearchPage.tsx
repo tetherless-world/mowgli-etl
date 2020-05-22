@@ -186,13 +186,13 @@ export const NodeSearchPage: React.FunctionComponent<{}> = ({}) => {
   return (
     <Frame>
       <Grid container spacing={3}>
-        <Grid item xs={12}>
+        <Grid item xs={12} data-cy="searchContainer">
           <Typography variant="body1">
             Searching <span>all data sources</span>
           </Typography>
           <Paper variant="outlined" square>
             <InputBase
-              inputProps={{ref: searchTextInputRef}}
+              inputProps={{ref: searchTextInputRef, 'data-cy': 'searchTextInput'}}
               fullWidth
               startAdornment={
                 <InputAdornment position="end" style={{marginRight: "8px"}}>
@@ -210,7 +210,7 @@ export const NodeSearchPage: React.FunctionComponent<{}> = ({}) => {
             <FontAwesomeIcon icon={faFilter} /> &nbsp;Filters
           </Button>
         </Grid>
-        <Grid item xs={8}>
+        <Grid item xs={8} data-cy="visualizationContainer">
           {matchingNodes && matchingNodesCount && (
             <React.Fragment>
               <Typography variant="body1">
@@ -218,7 +218,7 @@ export const NodeSearchPage: React.FunctionComponent<{}> = ({}) => {
                 {searchTextInputRef.current!.value}"
               </Typography>
               <TableContainer component={Paper}>
-                <Table>
+                <Table data-cy="matchingNodesTable">
                   <TableHead>
                     <TableRow>
                       <TableCell></TableCell>
