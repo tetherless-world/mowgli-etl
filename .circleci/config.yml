@@ -160,7 +160,7 @@ jobs:
             - "~/.ivy2/cache"
             - "~/.m2"
             - "~/.sbt"
-  ts:
+  gui-ts:
     working_directory: ~/project
     docker:
       - image: circleci/node:12
