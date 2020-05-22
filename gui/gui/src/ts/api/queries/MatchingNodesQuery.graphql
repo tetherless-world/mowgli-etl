@@ -1,0 +1,6 @@
+#import "./NodeFieldsFragment.graphql"
+query MatchingNodesQuery($limit: Int!, $offset: Int!, $text: String!) {
+  matchingNodes(limit: $limit, offset: $offset, text: $text) {
+    ...NodeFieldsFragment
+  }
+}
