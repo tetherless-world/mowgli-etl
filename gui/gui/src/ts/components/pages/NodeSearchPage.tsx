@@ -136,7 +136,7 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
 }
 
 export const NodeSearchPage: React.FunctionComponent<{}> = ({}) => {
-  const searchTextInputRef = React.useRef<HTMLInputElement>();
+  const searchTextInputRef = React.useRef<HTMLInputElement>(null);
 
   const [searchText, setSearchText] = React.useState<string>("");
   const [matchingNodesPage, setMatchingNodesPage] = React.useState<number>(0);
