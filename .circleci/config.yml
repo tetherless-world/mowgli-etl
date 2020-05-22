@@ -192,32 +192,32 @@ orbs:
   cypress: cypress-io/cypress@1
 workflows:
   version: 2
-#  etl:
-#    jobs:
-#      - etl-py
+  etl:
+    jobs:
+      - etl-py
   gui:
     jobs:
-      - cypress/install:
-          requires:
-            - gui-scala
-            - gui-ts
-          working_directory: gui/test/integration
-      - cypress/run:
-          attach-workspace: true
-          post-steps:
-            - store_test_results:
-                path: cypress/results
-          requires:
-            - cypress/install
-          start: |
-            pwd
-            cp ~/project/.circleci/cypress.json .
-            apt-get update && apt-get install -y default-jre
-            cd ~/dist/gui-app
-            bin/gui-app -DtestIntegration
-          store_artifacts: true
-          wait-on: 'http-get://localhost:9000/index.html'
-      #      - gui-docker
+#      - cypress/install:
+#          requires:
+#            - gui-scala
+#            - gui-ts
+#          working_directory: gui/test/integration
+#      - cypress/run:
+#          attach-workspace: true
+#          post-steps:
+#            - store_test_results:
+#                path: cypress/results
+#          requires:
+#            - cypress/install
+#          start: |
+#            pwd
+#            cp ~/project/.circleci/cypress.json .
+#            apt-get update && apt-get install -y default-jre
+#            cd ~/dist/gui-app
+#            bin/gui-app -DtestIntegration
+#          store_artifacts: true
+#          wait-on: 'http-get://localhost:9000/index.html'
+      - gui-docker
       - gui-scala:
           requires:
             - gui-ts
