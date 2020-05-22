@@ -4,4 +4,6 @@
 /integration/
 /logs/
 /target/
-
+/test/integration/node_modules/
+/test/integration/package-lock.json
+/test/integration/cypress/videos
