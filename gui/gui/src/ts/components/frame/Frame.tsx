@@ -1,11 +1,7 @@
 import * as React from "react";
-import {
-  Typography,
-  AppBar,
-  Toolbar,
-  makeStyles,
-  createStyles,
-} from "@material-ui/core";
+import {Navbar} from "components/navbar/Navbar";
+
+import {makeStyles, createStyles} from "@material-ui/core";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -23,11 +19,7 @@ export const Frame: React.FunctionComponent<{children: React.ReactNode}> = ({
 
   return (
     <React.Fragment>
-      <AppBar position="static">
-        <Toolbar>
-          <Typography variant="h6">Mowgli</Typography>
-        </Toolbar>
-      </AppBar>
+      <Navbar></Navbar>
       <div className={classes.root}>{children}</div>
     </React.Fragment>
   );
