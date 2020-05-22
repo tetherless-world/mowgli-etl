@@ -1,6 +1,12 @@
 #import "./NodeFieldsFragment.graphql"
-query MatchingNodesQuery($limit: Int!, $offset: Int!, $text: String!) {
+query MatchingNodesQuery(
+  $limit: Int!
+  $offset: Int!
+  $text: String!
+  $withCount: Boolean!
+) {
   matchingNodes(limit: $limit, offset: $offset, text: $text) {
     ...NodeFieldsFragment
   }
+  matchingNodesCount(text: $text) @include(if: $withCount)
 }

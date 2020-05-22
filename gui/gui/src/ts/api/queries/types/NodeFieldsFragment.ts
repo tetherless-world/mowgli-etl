@@ -11,7 +11,7 @@ export interface NodeFieldsFragment {
   aliases: string[] | null;
   datasource: string;
   id: string;
-  label: string;
+  label: string | null;
   other: string | null;
   pos: string | null;
 }

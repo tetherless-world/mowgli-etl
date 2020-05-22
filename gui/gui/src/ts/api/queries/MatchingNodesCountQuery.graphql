@@ -1,3 +1,0 @@
-query MatchingNodesCountQuery($text: String!) {
-  matchingNodesCount(text: $text)
-}

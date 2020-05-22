@@ -11,17 +11,19 @@ export interface MatchingNodesQuery_matchingNodes {
   aliases: string[] | null;
   datasource: string;
   id: string;
-  label: string;
+  label: string | null;
   other: string | null;
   pos: string | null;
 }
 
 export interface MatchingNodesQuery {
   matchingNodes: MatchingNodesQuery_matchingNodes[];
+  matchingNodesCount: number;
 }
 
 export interface MatchingNodesQueryVariables {
   limit: number;
   offset: number;
   text: string;
+  withCount: boolean;
 }
