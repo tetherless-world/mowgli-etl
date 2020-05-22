@@ -1,4 +1,4 @@
-class NodeSearchPage {
+export class NodeSearchPage {
   visit() {
     cy.visit("/");
     return this;
@@ -27,7 +27,3 @@ class NodeSearchPage {
     return this;
   }
 }
-
-export {NodeSearchPage};
-
-export default new NodeSearchPage();

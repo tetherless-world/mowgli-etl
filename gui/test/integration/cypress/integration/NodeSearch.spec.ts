@@ -1,21 +1,22 @@
-import NodeSearchPage from "../support/page_files/NodeSearch.page";
+import {NodeSearchPage} from "../support/page_files/NodeSearch.page";
 
 context("Node Search Page", () => {
+  const page = new NodeSearchPage();
+
   beforeEach(() => {
-    NodeSearchPage.visit();
+    page.visit();
   });
 
   it("Table should show after search", () => {
-    NodeSearchPage.getVisualizationContainer()
-      .children()
-      .should("have.length", 0);
+    page.getVisualizationContainer().children().should("have.length", 0);
 
-    NodeSearchPage.search("apples");
+    page.search("apples");
 
-    NodeSearchPage.getVisualizationContainer()
+    page
+      .getVisualizationContainer()
       .children()
       .should("have.length.greaterThan", 0);
 
-    NodeSearchPage.getMatchingNodesTable();
+    page.getMatchingNodesTable();
   });
 });
