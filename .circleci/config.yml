@@ -182,6 +182,7 @@ jobs:
           command: |
             cd gui/gui
             npm run build
+            mkdir ~/dist
             mv dist ~/dist/gui-gui
       - persist_to_workspace:
           root: ~/
