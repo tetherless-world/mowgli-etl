@@ -104,6 +104,14 @@ const TablePaginationActions = (props: TablePaginationActionsProps) => {
   );
 };
 
+const showListAsColumn = (list: string[]) =>
+  list.map((item) => (
+    <React.Fragment>
+      {item}
+      <br />
+    </React.Fragment>
+  ));
+
 export const NodeTable: React.FunctionComponent<{
   nodes: Node[];
   rowsPerPage: number;
@@ -130,10 +138,17 @@ export const NodeTable: React.FunctionComponent<{
             <TableRow key={node.id}>
               <TableCell>{page * rowsPerPage + index + 1}</TableCell>
               <TableCell>{node.label}</TableCell>
-              <TableCell>{node.aliases}</TableCell>
-              <TableCell>{node.datasource}</TableCell>
+              <TableCell>
+                {node.aliases && showListAsColumn(node.aliases)}
+              </TableCell>
+              <TableCell>
+                {node.datasource &&
+                  showListAsColumn(node.datasource.split(","))}
+              </TableCell>
               <TableCell>{node.other}</TableCell>
-              <TableCell>{node.pos}</TableCell>
+              <TableCell>
+                {node.pos && showListAsColumn(node.pos.split(","))}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
