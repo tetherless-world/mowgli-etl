@@ -1,8 +1,9 @@
 # Build
-FROM tiangolo/node-frontend:10 as build
+FROM node:12 as build
 WORKDIR /app
-COPY /gui/gui .
+COPY /gui/gui/package.json .
 RUN npm install
+COPY /gui/gui .
 RUN npm run build
 
 # Deployment
