@@ -4,5 +4,6 @@
 /logs/
 /target/
 /venv/
-.idea
+/.idea/
 .python-version
+*.iml
