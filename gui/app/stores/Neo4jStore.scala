@@ -41,26 +41,34 @@ class Neo4jStore @Inject()(configuration: Neo4jStoreConfiguration) extends Store
     }
   }
 
+  override final def getEdgesByObject(objectNodeId: String): List[Edge] = {
+    withSession { session =>
+      session.readTransaction { transaction => {
+        val result =
+          transaction.run(
+            s"MATCH (subject:Node)-[edge]->(object:Node {id: $$objectNodeId}) RETURN type(edge), object.id, subject.id, ${edgePropertyNames.map(edgePropertyName => "edge." + edgePropertyName).mkString(", ")};",
+            Map(
+              "objectNodeId" -> objectNodeId
+            ).asJava.asInstanceOf[java.util.Map[String, Object]]
+          )
+        getEdgesFromRecords(result)
+      }
+      }
+    }
+  }
+
+
   override final def getEdgesBySubject(subjectNodeId: String): List[Edge] = {
     withSession { session =>
       session.readTransaction { transaction => {
         val result =
           transaction.run(
-            s"MATCH (subject:Node {id: $$subjectNodeId})-[edge]->(object) RETURN type(edge), object.id, ${edgePropertyNames.map(edgePropertyName => "edge." + edgePropertyName).mkString(", ")};",
+            s"MATCH (subject:Node {id: $$subjectNodeId})-[edge]->(object:Node) RETURN type(edge), object.id, subject.id, ${edgePropertyNames.map(edgePropertyName => "edge." + edgePropertyName).mkString(", ")};",
             Map(
               "subjectNodeId" -> subjectNodeId
             ).asJava.asInstanceOf[java.util.Map[String, Object]]
           )
-        result.asScala.toList.map(record => record.asMap().asScala).map(recordMap =>
-          Edge(
-            datasource = recordMap("edge.datasource").asInstanceOf[String],
-            `object` = recordMap("object.id").asInstanceOf[String],
-            other = Option(recordMap("edge.other")).map(other => other.asInstanceOf[String]),
-            predicate = recordMap("type(edge)").asInstanceOf[String],
-            subject = subjectNodeId,
-            weight = Option(recordMap("edge.weight")).map(weight => weight.asInstanceOf[Double].floatValue())
-          )
-        )
+        getEdgesFromRecords(result)
       }
       }
     }
@@ -115,6 +123,21 @@ class Neo4jStore @Inject()(configuration: Neo4jStoreConfiguration) extends Store
         record.get("COUNT(node)").asInt()
       }
     }
+
+  private def getEdgeFromRecord(record: Record): Edge = {
+    val recordMap = record.asMap().asScala.toMap.asInstanceOf[Map[String, Object]]
+    Edge(
+      datasource = recordMap("edge.datasource").asInstanceOf[String],
+      `object` = recordMap("object.id").asInstanceOf[String],
+      other = Option(recordMap("edge.other")).map(other => other.asInstanceOf[String]),
+      predicate = recordMap("type(edge)").asInstanceOf[String],
+      subject = recordMap("subject.id").asInstanceOf[String],
+      weight = Option(recordMap("edge.weight")).map(weight => weight.asInstanceOf[Double].floatValue())
+    )
+  }
+
+  private def getEdgesFromRecords(result: Result): List[Edge] =
+    result.asScala.toList.map(record => getEdgeFromRecord(record))
 
   private def getNodeFromRecord(record: Record): Node = {
     val recordMap = record.asMap().asScala.toMap.asInstanceOf[Map[String, String]]

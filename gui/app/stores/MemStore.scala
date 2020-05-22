@@ -3,6 +3,9 @@ package stores
 import models.cskg.{Edge, Node}
 
 class MemStore(val edges: List[Edge], val nodes: List[Node]) extends Store {
+  final override def getEdgesByObject(objectNodeId: String): List[Edge] =
+    edges.filter(edge => edge.`object` == objectNodeId)
+
   final override def getEdgesBySubject(subjectNodeId: String): List[Edge] =
     edges.filter(edge => edge.subject == subjectNodeId)
 

@@ -7,6 +7,10 @@ class MemStoreSpec extends StoreSpec with BeforeAndAfterAll {
   val sut = new TestStore
 
   "The mem store" can {
+    "get edges by object" in {
+      getEdgesByObject()
+    }
+
     "get edges by subject" in {
       getEdgesBySubject()
     }

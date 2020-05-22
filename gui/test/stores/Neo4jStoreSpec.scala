@@ -20,6 +20,10 @@ class Neo4jStoreSpec extends StoreSpec with BeforeAndAfterAll {
   }
 
   "The neo4j store" can {
+    "get edges by object" in {
+      getEdgesByObject()
+    }
+
     "get edges by subject" in {
       getEdgesBySubject()
     }
