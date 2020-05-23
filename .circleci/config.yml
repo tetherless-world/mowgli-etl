@@ -132,6 +132,8 @@ jobs:
           NEO4J_AUTH: neo4j/nC1aB4mji623s2Zs
           NEO4JLABS_PLUGINS: "[\"apoc\"]"
     steps:
+      - attach_workspace:
+          at: /tmp/workspace
       - checkout
       - restore_cache:
           key: sbt-cache-v1
@@ -143,15 +145,51 @@ jobs:
       - run:
           name: Build and test
           command: |
-            sbt test
+            cp -p -R /tmp/workspace/dist/gui-gui gui/public
+            sbt test "project guiApp" playUpdateSecret dist
+            cd gui/target/universal && unzip -qq mowgli-gui-app*.zip && rm mowgli-gui-app*.zip && mkdir ~/dist && mv mowgli-gui-app-*-SNAPSHOT ~/dist/gui-app
       - store_test_results:
           path: gui/target/test-reports
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - dist/gui-app
       - save_cache:
           key: sbt-cache-v1
           paths:
             - "~/.ivy2/cache"
             - "~/.m2"
             - "~/.sbt"
+  gui-ts:
+    working_directory: ~/project
+    docker:
+      - image: circleci/node:12
+    steps:
+      - checkout
+      - restore_cache:
+          key: ts-dependency-cache-v1-{{ checksum "gui/gui/package.json" }}
+      - run:
+          name: Install dependencies
+          command: |
+            cd gui/gui
+            npm install
+      - save_cache:
+          key: ts-dependency-cache-v1-{{ checksum "gui/gui/package.json" }}
+          paths:
+            - gui/gui/node_modules
+      - run:
+          name: Build
+          command: |
+            cd gui/gui
+            npm run build
+            mkdir ~/dist
+            mv dist ~/dist/gui-gui
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - dist/gui-gui
+orbs:
+  cypress: cypress-io/cypress@1
 workflows:
   version: 2
   etl:
@@ -159,5 +197,28 @@ workflows:
       - etl-py
   gui:
     jobs:
+#      - cypress/install:
+#          requires:
+#            - gui-scala
+#            - gui-ts
+#          working_directory: gui/test/integration
+#      - cypress/run:
+#          attach-workspace: true
+#          post-steps:
+#            - store_test_results:
+#                path: cypress/results
+#          requires:
+#            - cypress/install
+#          start: |
+#            pwd
+#            cp ~/project/.circleci/cypress.json .
+#            apt-get update && apt-get install -y default-jre
+#            cd ~/dist/gui-app
+#            bin/gui-app -DtestIntegration
+#          store_artifacts: true
+#          wait-on: 'http-get://localhost:9000/index.html'
       - gui-docker
-      - gui-scala
+      - gui-scala:
+          requires:
+            - gui-ts
+      - gui-ts
