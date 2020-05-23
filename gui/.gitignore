@@ -1,7 +1,8 @@
 /gui/dist/
-/gui/node_modules/
-/gui/package-lock.json
+node_modules/
+package-lock.json
 /integration/
 /logs/
 /target/
-
+/test/integration/cypress/videos/
+/test/integration/cypress/screenshots/
