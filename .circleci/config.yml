@@ -192,9 +192,9 @@ orbs:
   cypress: cypress-io/cypress@1
 workflows:
   version: 2
-  etl:
-    jobs:
-      - etl-py
+#  etl:
+#    jobs:
+#      - etl-py
   gui:
     jobs:
       - cypress/install:
@@ -217,7 +217,7 @@ workflows:
             bin/mowgli-gui-app -DtestIntegration
           store_artifacts: true
           wait-on: 'http-get://localhost:9000/index.html'
-      - gui-docker
+#      - gui-docker
       - gui-scala:
           requires:
             - gui-ts
