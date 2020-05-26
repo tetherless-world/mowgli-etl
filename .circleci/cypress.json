@@ -2,7 +2,6 @@
   "baseUrl": "http://localhost:9000",
   "reporter": "junit",
   "reporterOptions": {
-    "mochaFile": "results/junit.xml",
-    "toConsole": true
+    "mochaFile": "results/junit.xml"
   }
 }

@@ -1,7 +1,6 @@
 /gui/dist/
 node_modules/
 package-lock.json
-/integration/
 /logs/
 /target/
 /test/integration/cypress/videos/
