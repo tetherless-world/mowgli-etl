@@ -198,14 +198,14 @@ workflows:
   gui:
     jobs:
       - cypress/install:
-          cache-key: 'npm-packages-{{ arch }}-{{ checksum "gui/test/integration/package-lock.json" }}'
+          cache-key: 'npm-packages-v2-{{ arch }}-{{ checksum "gui/test/integration/package-lock.json" }}'
           requires:
             - gui-scala
             - gui-ts
           working_directory: gui/test/integration
       - cypress/run:
           attach-workspace: true
-          cache-key: 'npm-packages-{{ arch }}-{{ checksum "gui/test/integration/package-lock.json" }}'
+          cache-key: 'npm-packages-v2-{{ arch }}-{{ checksum "gui/test/integration/package-lock.json" }}'
           post-steps:
             - store_test_results:
                 path: gui/test/integration/results
