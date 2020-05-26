@@ -1,4 +1,4 @@
-version: 2
+version: 2.1
 jobs:
   etl-py:
     docker:
@@ -192,32 +192,34 @@ orbs:
   cypress: cypress-io/cypress@1
 workflows:
   version: 2
-  etl:
-    jobs:
-      - etl-py
+#  etl:
+#    jobs:
+#      - etl-py
   gui:
     jobs:
-#      - cypress/install:
-#          requires:
-#            - gui-scala
-#            - gui-ts
-#          working_directory: gui/test/integration
-#      - cypress/run:
-#          attach-workspace: true
-#          post-steps:
-#            - store_test_results:
-#                path: cypress/results
-#          requires:
-#            - cypress/install
-#          start: |
-#            pwd
-#            cp ~/project/.circleci/cypress.json .
-#            apt-get update && apt-get install -y default-jre
-#            cd ~/dist/gui-app
-#            bin/gui-app -DtestIntegration
-#          store_artifacts: true
-#          wait-on: 'http-get://localhost:9000/index.html'
-      - gui-docker
+      - cypress/install:
+          cache-key: 'npm-packages-v2-{{ arch }}-{{ checksum "gui/test/integration/package.json" }}'
+          requires:
+            - gui-scala
+          working_directory: gui/test/integration
+      - cypress/run:
+          attach-workspace: true
+          cache-key: 'npm-packages-v2-{{ arch }}-{{ checksum "gui/test/integration/package.json" }}'
+          post-steps:
+            - store_test_results:
+                path: gui/test/integration/results
+          requires:
+            - cypress/install
+          start: |
+            pwd
+            cp ~/project/.circleci/cypress.json .
+            apt-get update && apt-get install -y default-jre
+            cd ~/dist/gui-app
+            bin/mowgli-gui-app -DtestIntegration
+          store_artifacts: true
+          wait-on: 'http-get://localhost:9000/index.html'
+          working_directory: gui/test/integration
+#      - gui-docker
       - gui-scala:
           requires:
             - gui-ts
