@@ -10,8 +10,9 @@ import {
   createStyles,
 } from "@material-ui/core";
 
-import {SearchTextInput} from "components/search/SearchTextInput";
+import {NodeLabelSearch} from "components/search/NodeLabelSearch";
 import {useHistory} from "react-router-dom";
+import {Hrefs} from "Hrefs";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -26,8 +27,10 @@ export const Navbar: React.FunctionComponent<{}> = () => {
 
   const history = useHistory();
 
-  const onSearchSubmit = (search: string) => {
-    history.push(qs.stringify({search}, {addQueryPrefix: true}));
+  const onSearchSubmit = (text: string) => {
+    history.push(
+      Hrefs.nodeSearch + qs.stringify({text}, {addQueryPrefix: true})
+    );
   };
 
   return (
@@ -36,7 +39,7 @@ export const Navbar: React.FunctionComponent<{}> = () => {
         <Typography variant="h6" className={classes.brand}>
           MOWGLI
         </Typography>
-        <SearchTextInput onSubmit={onSearchSubmit} />
+        <NodeLabelSearch onSubmit={onSearchSubmit} />
       </Toolbar>
     </AppBar>
   );

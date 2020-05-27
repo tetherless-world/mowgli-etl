@@ -4,10 +4,6 @@ export class NodeSearchPage {
     return this;
   }
 
-  getSearchContainer() {
-    return cy.get("[data-cy=searchContainer]");
-  }
-
   getSearchTextInput() {
     return cy.get("[data-cy=searchTextInput]");
   }
