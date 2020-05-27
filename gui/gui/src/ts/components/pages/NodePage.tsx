@@ -17,7 +17,12 @@ import {
   Grid,
   List,
   ListItemText,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
 } from "@material-ui/core";
+import {NodeLink} from "../node/NodeLink";
 // import {makeStyles} from "@material-ui/core/styles";
 
 // const useStyles = makeStyles((theme) => ({
@@ -86,7 +91,24 @@ export const NodePage: React.FunctionComponent = () => {
             </Grid>
           </Grid>
           <Grid item>
-            <CardContent>Stuff here</CardContent>
+            <CardContent>
+              <Table>
+                <TableBody>
+                  {node.subjectOfEdges.map((edge) => {
+                    <TableRow>
+                      <TableCell>{edge.predicate}</TableCell>
+                      <TableCell>
+                        {edge.objectNode ? (
+                          <NodeLink node={edge.objectNode} />
+                        ) : (
+                          edge.object
+                        )}
+                      </TableCell>
+                    </TableRow>;
+                  })}
+                </TableBody>
+              </Table>
+            </CardContent>
           </Grid>
         </Grid>
       </Card>

@@ -5,5 +5,14 @@ query NodePageQuery(
 ) {
   nodeById(id: $id) {
     ...NodeFieldsFragment
+    subjectOfEdges {
+      object
+      objectNode {
+        id
+        label
+        pos
+      }
+      predicate
+    }
   }
 }
