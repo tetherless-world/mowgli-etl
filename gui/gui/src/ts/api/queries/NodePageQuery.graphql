@@ -1,0 +1,9 @@
+#import "./NodeFieldsFragment.graphql"
+
+query NodePageQuery(
+  $id: String!
+) {
+  nodeById(id: $id) {
+    ...NodeFieldsFragment
+  }
+}
