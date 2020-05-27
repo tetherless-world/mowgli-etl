@@ -74,7 +74,7 @@ class Neo4jStore @Inject()(configuration: Neo4jStoreConfiguration) extends Store
     }
   }
 
-  override final def getNodeById(id: String): Node = {
+  override final def getNodeById(id: String): Option[Node] = {
     withSession { session =>
       session.readTransaction { transaction => {
         val result =
@@ -83,7 +83,7 @@ class Neo4jStore @Inject()(configuration: Neo4jStoreConfiguration) extends Store
             Map("id" -> id).asJava.asInstanceOf[java.util.Map[String, Object]]
           )
         val nodes = getNodesFromRecords(result)
-        nodes(0)
+        nodes.headOption
       }
       }
     }
