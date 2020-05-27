@@ -28,5 +28,5 @@ trait Store {
   /**
    * Get a node by ID.
    */
-  def getNodeById(id: String): Node
+  def getNodeById(id: String): Option[Node]
 }
