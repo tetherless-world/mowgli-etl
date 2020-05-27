@@ -14,6 +14,7 @@ import {
   useTheme,
   createStyles,
   makeStyles,
+  Link,
 } from "@material-ui/core";
 
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -25,6 +26,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 import {Node} from "models/Node";
+import {Hrefs} from "../../Hrefs";
 
 // Using example Table Pagination Actions toolbar given by docs
 // https://material-ui.com/components/tables/
@@ -137,7 +139,9 @@ export const NodeTable: React.FunctionComponent<{
           {nodes.map((node, index) => (
             <TableRow key={node.id}>
               <TableCell>{page * rowsPerPage + index + 1}</TableCell>
-              <TableCell>{node.label}</TableCell>
+              <TableCell>
+                <Link href={Hrefs.node(node.id)}>{node.label}</Link>
+              </TableCell>
               <TableCell>
                 {node.aliases && showListAsColumn(node.aliases)}
               </TableCell>
