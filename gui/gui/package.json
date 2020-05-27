@@ -11,10 +11,12 @@
     "@tetherless-world/twxplore-base": "1.0.10",
     "@types/d3": "^5.7.2",
     "@types/qs": "^6.9.2",
+    "@types/react-loader": "2.4.4",
     "@types/react-router": "^5.1.7",
     "@types/react-router-dom": "^5.1.5",
     "graphql": "^14.3.1",
     "qs": "^6.9.4",
+    "react-loader": "2.4.7",
     "react-router-dom": "^5.1.2"
   },
   "devDependencies": {
