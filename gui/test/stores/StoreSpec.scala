@@ -43,6 +43,6 @@ abstract class StoreSpec extends WordSpec with Matchers {
   protected def getNodeById() = {
     val expected = TestData.nodes(0)
     val actual = sut.getNodeById(expected.id)
-    actual should equal(expected)
+    actual should equal(Some(expected))
   }
 }
