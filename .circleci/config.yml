@@ -192,9 +192,9 @@ orbs:
   cypress: cypress-io/cypress@1
 workflows:
   version: 2
-#  etl:
-#    jobs:
-#      - etl-py
+  etl:
+    jobs:
+      - etl-py
   gui:
     jobs:
       - cypress/install:
@@ -219,7 +219,7 @@ workflows:
           store_artifacts: true
           wait-on: 'http-get://localhost:9000/index.html'
           working_directory: gui/test/integration
-#      - gui-docker
+      - gui-docker
       - gui-scala:
           requires:
             - gui-ts
