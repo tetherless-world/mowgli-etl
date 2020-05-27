@@ -1,9 +1,7 @@
 import * as React from "react";
-import {Grid, Typography, Button} from "@material-ui/core";
+import {Grid, Typography} from "@material-ui/core";
 import {Frame} from "components/frame/Frame";
 import {SearchTextInput} from "components/search/SearchTextInput";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faFilter} from "@fortawesome/free-solid-svg-icons";
 import {useApolloClient} from "@apollo/react-hooks";
 import {
   MatchingNodesQuery,
@@ -12,6 +10,7 @@ import {
 import * as MatchingNodesQueryDocument from "api/queries/MatchingNodesQuery.graphql";
 import {NodeTable} from "components/data/NodeTable";
 import {Node} from "models/Node";
+import * as ReactLoader from "react-loader";
 
 interface MatchingNodesQueryState {
   matchingNodes: Node[];
@@ -30,12 +29,17 @@ export const NodeSearchPage: React.FunctionComponent<{}> = ({}) => {
     queryLimit: 10,
   });
 
-  const onLoadedData = (updatedState: Partial<MatchingNodesQueryState>) =>
+  const [loading, setLoading] = React.useState<boolean>(false);
+
+  const onLoadedData = (updatedState: Partial<MatchingNodesQueryState>) => {
     setState((prevState) => ({...prevState, ...updatedState}));
+    setLoading(false);
+  };
 
   const apolloClient = useApolloClient();
 
-  const onSearchSubmit = (searchText: string) =>
+  const onSearchSubmit = (searchText: string) => {
+    setLoading(true);
     apolloClient
       .query<MatchingNodesQuery, MatchingNodesQueryVariables>({
         query: MatchingNodesQueryDocument,
@@ -53,6 +57,7 @@ export const NodeSearchPage: React.FunctionComponent<{}> = ({}) => {
           searchText: searchText,
         })
       );
+  };
 
   const onTableChangePage = (newPage: number) => {
     const newOffset = newPage * state.queryLimit;
@@ -101,30 +106,32 @@ export const NodeSearchPage: React.FunctionComponent<{}> = ({}) => {
             Searching <span>all data sources</span>
           </Typography>
           <SearchTextInput onSubmit={onSearchSubmit} />
-          <Button>
+          {/* <Button>
             <FontAwesomeIcon icon={faFilter} /> &nbsp;Filters
-          </Button>
+          </Button> */}
         </Grid>
         <Grid item xs={8} data-cy="visualizationContainer">
-          {searchText.length > 0 && (
-            <React.Fragment>
-              <Typography variant="body1">
-                {count} results for "{searchText}"
-              </Typography>
-              <NodeTable
-                nodes={matchingNodes}
-                rowsPerPage={queryLimit}
-                count={count}
-                page={offset / queryLimit}
-                onChangePage={onTableChangePage}
-                onChangeRowsPerPage={onTableChangeRowsPerPage}
-              />
-            </React.Fragment>
-          )}
+          <ReactLoader loaded={!loading}>
+            {searchText.length > 0 && (
+              <React.Fragment>
+                <Typography variant="body1">
+                  {count} results for "{searchText}"
+                </Typography>
+                <NodeTable
+                  nodes={matchingNodes}
+                  rowsPerPage={queryLimit}
+                  count={count}
+                  page={offset / queryLimit}
+                  onChangePage={onTableChangePage}
+                  onChangeRowsPerPage={onTableChangeRowsPerPage}
+                />
+              </React.Fragment>
+            )}
+          </ReactLoader>
         </Grid>
-        <Grid item xs={4} container direction="column">
+        {/* <Grid item xs={4} container direction="column">
           <Grid item>Extra information</Grid>
-        </Grid>
+        </Grid> */}
       </Grid>
     </Frame>
   );

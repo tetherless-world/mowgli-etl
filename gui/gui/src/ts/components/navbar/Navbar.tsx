@@ -6,7 +6,7 @@ export const Navbar: React.FunctionComponent<{}> = () => {
   return (
     <AppBar position="static">
       <Toolbar>
-        <Typography variant="h6">Mowgli</Typography>
+        <Typography variant="h6">MOWGLI</Typography>
       </Toolbar>
     </AppBar>
   );

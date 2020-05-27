@@ -8,25 +8,30 @@ import {faSearch} from "@fortawesome/free-solid-svg-icons";
 export const SearchTextInput: React.FunctionComponent<{
   onSubmit: (value: string) => void;
 }> = ({onSubmit}) => {
+  const searchInputRef = React.useRef<HTMLInputElement>(null);
+
   return (
     <Paper variant="outlined" square>
-      <InputBase
-        inputProps={{
-          "data-cy": "searchTextInput",
+      <form
+        onSubmit={(event: React.FormEvent<HTMLFormElement>) => {
+          event.preventDefault();
+
+          onSubmit(searchInputRef.current!.value);
         }}
-        fullWidth
-        startAdornment={
-          <InputAdornment position="end" style={{marginRight: "8px"}}>
-            <FontAwesomeIcon icon={faSearch} />
-          </InputAdornment>
-        }
-        onKeyDown={(event: React.KeyboardEvent<HTMLInputElement>) => {
-          if (event.which === 13) {
-            // Submit when user presses enter
-            onSubmit(event.currentTarget!.value);
+      >
+        <InputBase
+          inputProps={{
+            "data-cy": "searchTextInput",
+            ref: searchInputRef,
+          }}
+          fullWidth
+          startAdornment={
+            <InputAdornment position="end" style={{marginRight: "8px"}}>
+              <FontAwesomeIcon icon={faSearch} />
+            </InputAdornment>
           }
-        }}
-      ></InputBase>
+        ></InputBase>
+      </form>
     </Paper>
   );
 };
