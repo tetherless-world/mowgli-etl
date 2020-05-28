@@ -16,7 +16,7 @@
     "@types/react-router-dom": "^5.1.5",
     "graphql": "^14.3.1",
     "qs": "^6.9.4",
-    "react-loader": "^2.4.7",
+    "react-loader": "2.4.7",
     "react-router-dom": "^5.1.2"
   },
   "devDependencies": {
