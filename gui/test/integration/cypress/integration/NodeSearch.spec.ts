@@ -13,7 +13,8 @@ context("Basic node search", () => {
       .getVisualizationContainer()
       .contains('results for "oranges"');
 
-    nodeSearchResultsPage.getNodeResultsTable();
+    // Increase timeout for first query
+    nodeSearchResultsPage.getNodeResultsTable({timeout: 15000});
 
     nodeSearchResultsPage.clickNodeLinkByResultIndex(0);
 

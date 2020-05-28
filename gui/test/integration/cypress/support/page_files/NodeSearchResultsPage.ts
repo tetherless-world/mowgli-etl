@@ -10,8 +10,12 @@ export class NodeSearchResultsPage extends Frame {
     return cy.get("[data-cy=visualizationContainer]");
   }
 
-  getNodeResultsTable() {
-    return cy.get("[data-cy=matchingNodesTable]");
+  getNodeResultsTable(
+    cypressGetOptions?: Partial<
+      Cypress.Loggable & Cypress.Timeoutable & Cypress.Withinable
+    >
+  ) {
+    return cy.get("[data-cy=matchingNodesTable]", cypressGetOptions);
   }
 
   getNodeResultsTableRow(index: number) {
