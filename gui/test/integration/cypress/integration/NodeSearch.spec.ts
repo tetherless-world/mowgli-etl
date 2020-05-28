@@ -13,7 +13,7 @@ context("Basic node search", () => {
       '107 results for "chicken"'
     );
 
-    nodeSearchResultsPage.nodeResultsTable.row(0).get();
+    nodeSearchResultsPage.nodeResultsTable.row(0).nodeLink.click();
 
     const nodePage = new NodePage("foodon:03411457");
 

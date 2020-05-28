@@ -3,6 +3,10 @@ export abstract class Page {
     return Cypress.config().baseUrl + this.relativeUrl;
   }
 
+  assertLoaded() {
+    cy.url().should("eq", this.absoluteUrl);
+  }
+
   readonly frame = {
     navbar: {
       get nodeLabelSearchInput() {
@@ -22,7 +26,7 @@ export abstract class Page {
 
   visit(): Page {
     cy.visit(this.relativeUrl);
-    cy.url().should("eq", this.absoluteUrl);
+    this.assertLoaded();
     return this;
   }
 }

@@ -18,9 +18,9 @@ export const Frame: React.FunctionComponent<{children: React.ReactNode}> = ({
   const classes = useStyles();
 
   return (
-    <React.Fragment>
+    <div data-cy="frame">
       <Navbar></Navbar>
       <div className={classes.root}>{children}</div>
-    </React.Fragment>
+    </div>
   );
 };
