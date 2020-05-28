@@ -10,7 +10,7 @@ import {
   createStyles,
 } from "@material-ui/core";
 
-import {NodeLabelSearch} from "components/search/NodeLabelSearch";
+import {NodeSearchBox} from "components/search/NodeSearchBox";
 import {useHistory} from "react-router-dom";
 import {Hrefs} from "Hrefs";
 
@@ -39,7 +39,7 @@ export const Navbar: React.FunctionComponent<{}> = () => {
         <Typography variant="h6" className={classes.brand}>
           MOWGLI
         </Typography>
-        <NodeLabelSearch onSubmit={onSearchSubmit} />
+        <NodeSearchBox onSubmit={onSearchSubmit} />
       </Toolbar>
     </AppBar>
   );

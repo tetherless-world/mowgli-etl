@@ -5,7 +5,7 @@ import {Paper, InputAdornment, InputBase} from "@material-ui/core";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faSearch} from "@fortawesome/free-solid-svg-icons";
 
-export const NodeLabelSearch: React.FunctionComponent<{
+export const NodeSearchBox: React.FunctionComponent<{
   onSubmit: (value: string) => void;
 }> = ({onSubmit}) => {
   const searchInputRef = React.useRef<HTMLInputElement>(null);
