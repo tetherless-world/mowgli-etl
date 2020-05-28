@@ -53,9 +53,9 @@ jobs:
       #              python3 -m mowgli_etl.cli etl rdf --data-dir-path cskg --nodes-csv-file-path cskg/rpi_combined/loaded/nodes.csv --edges-csv-file-path cskg/rpi_combined/loaded/edges.csv --pipeline-id rpi-combined-rdf
       #            fi
       - save_cache:
-          - key: etl-data-{{ checksum "etl/mowgli_etl/pipeline/rpi_combined/rpi_combined_pipeline.py" }}
-          - paths:
-              - etl/cskg/extracted
+          key: etl-data-{{ checksum "etl/mowgli_etl/pipeline/rpi_combined/rpi_combined_pipeline.py" }}
+          paths:
+            - etl/cskg/extracted
       - run:
           name: Archive artifacts (master branch only)
           command: |
