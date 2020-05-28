@@ -13,6 +13,8 @@ import {NodeTable} from "components/data/NodeTable";
 import * as ReactLoader from "react-loader";
 import {useLocation, useHistory} from "react-router-dom";
 import * as qs from "qs";
+import {FatalErrorModal} from "components/error/FatalErrorModal";
+import {ApolloException} from "@tetherless-world/twxplore-base";
 
 interface NodeSearchVariables {
   text: string;
@@ -72,12 +74,16 @@ export const NodeSearchResultsPage: React.FunctionComponent<{}> = ({}) => {
 
   const [count, setCount] = React.useState<number | null>(null);
 
-  const {data, loading} = useQuery<
+  const {data, loading, error} = useQuery<
     NodeSearchResultsPageQuery,
     NodeSearchResultsPageQueryVariables
   >(NodeSearchResultsPageQueryDocument, {
     variables: {...searchVariables.object, withCount: count === null},
   });
+
+  if (error) {
+    return <FatalErrorModal exception={new ApolloException(error)} />;
+  }
 
   if (data?.matchingNodesCount) {
     setCount(data.matchingNodesCount);
