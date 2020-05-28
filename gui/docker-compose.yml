@@ -19,10 +19,11 @@ services:
     environment:
       NEO4J_AUTH: neo4j/nC1aB4mji623s2Zs
       NEO4JLABS_PLUGINS: "[\"apoc\"]"
+      NEO4J_dbms_memory_pagecache_size: 4G
+      NEO4J_dbms_memory_heap_max__size: 4G
     ports:
-      - 127.0.0.1:7473:7473 # HTTPS
-      - 127.0.0.1:7474:7474 # HTTP
-      - 127.0.0.1:7687:7687 # Bolt
+      - 7474:7474 # HTTP
+      - 7687:7687 # Bolt
     volumes:
       - ./data/neo4j/data:/data
       - ./data/neo4j/logs:/logs
