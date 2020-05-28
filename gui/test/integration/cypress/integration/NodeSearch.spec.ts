@@ -7,15 +7,13 @@ context("Basic node search", () => {
 
     nodeSearchResultsPage.visit();
 
-    nodeSearchResultsPage.navbar.search("chicken");
+    nodeSearchResultsPage.frame.navbar.search("chicken");
 
-    nodeSearchResultsPage
-      .getVisualizationContainer()
-      .contains('107 results for "chicken"');
+    nodeSearchResultsPage.visualizationContainer.contains(
+      '107 results for "chicken"'
+    );
 
-    nodeSearchResultsPage.getNodeResultsTable();
-
-    nodeSearchResultsPage.clickNodeLinkByResultIndex(0);
+    nodeSearchResultsPage.nodeResultsTable.row(0).get();
 
     const nodePage = new NodePage("foodon:03411457");
 

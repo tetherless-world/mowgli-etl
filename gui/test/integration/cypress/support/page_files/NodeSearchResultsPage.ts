@@ -1,30 +1,42 @@
-import {Frame} from "./Frame";
+import {Page} from "./Page";
 
-export class NodeSearchResultsPage extends Frame {
-  visit() {
-    cy.visit("/");
-    return this;
-  }
-
-  getVisualizationContainer() {
-    return cy.get("[data-cy=visualizationContainer]");
-  }
-
-  getNodeResultsTable() {
+class NodeResultsTable {
+  get() {
     return cy.get("[data-cy=matchingNodesTable]");
   }
 
-  getNodeResultsTableRow(index: number) {
-    return this.getNodeResultsTable().find("tbody>tr").eq(index);
+  row(index: number): NodeResultsTableRow {
+    return new NodeResultsTableRow(index, this);
+  }
+}
+
+class NodeResultsTableRow {
+  constructor(
+    private readonly index: number,
+    private readonly table: NodeResultsTable
+  ) {}
+
+  get() {
+    return this.table.get().find("tbody>tr").eq(this.index);
   }
 
-  /**
-   * Clicks on link for node in search results table
-   * @param index Starts at 0
-   */
-  clickNodeLinkByResultIndex(index: number) {
-    this.getNodeResultsTableRow(index).find("a").click();
+  readonly nodeLink = new NodeResultsNodeTableRowNodeLink(this);
+}
 
-    return this;
+class NodeResultsNodeTableRowNodeLink {
+  constructor(private readonly row: NodeResultsTableRow) {}
+
+  click() {
+    this.row.get().find("a").click();
+  }
+}
+
+export class NodeSearchResultsPage extends Page {
+  readonly nodeResultsTable = new NodeResultsTable();
+
+  readonly relativeUrl = "/";
+
+  get visualizationContainer() {
+    return cy.get("[data-cy=visualizationContainer]");
   }
 }

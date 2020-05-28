@@ -1,6 +1,6 @@
-import {Frame} from "./Frame";
+import {Page} from "./Frame";
 
-export class NodePage extends Frame {
+export class NodePage extends Page {
   private readonly relativePathName: string;
 
   constructor(private readonly nodeId: string) {
