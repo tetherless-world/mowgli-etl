@@ -45,7 +45,11 @@ export const NodePage: React.FunctionComponent = () => {
   if (error) {
     return <FatalErrorModal exception={new ApolloException(error)} />;
   } else if (loading) {
-    return <ReactLoader loaded={false} />;
+    return (
+      <Frame>
+        <ReactLoader loaded={false} />
+      </Frame>
+    );
   } else if (!data) {
     throw new EvalError();
   }
@@ -94,7 +98,7 @@ export const NodePage: React.FunctionComponent = () => {
             <CardContent>
               <Table>
                 <TableBody>
-                  {node.subjectOfEdges.map((edge) => {
+                  {node.subjectOfEdges.map((edge) => (
                     <TableRow>
                       <TableCell>{edge.predicate}</TableCell>
                       <TableCell>
@@ -104,8 +108,8 @@ export const NodePage: React.FunctionComponent = () => {
                           edge.object
                         )}
                       </TableCell>
-                    </TableRow>;
-                  })}
+                    </TableRow>
+                  ))}
                 </TableBody>
               </Table>
             </CardContent>
