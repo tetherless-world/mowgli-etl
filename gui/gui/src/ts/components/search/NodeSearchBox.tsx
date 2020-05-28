@@ -8,7 +8,7 @@ import {faSearch} from "@fortawesome/free-solid-svg-icons";
 export const NodeSearchBox: React.FunctionComponent<{
   onSubmit: (value: string) => void;
 }> = ({onSubmit}) => {
-  const searchInputRef = React.useRef<HTMLInputElement>(null);
+  const [search, setSearch] = React.useState<{text: string}>({text: ""});
 
   return (
     <Paper variant="outlined" square>
@@ -16,14 +16,20 @@ export const NodeSearchBox: React.FunctionComponent<{
         onSubmit={(event: React.FormEvent<HTMLFormElement>) => {
           event.preventDefault();
 
-          onSubmit(searchInputRef.current!.value);
+          onSubmit(search.text);
         }}
       >
         <InputBase
           inputProps={{
             "data-cy": "searchTextInput",
-            ref: searchInputRef,
           }}
+          value={search.text}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+            setSearch((prevSearch) => ({
+              ...prevSearch,
+              text: event.target.value,
+            }))
+          }
           fullWidth
           startAdornment={
             <InputAdornment position="end" style={{marginRight: "8px"}}>
