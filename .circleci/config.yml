@@ -35,12 +35,15 @@ jobs:
             pytest --junitxml=test-results/junit.xml
       - store_test_results:
           path: test-results
+      - restore_cache:
+          keys:
+            - etl-data-{{ checksum "etl/mowgli_etl/pipeline/rpi_combined/rpi_combined_pipeline.py" }}
       - run:
           name: Generate RPI combined CSKG CSV (master branch only)
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               cd etl
-              mkdir cskg
+              mkdir -p cskg
               python -m mowgli_etl.cli etl rpi_combined --data-dir-path cskg
             fi
       #      - run:
@@ -49,6 +52,10 @@ jobs:
       #            if [ "${CIRCLE_BRANCH}" == "master" ]; then
       #              python3 -m mowgli_etl.cli etl rdf --data-dir-path cskg --nodes-csv-file-path cskg/rpi_combined/loaded/nodes.csv --edges-csv-file-path cskg/rpi_combined/loaded/edges.csv --pipeline-id rpi-combined-rdf
       #            fi
+      - save_cache:
+          - key: etl-data-{{ checksum "etl/mowgli_etl/pipeline/rpi_combined/rpi_combined_pipeline.py" }}
+          - paths:
+              - etl/cskg/extracted
       - run:
           name: Archive artifacts (master branch only)
           command: |
