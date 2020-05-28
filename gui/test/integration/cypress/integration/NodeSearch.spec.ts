@@ -1,22 +1,22 @@
-import {NodeSearchPage} from "../support/page_files/NodeSearch.page";
+import {NodeSearchResultsPage} from "../support/page_files/NodeSearchResultsPage";
+import {NodePage} from "../support/page_files/NodePage";
 
-context("Node Search Page", () => {
-  const page = new NodeSearchPage();
+context("Basic node search", () => {
+  it("Show results after search and redirect to node page on node click", () => {
+    const nodeSearchResultsPage = new NodeSearchResultsPage();
 
-  beforeEach(() => {
-    page.visit();
-  });
+    nodeSearchResultsPage.visit();
 
-  it("Table should show after search", () => {
-    page.getVisualizationContainer().children().should("have.length", 0);
+    nodeSearchResultsPage.frame.navbar.search("chicken");
 
-    page.search("apples");
+    nodeSearchResultsPage.visualizationContainer.contains(
+      '107 results for "chicken"'
+    );
 
-    page
-      .getVisualizationContainer()
-      .children()
-      .should("have.length.greaterThan", 0);
+    nodeSearchResultsPage.nodeResultsTable.row(0).nodeLink.click();
 
-    page.getMatchingNodesTable();
+    const nodePage = new NodePage("foodon:03411457");
+
+    nodePage.assertLoaded();
   });
 });

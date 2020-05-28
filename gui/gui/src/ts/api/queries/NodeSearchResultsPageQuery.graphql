@@ -1,5 +1,5 @@
 #import "./NodeFieldsFragment.graphql"
-query MatchingNodesQuery(
+query NodeSearchResultsPageQuery(
   $limit: Int!
   $offset: Int!
   $text: String!
