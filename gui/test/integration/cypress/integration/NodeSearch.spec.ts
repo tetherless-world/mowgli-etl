@@ -7,18 +7,17 @@ context("Basic node search", () => {
 
     nodeSearchResultsPage.visit();
 
-    nodeSearchResultsPage.navbar.search("oranges");
+    nodeSearchResultsPage.navbar.search("chicken");
 
     nodeSearchResultsPage
       .getVisualizationContainer()
-      .contains('results for "oranges"');
+      .contains('107 results for "chicken"');
 
-    // Increase timeout for first query
-    nodeSearchResultsPage.getNodeResultsTable({timeout: 15000});
+    nodeSearchResultsPage.getNodeResultsTable();
 
     nodeSearchResultsPage.clickNodeLinkByResultIndex(0);
 
-    const nodePage = new NodePage("/c/en/oranges/n");
+    const nodePage = new NodePage("foodon:03411457");
 
     nodePage.assertLoaded();
   });
