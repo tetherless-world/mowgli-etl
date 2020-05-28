@@ -79,6 +79,7 @@ export const NodeSearchResultsPage: React.FunctionComponent<{}> = ({}) => {
     NodeSearchResultsPageQueryVariables
   >(NodeSearchResultsPageQueryDocument, {
     variables: {...searchVariables.object, withCount: count === null},
+    skip: !searchVariables.text, // Remove this when new landing page is added
   });
 
   if (error) {
@@ -95,28 +96,30 @@ export const NodeSearchResultsPage: React.FunctionComponent<{}> = ({}) => {
         <Grid item xs={8} data-cy="visualizationContainer">
           <ReactLoader loaded={!loading}>
             <Typography variant="h6">
-              {count} results for "{searchVariables.text}"
+              {count || "No"} results for "{searchVariables.text}"
             </Typography>
-            <NodeTable
-              nodes={data?.matchingNodes || []}
-              rowsPerPage={searchVariables.limit}
-              count={count!}
-              page={searchVariables.page}
-              onChangePage={(newPage: number) =>
-                history.push(
-                  searchVariables
-                    .replace({offset: newPage * searchVariables.limit})
-                    .stringify()
-                )
-              }
-              onChangeRowsPerPage={(newRowsPerPage: number) =>
-                history.push(
-                  searchVariables
-                    .replace({offset: 0, limit: newRowsPerPage})
-                    .stringify()
-                )
-              }
-            />
+            {count && (
+              <NodeTable
+                nodes={data?.matchingNodes || []}
+                rowsPerPage={searchVariables.limit}
+                count={count}
+                page={searchVariables.page}
+                onChangePage={(newPage: number) =>
+                  history.push(
+                    searchVariables
+                      .replace({offset: newPage * searchVariables.limit})
+                      .stringify()
+                  )
+                }
+                onChangeRowsPerPage={(newRowsPerPage: number) =>
+                  history.push(
+                    searchVariables
+                      .replace({offset: 0, limit: newRowsPerPage})
+                      .stringify()
+                  )
+                }
+              />
+            )}
           </ReactLoader>
         </Grid>
         {/* <Grid item xs={4} container direction="column">
