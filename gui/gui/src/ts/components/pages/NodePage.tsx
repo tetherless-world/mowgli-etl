@@ -3,6 +3,7 @@ import {useLocation} from "react-router-dom";
 import * as NodePageQueryDocument from "api/queries/NodePageQuery.graphql";
 import {
   NodePageQuery,
+  NodePageQuery_nodeById_subjectOfEdges,
   NodePageQueryVariables,
 } from "api/queries/types/NodePageQuery";
 import {useQuery} from "@apollo/react-hooks";
@@ -16,11 +17,8 @@ import {
   CardHeader,
   Grid,
   List,
+  ListItem,
   ListItemText,
-  Table,
-  TableBody,
-  TableCell,
-  TableRow,
 } from "@material-ui/core";
 import {NodeLink} from "../node/NodeLink";
 // import {makeStyles} from "@material-ui/core/styles";
@@ -30,6 +28,34 @@ import {NodeLink} from "../node/NodeLink";
 //     fontWeight: "bold",
 //   },
 // }));
+
+const EDGE_PREDICATE_DISPLAY_NAMES: {[index: string]: string} = {};
+
+const EdgeList: React.FunctionComponent<{
+  edges: NodePageQuery_nodeById_subjectOfEdges[];
+  predicate: string;
+}> = ({edges, predicate}) => {
+  let title = EDGE_PREDICATE_DISPLAY_NAMES[predicate];
+  if (!title) {
+    title = predicate;
+  }
+  return (
+    <Card>
+      <CardHeader title={title} style={{textAlign: "center"}} />
+      <CardContent>
+        <List>
+          {edges
+            .filter((edge) => edge.objectNode)
+            .map((edge) => (
+              <ListItem>
+                <NodeLink node={edge.objectNode!} />
+              </ListItem>
+            ))}
+        </List>
+      </CardContent>
+    </Card>
+  );
+};
 
 export const NodePage: React.FunctionComponent = () => {
   const location = useLocation();
@@ -72,50 +98,55 @@ export const NodePage: React.FunctionComponent = () => {
     title += " (" + node.pos + ")";
   }
 
+  const subjectOfEdgesByPredicate: {
+    [index: string]: NodePageQuery_nodeById_subjectOfEdges[];
+  } = {};
+  for (const edge of node.subjectOfEdges) {
+    if (!edge.predicate) {
+      continue;
+    }
+    const edges = subjectOfEdgesByPredicate[edge.predicate];
+    if (edges) {
+      edges.push(edge);
+    } else {
+      subjectOfEdgesByPredicate[edge.predicate] = [edge];
+    }
+  }
+
   return (
     <Frame>
-      <Card>
-        <Grid container direction="column">
-          <Grid item container>
-            <Grid item xs={10}>
-              <CardHeader title={title} />
-            </Grid>
-            <Grid item xs={2}>
-              <h3>Data source: {node.datasource}</h3>
-              {node.aliases ? (
-                <React.Fragment>
-                  <h3>Aliases</h3>
-                  <List>
-                    {node.aliases.map((alias) => (
-                      <ListItemText key={alias}>{alias}</ListItemText>
-                    ))}
-                  </List>
-                </React.Fragment>
-              ) : null}
-            </Grid>
+      <Grid container direction="column">
+        <Grid item container>
+          <Grid item xs={10}>
+            <h2>{title}</h2>
           </Grid>
-          <Grid item>
-            <CardContent>
-              <Table>
-                <TableBody>
-                  {node.subjectOfEdges.map((edge) => (
-                    <TableRow>
-                      <TableCell>{edge.predicate}</TableCell>
-                      <TableCell>
-                        {edge.objectNode ? (
-                          <NodeLink node={edge.objectNode} />
-                        ) : (
-                          edge.object
-                        )}
-                      </TableCell>
-                    </TableRow>
+          <Grid item xs={2}>
+            <h3>Data source: {node.datasource}</h3>
+            {node.aliases ? (
+              <React.Fragment>
+                <h3>Aliases</h3>
+                <List>
+                  {node.aliases.map((alias) => (
+                    <ListItemText key={alias}>{alias}</ListItemText>
                   ))}
-                </TableBody>
-              </Table>
-            </CardContent>
+                </List>
+              </React.Fragment>
+            ) : null}
           </Grid>
         </Grid>
-      </Card>
+        <Grid item>
+          <Grid container spacing={4}>
+            {Object.keys(subjectOfEdgesByPredicate).map((predicate) => (
+              <Grid item>
+                <EdgeList
+                  edges={subjectOfEdgesByPredicate[predicate]!}
+                  predicate={predicate}
+                />
+              </Grid>
+            ))}
+          </Grid>
+        </Grid>
+      </Grid>
     </Frame>
   );
 };
