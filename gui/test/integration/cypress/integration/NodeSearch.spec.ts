@@ -1,22 +1,24 @@
-import {NodeSearchPage} from "../support/page_files/NodeSearch.page";
+import {NodeSearchResultsPage} from "../support/page_files/NodeSearchResultsPage";
+import {NodePage} from "../support/page_files/NodePage";
 
-context("Node Search Page", () => {
-  const page = new NodeSearchPage();
+context("Basic node search", () => {
+  it("Show results after search and redirect to node page on node click", () => {
+    const nodeSearchResultsPage = new NodeSearchResultsPage();
 
-  beforeEach(() => {
-    page.visit();
-  });
+    nodeSearchResultsPage.visit();
 
-  it("Table should show after search", () => {
-    page.getVisualizationContainer().children().should("have.length", 0);
+    nodeSearchResultsPage.navbar.search("oranges");
 
-    page.search("apples");
-
-    page
+    nodeSearchResultsPage
       .getVisualizationContainer()
-      .children()
-      .should("have.length.greaterThan", 0);
+      .contains('results for "oranges"');
 
-    page.getMatchingNodesTable();
+    nodeSearchResultsPage.getNodeResultsTable();
+
+    nodeSearchResultsPage.clickNodeLinkByResultIndex(0);
+
+    const nodePage = new NodePage("/c/en/oranges/n");
+
+    nodePage.assertLoaded();
   });
 });
