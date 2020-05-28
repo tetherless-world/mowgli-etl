@@ -24,7 +24,7 @@ export const NodeSearchBox: React.FunctionComponent<{
             "data-cy": "searchTextInput",
           }}
           value={search.text}
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+          onChange={(event) => {
             const text = event.target.value;
             setSearch((prevSearch) => ({
               ...prevSearch,
