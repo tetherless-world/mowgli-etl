@@ -4,6 +4,10 @@ export class Hrefs {
   }
 
   static get nodeSearch() {
+    return "/node/search";
+  }
+
+  static get home() {
     return "/";
   }
 }

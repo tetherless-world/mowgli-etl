@@ -86,7 +86,11 @@ export const NodeSearchResultsPage: React.FunctionComponent<{}> = ({}) => {
     return <FatalErrorModal exception={new ApolloException(error)} />;
   }
 
-  if (data?.matchingNodesCount) {
+  if (loading && count !== null) {
+    setCount(null);
+  }
+
+  if (data?.matchingNodesCount && count === null) {
     setCount(data.matchingNodesCount);
   }
 
