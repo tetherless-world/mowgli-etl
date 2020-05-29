@@ -12,7 +12,7 @@
   "devDependencies": {
     "@tetherless-world/twxplore-base": "1.0.10",
     "cross-env": "7.0.2",
-    "cypress": "4.6.0",
+    "cypress": "4.7.0",
     "cypress-intellij-reporter": "0.0.4",
     "typescript": "3.9.3"
   },
