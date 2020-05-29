@@ -20,13 +20,13 @@ export abstract class Page {
         return this;
       },
     },
+    selector: "[data-cy=frame]",
   };
 
   abstract readonly relativeUrl: string;
 
-  visit(): Page {
+  visit() {
     cy.visit(this.relativeUrl);
     this.assertLoaded();
-    return this;
   }
 }
