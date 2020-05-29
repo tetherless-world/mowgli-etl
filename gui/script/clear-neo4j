@@ -1,4 +1,2 @@
 #!/bin/bash
-set -e
-cd `dirname "$0"`/..
-cat conf/cypher/clear.cypher | docker exec --interactive neo4j cypher-shell -u neo4j -p nC1aB4mji623s2Zs --non-interactive
+docker exec neo4j cypher-shell -f cypher/clear.cypher --non-interactive -p nC1aB4mji623s2Zs -u neo4j

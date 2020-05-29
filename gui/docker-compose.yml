@@ -14,13 +14,10 @@ services:
     ports:
       - 127.0.0.1:8080:80
   neo4j:
+    build:
+      context: ..
+      dockerfile: gui/neo4j/Dockerfile
     container_name: neo4j
-    image: neo4j:4.0.4
-    environment:
-      NEO4J_AUTH: neo4j/nC1aB4mji623s2Zs
-      NEO4JLABS_PLUGINS: "[\"apoc\"]"
-      NEO4J_dbms_memory_pagecache_size: 4G
-      NEO4J_dbms_memory_heap_max__size: 4G
     ports:
       - 7474:7474 # HTTP
       - 7687:7687 # Bolt
@@ -29,4 +26,3 @@ services:
       - ./data/neo4j/logs:/logs
       - ./data/neo4j/import:/var/lib/neo4j/import
       - ./data/neo4j/plugins:/plugins
-
