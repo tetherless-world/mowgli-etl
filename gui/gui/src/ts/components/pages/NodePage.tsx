@@ -41,16 +41,18 @@ const EdgeList: React.FunctionComponent<{
   }
   return (
     <Card>
-      <CardHeader title={title} style={{textAlign: "center"}} />
+      <CardHeader
+        data-cy="edge-list-title"
+        title={title}
+        style={{textAlign: "center"}}
+      />
       <CardContent>
         <List>
-          {edges
-            .filter((edge) => edge.objectNode)
-            .map((edge) => (
-              <ListItem>
-                <NodeLink node={edge.objectNode!} />
-              </ListItem>
-            ))}
+          {edges.map((edge) => (
+            <ListItem data-cy="edge" key={edge.object}>
+              <NodeLink node={edge.objectNode!} />
+            </ListItem>
+          ))}
         </List>
       </CardContent>
     </Card>
@@ -102,7 +104,9 @@ export const NodePage: React.FunctionComponent = () => {
     [index: string]: NodePageQuery_nodeById_subjectOfEdges[];
   } = {};
   for (const edge of node.subjectOfEdges) {
-    if (!edge.predicate) {
+    if (!edge.objectNode) {
+      continue;
+    } else if (!edge.predicate) {
       continue;
     }
     const edges = subjectOfEdgesByPredicate[edge.predicate];
@@ -118,10 +122,13 @@ export const NodePage: React.FunctionComponent = () => {
       <Grid container direction="column">
         <Grid item container>
           <Grid item xs={10}>
-            <h2>{title}</h2>
+            <h2 data-cy="node-title">{title}</h2>
           </Grid>
           <Grid item xs={2}>
-            <h3>Data source: {node.datasource}</h3>
+            <h3>
+              Data source:{" "}
+              <span data-cy="node-datasource">{node.datasource}</span>
+            </h3>
             {node.aliases ? (
               <React.Fragment>
                 <h3>Aliases</h3>
@@ -137,7 +144,7 @@ export const NodePage: React.FunctionComponent = () => {
         <Grid item>
           <Grid container spacing={4}>
             {Object.keys(subjectOfEdgesByPredicate).map((predicate) => (
-              <Grid item>
+              <Grid item key={predicate} data-cy={predicate + "-edges"}>
                 <EdgeList
                   edges={subjectOfEdgesByPredicate[predicate]!}
                   predicate={predicate}
