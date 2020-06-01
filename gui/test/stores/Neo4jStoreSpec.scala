@@ -40,5 +40,12 @@ class Neo4jStoreSpec extends WordSpec with StoreBehaviors with BeforeAndAfterAll
       actual should not be empty
       actual(0) should equal(expected)
     }
+
+    "get matching nodes by id" in {
+      val expected = TestData.nodes(0)
+      val actual = sut.getMatchingNodes(limit = 10, offset = 0, text = s"id:'${expected.id}'")
+      actual.size should be(1)
+      actual(0) should equal(expected)
+    }
   }
 }
