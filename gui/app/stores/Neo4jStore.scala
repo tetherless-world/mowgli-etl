@@ -124,6 +124,24 @@ class Neo4jStore @Inject()(configuration: Neo4jStoreConfiguration) extends Store
       }
     }
 
+  final override def getTotalNodesCount(): Int =
+    withSession { session =>
+      session.readTransaction { transaction =>
+        val result = transaction.run("MATCH (n) RETURN count(n) as count")
+        val record = result.single()
+        record.get("count").asInt()
+      }
+    }
+
+  final override def getTotalEdgesCount(): Int =
+    withSession { session =>
+      session.readTransaction { transaction =>
+        val result = transaction.run("MATCH ()-[r]->() RETURN count(*) as count")
+        val record = result.single()
+        record.get("count").asInt()
+      }
+    }
+
   private def getEdgeFromRecord(record: Record): Edge = {
     val recordMap = record.asMap().asScala.toMap.asInstanceOf[Map[String, Object]]
     Edge(

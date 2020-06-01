@@ -79,7 +79,6 @@ export const NodeSearchResultsPage: React.FunctionComponent<{}> = ({}) => {
     NodeSearchResultsPageQueryVariables
   >(NodeSearchResultsPageQueryDocument, {
     variables: {...searchVariables.object, withCount: count === null},
-    skip: !searchVariables.text, // Remove this when new landing page is added
   });
 
   if (error) {

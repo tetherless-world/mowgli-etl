@@ -92,6 +92,22 @@ class GraphQlSchemaDefinitionSpec extends PlaySpec {
            |{"data":{"matchingNodes":[{"id":"${node.id}"}],"matchingNodesCount":1}}
            |""".stripMargin))
     }
+
+    "get total node and edge count" in {
+      val nodeCount = TestData.nodes.size
+      val edgeCount = TestData.edges.size
+      val query = 
+        graphql"""
+          query TotalCountsQuery {
+            totalNodesCount
+            totalEdgesCount
+          }
+        """
+      
+      executeQuery(query) must be(Json.parse(
+        s"""{"data":{"totalNodesCount":${nodeCount},"totalEdgesCount":${edgeCount}}}"""
+      ))
+    }
   }
 
   def executeQuery(query: Document, vars: JsObject = Json.obj()) = {

@@ -29,4 +29,14 @@ trait Store {
    * Get a node by ID.
    */
   def getNodeById(id: String): Option[Node]
+
+  /**
+   * Get total number of nodes.
+   */
+  def getTotalNodesCount(): Int;
+
+  /**
+   * Get toal number of edges.
+   */
+  def getTotalEdgesCount(): Int;
 }

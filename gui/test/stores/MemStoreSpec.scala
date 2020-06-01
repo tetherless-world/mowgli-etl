@@ -23,6 +23,14 @@ class MemStoreSpec extends StoreSpec with BeforeAndAfterAll {
       getMatchingNodesCount()
     }
 
+    "get total nodes count" in {
+      getTotalNodesCount()
+    }
+
+    "get total edges count" in {
+      getTotalEdgesCount()
+    }
+
     "get a node by ID" in {
       getNodeById()
     }

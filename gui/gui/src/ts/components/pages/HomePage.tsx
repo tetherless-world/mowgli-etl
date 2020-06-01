@@ -1,6 +1,9 @@
 import * as React from "react";
 import * as qs from "qs";
 import {NodeSearchBox} from "components/search/NodeSearchBox";
+import {HomePageQuery} from "api/queries/types/HomePageQuery";
+import {useQuery} from "@apollo/react-hooks";
+import * as HomePageQueryDocument from "api/queries/HomePageQuery.graphql";
 
 import {
   Grid,
@@ -23,6 +26,9 @@ const useStyles = makeStyles((theme) =>
     title: {
       fontFamily: "Hiragino Maru Gothic Pro",
     },
+    primaryText: {
+      color: theme.palette.primary.main,
+    },
   })
 );
 
@@ -30,6 +36,8 @@ export const HomePage: React.FunctionComponent<{}> = () => {
   const classes = useStyles();
 
   const history = useHistory();
+
+  const {data} = useQuery<HomePageQuery>(HomePageQueryDocument);
 
   const [search, setSearch] = React.useState<{text: string}>({text: ""});
 
@@ -58,6 +66,12 @@ export const HomePage: React.FunctionComponent<{}> = () => {
           </Typography>
         </Grid>
         <Grid item>
+          {data && (
+            <Typography>
+              Search <strong>{data.totalNodesCount} nodes</strong> with{" "}
+              <strong>{data.totalEdgesCount} relationships</strong>
+            </Typography>
+          )}
           <NodeSearchBox
             placeholder="Search a word"
             showIcon={true}
@@ -71,6 +85,7 @@ export const HomePage: React.FunctionComponent<{}> = () => {
           >
             Search
           </Button>
+          {/* Maybe add random node to scala */}
           <Button color="primary" onClick={() => searchText("apples")}>
             Show me something interesting
           </Button>

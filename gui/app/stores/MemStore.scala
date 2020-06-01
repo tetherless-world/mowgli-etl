@@ -17,4 +17,10 @@ class MemStore(val edges: List[Edge], val nodes: List[Node]) extends Store {
 
   final override def getMatchingNodesCount(text: String): Int =
     getMatchingNodes(limit = Integer.MAX_VALUE, offset = 0, text = text).size
+
+  final override def getTotalNodesCount(): Int =
+    nodes.size
+
+  final override def getTotalEdgesCount(): Int =
+    edges.size
 }
