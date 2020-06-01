@@ -23,7 +23,7 @@ export abstract class Page {
       },
     },
     selector: "[data-cy=frame]",
-    bodySelector: "[data-cy=frame] [data-cy=body]",
+    bodySelector: "[data-cy=frame] [data-cy=frame-content]",
   };
 
   abstract readonly relativeUrl: string;

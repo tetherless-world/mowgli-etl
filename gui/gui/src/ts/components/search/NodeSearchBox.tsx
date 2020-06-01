@@ -1,5 +1,4 @@
 import * as React from "react";
-import * as qs from "qs";
 
 import {Paper, InputAdornment, InputBase} from "@material-ui/core";
 
@@ -15,22 +14,27 @@ export const NodeSearchBox: React.FunctionComponent<{
   style?: React.CSSProperties;
   value?: string;
   onChange?: (value: string) => void;
-}> = ({onSubmit, showIcon = false, placeholder, style, value, onChange}) => {
+}> = ({
+  onSubmit: onSubmitUserDefined,
+  showIcon = false,
+  placeholder,
+  style,
+  value,
+  onChange,
+}) => {
   const [search, setSearch] = React.useState<{text: string}>({
     text: value || "",
   });
 
   const history = useHistory();
 
-  if (!onSubmit) {
-    onSubmit = (text: string) => {
-      if (text.length === 0) return;
+  const onSubmit = onSubmitUserDefined
+    ? onSubmitUserDefined
+    : (text: string) => {
+        if (text.length === 0) return;
 
-      history.push(
-        Hrefs.nodeSearch + qs.stringify({text}, {addQueryPrefix: true})
-      );
-    };
-  }
+        history.push(Hrefs.nodeSearch({text}));
+      };
 
   return (
     <Paper variant="outlined" square style={style}>
