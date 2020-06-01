@@ -75,6 +75,21 @@ class GraphQlSchemaDefinitionSpec extends PlaySpec {
            |""".stripMargin))
     }
 
+    "get a random node" in {
+        val query =
+          graphql"""
+         query RandomNodeQuery {
+           randomNode {
+            id
+            label
+           }
+         }
+       """
+
+        val results = Json.stringify(executeQuery(query))
+        results must include("""{"data":{"randomNode":{"id":"""")
+    }
+
     "search nodes" in {
       val node = TestData.nodes(0)
       val query =

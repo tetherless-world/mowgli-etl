@@ -8,8 +8,10 @@ import scala.collection.JavaConverters._
 
 class Neo4jStore @Inject()(configuration: Neo4jStoreConfiguration) extends Store with WithResource {
   private val driver = GraphDatabase.driver(configuration.uri, AuthTokens.basic(configuration.user, configuration.password))
-  private val edgePropertyNames = List("datasource", "other", "weight")
-  private val nodePropertyNames = List("aliases", "datasource", "id", "label", "other", "pos")
+  private val edgePropertyNameList = List("datasource", "other", "weight")
+  private val edgePropertyNamesString = edgePropertyNameList.map(edgePropertyName => "edge." + edgePropertyName).mkString(", ")
+  private val nodePropertyNameList = List("aliases", "datasource", "id", "label", "other", "pos")
+  private val nodePropertyNamesString = nodePropertyNameList.map(nodePropertyName => "node." + nodePropertyName).mkString(", ")
 
   final def bootstrap(): Unit = {
     val bootstrapCypherStatements =
@@ -46,7 +48,7 @@ class Neo4jStore @Inject()(configuration: Neo4jStoreConfiguration) extends Store
       session.readTransaction { transaction => {
         val result =
           transaction.run(
-            s"MATCH (subject:Node)-[edge]->(object:Node {id: $$objectNodeId}) RETURN type(edge), object.id, subject.id, ${edgePropertyNames.map(edgePropertyName => "edge." + edgePropertyName).mkString(", ")};",
+            s"MATCH (subject:Node)-[edge]->(object:Node {id: $$objectNodeId}) RETURN type(edge), object.id, subject.id, ${edgePropertyNamesString};",
             Map(
               "objectNodeId" -> objectNodeId
             ).asJava.asInstanceOf[java.util.Map[String, Object]]
@@ -63,7 +65,7 @@ class Neo4jStore @Inject()(configuration: Neo4jStoreConfiguration) extends Store
       session.readTransaction { transaction => {
         val result =
           transaction.run(
-            s"MATCH (subject:Node {id: $$subjectNodeId})-[edge]->(object:Node) RETURN type(edge), object.id, subject.id, ${edgePropertyNames.map(edgePropertyName => "edge." + edgePropertyName).mkString(", ")};",
+            s"MATCH (subject:Node {id: $$subjectNodeId})-[edge]->(object:Node) RETURN type(edge), object.id, subject.id, ${edgePropertyNamesString};",
             Map(
               "subjectNodeId" -> subjectNodeId
             ).asJava.asInstanceOf[java.util.Map[String, Object]]
@@ -79,7 +81,7 @@ class Neo4jStore @Inject()(configuration: Neo4jStoreConfiguration) extends Store
       session.readTransaction { transaction => {
         val result =
           transaction.run(
-            s"MATCH (node:Node {id: $$id}) RETURN ${nodePropertyNames.map(nodePropertyName => "node." + nodePropertyName).mkString(", ")};",
+            s"MATCH (node:Node {id: $$id}) RETURN ${nodePropertyNamesString};",
             Map("id" -> id).asJava.asInstanceOf[java.util.Map[String, Object]]
           )
         val nodes = getNodesFromRecords(result)
@@ -95,7 +97,7 @@ class Neo4jStore @Inject()(configuration: Neo4jStoreConfiguration) extends Store
         val result =
           transaction.run(
             s"""CALL db.index.fulltext.queryNodes("node", $$text) YIELD node, score
-              |RETURN ${nodePropertyNames.map(nodePropertyName => "node." + nodePropertyName).mkString(", ")}
+              |RETURN ${nodePropertyNamesString}
               |SKIP ${offset}
               |LIMIT ${limit}
               |""".stripMargin,
@@ -153,6 +155,19 @@ class Neo4jStore @Inject()(configuration: Neo4jStoreConfiguration) extends Store
 
   private def getNodesFromRecords(result: Result): List[Node] =
     result.asScala.toList.map(record => getNodeFromRecord(record))
+
+  final override def getRandomNode: Node =
+    withSession { session =>
+      session.readTransaction { transaction => {
+        val result =
+          transaction.run(
+            s"MATCH (node:Node) RETURN ${nodePropertyNamesString}, rand() as rand ORDER BY rand ASC LIMIT 1"
+          )
+        val nodes = getNodesFromRecords(result)
+        nodes.head
+      }
+      }
+    }
 
   final override def getTotalEdgesCount: Int =
     withSession { session =>
