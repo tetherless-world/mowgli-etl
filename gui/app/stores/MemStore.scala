@@ -1,8 +1,18 @@
 package stores
 
+import com.outr.lucene4s.{DirectLucene, Lucene}
 import models.cskg.{Edge, Node}
 
 class MemStore(val edges: List[Edge], val nodes: List[Node]) extends Store {
+  private val lucene = new DirectLucene(List("datasource", "id", "label"))
+  private val luceneNodeDatasourceField = lucene.create.field[String]("datasource")
+  private val luceneNodeIdField = lucene.create.field[String]("id")
+  private val luceneNodeLabelField = lucene.create.field[String]("label")
+  nodes.foreach(node => {
+    lucene.doc().fields(luceneNodeDatasourceField(node.datasource), luceneNodeIdField(node.id), luceneNodeLabelField(node.label)).index()
+  })
+  private val nodesById = nodes.map(node => (node.id, node)).toMap
+
   final override def getEdgesByObject(objectNodeId: String): List[Edge] =
     edges.filter(edge => edge.`object` == objectNodeId)
 
@@ -10,13 +20,17 @@ class MemStore(val edges: List[Edge], val nodes: List[Node]) extends Store {
     edges.filter(edge => edge.subject == subjectNodeId)
 
   final override def getNodeById(id: String): Option[Node] =
-    nodes.find(node => node.id == id)
+    nodesById.get(id)
 
-  final override def getMatchingNodes(limit: Int, offset: Int, text: String): List[Node] =
-    nodes.filter(node => node.label.contains(text)).drop(offset).take(limit)
+  final override def getMatchingNodes(limit: Int, offset: Int, text: String): List[Node] = {
+    val results = lucene.query().filter(text).limit(limit).offset(offset).search()
+    results.results.toList.map(searchResult => nodesById(searchResult(luceneNodeIdField)))
+  }
 
-  final override def getMatchingNodesCount(text: String): Int =
-    getMatchingNodes(limit = Integer.MAX_VALUE, offset = 0, text = text).size
+  final override def getMatchingNodesCount(text: String): Int = {
+    val results = lucene.query().filter(text).limit(0).search()
+    results.total.intValue
+  }
 
   final override def getTotalEdgesCount: Int =
     edges.size
