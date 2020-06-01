@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-export const HomePage: React.FunctionComponent<{}> = () => {
+export const HomePage: React.FunctionComponent = () => {
   const classes = useStyles();
 
   const history = useHistory();
