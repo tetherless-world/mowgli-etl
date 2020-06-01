@@ -68,6 +68,11 @@ trait StoreBehaviors extends Matchers { this: WordSpec =>
       actual should equal(Some(expected))
     }
 
+    "get a random node" in {
+      val node = sut.getRandomNode
+      sut.getNodeById(node.id) should equal(Some(node))
+    }
+
     "get total edges count" in {
       val expected = TestData.edges.size
       val actual = sut.getTotalEdgesCount

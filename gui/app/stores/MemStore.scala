@@ -3,6 +3,8 @@ package stores
 import com.outr.lucene4s.{DirectLucene, Lucene}
 import models.cskg.{Edge, Node}
 
+import scala.util.Random
+
 class MemStore(val edges: List[Edge], val nodes: List[Node]) extends Store {
   private val lucene = new DirectLucene(List("datasource", "id", "label"))
   private val luceneNodeDatasourceField = lucene.create.field[String]("datasource", fullTextSearchable = true)
@@ -12,6 +14,7 @@ class MemStore(val edges: List[Edge], val nodes: List[Node]) extends Store {
     lucene.doc().fields(luceneNodeDatasourceField(node.datasource), luceneNodeIdField(node.id), luceneNodeLabelField(node.label)).index()
   })
   private val nodesById = nodes.map(node => (node.id, node)).toMap
+  private val random = new Random()
 
   final override def getEdgesByObject(objectNodeId: String): List[Edge] =
     edges.filter(edge => edge.`object` == objectNodeId)
@@ -31,6 +34,9 @@ class MemStore(val edges: List[Edge], val nodes: List[Node]) extends Store {
     val results = lucene.query().filter(text).search()
     results.total.intValue
   }
+
+  override def getRandomNode: Node =
+    nodes(random.nextInt(nodes.size))
 
   final override def getTotalEdgesCount: Int =
     edges.size

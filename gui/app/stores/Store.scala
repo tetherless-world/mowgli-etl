@@ -31,6 +31,11 @@ trait Store {
   def getNodeById(id: String): Option[Node]
 
   /**
+   * Get a random node
+   */
+  def getRandomNode: Node
+
+  /**
    * Get toal number of edges.
    */
   def getTotalEdgesCount: Int;
