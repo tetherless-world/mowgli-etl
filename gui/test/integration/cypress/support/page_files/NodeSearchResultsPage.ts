@@ -32,11 +32,19 @@ class NodeResultsNodeTableRowNodeLink {
 }
 
 export class NodeSearchResultsPage extends Page {
+  constructor(private readonly search: string) {
+    super();
+  }
+
   readonly nodeResultsTable = new NodeResultsTable();
 
-  readonly relativeUrl = "/";
+  get relativeUrl() {
+    return "/node/search?text=" + this.search;
+  }
 
   get visualizationContainer() {
-    return cy.get("[data-cy=visualizationContainer]");
+    return cy.get(
+      this.frame.bodySelector + " [data-cy=visualizationContainer]"
+    );
   }
 }

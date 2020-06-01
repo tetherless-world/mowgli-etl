@@ -154,6 +154,24 @@ class Neo4jStore @Inject()(configuration: Neo4jStoreConfiguration) extends Store
   private def getNodesFromRecords(result: Result): List[Node] =
     result.asScala.toList.map(record => getNodeFromRecord(record))
 
+  final override def getTotalEdgesCount: Int =
+    withSession { session =>
+      session.readTransaction { transaction =>
+        val result = transaction.run("MATCH ()-[r]->() RETURN COUNT(r) as count")
+        val record = result.single()
+        record.get("count").asInt()
+      }
+    }
+
+  final override def getTotalNodesCount: Int =
+    withSession { session =>
+      session.readTransaction { transaction =>
+        val result = transaction.run("MATCH (n) RETURN COUNT(n) as count")
+        val record = result.single()
+        record.get("count").asInt()
+      }
+    }
+
   final def putEdges(edges: List[Edge]): Unit = {
     withSession { session =>
       session.writeTransaction { transaction =>
@@ -177,6 +195,10 @@ class Neo4jStore @Inject()(configuration: Neo4jStoreConfiguration) extends Store
         transaction.commit()
       }
     }
+    val storedEdgesCount = getTotalEdgesCount
+    if (storedEdgesCount != edges.size) {
+      throw new IllegalStateException(s"some edges were not put correctly: expected ${edges.size}, actual ${storedEdgesCount}")
+    }
   }
 
   final def putNodes(nodes: List[Node]): Unit = {
@@ -198,6 +220,10 @@ class Neo4jStore @Inject()(configuration: Neo4jStoreConfiguration) extends Store
         }
         transaction.commit()
       }
+    }
+    val storedNodesCount = getTotalNodesCount
+    if (storedNodesCount != nodes.size) {
+      throw new IllegalStateException(s"some nodes were not put correctly: expected ${nodes.size}, actual ${storedNodesCount}")
     }
   }
 

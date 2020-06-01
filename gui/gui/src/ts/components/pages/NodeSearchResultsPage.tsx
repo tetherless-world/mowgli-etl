@@ -79,14 +79,17 @@ export const NodeSearchResultsPage: React.FunctionComponent<{}> = ({}) => {
     NodeSearchResultsPageQueryVariables
   >(NodeSearchResultsPageQueryDocument, {
     variables: {...searchVariables.object, withCount: count === null},
-    skip: !searchVariables.text, // Remove this when new landing page is added
   });
 
   if (error) {
     return <FatalErrorModal exception={new ApolloException(error)} />;
   }
 
-  if (data?.matchingNodesCount) {
+  if (loading && count !== null) {
+    setCount(null);
+  }
+
+  if (data?.matchingNodesCount && count === null) {
     setCount(data.matchingNodesCount);
   }
 

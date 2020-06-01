@@ -1,0 +1,4 @@
+query HomePageQuery {
+  totalNodesCount
+  totalEdgesCount
+}
