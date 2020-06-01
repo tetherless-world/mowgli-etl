@@ -5,9 +5,9 @@ import models.cskg.{Edge, Node}
 
 class MemStore(val edges: List[Edge], val nodes: List[Node]) extends Store {
   private val lucene = new DirectLucene(List("datasource", "id", "label"))
-  private val luceneNodeDatasourceField = lucene.create.field[String]("datasource")
-  private val luceneNodeIdField = lucene.create.field[String]("id")
-  private val luceneNodeLabelField = lucene.create.field[String]("label")
+  private val luceneNodeDatasourceField = lucene.create.field[String]("datasource", fullTextSearchable = true)
+  private val luceneNodeIdField = lucene.create.field[String]("id", fullTextSearchable = true)
+  private val luceneNodeLabelField = lucene.create.field[String]("label", fullTextSearchable = true)
   nodes.foreach(node => {
     lucene.doc().fields(luceneNodeDatasourceField(node.datasource), luceneNodeIdField(node.id), luceneNodeLabelField(node.label)).index()
   })
@@ -28,7 +28,7 @@ class MemStore(val edges: List[Edge], val nodes: List[Node]) extends Store {
   }
 
   final override def getMatchingNodesCount(text: String): Int = {
-    val results = lucene.query().filter(text).limit(0).search()
+    val results = lucene.query().filter(text).search()
     results.total.intValue
   }
 
