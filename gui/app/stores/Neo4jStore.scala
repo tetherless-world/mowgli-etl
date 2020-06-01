@@ -112,11 +112,11 @@ class Neo4jStore @Inject()(configuration: Neo4jStoreConfiguration) extends Store
       session.readTransaction { transaction =>
         val result =
           transaction.run(
-            s"""CALL db.index.fulltext.queryNodes("nodeLabel", $$nodeLabel) YIELD node, score
+            s"""CALL db.index.fulltext.queryNodes("node", $$text) YIELD node, score
                |RETURN COUNT(node)
                |""".stripMargin,
             Map(
-              "nodeLabel" -> text
+              "text" -> text
             ).asJava.asInstanceOf[java.util.Map[String, Object]]
           )
         val record = result.single()
