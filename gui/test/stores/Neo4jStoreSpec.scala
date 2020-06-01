@@ -33,5 +33,12 @@ class Neo4jStoreSpec extends WordSpec with StoreBehaviors with BeforeAndAfterAll
       val actual = sut.getMatchingNodes(limit = 10, offset = 0, text = s"datasource:nonextant")
       actual.size should be(0)
     }
+
+    "get matching nodes by datasource and label" in {
+      val expected = TestData.nodes(0)
+      val actual = sut.getMatchingNodes(limit = 10, offset = 0, text = s"datasource:${expected.datasource} label:'${expected.label}'")
+      actual should not be empty
+      actual(0) should equal(expected)
+    }
   }
 }
