@@ -37,8 +37,8 @@ object GraphQlSchemaDefinition extends BaseGraphQlSchemaDefinition {
     Field("matchingNodes", ListType(NodeType), arguments = LimitArgument :: OffsetArgument :: TextArgument :: Nil, resolve = ctx => ctx.ctx.store.getMatchingNodes(limit = ctx.args.arg(LimitArgument), offset = ctx.args.arg(OffsetArgument), text = ctx.args.arg(TextArgument))),
     Field("matchingNodesCount", IntType, arguments = TextArgument :: Nil, resolve = ctx => ctx.ctx.store.getMatchingNodesCount(text = ctx.args.arg(TextArgument))),
     Field("nodeById", OptionType(NodeType), arguments = IdArgument :: Nil, resolve = ctx => ctx.ctx.store.getNodeById(ctx.args.arg(IdArgument))),
-    Field("totalNodesCount", IntType, resolve = ctx => ctx.ctx.store.getTotalNodesCount()),
-    Field("totalEdgesCount", IntType, resolve = ctx => ctx.ctx.store.getTotalEdgesCount())
+    Field("totalEdgesCount", IntType, resolve = ctx => ctx.ctx.store.getTotalEdgesCount()),
+    Field("totalNodesCount", IntType, resolve = ctx => ctx.ctx.store.getTotalNodesCount())
   ))
 
   // Schema

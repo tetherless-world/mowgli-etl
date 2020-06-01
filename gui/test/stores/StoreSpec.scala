@@ -40,10 +40,10 @@ abstract class StoreSpec extends WordSpec with Matchers {
     actual should be >= 1
   }
 
-  protected def getTotalNodesCount(): Unit = {
-    val expected = TestData.nodes.size
-    val actual = sut.getTotalNodesCount()
-    actual should equal(expected)
+  protected def getNodeById() = {
+    val expected = TestData.nodes(0)
+    val actual = sut.getNodeById(expected.id)
+    actual should equal(Some(expected))
   }
 
   protected def getTotalEdgesCount(): Unit = {
@@ -52,9 +52,9 @@ abstract class StoreSpec extends WordSpec with Matchers {
     actual should equal(expected)
   }
 
-  protected def getNodeById() = {
-    val expected = TestData.nodes(0)
-    val actual = sut.getNodeById(expected.id)
-    actual should equal(Some(expected))
+  protected def getTotalNodesCount(): Unit = {
+    val expected = TestData.nodes.size
+    val actual = sut.getTotalNodesCount()
+    actual should equal(expected)
   }
 }
