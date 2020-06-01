@@ -1,7 +1,8 @@
 import * as React from "react";
 import {Navbar} from "components/navbar/Navbar";
 
-import {makeStyles, createStyles} from "@material-ui/core";
+import {makeStyles, createStyles, Grid} from "@material-ui/core";
+import {Footer} from "../footer/Footer";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -18,11 +19,19 @@ export const Frame: React.FunctionComponent<{children: React.ReactNode}> = ({
   const classes = useStyles();
 
   return (
-    <div data-cy="frame">
-      <Navbar></Navbar>
-      <div className={classes.root} data-cy="frame-content">
-        {children}
-      </div>
-    </div>
+    <Grid container data-cy="frame" direction="column" spacing={2}>
+      <Grid item>
+        <Navbar />
+      </Grid>
+      <Grid item>
+        <div className={classes.root} data-cy="frame-content">
+          {children}
+        </div>
+      </Grid>
+      <Grid item>
+        <hr />
+        <Footer />
+      </Grid>
+    </Grid>
   );
 };
