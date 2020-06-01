@@ -43,6 +43,8 @@ export class NodeSearchResultsPage extends Page {
   }
 
   get visualizationContainer() {
-    return cy.get("[data-cy=visualizationContainer]");
+    return cy.get(
+      this.frame.bodySelector + " [data-cy=visualizationContainer]"
+    );
   }
 }

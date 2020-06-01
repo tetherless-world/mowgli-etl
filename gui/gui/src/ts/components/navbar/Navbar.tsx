@@ -26,7 +26,7 @@ export const Navbar: React.FunctionComponent<{}> = () => {
   const classes = useStyles();
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" data-cy="navbar">
       <Toolbar>
         <Button href={Hrefs.home} className={classes.brand}>
           <Typography variant="h6">MOWGLI</Typography>

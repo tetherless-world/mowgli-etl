@@ -4,6 +4,7 @@ import {NodeSearchBox} from "components/search/NodeSearchBox";
 import {HomePageQuery} from "api/queries/types/HomePageQuery";
 import {useQuery} from "@apollo/react-hooks";
 import * as HomePageQueryDocument from "api/queries/HomePageQuery.graphql";
+import {Frame} from "components/frame/Frame";
 
 import {
   Grid,
@@ -54,43 +55,51 @@ export const HomePage: React.FunctionComponent<{}> = () => {
   };
 
   return (
-    <Container maxWidth="md" className={classes.container}>
-      <Grid container direction="column" spacing={3}>
-        <Grid item>
-          <Typography variant="h2" className={classes.title}>
-            MOWGLI
-          </Typography>
-          <Typography variant="body1">
-            DARPA Machine Common Sense (MCS) Multi-modal Open World Grounded
-            Learning and Inference (MOWGLI)
-          </Typography>
-        </Grid>
-        <Grid item>
-          {data && (
-            <Typography>
-              Search <strong>{data.totalNodesCount} nodes</strong> with{" "}
-              <strong>{data.totalEdgesCount} relationships</strong>
+    <Frame>
+      <Container maxWidth="md" className={classes.container}>
+        <Grid container direction="column" spacing={3}>
+          <Grid item>
+            <Typography variant="h2" className={classes.title}>
+              MOWGLI
             </Typography>
-          )}
-          <NodeSearchBox
-            placeholder="Search a word"
-            showIcon={true}
-            onChange={onSearchInputChange}
-          />
-          <br />
-          <Button
-            color="primary"
-            variant="contained"
-            onClick={() => searchText(search.text)}
-          >
-            Search
-          </Button>
-          {/* Maybe add random node to scala */}
-          <Button color="primary" onClick={() => searchText("apples")}>
-            Show me something interesting
-          </Button>
+            <Typography variant="body1">
+              DARPA Machine Common Sense (MCS) Multi-modal Open World Grounded
+              Learning and Inference (MOWGLI)
+            </Typography>
+          </Grid>
+          <Grid item>
+            {data && (
+              <Typography>
+                Search{" "}
+                <strong data-cy="totalNodeCount">
+                  {data.totalNodesCount} nodes
+                </strong>{" "}
+                with{" "}
+                <strong data-cy="totalEdgeCount">
+                  {data.totalEdgesCount} relationships
+                </strong>
+              </Typography>
+            )}
+            <NodeSearchBox
+              placeholder="Search a word"
+              showIcon={true}
+              onChange={onSearchInputChange}
+            />
+            <br />
+            <Button
+              color="primary"
+              variant="contained"
+              onClick={() => searchText(search.text)}
+            >
+              Search
+            </Button>
+            {/* Maybe add random node to scala */}
+            <Button color="primary" onClick={() => searchText("apples")}>
+              Show me something interesting
+            </Button>
+          </Grid>
         </Grid>
-      </Grid>
-    </Container>
+      </Container>
+    </Frame>
   );
 };

@@ -10,7 +10,9 @@ export abstract class Page {
   readonly frame = {
     navbar: {
       get nodeLabelSearchInput() {
-        return cy.get("[data-cy=frame] [data-cy=searchTextInput]");
+        return cy.get(
+          "[data-cy=frame] [data-cy=navbar] [data-cy=searchTextInput]"
+        );
       },
 
       search(text: string) {
@@ -21,6 +23,7 @@ export abstract class Page {
       },
     },
     selector: "[data-cy=frame]",
+    bodySelector: "[data-cy=frame] [data-cy=body]",
   };
 
   abstract readonly relativeUrl: string;
