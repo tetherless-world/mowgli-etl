@@ -42,6 +42,18 @@ After starting the application, run
 
 After starting the application and loading the data, open your browser to [http://localhost:8080](http://localhost:8080).
 
+# Using the application
+
+## Searching for nodes
+
+The navbar searchbox searches for nodes using full-text search. By default it searches across all of a node's indexed attributes, which currently (2020601) include:
+
+* id
+* datasource
+* label
+
+You can specify Lucene-style queries such as `id:"someid"` or `datasource:somedatasource` or some combination thereof.
+
 # Developing
 
 ## Database
