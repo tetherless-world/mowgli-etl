@@ -7,6 +7,6 @@ context("Home Page", () => {
 
   it("should show total node and edge counts", () => {
     page.totalNodeCount.should("have.text", "10376 nodes");
-    page.totalEdgeCount.should("have.text", "11936 relationships");
+    page.totalEdgeCount.should("have.text", "10623 relationships");
   });
 });
