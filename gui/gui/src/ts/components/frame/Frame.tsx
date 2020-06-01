@@ -20,7 +20,7 @@ export const Frame: React.FunctionComponent<{children: React.ReactNode}> = ({
   return (
     <div data-cy="frame">
       <Navbar></Navbar>
-      <div className={classes.root} data-cy="body">
+      <div className={classes.root} data-cy="frame-content">
         {children}
       </div>
     </div>
