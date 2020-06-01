@@ -4,7 +4,7 @@ import org.neo4j.driver.exceptions.ClientException
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpec}
 import org.slf4j.LoggerFactory
 
-class Neo4jStoreSpec extends StoreSpec with BeforeAndAfterAll {
+class Neo4jStoreSpec extends WordSpec with StoreBehaviors with BeforeAndAfterAll {
   val logger = LoggerFactory.getLogger(getClass)
   val sut = new Neo4jStore(new Neo4jStoreConfiguration(password = "nC1aB4mji623s2Zs", uri = "bolt://neo4j:7687", user = "neo4j"))
 
@@ -20,32 +20,6 @@ class Neo4jStoreSpec extends StoreSpec with BeforeAndAfterAll {
   }
 
   "The neo4j store" can {
-    "get edges by object" in {
-      getEdgesByObject()
-    }
-
-    "get edges by subject" in {
-      getEdgesBySubject()
-    }
-
-    "get matching nodes" in {
-      getMatchingNodes()
-    }
-
-    "get matching nodes count" in {
-      getMatchingNodesCount()
-    }
-
-    "get a node by ID" in {
-      getNodeById()
-    }
-
-    "get total edges count" in {
-      getTotalEdgesCount()
-    }
-
-    "get total nodes count" in {
-      getTotalNodesCount()
-    }
+    behave like store(sut)
   }
 }
