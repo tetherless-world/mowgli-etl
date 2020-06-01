@@ -20,7 +20,7 @@ context("Basic node search", () => {
 
     nodeSearchResultsPage.nodeResultsTable.row(0).nodeLink.click();
 
-    const nodePage = new NodePage("foodon:03304139");
+    const nodePage = new NodePage("foodon:03411457");
 
     nodePage.assertLoaded();
   });
