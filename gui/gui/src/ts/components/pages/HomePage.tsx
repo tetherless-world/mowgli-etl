@@ -1,5 +1,5 @@
 import * as React from "react";
-import * as qs from "qs";
+
 import {NodeSearchBox} from "components/search/NodeSearchBox";
 import {HomePageQuery} from "api/queries/types/HomePageQuery";
 import {useQuery} from "@apollo/react-hooks";
@@ -49,9 +49,7 @@ export const HomePage: React.FunctionComponent = () => {
   const searchText = (text: string) => {
     if (text.length === 0) return;
 
-    history.push(
-      Hrefs.nodeSearch + qs.stringify({text}, {addQueryPrefix: true})
-    );
+    history.push(Hrefs.nodeSearch({text}));
   };
 
   return (

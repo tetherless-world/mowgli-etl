@@ -6,9 +6,9 @@ export class Hrefs {
   }
 
   static nodeSearch(kwds?: {text: string}) {
-    return "/node/search" + kwds
-      ? qs.stringify(kwds, {addQueryPrefix: true})
-      : "";
+    return (
+      "/node/search" + (kwds ? qs.stringify(kwds, {addQueryPrefix: true}) : "")
+    );
   }
 
   static get home() {
