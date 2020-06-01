@@ -33,10 +33,10 @@ trait Store {
   /**
    * Get toal number of edges.
    */
-  def getTotalEdgesCount(): Int;
+  def getTotalEdgesCount: Int;
 
   /**
    * Get total number of nodes.
    */
-  def getTotalNodesCount(): Int;
+  def getTotalNodesCount: Int;
 }

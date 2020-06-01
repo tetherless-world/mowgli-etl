@@ -154,7 +154,7 @@ class Neo4jStore @Inject()(configuration: Neo4jStoreConfiguration) extends Store
   private def getNodesFromRecords(result: Result): List[Node] =
     result.asScala.toList.map(record => getNodeFromRecord(record))
 
-  final override def getTotalEdgesCount(): Int =
+  final override def getTotalEdgesCount: Int =
     withSession { session =>
       session.readTransaction { transaction =>
         val result = transaction.run("MATCH ()-[r]->() RETURN COUNT(*) as count")
@@ -163,7 +163,7 @@ class Neo4jStore @Inject()(configuration: Neo4jStoreConfiguration) extends Store
       }
     }
 
-  final override def getTotalNodesCount(): Int =
+  final override def getTotalNodesCount: Int =
     withSession { session =>
       session.readTransaction { transaction =>
         val result = transaction.run("MATCH (n) RETURN COUNT(n) as count")
