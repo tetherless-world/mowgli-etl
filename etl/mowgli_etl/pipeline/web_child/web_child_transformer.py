@@ -25,8 +25,8 @@ class WebChildTransformer(_Transformer):
         "hasPart": (PART_OF, True),
         "hasSubstance": (MADE_OF, False),
     }
-    __DATASOURCE_ID = "WebChild"
-    __NAMESPACE = "WebChild"
+    __DATASOURCE_ID = "web_child"
+    __NAMESPACE = "web_child"
 
     def __webchild_nid(self, ssid: str):
         return f"{self.__NAMESPACE}:{ssid}"
