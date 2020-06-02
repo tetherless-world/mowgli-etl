@@ -11,7 +11,7 @@ class RdfLoaderTestPipeline(_Pipeline):
             self,
             extractor=CskgCsvExtractor(edges_csv_file_paths=(cskg_edges_csv_file_path,),
                                        nodes_csv_file_paths=(cskg_nodes_csv_file_path,)),
-            id="quad_rdf_loader_test",
+            id="swow",
             loader=loader,
             transformer=CskgCsvTransformer(),
         )

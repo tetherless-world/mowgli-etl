@@ -112,10 +112,9 @@ class PipelineWrapper:
             transform_generator: Generator[Union[Edge, Node], None, None],
             used_node_ids_set: _NodeIdSet
     ) -> Generator[Union[Edge, Node], None, None]:
-        datasource = None
         for node_or_edge in transform_generator:
-            if node_or_edge.datasource != self.id and self.id != "combined":
-                raise ValueError(f"one pipeline can only yield one datasource, the same as the pipeline id: expected={self.id}, actual={node_or_edge.datasource}")
+            if self.__pipeline.single_datasource and node_or_edge.datasource != self.__pipeline.id:
+                raise ValueError(f"pipeline can only yield one datasource, the same as the pipeline id: expected={self.id}, actual={node_or_edge.datasource}")
 
             if isinstance(node_or_edge, Node):
                 node = node_or_edge
