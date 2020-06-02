@@ -91,8 +91,7 @@ export const HomePage: React.FunctionComponent = () => {
             >
               Search
             </Button>
-            {/* Maybe add random node to scala */}
-            <Button color="primary" onClick={() => searchText("apples")}>
+            <Button color="primary" href={Hrefs.randomNode}>
               Show me something interesting
             </Button>
           </Grid>
