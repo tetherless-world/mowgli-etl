@@ -9,6 +9,10 @@ export class Hrefs {
     return "https://github.com/tetherless-world/mowgli";
   }
 
+  static get home() {
+    return "/";
+  }
+
   static node(id: string) {
     return "/node/" + encodeURI(id);
   }
@@ -19,7 +23,7 @@ export class Hrefs {
     );
   }
 
-  static get home() {
-    return "/";
+  static get randomNode() {
+    return "/randomNode";
   }
 }
