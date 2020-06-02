@@ -14,6 +14,7 @@ class RpiCombinedPipeline(_Pipeline):
         super().__init__(
             id="combined",
             extractor=RpiCombinedExtractor(pipelines=pipelines, parallel=bool(parallel)),
+            single_datasource=False,
             transformer=CskgCsvTransformer(),
             **kwds
         )

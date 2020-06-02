@@ -10,7 +10,7 @@ from mowgli_etl._transformer import _Transformer
 
 
 class FoodOnTransformer(_Transformer):
-    _DATASOURCE = "foodon"
+    _DATASOURCE = "food_on"
 
     class __FoodOnClass:
         _URI_PREFIX = "http://purl.obolibrary.org/obo/FOODON_"
