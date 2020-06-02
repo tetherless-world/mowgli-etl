@@ -229,7 +229,10 @@ workflows:
             bin/mowgli-gui-app -DtestIntegration
           wait-on: "http-get://localhost:9000/index.html"
           working_directory: gui/test/integration
-      - gui-docker
+      - gui-docker:
+          filters:
+            branches:
+              only: master
       - gui-scala:
           requires:
             - gui-ts
