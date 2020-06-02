@@ -66,3 +66,13 @@ def test_extraneous_node(pipeline_storage):
         fail()
     except ValueError:
         pass
+
+
+def test_mixed_datasource(pipeline_storage):
+    try:
+        run((SUBJECT_NODE, OBJECT_NODE,
+             Edge(subject=SUBJECT_NODE.id, object="externalnode", predicate="test",
+                  datasource="otherdatasource")), pipeline_storage)
+        fail()
+    except ValueError:
+        pass
