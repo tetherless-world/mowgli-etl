@@ -6,6 +6,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faSearch} from "@fortawesome/free-solid-svg-icons";
 import {useHistory} from "react-router-dom";
 import {Hrefs} from "Hrefs";
+import {NodeSearchSuggestions} from "components/search/NodeSearchSuggestions";
 
 export const NodeSearchBox: React.FunctionComponent<{
   placeholder?: string;
@@ -22,11 +23,13 @@ export const NodeSearchBox: React.FunctionComponent<{
   value,
   onChange,
 }) => {
+  const history = useHistory();
+
+  const inputBaseRef = React.useRef<HTMLDivElement>(null);
+
   const [search, setSearch] = React.useState<{text: string}>({
     text: value || "",
   });
-
-  const history = useHistory();
 
   const onSubmit = onSubmitUserDefined
     ? onSubmitUserDefined
@@ -50,6 +53,7 @@ export const NodeSearchBox: React.FunctionComponent<{
             "data-cy": "searchTextInput",
             style: {paddingLeft: "5px"},
           }}
+          ref={inputBaseRef}
           placeholder={placeholder}
           value={search.text}
           onChange={(event) => {
@@ -69,6 +73,11 @@ export const NodeSearchBox: React.FunctionComponent<{
             ) : null
           }
         ></InputBase>
+        <NodeSearchSuggestions
+          search={search.text}
+          anchorEl={inputBaseRef.current}
+          placement="bottom-start"
+        />
       </form>
     </Paper>
   );
