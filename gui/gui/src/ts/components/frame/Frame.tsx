@@ -6,6 +6,13 @@ import {Footer} from "../footer/Footer";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
+    frame: {
+      minHeight: "100%",
+    },
+    rootContainer: {
+      display: "flex",
+      flexGrow: 1,
+    },
     root: {
       flexGrow: 1,
       padding: theme.spacing(3),
@@ -19,11 +26,17 @@ export const Frame: React.FunctionComponent<{children: React.ReactNode}> = ({
   const classes = useStyles();
 
   return (
-    <Grid container data-cy="frame" direction="column" spacing={2}>
+    <Grid
+      className={classes.frame}
+      container
+      data-cy="frame"
+      direction="column"
+      spacing={0} // Adds margins to sides of pages so set to 0
+    >
       <Grid item>
         <Navbar />
       </Grid>
-      <Grid item>
+      <Grid className={classes.rootContainer} item>
         <div className={classes.root} data-cy="frame-content">
           {children}
         </div>

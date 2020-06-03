@@ -2,13 +2,27 @@ import {NodeSearchResultsPage} from "../support/page_files/NodeSearchResultsPage
 import {NodePage} from "../support/page_files/NodePage";
 import {HomePage} from "../support/page_files/HomePage";
 
-context("Basic node search", () => {
-  it("Show results after search and redirect to node page on node click", () => {
-    const homePage = new HomePage();
+context("Navigate to chicken NodePage from HomePage using search", () => {
+  const homePage = new HomePage();
 
+  beforeEach(() => {
     homePage.visit();
 
-    homePage.search("chicken");
+    homePage.search.get().type("chicken");
+  });
+
+  afterEach(() => {
+    const nodePage = new NodePage("foodon:03411457");
+
+    nodePage.assertLoaded();
+  });
+
+  it("Use search suggestions to reach node page", () => {
+    homePage.search.suggestion(0).get().click();
+  });
+
+  it("Use all results to reach node page", () => {
+    homePage.search.enter();
 
     const nodeSearchResultsPage = new NodeSearchResultsPage("chicken");
 
@@ -19,9 +33,5 @@ context("Basic node search", () => {
     );
 
     nodeSearchResultsPage.nodeResultsTable.row(0).nodeLink.click();
-
-    const nodePage = new NodePage("foodon:03411457");
-
-    nodePage.assertLoaded();
   });
 });
