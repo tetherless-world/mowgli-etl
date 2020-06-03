@@ -135,6 +135,11 @@ export const NodeSearchSuggestions: React.FunctionComponent<
     };
   }, [search, throttledQuery]);
 
+  // See https://material-ui.com/components/lists/
+  const ListItemLink = (props: any) => (
+    <ListItem button component="a" {...props} />
+  );
+
   return (
     <Popper open={isOpen} {...popperProps} data-cy="nodeSearchSuggestions">
       <Paper className={classes.paper} variant="outlined" square>
@@ -142,16 +147,16 @@ export const NodeSearchSuggestions: React.FunctionComponent<
           {!searchErrors && (
             <List>
               {searchResults.matchingNodes.map((node) => (
-                <ListItem component="a" href={Hrefs.node(node.id)}>
+                <ListItemLink href={Hrefs.node(node.id)}>
                   <ListItemText primary={node.label}></ListItemText>
-                </ListItem>
+                </ListItemLink>
               ))}
               {searchResults.matchingNodesCount > 0 && (
-                <ListItem component="a" href={Hrefs.nodeSearch({text: search})}>
+                <ListItemLink href={Hrefs.nodeSearch({text: search})}>
                   <ListItemText
                     primary={`See ${searchResults.matchingNodesCount} results`}
                   ></ListItemText>
-                </ListItem>
+                </ListItemLink>
               )}
               {searchResults.matchingNodesCount === 0 && (
                 <ListItem>
