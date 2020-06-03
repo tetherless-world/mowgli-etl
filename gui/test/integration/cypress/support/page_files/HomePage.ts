@@ -1,11 +1,7 @@
 import {Page} from "./Page";
-import {NodeSearchInput} from "./NodeSearchInput";
+import {NodeSearchInput} from "./NodeSearchBox";
 
 export class HomePage extends Page {
-  get searchInput() {
-    return cy.get(this.frame.bodySelector + " [data-cy=searchTextInput]");
-  }
-
   get totalNodeCount() {
     return cy.get(this.frame.bodySelector + " [data-cy=totalNodeCount]");
   }

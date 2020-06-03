@@ -5,6 +5,7 @@ import {HomePageQuery} from "api/queries/types/HomePageQuery";
 import {useQuery} from "@apollo/react-hooks";
 import * as HomePageQueryDocument from "api/queries/HomePageQuery.graphql";
 import {Frame} from "components/frame/Frame";
+import {Node} from "models/Node";
 
 import {
   Grid,
@@ -40,17 +41,19 @@ export const HomePage: React.FunctionComponent = () => {
 
   const {data} = useQuery<HomePageQuery>(HomePageQueryDocument);
 
-  const [search, setSearch] = React.useState<{text: string}>({text: ""});
+  const [search, setSearch] = React.useState<{value: string | Node}>({
+    value: "",
+  });
 
-  const onSearchInputChange = (text: string) => {
-    setSearch((prevSearch) => ({...prevSearch, text}));
+  const onSearchInputChange = (newValue: string | Node) => {
+    setSearch((prevSearch) => ({...prevSearch, value: newValue}));
   };
 
-  const searchText = (text: string) => {
-    if (text.length === 0) return;
+  // const searchText = (text: string) => {
+  //   if (text.length === 0) return;
 
-    history.push(Hrefs.nodeSearch({text}));
-  };
+  //   history.push(Hrefs.nodeSearch({text}));
+  // };
 
   return (
     <Frame>
@@ -87,7 +90,15 @@ export const HomePage: React.FunctionComponent = () => {
             <Button
               color="primary"
               variant="contained"
-              onClick={() => searchText(search.text)}
+              onClick={() => {
+                if (typeof search.value === "string") {
+                  if (search.value.length === 0) return;
+
+                  history.push(Hrefs.nodeSearch({text: search.value}));
+                } else {
+                  history.push(Hrefs.node(search.value.id));
+                }
+              }}
             >
               Search
             </Button>

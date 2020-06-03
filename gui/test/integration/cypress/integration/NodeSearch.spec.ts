@@ -8,7 +8,7 @@ context("Navigate to chicken NodePage from HomePage using search", () => {
   beforeEach(() => {
     homePage.visit();
 
-    homePage.search.type("chicken");
+    homePage.search.get().type("chicken");
   });
 
   afterEach(() => {
@@ -18,13 +18,11 @@ context("Navigate to chicken NodePage from HomePage using search", () => {
   });
 
   it("Use search suggestions to reach node page", () => {
-    homePage.search.autocomplete.clickSuggestion(0);
+    homePage.search.suggestion(0).get().click();
   });
 
   it("Use all results to reach node page", () => {
-    homePage.search.autocomplete.allResults.get().contains("See 107 results");
-
-    homePage.search.autocomplete.clickAllResults();
+    homePage.search.enter();
 
     const nodeSearchResultsPage = new NodeSearchResultsPage("chicken");
 

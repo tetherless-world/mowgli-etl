@@ -1,4 +1,4 @@
-import {NodeSearchInput} from "./NodeSearchInput";
+import {NodeSearchInput} from "./NodeSearchBox";
 
 export abstract class Page {
   get absoluteUrl() {
