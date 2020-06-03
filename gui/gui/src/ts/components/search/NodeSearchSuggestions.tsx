@@ -27,9 +27,15 @@ const useStyles = makeStyles({
   },
 });
 
-const THROTTLE_WAIT_DURATION = 200;
+// Throttle wait duration in milliseconds
+// Minimum time between requests
+const THROTTLE_WAIT_DURATION = 500;
 
+// Maximum number of suggestions to show
 const MAXIMUM_SUGGESTIONS = 5;
+
+// Used example in docs as reference
+// https://material-ui.com/components/autocomplete/#google-maps-place
 
 export const NodeSearchSuggestions: React.FunctionComponent<
   {
@@ -52,6 +58,11 @@ export const NodeSearchSuggestions: React.FunctionComponent<
     NodeSearchResultsPageQuery
   >({matchingNodes: [], matchingNodesCount: 0});
 
+  // Query server for search results to display
+  // Is throttled so server request is only sent
+  // once every THROTTLE_WAIT_DURATION
+  // If a call is made within that duration, the
+  // callback is called with the previous result
   const throttledQuery = React.useRef(
     _.throttle(
       (
@@ -61,9 +72,12 @@ export const NodeSearchSuggestions: React.FunctionComponent<
           errors: readonly GraphQLError[] | undefined
         ) => void
       ) => {
+        // If there were searchErrors from previous query,
+        // clear errors before new query
         if (searchErrors !== undefined) {
           setSearchErrors(undefined);
         }
+
         setIsLoading(true);
 
         apolloClient
@@ -80,9 +94,11 @@ export const NodeSearchSuggestions: React.FunctionComponent<
     )
   );
 
+  // Execute this block of code when the text input value changes
   React.useEffect(() => {
     let active = true;
 
+    // If text input is empty, close dropdown
     if (search.length === 0) {
       setSearchResults((prevResults) => ({
         ...prevResults,
@@ -91,6 +107,8 @@ export const NodeSearchSuggestions: React.FunctionComponent<
       }));
 
       setIsOpen(false);
+
+      // Call throttled query with new search text
     } else {
       throttledQuery.current(
         {text: search, limit: MAXIMUM_SUGGESTIONS, offset: 0, withCount: true},

@@ -1,4 +1,5 @@
 import {Page} from "./Page";
+import {NodeSearchInput} from "./NodeSearchInput";
 
 export class HomePage extends Page {
   get searchInput() {
@@ -13,11 +14,8 @@ export class HomePage extends Page {
     return cy.get(this.frame.bodySelector + " [data-cy=totalEdgeCount]");
   }
 
-  search(text: string) {
-    const field = this.searchInput;
-    field.clear();
-    field.type(text + "{enter}");
-    return this;
+  get search() {
+    return new NodeSearchInput(this.frame.bodySelector);
   }
 
   readonly relativeUrl: string = "/";

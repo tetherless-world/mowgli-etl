@@ -1,3 +1,5 @@
+import {NodeSearchInput} from "./NodeSearchInput";
+
 export abstract class Page {
   get absoluteUrl() {
     return Cypress.config().baseUrl + this.relativeUrl;
@@ -9,17 +11,8 @@ export abstract class Page {
 
   readonly frame = {
     navbar: {
-      get nodeLabelSearchInput() {
-        return cy.get(
-          "[data-cy=frame] [data-cy=navbar] [data-cy=searchTextInput]"
-        );
-      },
-
-      search(text: string) {
-        const field = this.nodeLabelSearchInput;
-        field.clear();
-        field.type(text + "{enter}");
-        return this;
+      get search() {
+        return new NodeSearchInput("[data-cy=frame] [data-cy=navbar]");
       },
     },
     selector: "[data-cy=frame]",
