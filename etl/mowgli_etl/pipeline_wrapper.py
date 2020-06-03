@@ -113,6 +113,9 @@ class PipelineWrapper:
             used_node_ids_set: _NodeIdSet
     ) -> Generator[Union[Edge, Node], None, None]:
         for node_or_edge in transform_generator:
+            if self.__pipeline.single_datasource and node_or_edge.datasource != self.__pipeline.id:
+                raise ValueError(f"pipeline can only yield one datasource, the same as the pipeline id: expected={self.id}, actual={node_or_edge.datasource}")
+
             if isinstance(node_or_edge, Node):
                 node = node_or_edge
                 # Node ID's should be unique in the CSKG.

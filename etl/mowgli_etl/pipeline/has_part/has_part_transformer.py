@@ -12,7 +12,7 @@ from mowgli_etl.word_net_id import WordNetId
 
 
 class HasPartTransformer(_Transformer):
-    __DATASOURCE = "hasPartKB"
+    __DATASOURCE = "has_part"
 
     def __convert_normalized_arg_to_node(self, normalized_arg):
         # Create nodes in a custom namespace.

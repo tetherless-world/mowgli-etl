@@ -8,7 +8,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.13.0",
     "@fortawesome/react-fontawesome": "^0.1.9",
     "@material-ui/core": "^4.9.1",
-    "@tetherless-world/twxplore-base": "1.0.10",
+    "@tetherless-world/twxplore-base": "1.0.11",
     "@types/d3": "^5.7.2",
     "@types/qs": "^6.9.2",
     "@types/react-loader": "2.4.4",

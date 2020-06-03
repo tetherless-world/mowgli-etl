@@ -14,6 +14,7 @@ class RpiCombinedPipeline(_Pipeline):
         super().__init__(
             id="combined",
             extractor=RpiCombinedExtractor(pipelines=pipelines, parallel=bool(parallel)),
+            single_datasource=False,
             transformer=CskgCsvTransformer(),
             **kwds
         )
@@ -32,7 +33,7 @@ class RpiCombinedPipeline(_Pipeline):
         from mowgli_etl.pipeline.has_part.has_part_pipeline import HasPartPipeline
         from mowgli_etl.pipeline.swow.swow_pipeline import SwowPipeline
         from mowgli_etl.pipeline.usf.usf_pipeline import UsfPipeline
-        from mowgli_etl.pipeline.web_child.web_child_pipeline import WebChildPipeline
+        # from mowgli_etl.pipeline.web_child.web_child_pipeline import WebChildPipeline
 
         return (
             AristoPipeline(),
@@ -41,5 +42,5 @@ class RpiCombinedPipeline(_Pipeline):
             HasPartPipeline(),
             SwowPipeline(),
             UsfPipeline(),
-            WebChildPipeline(),
+            # WebChildPipeline(),  # Takes a long time to run and produces dubious triples
         )

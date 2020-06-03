@@ -30,7 +30,7 @@ def test_load(pipeline: PipelineWrapper, pipeline_storage: PipelineStorage):
 def test_load_missing_node(pipeline_storage: PipelineStorage):
     with TripleRdfLoader(format="ttl", pipeline_id="test").open(pipeline_storage) as loader:
         loader.load_edge(Edge(
-            datasource="test",
+            datasource="swow",
             object="missing_object",
             predicate="predicate",
             subject="missing_subject",

@@ -11,6 +11,9 @@ from mowgli_etl.pipeline_storage import PipelineStorage
 from mowgli_etl.pipeline_wrapper import PipelineWrapper
 
 
+DATASOURCE = "test"
+
+
 class NopExtractor(_Extractor):
     def extract(self, *args, **kwds):
         return {}
@@ -29,7 +32,7 @@ class MockPipeline(_Pipeline):
         _Pipeline.__init__(
             self,
             extractor=NopExtractor(),
-            id="mock",
+            id=DATASOURCE,
             transformer=MockTransformer(node_edge_sequence)
         )
 
@@ -38,11 +41,11 @@ def run(node_edge_sequence: Tuple[Union[Node, Edge], ...], pipeline_storage: Pip
     return PipelineWrapper(MockPipeline(node_edge_sequence), pipeline_storage).run()
 
 
-SUBJECT_NODE = Node(id="testid", label="test label", pos="n", datasource="test")
-EXACT_DUPLICATE_SUBJECT_NODE = Node(id="testid", label="test label", pos="n", datasource="test")
-INEXACT_DUPLICATE_SUBJECT_NODE = Node(id="testid", label="test label variation", pos="n", datasource="test")
-OBJECT_NODE = Node(id="testobject", label="test object", pos="n", datasource="test")
-EDGE = Edge(subject=SUBJECT_NODE.id, object=OBJECT_NODE.id, predicate="test", datasource="test")
+SUBJECT_NODE = Node(id="testid", label="test label", pos="n", datasource=DATASOURCE)
+EXACT_DUPLICATE_SUBJECT_NODE = Node(id="testid", label="test label", pos="n", datasource=DATASOURCE)
+INEXACT_DUPLICATE_SUBJECT_NODE = Node(id="testid", label="test label variation", pos="n", datasource=DATASOURCE)
+OBJECT_NODE = Node(id="testobject", label="test object", pos="n", datasource=DATASOURCE)
+EDGE = Edge(subject=SUBJECT_NODE.id, object=OBJECT_NODE.id, predicate=DATASOURCE, datasource=DATASOURCE)
 
 
 def test_exact_duplicate_node(pipeline_storage):
@@ -61,8 +64,18 @@ def test_inexact_duplicate_node(pipeline_storage):
 def test_extraneous_node(pipeline_storage):
     try:
         run((SUBJECT_NODE, OBJECT_NODE,
-             Edge(subject=SUBJECT_NODE.id, object="externalnode", predicate="test",
-                  datasource="test")), pipeline_storage)
+             Edge(subject=SUBJECT_NODE.id, object="externalnode", predicate=DATASOURCE,
+                  datasource=DATASOURCE)), pipeline_storage)
+        fail()
+    except ValueError:
+        pass
+
+
+def test_mixed_datasource(pipeline_storage):
+    try:
+        run((SUBJECT_NODE, OBJECT_NODE,
+             Edge(subject=SUBJECT_NODE.id, object="externalnode", predicate=DATASOURCE,
+                  datasource="otherdatasource")), pipeline_storage)
         fail()
     except ValueError:
         pass

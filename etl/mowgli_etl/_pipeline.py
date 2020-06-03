@@ -12,7 +12,7 @@ from mowgli_etl.pipeline.rdf.triple_rdf_loader import TripleRdfLoader
 
 
 class _Pipeline(ABC):
-    def __init__(self, *, extractor: _Extractor, id: str, transformer: _Transformer, loader: Optional[Union[_Loader, str]] = None, **kwds):
+    def __init__(self, *, extractor: _Extractor, id: str, transformer: _Transformer, loader: Optional[Union[_Loader, str]] = None, single_datasource=True, **kwds):
         """
         Construct an extract-transform pipeline.
         :param extractor: extractor implementation
@@ -25,6 +25,7 @@ class _Pipeline(ABC):
         if not isinstance(loader, _Loader):
             loader = self.__create_loader(id=id, loader=loader, **kwds)
         self.__loader = loader
+        self.__single_datasource = single_datasource
         self.__transformer = transformer
 
     @classmethod
@@ -54,17 +55,21 @@ class _Pipeline(ABC):
             raise NotImplementedError(loader)
 
     @property
-    def extractor(self):
+    def extractor(self) -> _Extractor:
         return self.__extractor
 
     @property
-    def id(self):
+    def id(self) -> str:
         return self.__id
 
     @property
-    def loader(self):
+    def loader(self) -> _Loader:
         return self.__loader
 
     @property
-    def transformer(self):
+    def single_datasource(self) -> bool:
+        return self.__single_datasource
+
+    @property
+    def transformer(self) -> _Transformer:
         return self.__transformer

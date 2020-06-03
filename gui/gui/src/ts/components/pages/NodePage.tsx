@@ -123,6 +123,16 @@ export const NodePage: React.FunctionComponent = () => {
         <Grid item container>
           <Grid item xs={10}>
             <h2 data-cy="node-title">{title}</h2>
+            <Grid container spacing={4}>
+              {Object.keys(subjectOfEdgesByPredicate).map((predicate) => (
+                <Grid item key={predicate} data-cy={predicate + "-edges"}>
+                  <EdgeList
+                    edges={subjectOfEdgesByPredicate[predicate]!}
+                    predicate={predicate}
+                  />
+                </Grid>
+              ))}
+            </Grid>
           </Grid>
           <Grid item xs={2}>
             <h3>
@@ -139,18 +149,6 @@ export const NodePage: React.FunctionComponent = () => {
                 </List>
               </React.Fragment>
             ) : null}
-          </Grid>
-        </Grid>
-        <Grid item>
-          <Grid container spacing={4}>
-            {Object.keys(subjectOfEdgesByPredicate).map((predicate) => (
-              <Grid item key={predicate} data-cy={predicate + "-edges"}>
-                <EdgeList
-                  edges={subjectOfEdgesByPredicate[predicate]!}
-                  predicate={predicate}
-                />
-              </Grid>
-            ))}
           </Grid>
         </Grid>
       </Grid>
