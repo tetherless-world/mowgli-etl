@@ -31,7 +31,7 @@ export const Frame: React.FunctionComponent<{children: React.ReactNode}> = ({
       container
       data-cy="frame"
       direction="column"
-      spacing={0}
+      spacing={0} // Adds margins to sides of pages so set to 0
     >
       <Grid item>
         <Navbar />

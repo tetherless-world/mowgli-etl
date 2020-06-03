@@ -50,7 +50,9 @@ export class NodeSearchSuggestions {
   }
 
   clickSuggestion(index: number) {
-    return this.suggestion(index).click();
+    this.suggestion(index).click();
+
+    return this;
   }
 
   get allResults() {
@@ -58,7 +60,9 @@ export class NodeSearchSuggestions {
   }
 
   clickAllResults() {
-    return this.allResults.click();
+    this.allResults.click();
+
+    return this;
   }
 }
 
