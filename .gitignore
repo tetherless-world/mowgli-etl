@@ -7,3 +7,6 @@
 /.idea/
 .python-version
 *.iml
+.bloop/
+.metals/
+project/metals.sbt

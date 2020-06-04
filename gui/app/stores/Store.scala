@@ -16,6 +16,11 @@ trait Store {
   def getEdgesBySubject(subjectNodeId: String): List[Edge]
 
   /**
+   * Get all datasources
+   */
+  def getDatasources: List[String]
+
+  /**
    * Fulltext search nodes.
    */
   def getMatchingNodes(limit: Int, offset: Int, text: String): List[Node]

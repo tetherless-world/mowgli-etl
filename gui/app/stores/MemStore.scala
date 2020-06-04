@@ -22,6 +22,9 @@ class MemStore(val edges: List[Edge], val nodes: List[Node]) extends Store {
   final override def getEdgesBySubject(subjectNodeId: String): List[Edge] =
     edges.filter(edge => edge.subject == subjectNodeId)
 
+  final override def getDatasources: List[String] =
+    nodes.flatMap(_.datasource.split(",")).distinct
+
   final override def getNodeById(id: String): Option[Node] =
     nodesById.get(id)
 
