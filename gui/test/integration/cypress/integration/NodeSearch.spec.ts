@@ -29,7 +29,7 @@ context("Navigate to test NodePage from HomePage using search", () => {
     nodeSearchResultsPage.assertLoaded();
 
     nodeSearchResultsPage.visualizationContainer.contains(
-      '1000 results for Test node 0"'
+      '1000 results for "Test node 0"'
     );
 
     nodeSearchResultsPage.nodeResultsTable.row(0).nodeLink.click();
