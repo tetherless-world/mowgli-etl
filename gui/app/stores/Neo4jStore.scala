@@ -44,6 +44,16 @@ class Neo4jStore @Inject()(configuration: Neo4jStoreConfiguration) extends Store
     }
   }
 
+  final def hasConstraints: Boolean = {
+    withSession { session =>
+      session.readTransaction { transaction => 
+        val result =
+          transaction.run("CALL db.constraints")
+        result.hasNext()
+      }
+    }
+  }
+
   override final def getEdgesByObject(objectNodeId: String): List[Edge] = {
     withSession { session =>
       session.readTransaction { transaction => {
