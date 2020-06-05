@@ -157,8 +157,7 @@ class Neo4jStore @Inject()(configuration: Neo4jStoreConfiguration) extends Store
       session.readTransaction { transaction => 
         val result = 
           transaction.run("MATCH (node:Node) RETURN DISTINCT node.datasource AS datasources")
-        val record = result.single()
-        val datasourceValues = record.get("datasources").asList(Values.ofToString).asScala.toList
+        val datasourceValues = result.asScala.toList.map(_.get("datasources").asString)
         // Returns list of datasource values which can contain multiple datasources
         // so need to extract unique datasources
         datasourceValues.flatMap(_.split(",")).distinct
