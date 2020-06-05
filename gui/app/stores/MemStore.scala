@@ -15,15 +15,16 @@ class MemStore(val edges: List[Edge], val nodes: List[Node]) extends Store {
   })
   private val nodesById = nodes.map(node => (node.id, node)).toMap
   private val random = new Random()
+  private val datasources = nodes.flatMap(_.datasource.split(",")).distinct
+
+  final override def getDatasources: List[String] =
+    this.datasources
 
   final override def getEdgesByObject(objectNodeId: String): List[Edge] =
     edges.filter(edge => edge.`object` == objectNodeId)
 
   final override def getEdgesBySubject(subjectNodeId: String): List[Edge] =
     edges.filter(edge => edge.subject == subjectNodeId)
-
-  final override def getDatasources: List[String] =
-    nodes.flatMap(_.datasource.split(",")).distinct
 
   final override def getNodeById(id: String): Option[Node] =
     nodesById.get(id)
