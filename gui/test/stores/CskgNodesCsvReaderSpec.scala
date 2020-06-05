@@ -11,7 +11,7 @@ class CskgNodesCsvReaderSpec extends WordSpec with Matchers {
     "read the test data" in {
       val inputStream = getClass.getResourceAsStream("/test_data/nodes.csv.bz2")
       try {
-        val nodes = sut.read(inputStream).toList
+        val nodes = sut.readCompressed(inputStream).toList
         nodes.size should be > 0
         for (node <- nodes) {
           node.id should not be empty
