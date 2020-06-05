@@ -18,6 +18,9 @@ class _EdgeSet(ABC):
     def _construct_edge_key(self, *, object: str, predicate: str, subject: str) -> str:
         return f"{subject}\t{predicate}\t{object}"
 
+    def __contains__(self, edge: Edge) -> bool:
+        return self.get(object=edge.object, predicate=edge.predicate, subject=edge.subject) is not None
+
     @abstractmethod
     def get(self, *, object: str, predicate: str, subject: str, default: Optional[Edge] = None) -> Optional[Edge]:
         """

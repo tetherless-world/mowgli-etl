@@ -6,7 +6,7 @@ context("Home Page", () => {
   beforeEach(() => page.visit());
 
   it("should show total node and edge counts", () => {
-    page.totalNodeCount.should("have.text", "10376 nodes");
-    page.totalEdgeCount.should("have.text", "10623 relationships");
+    page.totalNodeCount.should("have.text", "1000 nodes");
+    page.totalEdgeCount.should("have.text", "52293 relationships");
   });
 });

@@ -23,7 +23,9 @@ class Neo4jStoreSpec extends WordSpec with StoreBehaviors with BeforeAndAfterAll
         case e: ClientException => logger.warn("error bootstrapping neo4j: {}", e.getMessage);
       }
     }
-    sut.clear()
+    if (!sut.isEmpty) {
+      sut.clear()
+    }
     sut.putNodes(TestData.nodes)
     sut.putEdges(TestData.edges)
   }
