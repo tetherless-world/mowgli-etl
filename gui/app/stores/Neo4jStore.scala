@@ -46,10 +46,14 @@ class Neo4jStore @Inject()(configuration: Neo4jStoreConfiguration) extends Store
 
   final def hasConstraints: Boolean = {
     withSession { session =>
-      session.readTransaction { transaction => 
+      session.readTransaction { transaction =>
         val result =
           transaction.run("CALL db.constraints")
-        result.hasNext()
+        val hasConstraints = result.hasNext
+        while (result.hasNext) {
+          result.next()
+        }
+        hasConstraints
       }
     }
   }
@@ -154,8 +158,8 @@ class Neo4jStore @Inject()(configuration: Neo4jStoreConfiguration) extends Store
 
   final override def getDatasources: List[String] =
     withSession { session =>
-      session.readTransaction { transaction => 
-        val result = 
+      session.readTransaction { transaction =>
+        val result =
           transaction.run("MATCH (node:Node) RETURN DISTINCT node.datasource AS datasources")
         val datasourceValues = result.asScala.toList.map(_.get("datasources").asString)
         // Returns list of datasource values which can contain multiple datasources
@@ -207,6 +211,15 @@ class Neo4jStore @Inject()(configuration: Neo4jStoreConfiguration) extends Store
         val result = transaction.run("MATCH (n) RETURN COUNT(n) as count")
         val record = result.single()
         record.get("count").asInt()
+      }
+    }
+
+  final def isEmpty: Boolean =
+    withSession { session =>
+      session.readTransaction { transaction =>
+        val result = transaction.run("MATCH (n) RETURN n IS NULL AS isEmpty LIMIT 1;")
+        val record = result.single()
+        record.get("isEmpty").asBoolean()
       }
     }
 
