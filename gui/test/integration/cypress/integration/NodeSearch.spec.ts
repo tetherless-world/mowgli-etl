@@ -2,17 +2,17 @@ import {NodeSearchResultsPage} from "../support/page_files/NodeSearchResultsPage
 import {NodePage} from "../support/page_files/NodePage";
 import {HomePage} from "../support/page_files/HomePage";
 
-context("Navigate to chicken NodePage from HomePage using search", () => {
+context("Navigate to test NodePage from HomePage using search", () => {
   const homePage = new HomePage();
 
   beforeEach(() => {
     homePage.visit();
 
-    homePage.search.get().type("chicken");
+    homePage.search.get().type("Test node 0");
   });
 
   afterEach(() => {
-    const nodePage = new NodePage("foodon:03411457");
+    const nodePage = new NodePage("gui_test_data:0");
 
     nodePage.assertLoaded();
   });
@@ -24,12 +24,12 @@ context("Navigate to chicken NodePage from HomePage using search", () => {
   it("Use all results to reach node page", () => {
     homePage.search.enter();
 
-    const nodeSearchResultsPage = new NodeSearchResultsPage("chicken");
+    const nodeSearchResultsPage = new NodeSearchResultsPage("Test node 0");
 
     nodeSearchResultsPage.assertLoaded();
 
     nodeSearchResultsPage.visualizationContainer.contains(
-      '107 results for "chicken"'
+      '1000 results for Test node 0"'
     );
 
     nodeSearchResultsPage.nodeResultsTable.row(0).nodeLink.click();
