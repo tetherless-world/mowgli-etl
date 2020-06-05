@@ -5,6 +5,7 @@ import org.neo4j.driver.{AuthTokens, GraphDatabase, Record, Result, Session}
 
 import scala.io.Source
 import scala.collection.JavaConverters._
+import org.neo4j.driver.Values
 
 class Neo4jStore @Inject()(configuration: Neo4jStoreConfiguration) extends Store with WithResource {
   private val driver = GraphDatabase.driver(configuration.uri, AuthTokens.basic(configuration.user, configuration.password))
@@ -39,6 +40,16 @@ class Neo4jStore @Inject()(configuration: Neo4jStoreConfiguration) extends Store
       session.writeTransaction { transaction =>
         transaction.run(clearCypherString)
         transaction.commit()
+      }
+    }
+  }
+
+  final def hasConstraints: Boolean = {
+    withSession { session =>
+      session.readTransaction { transaction => 
+        val result =
+          transaction.run("CALL db.constraints")
+        result.hasNext()
       }
     }
   }
@@ -140,6 +151,18 @@ class Neo4jStore @Inject()(configuration: Neo4jStoreConfiguration) extends Store
 
   private def getEdgesFromRecords(result: Result): List[Edge] =
     result.asScala.toList.map(record => getEdgeFromRecord(record))
+
+  final override def getDatasources: List[String] =
+    withSession { session =>
+      session.readTransaction { transaction => 
+        val result = 
+          transaction.run("MATCH (node:Node) RETURN DISTINCT node.datasource AS datasources")
+        val datasourceValues = result.asScala.toList.map(_.get("datasources").asString)
+        // Returns list of datasource values which can contain multiple datasources
+        // so need to extract unique datasources
+        datasourceValues.flatMap(_.split(",")).distinct
+      }
+    }
 
   private def getNodeFromRecord(record: Record): Node = {
     val recordMap = record.asMap().asScala.toMap.asInstanceOf[Map[String, String]]

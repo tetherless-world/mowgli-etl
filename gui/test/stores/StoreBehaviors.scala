@@ -84,5 +84,12 @@ trait StoreBehaviors extends Matchers { this: WordSpec =>
       val actual = sut.getTotalNodesCount
       actual should equal(expected)
     }
+
+    "get datasources" in {
+      val expected = TestData.nodes.flatMap(_.datasource.split(",")).toSet
+      val actual = sut.getDatasources.toSet
+      // Convert list to set to compare content
+      actual should equal(expected)
+    }
   }
 }

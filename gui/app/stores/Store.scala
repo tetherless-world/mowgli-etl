@@ -6,6 +6,11 @@ import models.cskg.{Edge, Node}
 @ImplementedBy(classOf[Neo4jStore])
 trait Store {
   /**
+   * Get all datasources
+   */
+  def getDatasources: List[String]
+
+  /**
    * Get all of the edges that have the given node ID as an object.
    */
   def getEdgesByObject(objectNodeId: String): List[Edge]
