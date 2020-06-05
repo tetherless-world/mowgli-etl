@@ -27,13 +27,13 @@ class GuiTestDataTransformer(_Transformer):
                     other={"index": node_i},
                     pos=random.choice(pos),
                 )
-                for node_i in range(10000)
+                for node_i in range(1000)
             )
         yield from nodes
 
         out_degree_mean = 50
         out_degree_min = 10
-        out_degree_max = 500
+        out_degree_max = 200
         out_degree_lambda = 1.0 / out_degree_mean
         for subject_node in tqdm(nodes):
             edge_set = MemEdgeSet()

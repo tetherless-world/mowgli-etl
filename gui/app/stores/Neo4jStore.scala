@@ -1,11 +1,12 @@
 package stores
+import java.util
+
 import com.google.inject.Inject
 import models.cskg.{Edge, Node}
-import org.neo4j.driver.{AuthTokens, GraphDatabase, Record, Result, Session}
+import org.neo4j.driver.{AuthTokens, GraphDatabase, Record, Result, Session, Transaction, Values}
 
 import scala.io.Source
 import scala.collection.JavaConverters._
-import org.neo4j.driver.Values
 
 class Neo4jStore @Inject()(configuration: Neo4jStoreConfiguration) extends Store with WithResource {
   private val driver = GraphDatabase.driver(configuration.uri, AuthTokens.basic(configuration.user, configuration.password))
@@ -217,9 +218,8 @@ class Neo4jStore @Inject()(configuration: Neo4jStoreConfiguration) extends Store
   final def isEmpty: Boolean =
     withSession { session =>
       session.readTransaction { transaction =>
-        val result = transaction.run("MATCH (n) RETURN n IS NULL AS isEmpty LIMIT 1;")
-        val record = result.single()
-        record.get("isEmpty").asBoolean()
+        val result = transaction.run("MATCH (n) RETURN n LIMIT 1;")
+        !result.hasNext
       }
     }
 
@@ -240,16 +240,16 @@ class Neo4jStore @Inject()(configuration: Neo4jStoreConfiguration) extends Store
               "predicate" -> edge.predicate,
               "subject" -> edge.subject,
               "weight" -> edge.weight.getOrElse(null)
-            ).asJava.asInstanceOf[java.util.Map[String, Object]]
+            ).asJava.asInstanceOf[util.Map[String, Object]]
           )
         }
         transaction.commit()
       }
     }
-    val storedEdgesCount = getTotalEdgesCount
-    if (storedEdgesCount != edges.size) {
-      throw new IllegalStateException(s"some edges were not put correctly: expected ${edges.size}, actual ${storedEdgesCount}")
-    }
+//    val storedEdgesCount = getTotalEdgesCount
+//    if (storedEdgesCount != edges.size) {
+//      throw new IllegalStateException(s"some edges were not put correctly: expected ${edges.size}, actual ${storedEdgesCount}")
+//    }
   }
 
   final def putNodes(nodes: List[Node]): Unit = {
@@ -272,10 +272,10 @@ class Neo4jStore @Inject()(configuration: Neo4jStoreConfiguration) extends Store
         transaction.commit()
       }
     }
-    val storedNodesCount = getTotalNodesCount
-    if (storedNodesCount != nodes.size) {
-      throw new IllegalStateException(s"some nodes were not put correctly: expected ${nodes.size}, actual ${storedNodesCount}")
-    }
+//    val storedNodesCount = getTotalNodesCount
+//    if (storedNodesCount != nodes.size) {
+//      throw new IllegalStateException(s"some nodes were not put correctly: expected ${nodes.size}, actual ${storedNodesCount}")
+//    }
   }
 
   private def withSession[V](f: Session => V): V =
