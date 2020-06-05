@@ -19,18 +19,18 @@ object TestData {
     nodes.map(node => (node.id, node)).toMap
 
   private def readEdges(): List[Edge] = {
-    val edgesCsvInputStream = getClass.getResourceAsStream("/test_data/edges.csv")
+    val edgesCsvInputStream = getClass.getResourceAsStream("/test_data/edges.csv.bz2")
     try {
-      new CskgEdgesCsvReader().read(new InputStreamReader(edgesCsvInputStream)).toList
+      new CskgEdgesCsvReader().readCompressed(edgesCsvInputStream).toList
     } finally {
       edgesCsvInputStream.close()
     }
   }
 
   private def readNodes(): List[Node] = {
-    val nodesCsvInputStream = getClass.getResourceAsStream("/test_data/nodes.csv")
+    val nodesCsvInputStream = getClass.getResourceAsStream("/test_data/nodes.csv.bz2")
     try {
-      new CskgNodesCsvReader().read(new InputStreamReader(nodesCsvInputStream)).toList
+      new CskgNodesCsvReader().readCompressed(nodesCsvInputStream).toList
     } finally {
       nodesCsvInputStream.close()
     }
