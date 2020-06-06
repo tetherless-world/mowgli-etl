@@ -82,6 +82,7 @@ export const HomePage: React.FunctionComponent = () => {
               </Typography>
             )}
             <NodeSearchBox
+              autoFocus
               placeholder="Search a word"
               showIcon={true}
               onChange={onSearchInputChange}

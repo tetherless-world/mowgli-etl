@@ -25,6 +25,7 @@ const THROTTLE_WAIT_DURATION = 500;
 const MAXIMUM_SUGGESTIONS = 5;
 
 export const NodeSearchBox: React.FunctionComponent<{
+  autoFocus?: boolean;
   placeholder?: string;
   showIcon?: boolean;
   onSubmit?: (value: string | Node) => void;
@@ -32,6 +33,7 @@ export const NodeSearchBox: React.FunctionComponent<{
   value?: string;
   onChange?: (value: string | Node) => void;
 }> = ({
+  autoFocus,
   onSubmit: onSubmitUserDefined,
   showIcon = false,
   placeholder,
@@ -177,6 +179,7 @@ export const NodeSearchBox: React.FunctionComponent<{
         renderInput={(params) => (
           <Paper variant="outlined" square style={style}>
             <InputBase
+              autoFocus={autoFocus}
               inputProps={{
                 "data-cy": "searchTextInput",
                 style: {paddingLeft: "5px"},
