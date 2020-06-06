@@ -9,9 +9,9 @@ class CskgNodesCsvReaderSpec extends WordSpec with Matchers {
     val sut = new CskgNodesCsvReader()
 
     "read the test data" in {
-      val reader = new InputStreamReader(getClass.getResourceAsStream("/test_data/nodes.csv"))
+      val inputStream = getClass.getResourceAsStream("/test_data/nodes.csv.bz2")
       try {
-        val nodes = sut.read(reader).toList
+        val nodes = sut.readCompressed(inputStream).toList
         nodes.size should be > 0
         for (node <- nodes) {
           node.id should not be empty
@@ -19,7 +19,7 @@ class CskgNodesCsvReaderSpec extends WordSpec with Matchers {
           node.datasource should not be empty
         }
       } finally {
-        reader.close()
+        inputStream.close()
       }
     }
   }

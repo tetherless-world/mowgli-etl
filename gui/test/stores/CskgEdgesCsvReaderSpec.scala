@@ -9,9 +9,9 @@ class CskgEdgesCsvReaderSpec extends WordSpec with Matchers {
     val sut = new CskgEdgesCsvReader()
 
     "read the test data" in {
-      val reader = new InputStreamReader(getClass.getResourceAsStream("/test_data/edges.csv"))
+      val inputStream = getClass.getResourceAsStream("/test_data/edges.csv.bz2")
       try {
-        val edges = sut.read(reader).toList
+        val edges = sut.readCompressed(inputStream).toList
         edges.size should be > 0
         for (edge <- edges) {
           edge.subject should not be empty
@@ -19,7 +19,7 @@ class CskgEdgesCsvReaderSpec extends WordSpec with Matchers {
           edge.datasource should not be empty
         }
       } finally {
-        reader.close()
+        inputStream.close()
       }
     }
   }

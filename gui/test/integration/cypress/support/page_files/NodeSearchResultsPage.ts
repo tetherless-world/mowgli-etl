@@ -39,7 +39,7 @@ export class NodeSearchResultsPage extends Page {
   readonly nodeResultsTable = new NodeResultsTable();
 
   get relativeUrl() {
-    return "/node/search?text=" + this.search;
+    return "/node/search?text=" + encodeURIComponent(this.search);
   }
 
   get visualizationContainer() {

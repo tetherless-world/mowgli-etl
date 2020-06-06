@@ -1,14 +1,21 @@
 import os.path
 from pathlib import Path
+from typing import Optional
 
 
 class PipelineStorage:
-    def __init__(self, *, pipeline_id: str, root_data_dir_path: Path):
+    def __init__(self, *, pipeline_id: str, root_data_dir_path: Path, extracted_data_dir_path: Optional[Path] = None, loaded_data_dir_path: Optional[Path] = None):
         self.__root_data_dir_path = root_data_dir_path
         pipeline_data_dir_path = root_data_dir_path / Path(pipeline_id)
-        self.__extracted_data_dir_path = pipeline_data_dir_path / "extracted"
+
+        if extracted_data_dir_path is None:
+            extracted_data_dir_path = pipeline_data_dir_path / "extracted"
+        self.__extracted_data_dir_path = extracted_data_dir_path
         self.__extracted_data_dir_path_exists = False
-        self.__loaded_data_dir_path = pipeline_data_dir_path / "loaded"
+
+        if loaded_data_dir_path is None:
+            loaded_data_dir_path = pipeline_data_dir_path / "loaded"
+        self.__loaded_data_dir_path = loaded_data_dir_path
         self.__loaded_data_dir_path_exists = False
         # self.__transformed_data_dir_path = self.__makedirs(pipeline_data_dir_path / "transformed")
 
