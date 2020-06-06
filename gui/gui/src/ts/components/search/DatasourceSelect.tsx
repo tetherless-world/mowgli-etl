@@ -22,7 +22,7 @@ export const DatasourceSelect: React.FunctionComponent<{
   if (!datasources) return null;
 
   return (
-    <Paper variant="outlined" square style={style}>
+    <Paper variant="outlined" square style={style} data-cy="datasourceSelect">
       <Select
         multiple
         displayEmpty
@@ -33,7 +33,7 @@ export const DatasourceSelect: React.FunctionComponent<{
           if (onChange) onChange(values);
         }}
         renderValue={(selected) => (
-          <span style={{marginLeft: "5px"}}>
+          <span style={{marginLeft: "5px"}} data-cy="value">
             {(selected as string[]).length === 0 ? (
               <React.Fragment>All datasources</React.Fragment>
             ) : (
@@ -43,7 +43,11 @@ export const DatasourceSelect: React.FunctionComponent<{
         )}
       >
         {datasources.map((datasource) => (
-          <MenuItem key={datasource} value={datasource}>
+          <MenuItem
+            key={datasource}
+            value={datasource}
+            data-cy="datasourceSelectMenuItem"
+          >
             {datasource}
           </MenuItem>
         ))}

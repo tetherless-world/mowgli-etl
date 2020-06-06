@@ -29,4 +29,16 @@ export class NodeSearchInput {
   suggestion(index: number) {
     return new NodeSearchSuggestionLink(index, this.parentSelector);
   }
+
+  selectDatasource(label: string) {
+    cy.get(this.parentSelector + " [data-cy=datasourceSelect]").click();
+
+    cy.get("[data-cy=datasourceSelectMenuItem]").contains(label).click();
+  }
+
+  get selectedDatasource() {
+    return cy.get(
+      this.parentSelector + " [data-cy=datasourceSelect] [data-cy=value]"
+    );
+  }
 }
