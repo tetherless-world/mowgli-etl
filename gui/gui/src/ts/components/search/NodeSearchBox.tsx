@@ -15,6 +15,7 @@ import {useApolloClient} from "@apollo/react-hooks";
 import * as NodeSearchResultsPageQueryDocument from "api/queries/NodeSearchResultsPageQuery.graphql";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import {Node} from "models/Node";
+import {DatasourceSelect} from "components/search/DatasourceSelect";
 
 // Throttle wait duration in milliseconds
 // Minimum time between requests
@@ -47,6 +48,8 @@ export const NodeSearchBox: React.FunctionComponent<{
   const [search, setSearch] = React.useState<{text: string}>({
     text: value || "",
   });
+
+  const [datasources, setDatasources] = React.useState<string[]>([]);
 
   const onSubmit = onSubmitUserDefined
     ? onSubmitUserDefined
@@ -121,7 +124,9 @@ export const NodeSearchBox: React.FunctionComponent<{
     // Call throttled query with new search text
     throttledQuery.current(
       {
-        text: search.text,
+        text: `label:${search.text} ${datasources
+          .map((d) => "datasource:" + d)
+          .join(" ")}`,
         limit: MAXIMUM_SUGGESTIONS,
         offset: 0,
         withCount: false,
@@ -140,7 +145,7 @@ export const NodeSearchBox: React.FunctionComponent<{
     return () => {
       active = false;
     };
-  }, [search.text, throttledQuery]);
+  }, [search.text, datasources, throttledQuery]);
 
   return (
     <form
@@ -152,7 +157,7 @@ export const NodeSearchBox: React.FunctionComponent<{
       }}
     >
       <Autocomplete
-        debug={true}
+        style={{display: "inline-flex", verticalAlign: "top"}}
         getOptionLabel={(option: Node | string) =>
           typeof option === "string" ? option : option.label!
         }
@@ -194,8 +199,19 @@ export const NodeSearchBox: React.FunctionComponent<{
             ></InputBase>
           </Paper>
         )}
-        renderOption={(node) => <a href={Hrefs.node(node.id)}>{node.label}</a>}
+        renderOption={(node) => (
+          <a href={Hrefs.node(node.id)}>
+            {node.label} - {node.datasource}
+          </a>
+        )}
       ></Autocomplete>
+      <DatasourceSelect
+        style={{display: "inline-flex", verticalAlign: "top"}}
+        value={datasources}
+        onChange={(newDatasources: string[]) => {
+          setDatasources(newDatasources);
+        }}
+      ></DatasourceSelect>
     </form>
   );
 };
