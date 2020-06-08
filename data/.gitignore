@@ -1,0 +1,7 @@
+# Create exceptions here.
+/cskg_release/extracted/
+indexed/
+loaded/
+/usf/extracted/
+/web_child/extracted/
+/webchildsampling/extracted/

@@ -1,9 +1,0 @@
-# GraphQL
-GET         /api/graphql                    controllers.graphql.GraphQlController.graphql(query: String, variables: Option[String], operation: Option[String])
-POST        /api/graphql                    controllers.graphql.GraphQlController.graphqlBody
-GET         /api/graphql-schema             controllers.graphql.GraphQlController.renderSchema
-
-
-# Assets
-GET         /             controllers.Assets.at(path="/public", file="index.html")
-GET         /$path<.*>    controllers.test.GenericTestController.frontEndPath(path)
