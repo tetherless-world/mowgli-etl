@@ -10,7 +10,8 @@ from mowgli_etl.pipeline_storage import PipelineStorage
 
 class GuiTestDataLoader(CskgCsvLoader):
     class __CustomPipelineStorage(PipelineStorage):
-        LOADED_DATA_DIR_PATH = PROJECT_ROOT.parent / "gui" / "conf" / "test_data"
+        LOADED_DATA_DIR_PATH = PROJECT_ROOT.parent / "mcs-portal" / "conf" / "test_data"
+        assert LOADED_DATA_DIR_PATH.exists(), LOADED_DATA_DIR_PATH
 
         def __init__(self, *, pipeline_id: str, root_data_dir_path: Path):
             PipelineStorage.__init__(
