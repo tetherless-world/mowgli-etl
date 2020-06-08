@@ -29,7 +29,6 @@ jobs:
       - run:
           name: Run tests with optional dependencies
           command: |
-            cd etl
             pytest --junitxml=test-results/junit.xml
       - store_test_results:
           path: test-results
@@ -40,7 +39,6 @@ jobs:
           name: Generate RPI combined CSKG CSV (master branch only)
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              cd etl
               mkdir -p cskg
               python -m mowgli_etl.cli etl rpi_combined --data-dir-path cskg
             fi
@@ -74,7 +72,6 @@ jobs:
           name: Upload CSKG to Drive (master branch only)
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              cd etl
               service_file_path="service_file_key.json"
               cat \<<< "$GCLOUD_SERVICE_KEY" > "$service_file_path"
               python3 -m mowgli_etl.cli drive-upload --file-path=cskg.tar.bz2  --file-id="$CSKG_FILE_ID" --service-account-file="$service_file_path"
