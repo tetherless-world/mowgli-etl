@@ -6,15 +6,14 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - pip_cache-{{ checksum "etl/requirements.txt" }}
+            - pip_cache-{{ checksum "requirements.txt" }}
             - pip_cache
       - run:
           name: Install mandatory dependencies
-          command: pip install -r etl/requirements.txt
+          command: pip install -r requirements.txt
       - run:
           name: Run tests without optional dependencies
           command: |
-            cd etl
             mkdir test-results
             # In a stable build results will be overwritten by the run with optional dependencies,
             # but if one of these tests fails, we still want them.
@@ -26,7 +25,7 @@ jobs:
       - save_cache:
           paths:
             - ~/.cache/pip
-          key: pip_cache-{{ checksum "etl/requirements.txt"}}
+          key: pip_cache-{{ checksum "requirements.txt"}}
       - run:
           name: Run tests with optional dependencies
           command: |
@@ -36,7 +35,7 @@ jobs:
           path: test-results
       - restore_cache:
           keys:
-            - etl-data-{{ checksum "etl/mowgli_etl/pipeline/rpi_combined/rpi_combined_pipeline.py" }}
+            - etl-data-{{ checksum "mowgli_etl/pipeline/rpi_combined/rpi_combined_pipeline.py" }}
       - run:
           name: Generate RPI combined CSKG CSV (master branch only)
           command: |
@@ -52,14 +51,14 @@ jobs:
       #              python3 -m mowgli_etl.cli etl rdf --data-dir-path cskg --nodes-csv-file-path cskg/rpi_combined/loaded/nodes.csv --edges-csv-file-path cskg/rpi_combined/loaded/edges.csv --pipeline-id rpi-combined-rdf
       #            fi
       - save_cache:
-          key: etl-data-{{ checksum "etl/mowgli_etl/pipeline/rpi_combined/rpi_combined_pipeline.py" }}
+          key: etl-data-{{ checksum "mowgli_etl/pipeline/rpi_combined/rpi_combined_pipeline.py" }}
           paths:
-            - etl/cskg/extracted
+            - cskg/extracted
       - run:
           name: Archive artifacts (master branch only)
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              cd etl/cskg
+              cd cskg
               for dir in `ls`; do
                 mv "$dir/loaded/"*.csv "$dir/" || true
                 mv "$dir/loaded/"*.trig "$dir/" || true
