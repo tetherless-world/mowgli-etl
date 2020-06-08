@@ -1,8 +1,0 @@
-fragment NodeFieldsFragment on Node {
-  aliases
-  datasource
-  id
-  label
-  other
-  pos
-}

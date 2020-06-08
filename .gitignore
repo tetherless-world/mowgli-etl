@@ -1,12 +1,5 @@
 *.pyc
-/project/project/
-/project/target/
-/logs/
-/target/
 /venv/
 /.idea/
 .python-version
 *.iml
-.bloop/
-.metals/
-project/metals.sbt

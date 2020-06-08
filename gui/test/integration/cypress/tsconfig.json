@@ -1,9 +1,0 @@
-{
-  "compilerOptions": {
-    "strict": true,
-    "baseUrl": "../node_modules",
-    "types": ["cypress", "node"]
-  },
-  "include": ["**/*.ts"],
-  "extends": "../node_modules/@tetherless-world/twxplore-base/tsconfig.base.json"
-}
