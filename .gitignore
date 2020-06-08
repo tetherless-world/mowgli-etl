@@ -3,3 +3,5 @@
 /.idea/
 .python-version
 *.iml
+/data/
+/out/
