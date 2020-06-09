@@ -8,7 +8,7 @@ from mowgli_etl.model.concept_net_predicates import IS_A, HAS_A, PART_OF, LOCATE
 from mowgli_etl.model.edge import Edge
 from mowgli_etl.model.node import Node
 from mowgli_etl._transformer import _Transformer
-from mowgli_etl.word_net_id import WordNetId
+from mowgli_etl.model.word_net_id import WordNetId
 
 
 class AristoTransformer(_Transformer):

@@ -8,7 +8,7 @@ from mowgli_etl.model.edge import Edge
 from mowgli_etl.model.mowgli_predicates import SAME_AS
 from mowgli_etl.model.node import Node
 from mowgli_etl._transformer import _Transformer
-from mowgli_etl.word_net_id import WordNetId
+from mowgli_etl.model.word_net_id import WordNetId
 
 
 class HasPartTransformer(_Transformer):
