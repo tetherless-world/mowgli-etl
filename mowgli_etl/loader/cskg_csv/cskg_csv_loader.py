@@ -1,7 +1,3 @@
-from csv import DictWriter
-from pathlib import Path
-from typing import Dict, Callable
-
 from mowgli_etl._edge_loader import _EdgeLoader
 from mowgli_etl._node_loader import _NodeLoader
 from mowgli_etl.loader.cskg_csv.cskg_csv_edge_loader import CskgCsvEdgeLoader

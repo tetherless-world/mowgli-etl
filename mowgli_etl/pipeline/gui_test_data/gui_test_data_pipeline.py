@@ -12,7 +12,7 @@ class GuiTestDataPipeline(_Pipeline):
             self,
             extractor=GuiTestDataExtractor(),
             id=self.ID,
-            loader=GuiTestDataLoader(bzip=True),
+            loader=GuiTestDataLoader(),
             transformer=GuiTestDataTransformer(),
             **kwds
         )
