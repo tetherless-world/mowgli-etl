@@ -2,9 +2,11 @@ import logging
 from typing import Generator, Union, Dict, Optional, Tuple
 
 from mowgli_etl.model.edge import Edge
+from mowgli_etl.model.model import Model
 from mowgli_etl.model.node import Node
 from mowgli_etl._mapper import _Mapper
 from mowgli_etl._pipeline import _Pipeline
+from mowgli_etl.model.path import Path
 from mowgli_etl.pipeline_storage import PipelineStorage
 from mowgli_etl.storage._edge_set import _EdgeSet
 from mowgli_etl.storage._node_id_set import _NodeIdSet
@@ -37,24 +39,26 @@ class PipelineWrapper:
     def id(self) -> str:
         return self.__pipeline.id
 
-    def map(self, graph_generator: Generator[Union[Node, Edge], None, None], mappers: Tuple[_Mapper, ...]) -> Generator[
-        Union[Node, Edge], None, None]:
-        for node_or_edge in graph_generator:
-            yield node_or_edge
-            if isinstance(node_or_edge, Node):
-                node = node_or_edge
+    def map(self, model_generator: Generator[Model, None, None], mappers: Tuple[_Mapper, ...]) -> Generator[
+        Model, None, None]:
+        for model in model_generator:
+            yield model
+            if isinstance(model, Node):
+                node = model
                 for mapper in mappers:
                     yield from mapper.map(node)
 
-    def load(self, graph_generator: Generator[Union[Node, Edge], None, None]) -> None:
+    def load(self, model_generator: Generator[Model, None, None]) -> None:
         with self.__pipeline.loader.open(storage=self.__storage) as loader:
-            for node_or_edge in graph_generator:
-                if isinstance(node_or_edge, Node):
-                    loader.load_node(node_or_edge)
-                elif isinstance(node_or_edge, Edge):
-                    loader.load_edge(node_or_edge)
+            for model in model_generator:
+                if isinstance(model, Node):
+                    loader.load_node(model)
+                elif isinstance(model, Edge):
+                    loader.load_edge(model)
+                elif isinstance(model, Path):
+                    loader.load_path(model)
                 else:
-                    raise ValueError(type(node_or_edge))
+                    raise ValueError(type(model))
 
     def run(
             self, *,
@@ -66,19 +70,19 @@ class PipelineWrapper:
         Run the entire pipeline.
         """
         extract_kwds = self.extract(force=force)
-        graph_generator = self.transform(
+        model_generator = self.transform(
             force=force, skip_whole_graph_check=skip_whole_graph_check, **extract_kwds
         )
         if mappers:
-            graph_generator = self.map(graph_generator, mappers)
-        self.load(graph_generator)
+            model_generator = self.map(model_generator, mappers)
+        self.load(model_generator)
 
     def transform(
             self,
             force: bool = False,
             skip_whole_graph_check: Optional[bool] = False,
             **extract_kwds
-    ) -> Generator[Union[Edge, Node], None, None]:
+    ) -> Generator[Model, None, None]:
         transform_generator = self.__pipeline.transformer.transform(**extract_kwds)
 
         if skip_whole_graph_check:
@@ -109,9 +113,9 @@ class PipelineWrapper:
             *,
             edge_set: _EdgeSet,
             node_set: _NodeSet,
-            transform_generator: Generator[Union[Edge, Node], None, None],
+            transform_generator: Generator[Model, None, None],
             used_node_ids_set: _NodeIdSet
-    ) -> Generator[Union[Edge, Node], None, None]:
+    ) -> Generator[Model, None, None]:
         for node_or_edge in transform_generator:
             if self.__pipeline.single_datasource and node_or_edge.datasource != self.__pipeline.id:
                 raise ValueError(f"pipeline can only yield one datasource, the same as the pipeline id: expected={self.id}, actual={node_or_edge.datasource}")
