@@ -4,7 +4,7 @@ from rdflib import ConjunctiveGraph, URIRef, Literal
 from rdflib.namespace import DCTERMS, XSD
 
 from mowgli_etl.model.node import Node
-from mowgli_etl.pipeline.rdf._rdf_loader import _RdfLoader
+from mowgli_etl.loader.rdf._rdf_loader import _RdfLoader
 
 
 class QuadRdfLoader(_RdfLoader):
