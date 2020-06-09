@@ -2,8 +2,8 @@ from urllib.parse import quote
 
 from xml.dom.minidom import parse
 
-from mowgli_etl.cskg.edge import Edge
-from mowgli_etl.cskg.node import Node
+from mowgli_etl.model.edge import Edge
+from mowgli_etl.model.node import Node
 from mowgli_etl._transformer import _Transformer
 
 

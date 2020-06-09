@@ -1,4 +1,4 @@
-from mowgli_etl.cskg.edge import Edge
+from mowgli_etl.model.edge import Edge
 from mowgli_etl.storage.mem_edge_set import MemEdgeSet
 
 

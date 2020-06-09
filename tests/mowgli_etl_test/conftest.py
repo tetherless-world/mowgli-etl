@@ -4,8 +4,8 @@ from typing import Generator, Union
 import pytest
 from itertools import count
 
-from mowgli_etl.cskg.edge import Edge
-from mowgli_etl.cskg.node import Node
+from mowgli_etl.model.edge import Edge
+from mowgli_etl.model.node import Node
 from mowgli_etl.pipeline_storage import PipelineStorage
 
 

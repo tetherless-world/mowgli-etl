@@ -1,9 +1,9 @@
 from math import floor
 
 from mowgli_etl._transformer import _Transformer
-import mowgli_etl.cskg.concept_net_predicates
-from mowgli_etl.cskg.edge import Edge
-from mowgli_etl.cskg.node import Node
+import mowgli_etl.model.concept_net_predicates
+from mowgli_etl.model.edge import Edge
+from mowgli_etl.model.node import Node
 from mowgli_etl.pipeline.gui_test_data.gui_test_data_pipeline import GuiTestDataPipeline
 import random
 from tqdm import tqdm
@@ -13,7 +13,7 @@ from mowgli_etl.storage.mem_edge_set import MemEdgeSet
 
 class GuiTestDataTransformer(_Transformer):
     def transform(self, **kwds):
-        concept_net_predicates = tuple(getattr(mowgli_etl.cskg.concept_net_predicates, attr) for attr in dir(mowgli_etl.cskg.concept_net_predicates) if not attr.startswith("_"))
+        concept_net_predicates = tuple(getattr(mowgli_etl.model.concept_net_predicates, attr) for attr in dir(mowgli_etl.model.concept_net_predicates) if not attr.startswith("_"))
 
         pos = ("a", "n", "r", "v")
 

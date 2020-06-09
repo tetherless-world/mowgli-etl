@@ -3,8 +3,8 @@ from collections import Counter
 from pathlib import Path
 from typing import Generator, Union
 
-from mowgli_etl.cskg.edge import Edge
-from mowgli_etl.cskg.node import Node
+from mowgli_etl.model.edge import Edge
+from mowgli_etl.model.node import Node
 from mowgli_etl._transformer import _Transformer
 from mowgli_etl.pipeline.swow.swow_mappers import swow_edge, swow_node, SwowResponseType
 

@@ -3,10 +3,10 @@ from pathlib import Path
 from typing import Generator, Tuple, Union
 
 from mowgli_etl._closeable import _Closeable
-from mowgli_etl.cskg.concept_net_predicates import HAS_A, MADE_OF, PART_OF
-from mowgli_etl.cskg.edge import Edge
-from mowgli_etl.cskg.mowgli_predicates import WN_SYNSET
-from mowgli_etl.cskg.node import Node
+from mowgli_etl.model.concept_net_predicates import HAS_A, MADE_OF, PART_OF
+from mowgli_etl.model.edge import Edge
+from mowgli_etl.model.mowgli_predicates import WN_SYNSET
+from mowgli_etl.model.node import Node
 from mowgli_etl._transformer import _Transformer
 from mowgli_etl.storage._node_set import _NodeSet
 from mowgli_etl.storage.mem_node_set import MemNodeSet

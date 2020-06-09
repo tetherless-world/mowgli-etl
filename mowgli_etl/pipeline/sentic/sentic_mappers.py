@@ -1,9 +1,9 @@
 from typing import Optional, Union
 from urllib.parse import quote
 
-from mowgli_etl.cskg.concept_net_predicates import RELATED_TO
-from mowgli_etl.cskg.edge import Edge
-from mowgli_etl.cskg.node import Node
+from mowgli_etl.model.concept_net_predicates import RELATED_TO
+from mowgli_etl.model.edge import Edge
+from mowgli_etl.model.node import Node
 from mowgli_etl.pipeline.sentic.sentic_constants import (
     SENTIC_DATASOURCE_ID,
     SENTIC_NAMESPACE,

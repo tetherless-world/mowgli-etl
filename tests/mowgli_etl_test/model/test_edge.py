@@ -1,6 +1,6 @@
 import pytest
 
-from mowgli_etl.cskg.edge import Edge
+from mowgli_etl.model.edge import Edge
 
 
 @pytest.fixture

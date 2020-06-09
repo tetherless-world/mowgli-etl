@@ -1,5 +1,5 @@
-from mowgli_etl.cskg.edge import Edge
-from mowgli_etl.cskg.node import Node
+from mowgli_etl.model.edge import Edge
+from mowgli_etl.model.node import Node
 from mowgli_etl.pipeline.swow.swow_pipeline import SwowPipeline
 from mowgli_etl.pipeline_wrapper import PipelineWrapper
 

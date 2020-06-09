@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Optional
 
-from mowgli_etl.cskg.edge import Edge
+from mowgli_etl.model.edge import Edge
 
 
 class _EdgeSet(ABC):

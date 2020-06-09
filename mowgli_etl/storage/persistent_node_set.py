@@ -1,7 +1,7 @@
 import pickle
 from typing import Optional, Generator
 
-from mowgli_etl.cskg.node import Node
+from mowgli_etl.model.node import Node
 from mowgli_etl.storage._node_set import _NodeSet
 from mowgli_etl.storage.level_db import LevelDb
 

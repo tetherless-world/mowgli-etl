@@ -1,7 +1,7 @@
 import pickle
 from typing import Optional
 
-from mowgli_etl.cskg.edge import Edge
+from mowgli_etl.model.edge import Edge
 from mowgli_etl.storage._edge_set import _EdgeSet
 from mowgli_etl.storage.level_db import LevelDb
 

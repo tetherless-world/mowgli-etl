@@ -1,9 +1,9 @@
 from collections import Counter
 from urllib.parse import quote
 
-from mowgli_etl.cskg.concept_net_predicates import RELATED_TO
-from mowgli_etl.cskg.edge import Edge
-from mowgli_etl.cskg.node import Node
+from mowgli_etl.model.concept_net_predicates import RELATED_TO
+from mowgli_etl.model.edge import Edge
+from mowgli_etl.model.node import Node
 from mowgli_etl.pipeline.swow.swow_constants import SWOW_DATASOURCE_ID, SWOW_NAMESPACE
 from mowgli_etl.pipeline.swow.swow_mappers import swow_edge, swow_node
 

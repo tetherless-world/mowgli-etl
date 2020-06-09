@@ -1,8 +1,8 @@
 from csv import DictWriter
 from typing import Dict, Callable
 
-from mowgli_etl.cskg.edge import Edge
-from mowgli_etl.cskg.node import Node
+from mowgli_etl.model.edge import Edge
+from mowgli_etl.model.node import Node
 from mowgli_etl._loader import _Loader
 
 

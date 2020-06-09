@@ -3,10 +3,10 @@ from collections import Counter
 from pathlib import Path
 from urllib.parse import quote
 
-from mowgli_etl.cskg.concept_net_predicates import IS_A, HAS_A, PART_OF, LOCATED_NEAR, HAS_FIRST_SUBEVENT, CAUSES, \
+from mowgli_etl.model.concept_net_predicates import IS_A, HAS_A, PART_OF, LOCATED_NEAR, HAS_FIRST_SUBEVENT, CAUSES, \
     CREATED_BY, HAS_PREREQUISITE, AT_LOCATION
-from mowgli_etl.cskg.edge import Edge
-from mowgli_etl.cskg.node import Node
+from mowgli_etl.model.edge import Edge
+from mowgli_etl.model.node import Node
 from mowgli_etl._transformer import _Transformer
 from mowgli_etl.word_net_id import WordNetId
 

@@ -2,9 +2,9 @@ from typing import Generator, Union
 
 from xml.dom.minidom import parse
 
-from mowgli_etl.cskg.concept_net_predicates import RELATED_TO
-from mowgli_etl.cskg.edge import Edge
-from mowgli_etl.cskg.node import Node
+from mowgli_etl.model.concept_net_predicates import RELATED_TO
+from mowgli_etl.model.edge import Edge
+from mowgli_etl.model.node import Node
 from mowgli_etl._transformer import _Transformer
 from mowgli_etl.pipeline.sentic.sentic_constants import SENTIC_FILE_KEY
 from mowgli_etl.pipeline.sentic.sentic_mappers import sentic_edge, sentic_node

@@ -9,12 +9,12 @@ except ImportError:
     sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..")))
 
 from mowgli_etl.pipeline.web_child.web_child_transformer import WebChildTransformer
-from mowgli_etl.cskg.edge import Edge
+from mowgli_etl.model.edge import Edge
 
 
 def annotate():
     ogfiles = [open('etl/data/webchildsampling/loaded/DF_annotations.csv'), open('etl/data/webchildsampling/loaded/MG_annotations.csv')]
-    newfiles = [open('etl/data/webchildsampling/loaded/DF_annotations_anlys.csv',mode='w'), 
+    newfiles = [open('etl/data/webchildsampling/loaded/DF_annotations_anlys.csv',mode='w'),
      open('etl/data/webchildsampling/loaded/MG_annotations_anlys.csv', mode='w')]
 
     transformer = WebChildTransformer()

@@ -1,7 +1,7 @@
 import pytest
 import rdflib
 
-from mowgli_etl.cskg.edge import Edge
+from mowgli_etl.model.edge import Edge
 from mowgli_etl.pipeline.rdf.quad_rdf_loader import QuadRdfLoader
 from mowgli_etl.pipeline_storage import PipelineStorage
 from mowgli_etl.pipeline_wrapper import PipelineWrapper
