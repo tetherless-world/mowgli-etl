@@ -28,11 +28,3 @@ class _Loader(ABC):
         Open this loader before calling load_* methods.
         """
         return self
-
-    @abstractmethod
-    def load_edge(self, edge: Edge):
-        pass
-
-    @abstractmethod
-    def load_node(self, node: Node):
-        pass

@@ -1,12 +1,14 @@
 from csv import DictWriter
 from typing import Dict, Callable
 
+from mowgli_etl._edge_loader import _EdgeLoader
+from mowgli_etl._node_loader import _NodeLoader
 from mowgli_etl.model.edge import Edge
 from mowgli_etl.model.node import Node
 from mowgli_etl._loader import _Loader
 
 
-class CskgCsvLoader(_Loader):
+class CskgCsvLoader(_EdgeLoader, _NodeLoader):
     __EDGE_CSV_FIELDS = {
         'weight': lambda edge: edge.weight if edge.weight is not None else 1.0,
         'other': lambda obj: str(obj.other) if obj.other is not None else None
