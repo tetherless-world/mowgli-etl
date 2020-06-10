@@ -5,7 +5,7 @@ from mowgli_etl.model.edge import Edge
 from mowgli_etl.loader.rdf.triple_rdf_loader import TripleRdfLoader
 from mowgli_etl.pipeline_storage import PipelineStorage
 from mowgli_etl.pipeline_wrapper import PipelineWrapper
-from tests.mowgli_etl_test.pipeline.rdf.rdf_loader_test_pipeline import RdfLoaderTestPipeline
+from tests.mowgli_etl_test.loader.rdf.rdf_loader_test_pipeline import RdfLoaderTestPipeline
 
 
 @pytest.fixture
