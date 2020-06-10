@@ -8,7 +8,7 @@ class JsonEdgeLoader(_EdgeLoader):
             json.dump(self.__edges, json_file)
 
     def load_edge(self, edge):
-        self.__edges.append(edge)
+        self.__edges.append({key: value for key, value in edge._asdict().items() if value is not None})
 
     def open(self, storage):
         self.__edges = []

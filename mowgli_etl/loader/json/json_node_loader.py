@@ -8,7 +8,7 @@ class JsonNodeLoader(_NodeLoader):
             json.dump(self.__nodes, json_file)
 
     def load_node(self, node):
-        self.__nodes.append(node)
+        self.__nodes.append({key: value for key, value in node._asdict().items() if value is not None})
 
     def open(self, storage):
         self.__nodes = []

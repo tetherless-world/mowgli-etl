@@ -1,5 +1,5 @@
 from mowgli_etl._path_loader import _PathLoader
-from mowgli_etl.loader import json
+import json
 
 
 class JsonlPathLoader(_PathLoader):
@@ -7,7 +7,7 @@ class JsonlPathLoader(_PathLoader):
         self.__paths_jsonl_file.close()
 
     def load_path(self, path):
-        json.dump(self.__paths_jsonl_file, path)
+        json.dump({key: value for key, value in path._asdict().items() if value is not None}, self.__paths_jsonl_file)
         self.__paths_jsonl_file.write("\n")
 
     def open(self, storage):

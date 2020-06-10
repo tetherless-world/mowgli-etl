@@ -7,6 +7,7 @@ from mowgli_etl.loader.cskg_csv.cskg_csv_edge_loader import CskgCsvEdgeLoader
 from mowgli_etl.loader.cskg_csv.cskg_csv_node_loader import CskgCsvNodeLoader
 from mowgli_etl.loader.json.json_edge_loader import JsonEdgeLoader
 from mowgli_etl.loader.json.json_node_loader import JsonNodeLoader
+from mowgli_etl.loader.json.json_path_loader import JsonPathLoader
 from mowgli_etl.loader.json.jsonl_path_loader import JsonlPathLoader
 from mowgli_etl.paths import PROJECT_ROOT
 from mowgli_etl.loader.cskg_csv.cskg_csv_loader import CskgCsvLoader
@@ -58,6 +59,7 @@ class GuiTestDataLoader(_EdgeLoader, _NodeLoader, _PathLoader):
         self.__edge_loaders.append(JsonEdgeLoader().open(ts_storage))
         self.__node_loaders.append(CskgCsvNodeLoader(bzip=True).open(scala_storage))
         self.__node_loaders.append(JsonNodeLoader().open(ts_storage))
+        self.__path_loaders.append(JsonPathLoader().open(ts_storage))
         self.__path_loaders.append(JsonlPathLoader().open(scala_storage))
 
         return self
