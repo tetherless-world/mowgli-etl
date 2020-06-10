@@ -77,6 +77,7 @@ class GuiTestDataTransformer(_Transformer):
                 while True:
                     choose_edge = random.choice(current_node_edges)
                     if choose_edge.object not in path_node_ids:
+                        # Prevent loops
                         break
                 # print(current_node_id, choose_edge.predicate, choose_edge.object)
                 path.append(choose_edge.predicate)

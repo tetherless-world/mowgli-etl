@@ -55,7 +55,7 @@ class GuiTestDataLoader(_EdgeLoader, _NodeLoader, _PathLoader):
         scala_storage = PipelineStorage(pipeline_id=GuiTestDataPipeline.ID, root_data_dir_path=PROJECT_ROOT, loaded_data_dir_path=PROJECT_ROOT.parent / "mcs-portal" / "conf" / "test_data")
         ts_storage = PipelineStorage(pipeline_id=GuiTestDataPipeline.ID, root_data_dir_path=PROJECT_ROOT, loaded_data_dir_path=PROJECT_ROOT.parent / "mcs-portal" / "test" / "integration" / "cypress" / "fixtures")
 
-        self.__edge_loaders.append(CskgCsvEdgeLoader(bzip=True).open(storage))
+        self.__edge_loaders.append(CskgCsvEdgeLoader(bzip=True).open(scala_storage))
         self.__edge_loaders.append(JsonEdgeLoader().open(ts_storage))
         self.__node_loaders.append(CskgCsvNodeLoader(bzip=True).open(scala_storage))
         self.__node_loaders.append(JsonNodeLoader().open(ts_storage))
