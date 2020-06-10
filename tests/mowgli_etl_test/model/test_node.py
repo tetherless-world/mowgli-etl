@@ -1,6 +1,6 @@
 import pytest
 
-from mowgli_etl.cskg.node import Node
+from mowgli_etl.model.node import Node
 
 
 @pytest.fixture

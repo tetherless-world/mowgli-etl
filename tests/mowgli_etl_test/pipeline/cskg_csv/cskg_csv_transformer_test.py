@@ -1,7 +1,7 @@
 import pytest
 
-from mowgli_etl.cskg.edge import Edge
-from mowgli_etl.cskg.node import Node
+from mowgli_etl.model.edge import Edge
+from mowgli_etl.model.node import Node
 from mowgli_etl.pipeline.cskg_csv.cskg_csv_extractor import CskgCsvExtractor
 from mowgli_etl.pipeline.cskg_csv.cskg_csv_transformer import CskgCsvTransformer
 

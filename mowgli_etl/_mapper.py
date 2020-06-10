@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import Generator
 
-from mowgli_etl.cskg.edge import Edge
-from mowgli_etl.cskg.node import Node
+from mowgli_etl.model.edge import Edge
+from mowgli_etl.model.node import Node
 
 
 class _Mapper(ABC):

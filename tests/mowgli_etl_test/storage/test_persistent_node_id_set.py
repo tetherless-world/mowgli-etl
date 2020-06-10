@@ -1,4 +1,4 @@
-from mowgli_etl.cskg.node import Node
+from mowgli_etl.model.node import Node
 
 try:
     from mowgli_etl.storage.persistent_node_id_set import PersistentNodeIdSet

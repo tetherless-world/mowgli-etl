@@ -1,6 +1,6 @@
 from rdflib import Graph
 
-from mowgli_etl.pipeline.rdf._rdf_loader import _RdfLoader
+from mowgli_etl.loader.rdf._rdf_loader import _RdfLoader
 
 
 class TripleRdfLoader(_RdfLoader):

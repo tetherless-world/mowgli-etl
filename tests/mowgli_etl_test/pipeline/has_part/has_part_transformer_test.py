@@ -1,6 +1,6 @@
-from mowgli_etl.cskg.concept_net_predicates import HAS_A, PART_OF
-from mowgli_etl.cskg.edge import Edge
-from mowgli_etl.cskg.mowgli_predicates import SAME_AS
+from mowgli_etl.model.concept_net_predicates import HAS_A, PART_OF
+from mowgli_etl.model.edge import Edge
+from mowgli_etl.model.mowgli_predicates import SAME_AS
 from mowgli_etl.pipeline.has_part.has_part_extractor import HasPartExtractor
 from mowgli_etl.pipeline.has_part.has_part_transformer import HasPartTransformer
 

@@ -2,8 +2,8 @@ from typing import Tuple, Union
 
 from pytest import fail
 
-from mowgli_etl.cskg.edge import Edge
-from mowgli_etl.cskg.node import Node
+from mowgli_etl.model.edge import Edge
+from mowgli_etl.model.node import Node
 from mowgli_etl._extractor import _Extractor
 from mowgli_etl._pipeline import _Pipeline
 from mowgli_etl._transformer import _Transformer

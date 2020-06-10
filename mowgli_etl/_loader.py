@@ -1,14 +1,22 @@
 import logging
+import subprocess
+import sys
 from abc import ABC, abstractmethod
+from pathlib import Path
 
-from mowgli_etl.cskg.edge import Edge
-from mowgli_etl.cskg.node import Node
+from mowgli_etl.model.edge import Edge
+from mowgli_etl.model.node import Node
 from mowgli_etl.pipeline_storage import PipelineStorage
 
 
 class _Loader(ABC):
     def __init__(self):
         self._logger = logging.getLogger(self.__class__.__name__)
+
+    def _bzip_file(self, file_path: Path):
+        if sys.platform.startswith("win"):
+            return
+        subprocess.call(["bzip2", "-9", "-f", str(file_path)])
 
     @abstractmethod
     def close(self) -> None:
@@ -28,11 +36,3 @@ class _Loader(ABC):
         Open this loader before calling load_* methods.
         """
         return self
-
-    @abstractmethod
-    def load_edge(self, edge: Edge):
-        pass
-
-    @abstractmethod
-    def load_node(self, node: Node):
-        pass

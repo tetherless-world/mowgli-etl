@@ -2,8 +2,8 @@ from typing import Generator, Union
 
 from xml.dom.minidom import parse
 
-from mowgli_etl.cskg.edge import Edge
-from mowgli_etl.cskg.node import Node
+from mowgli_etl.model.edge import Edge
+from mowgli_etl.model.node import Node
 from mowgli_etl._transformer import _Transformer
 from mowgli_etl.pipeline.usf.usf_constants import STRENGTH_FILE_KEY
 from mowgli_etl.pipeline.usf.usf_mappers import usf_edge, usf_node
