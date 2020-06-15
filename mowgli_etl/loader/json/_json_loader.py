@@ -21,7 +21,7 @@ class _JsonLoader:
     @staticmethod
     def _dump_models_to_json_file(*, json_file_path: Path, models: Sequence[NamedTuple]):
         with open(json_file_path, "w+") as json_file:
-            json.dump(_JsonLoader._convert_models_to_json_array(models), json_file)
+            json.dump(_JsonLoader._convert_models_to_json_array(models), json_file, indent=4)
 
     def _load_model(self, model: NamedTuple):
         self.__models.append(model)

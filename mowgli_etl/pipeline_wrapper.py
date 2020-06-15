@@ -14,6 +14,7 @@ from mowgli_etl.storage._node_set import _NodeSet
 from mowgli_etl.storage.mem_edge_set import MemEdgeSet
 from mowgli_etl.storage.mem_node_id_set import MemNodeIdSet
 from mowgli_etl.storage.mem_node_set import MemNodeSet
+import stringcase
 
 try:
     from mowgli_etl.storage.persistent_edge_set import PersistentEdgeSet
@@ -49,17 +50,17 @@ class PipelineWrapper:
                     yield from mapper.map(node)
 
     def load(self, model_generator: Generator[Model, None, None]) -> None:
+        load_method_cache = {}
         with self.__pipeline.loader.open(storage=self.__storage) as loader:
             for model in model_generator:
-                load_method = getattr()
-                if isinstance(model, Node):
-                    loader.load_node(model)
-                elif isinstance(model, Edge):
-                    loader.load_edge(model)
-                elif isinstance(model, Path):
-                    loader.load_path(model)
-                else:
-                    raise ValueError(type(model))
+                try:
+                    load_method = load_method_cache[model.__class__.__name__]
+                except KeyError:
+                    load_method_name = "load_" + stringcase.snakecase(model.__class__.__name__)
+                    load_method = getattr(loader, load_method_name)
+                    load_method_cache[model.__class__.__name__] = load_method
+
+                load_method(model)
 
     def run(
             self, *,
