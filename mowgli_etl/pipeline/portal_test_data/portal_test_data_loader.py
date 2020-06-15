@@ -11,11 +11,11 @@ from mowgli_etl.loader.json.json_path_loader import JsonPathLoader
 from mowgli_etl.loader.json.jsonl_path_loader import JsonlPathLoader
 from mowgli_etl.paths import PROJECT_ROOT
 from mowgli_etl.loader.cskg_csv.cskg_csv_loader import CskgCsvLoader
-from mowgli_etl.pipeline.gui_test_data.gui_test_data_pipeline import GuiTestDataPipeline
+from mowgli_etl.pipeline.portal_test_data.portal_test_data_pipeline import PortalTestDataPipeline
 from mowgli_etl.pipeline_storage import PipelineStorage
 
 
-class GuiTestDataLoader(_EdgeLoader, _NodeLoader, _PathLoader):
+class PortalTestDataLoader(_EdgeLoader, _NodeLoader, _PathLoader):
     class __CustomPipelineStorage(PipelineStorage):
         LOADED_DATA_DIR_PATH = PROJECT_ROOT.parent / "mcs-portal" / "conf" / "test_data"
         assert LOADED_DATA_DIR_PATH.exists(), LOADED_DATA_DIR_PATH
@@ -51,9 +51,9 @@ class GuiTestDataLoader(_EdgeLoader, _NodeLoader, _PathLoader):
             loader.load_path(path)
 
     def open(self, storage):
-        from mowgli_etl.pipeline.gui_test_data.gui_test_data_pipeline import GuiTestDataPipeline
-        scala_storage = PipelineStorage(pipeline_id=GuiTestDataPipeline.ID, root_data_dir_path=PROJECT_ROOT, loaded_data_dir_path=PROJECT_ROOT.parent / "mcs-portal" / "conf" / "test_data")
-        ts_storage = PipelineStorage(pipeline_id=GuiTestDataPipeline.ID, root_data_dir_path=PROJECT_ROOT, loaded_data_dir_path=PROJECT_ROOT.parent / "mcs-portal" / "test" / "integration" / "cypress" / "fixtures")
+        from mowgli_etl.pipeline.portal_test_data.portal_test_data_pipeline import PortalTestDataPipeline
+        scala_storage = PipelineStorage(pipeline_id=PortalTestDataPipeline.ID, root_data_dir_path=PROJECT_ROOT, loaded_data_dir_path=PROJECT_ROOT.parent / "mcs-portal" / "conf" / "test_data" / "kg")
+        ts_storage = PipelineStorage(pipeline_id=PortalTestDataPipeline.ID, root_data_dir_path=PROJECT_ROOT, loaded_data_dir_path=PROJECT_ROOT.parent / "mcs-portal" / "test" / "integration" / "cypress" / "fixtures" / "kg")
 
         self.__edge_loaders.append(CskgCsvEdgeLoader(bzip=True).open(scala_storage))
         self.__edge_loaders.append(JsonEdgeLoader().open(ts_storage))

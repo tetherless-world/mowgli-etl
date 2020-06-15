@@ -5,14 +5,14 @@ import mowgli_etl.model.concept_net_predicates
 from mowgli_etl.model.edge import Edge
 from mowgli_etl.model.node import Node
 from mowgli_etl.model.path import Path
-from mowgli_etl.pipeline.gui_test_data.gui_test_data_pipeline import GuiTestDataPipeline
+from mowgli_etl.pipeline.portal_test_data.portal_test_data_pipeline import PortalTestDataPipeline
 import random
 from tqdm import tqdm
 
 from mowgli_etl.storage.mem_edge_set import MemEdgeSet
 
 
-class GuiTestDataTransformer(_Transformer):
+class PortalTestDataTransformer(_Transformer):
     def transform(self, **kwds):
         concept_net_predicates = tuple(getattr(mowgli_etl.model.concept_net_predicates, attr) for attr in dir(mowgli_etl.model.concept_net_predicates) if not attr.startswith("_"))
 
@@ -21,9 +21,9 @@ class GuiTestDataTransformer(_Transformer):
         nodes = \
             tuple(
                 Node(
-                    datasource=GuiTestDataPipeline.ID,
+                    datasource=PortalTestDataPipeline.ID,
                     aliases=(f"Node {node_i}", f"Node alias {node_i}"),
-                    id=f"gui_test_data:{node_i}",
+                    id=f"portal_test_data:{node_i}",
                     label=f"Test node {node_i}",
                     other={"index": node_i},
                     pos=random.choice(pos),
@@ -53,7 +53,7 @@ class GuiTestDataTransformer(_Transformer):
                     predicate = random.choice(concept_net_predicates)
                     edge = \
                         Edge(
-                            datasource=GuiTestDataPipeline.ID,
+                            datasource=PortalTestDataPipeline.ID,
                             object=object_node.id,
                             predicate=predicate,
                             subject=subject_node.id,
@@ -85,7 +85,7 @@ class GuiTestDataTransformer(_Transformer):
                 path_node_ids.add(choose_edge.object)
                 current_node_id = choose_edge.object
             yield Path(
-                datasource=GuiTestDataPipeline.ID,
-                id="gui_test_data_path_" + str(path_i),
+                datasource=PortalTestDataPipeline.ID,
+                id="portal_test_data_path_" + str(path_i),
                 path=tuple(path)
             )
