@@ -1,16 +1,19 @@
 from mowgli_etl.loader._edge_loader import _EdgeLoader
 import json
 
+from mowgli_etl.loader.json._json_loader import _JsonLoader
 
-class JsonEdgeLoader(_EdgeLoader):
-    def close(self):
-        with open(self.__storage.loaded_data_dir_path / "edges.json", "w+") as json_file:
-            json.dump(self.__edges, json_file)
+
+class JsonEdgeLoader(_EdgeLoader, _JsonLoader):
+    def __init__(self):
+        _EdgeLoader.__init__(self)
+        _JsonLoader.__init__(self, json_file_name="edges.json")
+
+    def close(self, *args, **kwds):
+        return _JsonLoader.close(self, *args, **kwds)
 
     def load_edge(self, edge):
-        self.__edges.append({key: value for key, value in edge._asdict().items() if value is not None})
+        self._load_model(edge)
 
-    def open(self, storage):
-        self.__edges = []
-        self.__storage = storage
-        return self
+    def open(self, *args, **kwds):
+        return _JsonLoader.open(self, *args, **kwds)

@@ -1,16 +1,19 @@
 from mowgli_etl.loader._path_loader import _PathLoader
 import json
 
+from mowgli_etl.loader.json._jsonl_loader import _JsonlLoader
 
-class JsonlPathLoader(_PathLoader):
-    def close(self):
-        self.__paths_jsonl_file.close()
+
+class JsonlPathLoader(_PathLoader, _JsonlLoader):
+    def __init__(self):
+        _PathLoader.__init__(self)
+        _JsonlLoader.__init__(self, jsonl_file_name="paths.jsonl")
+
+    def close(self, *args, **kwds):
+        return _JsonlLoader.close(self, *args, **kwds)
 
     def load_path(self, path):
-        json.dump({key: value for key, value in path._asdict().items() if value is not None}, self.__paths_jsonl_file)
-        self.__paths_jsonl_file.write("\n")
+        self._load_model(path)
 
-    def open(self, storage):
-        # Ignore PipelineStorage passed in, write to the GUI test data directory
-        self.__paths_jsonl_file = open(storage.loaded_data_dir_path / "paths.jsonl", "w+")
-        return self
+    def open(self, *args, **kwds):
+        return _JsonlLoader.open(self, *args, **kwds)
