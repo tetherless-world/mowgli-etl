@@ -1,27 +1,34 @@
-from typing import NamedTuple, Sequence, Dict, List
+import collections
+from typing import NamedTuple
 import json
 
-from mowgli_etl.model.path import Path
+# Helper functions
+def isinstance_namedtuple(x):
+    if not isinstance(x, tuple):
+        return False
+    # if not isinstance(getattr(x, '__dict__', None), collections.Mapping):
+    #     return False
+    if getattr(x, '_fields', None) is None:
+        return False
+    return True
 
 
 class _JsonLoader:
     _JSON_FILE_NAME = None
 
     def close(self):
-        self._dump_models_to_json_file(json_file_path = self.__storage.loaded_data_dir_path / self._JSON_FILE_NAME, models = self.__models)
+        with open(self.__storage.loaded_data_dir_path / self._JSON_FILE_NAME, "w+") as json_file:
+            json.dump(_JsonLoader._convert_to_json(self.__models), json_file, indent=4)
 
     @staticmethod
-    def _convert_model_to_json_object(model: NamedTuple) -> Dict[str, object]:
-        return {key: value for key, value in model._asdict().items() if value is not None}
-
-    @staticmethod
-    def _convert_models_to_json_array(models: Sequence[NamedTuple]) -> List[Dict[str, object]]:
-        return [_JsonLoader._convert_model_to_json_object(model) for model in models]
-
-    @staticmethod
-    def _dump_models_to_json_file(*, json_file_path: Path, models: Sequence[NamedTuple]):
-        with open(json_file_path, "w+") as json_file:
-            json.dump(_JsonLoader._convert_models_to_json_array(models), json_file, indent=4)
+    def _convert_to_json(obj):
+        if isinstance_namedtuple(obj):
+            # Model/named tuple
+            return {key: _JsonLoader._convert_to_json(value) for key, value in obj._asdict().items() if value is not None}
+        elif isinstance(obj, (list, tuple)):
+            return [_JsonLoader._convert_to_json(element) for element in obj]
+        else:
+            return obj
 
     def _load_model(self, model: NamedTuple):
         self.__models.append(model)

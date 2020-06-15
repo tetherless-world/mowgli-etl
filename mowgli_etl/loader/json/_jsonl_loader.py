@@ -11,7 +11,7 @@ class _JsonlLoader:
         self.__jsonl_file.close()
 
     def _load_model(self, model: NamedTuple):
-        json.dump(_JsonLoader._convert_model_to_json_object(model), self.__jsonl_file)
+        json.dump(_JsonLoader._convert_to_json(model), self.__jsonl_file)
         self.__jsonl_file.write("\n")
 
     def open(self, storage):
