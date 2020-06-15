@@ -2,6 +2,9 @@ from math import floor
 
 from mowgli_etl._transformer import _Transformer
 import mowgli_etl.model.concept_net_predicates
+from mowgli_etl.model.benchmark import Benchmark
+from mowgli_etl.model.benchmark_question import BenchmarkQuestion
+from mowgli_etl.model.benchmark_question_set import BenchmarkQuestionSet
 from mowgli_etl.model.edge import Edge
 from mowgli_etl.model.node import Node
 from mowgli_etl.model.path import Path
@@ -65,6 +68,29 @@ class PortalTestDataTransformer(_Transformer):
                     edge_set.add(edge)
                     edges_by_subject.setdefault(subject_node.id, []).append(edge)
                     break
+
+        for benchmark_i in range(3):
+            benchmark_id = f"benchmark{benchmark_i}"
+            yield \
+                Benchmark(
+                    id=benchmark_id
+                )
+            for question_set_id in ("dev", "test", "train"):
+                question_ids = []
+                for question_i in range(100):
+                    question_id = f"benchmark{benchmark_i}-{question_set_id}-{question_i}"
+                    question_ids.append(question_id)
+                    yield \
+                        BenchmarkQuestion(
+                            benchmark_id=question_id,
+                            id=question_id
+                        )
+                yield \
+                    BenchmarkQuestionSet(
+                        benchmark_id=benchmark_id,
+                        id=question_set_id,
+                        question_ids=tuple(question_ids)
+                    )
 
         for path_i in range(10):
             current_node_id = start_node_id = random.choice(nodes).id
