@@ -75,6 +75,7 @@ class PortalTestDataTransformer(_Transformer):
                             question_set_id=question_set_id,
                             choices=choices,
                             concept=random.choice(concepts),
+                            correct_choice_label=random.choice(choices).label,
                             id=question_id,
                             text=f"Benchmark {benchmark_i} {question_set_id} set question {question_i}"
                         )
