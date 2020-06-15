@@ -7,7 +7,7 @@ from mowgli_etl.model.benchmark_question_set import BenchmarkQuestionSet
 from mowgli_etl.model.edge import Edge
 
 
-class _BenchmarkQuestionLoader(_Loader):
+class _BenchmarkQuestionSetLoader(_Loader):
     @abstractmethod
     def load_benchmark_question_set(self, benchmark_question_set: BenchmarkQuestionSet):
         raise NotImplementedError

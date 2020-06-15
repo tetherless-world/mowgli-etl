@@ -3,9 +3,7 @@ from mowgli_etl.loader.json._json_loader import _JsonLoader
 
 
 class JsonBenchmarkLoader(_BenchmarkLoader, _JsonLoader):
-    def __init__(self):
-        _BenchmarkLoader.__init__(self)
-        _JsonLoader.__init__(self, json_file_name="benchmarks.json")
-
-    def load_benchmark(self, benchmark):
-        self._load_model(benchmark)
+    _JSON_FILE_NAME = "benchmarks.json"
+    close = _JsonLoader.close
+    load_benchmark = _JsonLoader._load_model
+    open = _JsonLoader.open
