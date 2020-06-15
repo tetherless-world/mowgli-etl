@@ -3,6 +3,9 @@ from typing import NamedTuple
 import json
 
 # Helper functions
+import stringcase
+
+
 def isinstance_namedtuple(x):
     if not isinstance(x, tuple):
         return False
@@ -24,7 +27,7 @@ class _JsonLoader:
     def _convert_to_json(obj):
         if isinstance_namedtuple(obj):
             # Model/named tuple
-            return {key: _JsonLoader._convert_to_json(value) for key, value in obj._asdict().items() if value is not None}
+            return {stringcase.camelcase(key): _JsonLoader._convert_to_json(value) for key, value in obj._asdict().items() if value is not None}
         elif isinstance(obj, (list, tuple)):
             return [_JsonLoader._convert_to_json(element) for element in obj]
         else:
