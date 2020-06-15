@@ -1,5 +1,3 @@
-from mowgli_etl.loader._benchmark_loader import _BenchmarkLoader
-from mowgli_etl.loader._benchmark_question_loader import _BenchmarkQuestionLoader
 from mowgli_etl.loader._benchmark_question_set_loader import _BenchmarkQuestionSetLoader
 from mowgli_etl.loader.json._json_loader import _JsonLoader
 
