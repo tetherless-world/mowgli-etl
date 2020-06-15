@@ -5,12 +5,10 @@ from mowgli_etl.model.path import Path
 
 
 class _JsonLoader:
-    def __init__(self, *, json_file_name: str):
-        self.__json_file_name = json_file_name
-        self.__models = []
+    _JSON_FILE_NAME = None
 
     def close(self):
-        self._dump_models_to_json_file(json_file_path = self.__storage.loaded_data_dir_path / self.__json_file_name, models = self.__models)
+        self._dump_models_to_json_file(json_file_path = self.__storage.loaded_data_dir_path / self._JSON_FILE_NAME, models = self.__models)
 
     @staticmethod
     def _convert_model_to_json_object(model: NamedTuple) -> Dict[str, object]:
