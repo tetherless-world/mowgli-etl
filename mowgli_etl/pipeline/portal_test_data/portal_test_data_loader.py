@@ -1,8 +1,8 @@
 from pathlib import Path
 
-from mowgli_etl._edge_loader import _EdgeLoader
-from mowgli_etl._node_loader import _NodeLoader
-from mowgli_etl._path_loader import _PathLoader
+from mowgli_etl.loader._edge_loader import _EdgeLoader
+from mowgli_etl.loader._node_loader import _NodeLoader
+from mowgli_etl.loader._path_loader import _PathLoader
 from mowgli_etl.loader.cskg_csv.cskg_csv_edge_loader import CskgCsvEdgeLoader
 from mowgli_etl.loader.cskg_csv.cskg_csv_node_loader import CskgCsvNodeLoader
 from mowgli_etl.loader.json.json_edge_loader import JsonEdgeLoader

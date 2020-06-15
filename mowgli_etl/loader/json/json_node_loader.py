@@ -1,4 +1,4 @@
-from mowgli_etl._node_loader import _NodeLoader
+from mowgli_etl.loader._node_loader import _NodeLoader
 import json
 
 

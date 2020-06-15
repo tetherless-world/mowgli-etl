@@ -7,8 +7,8 @@ import rdflib.plugin
 import rdflib.store
 from rdflib import URIRef
 
-from mowgli_etl._edge_loader import _EdgeLoader
-from mowgli_etl._node_loader import _NodeLoader
+from mowgli_etl.loader._edge_loader import _EdgeLoader
+from mowgli_etl.loader._node_loader import _NodeLoader
 from mowgli_etl.model.edge import Edge
 from mowgli_etl.model.node import Node
 from mowgli_etl._loader import _Loader

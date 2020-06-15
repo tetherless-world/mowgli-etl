@@ -1,4 +1,4 @@
-from mowgli_etl._path_loader import _PathLoader
+from mowgli_etl.loader._path_loader import _PathLoader
 import json
 
 

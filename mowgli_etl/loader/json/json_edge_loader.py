@@ -1,4 +1,4 @@
-from mowgli_etl._edge_loader import _EdgeLoader
+from mowgli_etl.loader._edge_loader import _EdgeLoader
 import json
 
 
