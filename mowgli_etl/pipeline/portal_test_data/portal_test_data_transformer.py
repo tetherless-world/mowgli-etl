@@ -60,6 +60,7 @@ class PortalTestDataTransformer(_Transformer):
                     yield \
                         BenchmarkQuestion(
                             benchmark_id=question_id,
+                            benchmark_question_set_id=question_set_id,
                             choices=tuple(BenchmarkQuestionChoice(
                                label=chr(ord('A')+choice_i),
                                text=f"Choice {choice_i}"
@@ -71,7 +72,6 @@ class PortalTestDataTransformer(_Transformer):
                 yield \
                     BenchmarkQuestionSet(
                         benchmark_id=benchmark_id,
-                        benchmark_question_ids=tuple(question_ids),
                         id=question_set_id,
                     )
 
