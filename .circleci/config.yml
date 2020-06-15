@@ -1,3 +1,6 @@
+version: 2.1
+orbs:
+  slack: circleci/slack@3.4.2
 jobs:
   build:
     docker:
@@ -78,3 +81,4 @@ jobs:
             fi
       - store_artifacts:
           path: cskg.tar.bz2
+      - slack/status
