@@ -1,17 +1,11 @@
-import json
+from mowgli_etl.loader._node_loader import _NodeLoader
 
-from mowgli_etl._path_loader import _PathLoader
+from mowgli_etl.loader._path_loader import _PathLoader
+from mowgli_etl.loader.json._json_loader import _JsonLoader
 
 
-class JsonPathLoader(_PathLoader):
-    def close(self):
-        with open(self.__storage.loaded_data_dir_path / "paths.json", "w+") as json_file:
-            json.dump(self.__paths, json_file)
-
-    def load_path(self, path):
-        self.__paths.append({key: value for key, value in path._asdict().items() if value is not None})
-
-    def open(self, storage):
-        self.__paths = []
-        self.__storage = storage
-        return self
+class JsonPathLoader(_PathLoader, _JsonLoader):
+    _JSON_FILE_NAME = "paths.json"
+    close = _JsonLoader.close
+    load_path = _JsonLoader._load_model
+    open = _JsonLoader.open

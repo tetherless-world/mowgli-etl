@@ -14,6 +14,7 @@ from mowgli_etl.storage._node_set import _NodeSet
 from mowgli_etl.storage.mem_edge_set import MemEdgeSet
 from mowgli_etl.storage.mem_node_id_set import MemNodeIdSet
 from mowgli_etl.storage.mem_node_set import MemNodeSet
+import stringcase
 
 try:
     from mowgli_etl.storage.persistent_edge_set import PersistentEdgeSet
@@ -49,16 +50,17 @@ class PipelineWrapper:
                     yield from mapper.map(node)
 
     def load(self, model_generator: Generator[Model, None, None]) -> None:
+        load_method_cache = {}
         with self.__pipeline.loader.open(storage=self.__storage) as loader:
             for model in model_generator:
-                if isinstance(model, Node):
-                    loader.load_node(model)
-                elif isinstance(model, Edge):
-                    loader.load_edge(model)
-                elif isinstance(model, Path):
-                    loader.load_path(model)
-                else:
-                    raise ValueError(type(model))
+                try:
+                    load_method = load_method_cache[model.__class__.__name__]
+                except KeyError:
+                    load_method_name = "load_" + stringcase.snakecase(model.__class__.__name__)
+                    load_method = getattr(loader, load_method_name)
+                    load_method_cache[model.__class__.__name__] = load_method
+
+                load_method(model)
 
     def run(
             self, *,
@@ -116,12 +118,15 @@ class PipelineWrapper:
             transform_generator: Generator[Model, None, None],
             used_node_ids_set: _NodeIdSet
     ) -> Generator[Model, None, None]:
-        for node_or_edge in transform_generator:
-            if self.__pipeline.single_datasource and node_or_edge.datasource != self.__pipeline.id:
-                raise ValueError(f"pipeline can only yield one datasource, the same as the pipeline id: expected={self.id}, actual={node_or_edge.datasource}")
+        for model in transform_generator:
+            try:
+                if self.__pipeline.single_datasource and model.datasource != self.__pipeline.id:
+                    raise ValueError(f"pipeline can only yield one datasource, the same as the pipeline id: expected={self.id}, actual={model.datasource}")
+            except AttributeError:
+                pass
 
-            if isinstance(node_or_edge, Node):
-                node = node_or_edge
+            if isinstance(model, Node):
+                node = model
                 # Node ID's should be unique in the CSKG.
                 existing_node = node_set.get(node.id)
                 if existing_node is not None:
@@ -138,8 +143,8 @@ class PipelineWrapper:
                         )
                 else:
                     node_set.add(node)
-            elif isinstance(node_or_edge, Edge):
-                edge = node_or_edge
+            elif isinstance(model, Edge):
+                edge = model
                 # Edges should be unique in the CSKG, meaning that the tuple of (subject, predicate, object) should be unique.
                 existing_edge = edge_set.get(object=edge.object, predicate=edge.predicate,
                                              subject=edge.subject)
@@ -152,7 +157,7 @@ class PipelineWrapper:
                 edge_set.add(edge)
                 used_node_ids_set.add(edge.subject)
                 used_node_ids_set.add(edge.object)
-            yield node_or_edge
+            yield model
         for node_id in node_set.keys():
             if node_id not in used_node_ids_set:
                 raise ValueError("node %s not used by an edge" % node_id)
