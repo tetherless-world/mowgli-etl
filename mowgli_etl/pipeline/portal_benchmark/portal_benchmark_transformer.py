@@ -26,17 +26,17 @@ class PortalBenchmarkTransformer(_Transformer):
 
     def __transform_kagnet_commonsenseqa_benchmark_submission(self, jsonl_bz2_file_path):
         benchmark_id = "commonsenseqa"
+        question_set_id = "dev"
         yield \
             Benchmark(
                 id=benchmark_id,
-                name="CommonsenseQA"
-            )
-
-        question_set_id = "dev"
-        yield \
-            BenchmarkQuestionSet(
-                benchmark_id=benchmark_id,
-                id=question_set_id,
+                name="CommonsenseQA",
+                question_sets=(
+                    BenchmarkQuestionSet(
+                        benchmark_id=benchmark_id,
+                        id=question_set_id,
+                    ),
+                )
             )
 
         answers = []
