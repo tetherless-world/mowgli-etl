@@ -7,8 +7,9 @@ from mowgli_etl.model.benchmark import Benchmark
 from mowgli_etl.model.benchmark_answer import BenchmarkAnswer
 from mowgli_etl.model.benchmark_answer_explanation import BenchmarkAnswerExplanation
 from mowgli_etl.model.benchmark_question import BenchmarkQuestion
-from mowgli_etl.model.benchmark_question_answer_node_pair import BenchmarkQuestionAnswerNodePair
+from mowgli_etl.model.benchmark_question_answer_paths import BenchmarkQuestionAnswerPaths
 from mowgli_etl.model.benchmark_question_choice import BenchmarkQuestionChoice
+from mowgli_etl.model.benchmark_question_choice_analysis import BenchmarkQuestionChoiceAnalysis
 from mowgli_etl.model.benchmark_question_set import BenchmarkQuestionSet
 from mowgli_etl.model.benchmark_submission import BenchmarkSubmission
 from mowgli_etl.model.edge import Edge
@@ -70,6 +71,7 @@ class PortalTestDataTransformer(_Transformer):
                         for question_set_id in question_set_ids
                     )
                 )
+            submission_id = f"{benchmark_id}-submission"
             answers = []
             for question_set_id in question_set_ids:
                 question_ids = []
@@ -89,37 +91,44 @@ class PortalTestDataTransformer(_Transformer):
                         )
                 if question_set_id == "test":
                     for question_id in question_ids:
-                        question_answer_node_pairs = []
-                        for path_i in range(3):
-                            path = random.choice(paths).path
-                            question_answer_node_pairs.append(
-                                BenchmarkQuestionAnswerNodePair(
-                                    start_node_id=path[0],
-                                    end_node_id=path[-1],
-                                    score=random.random(),
-                                    paths=(
-                                        ScoredPath(
-                                            path=path,
-                                            score=random.random()
+                        choice_analyses = []
+                        for choice in choices:
+                            question_answer_paths = []
+                            for path_i in range(3):
+                                path = random.choice(paths).path
+                                question_answer_paths.append(
+                                    BenchmarkQuestionAnswerPaths(
+                                        start_node_id=path[0],
+                                        end_node_id=path[-1],
+                                        score=random.random(),
+                                        paths=(
+                                            ScoredPath(
+                                                path=path,
+                                                score=random.random()
+                                            ),
                                         ),
-                                    ),
+                                    )
                                 )
-                            )
-                        answers.append(
+                                choice_analyses.append(
+                                    BenchmarkQuestionChoiceAnalysis(
+                                        choice_label=choice.label,
+                                        question_answer_paths=tuple(question_answer_paths)
+                                    )
+                                )
+                        yield \
                             BenchmarkAnswer(
                                 choice_label=random.choice(choices).label,
                                 explanation=BenchmarkAnswerExplanation(
-                                    question_answer_node_pairs=tuple(question_answer_node_pairs)
+                                    choice_analyses=tuple(choice_analyses)
                                 ),
                                 question_id=question_id,
+                                submission_id=submission_id
                             )
-                        )
 
                     yield \
                         BenchmarkSubmission(
-                            answers=tuple(answers),
                             benchmark_id=benchmark_id,
-                            id=f"{benchmark_id}-submission",
+                            id=submission_id,
                             question_set_id=question_set_id
                         )
 

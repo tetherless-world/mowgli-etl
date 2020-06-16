@@ -1,7 +1,7 @@
-from typing import NamedTuple, Tuple
+from typing import NamedTuple, Tuple, Optional
 
-from mowgli_etl.model.benchmark_question_answer_node_pair import BenchmarkQuestionAnswerNodePair
+from mowgli_etl.model.benchmark_question_choice_analysis import BenchmarkQuestionChoiceAnalysis
 
 
 class BenchmarkAnswerExplanation(NamedTuple):
-    question_answer_node_pairs: Tuple[BenchmarkQuestionAnswerNodePair, ...]
+    choice_analyses: Optional[Tuple[BenchmarkQuestionChoiceAnalysis, ...]] = None

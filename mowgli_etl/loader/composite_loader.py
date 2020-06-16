@@ -2,6 +2,7 @@ from pathlib import Path
 from typing import Sequence, Optional
 
 from mowgli_etl._loader import _Loader
+from mowgli_etl.loader._benchmark_answer_loader import _BenchmarkAnswerLoader
 from mowgli_etl.loader._benchmark_loader import _BenchmarkLoader
 from mowgli_etl.loader._benchmark_question_loader import _BenchmarkQuestionLoader
 from mowgli_etl.loader._benchmark_submission_loader import _BenchmarkSubmissionLoader
@@ -10,7 +11,7 @@ from mowgli_etl.loader._node_loader import _NodeLoader
 from mowgli_etl.loader._path_loader import _PathLoader
 
 
-class CompositeLoader(_BenchmarkLoader, _BenchmarkQuestionLoader, _BenchmarkSubmissionLoader, _EdgeLoader, _NodeLoader, _PathLoader):
+class CompositeLoader(_BenchmarkLoader, _BenchmarkAnswerLoader, _BenchmarkQuestionLoader, _BenchmarkSubmissionLoader, _EdgeLoader, _NodeLoader, _PathLoader):
     def __init__(self, loaders: Optional[Sequence[_Loader]] = None):
         self._loaders = []
         if loaders is not None:
@@ -22,6 +23,9 @@ class CompositeLoader(_BenchmarkLoader, _BenchmarkQuestionLoader, _BenchmarkSubm
 
     def load_benchmark(self, benchmark):
         self.__load_model(loader_class=_BenchmarkLoader, load_method_name="load_benchmark", model=benchmark)
+
+    def load_benchmark_answer(self, benchmark_answer):
+        self.__load_model(loader_class=_BenchmarkAnswerLoader, load_method_name="load_benchmark_answer", model=benchmark_answer)
 
     def load_benchmark_question(self, benchmark_question):
         self.__load_model(loader_class=_BenchmarkQuestionLoader, load_method_name="load_benchmark_question", model=benchmark_question)
