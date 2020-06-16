@@ -1,25 +1,14 @@
-from pathlib import Path
-
-from mowgli_etl.loader._benchmark_loader import _BenchmarkLoader
-from mowgli_etl.loader._benchmark_question_loader import _BenchmarkQuestionLoader
-from mowgli_etl.loader._benchmark_question_set_loader import _BenchmarkQuestionSetLoader
-from mowgli_etl.loader._benchmark_submission_loader import _BenchmarkSubmissionLoader
-from mowgli_etl.loader._edge_loader import _EdgeLoader
-from mowgli_etl.loader._node_loader import _NodeLoader
-from mowgli_etl.loader._path_loader import _PathLoader
 from mowgli_etl.loader.composite_loader import CompositeLoader
 from mowgli_etl.loader.cskg_csv.cskg_csv_edge_loader import CskgCsvEdgeLoader
 from mowgli_etl.loader.cskg_csv.cskg_csv_node_loader import CskgCsvNodeLoader
 from mowgli_etl.loader.json.json_benchmark_loader import JsonBenchmarkLoader
 from mowgli_etl.loader.json.json_benchmark_question_loader import JsonBenchmarkQuestionLoader
-from mowgli_etl.loader.json.json_benchmark_question_set_loader import JsonBenchmarkQuestionSetLoader
 from mowgli_etl.loader.json.json_benchmark_submission_loader import JsonBenchmarkSubmissionLoader
 from mowgli_etl.loader.json.json_edge_loader import JsonEdgeLoader
 from mowgli_etl.loader.json.json_node_loader import JsonNodeLoader
 from mowgli_etl.loader.json.json_path_loader import JsonPathLoader
 from mowgli_etl.loader.json.jsonl_benchmark_loader import JsonlBenchmarkLoader
 from mowgli_etl.loader.json.jsonl_benchmark_question_loader import JsonlBenchmarkQuestionLoader
-from mowgli_etl.loader.json.jsonl_benchmark_question_set_loader import JsonlBenchmarkQuestionSetLoader
 from mowgli_etl.loader.json.jsonl_benchmark_submission_loader import JsonlBenchmarkSubmissionLoader
 from mowgli_etl.loader.json.jsonl_path_loader import JsonlPathLoader
 from mowgli_etl.paths import PROJECT_ROOT
@@ -34,7 +23,6 @@ class PortalTestDataLoader(CompositeLoader):
         ts_kg_storage = PipelineStorage(pipeline_id=PortalTestDataPipeline.ID, root_data_dir_path=PROJECT_ROOT, loaded_data_dir_path=PROJECT_ROOT.parent / "mcs-portal" / "test" / "integration" / "cypress" / "fixtures" / "kg")
         self._loaders.append(JsonBenchmarkLoader().open(ts_benchmark_storage))
         self._loaders.append(JsonBenchmarkQuestionLoader().open(ts_benchmark_storage))
-        self._loaders.append(JsonBenchmarkQuestionSetLoader().open(ts_benchmark_storage))
         self._loaders.append(JsonBenchmarkSubmissionLoader().open(ts_benchmark_storage))
         self._loaders.append(JsonEdgeLoader().open(ts_kg_storage))
         self._loaders.append(JsonNodeLoader().open(ts_kg_storage))
@@ -46,7 +34,6 @@ class PortalTestDataLoader(CompositeLoader):
         self._loaders.append(CskgCsvNodeLoader(bzip=True).open(scala_kg_storage))
         self._loaders.append(JsonlBenchmarkLoader().open(scala_benchmark_storage))
         self._loaders.append(JsonlBenchmarkQuestionLoader().open(scala_benchmark_storage))
-        self._loaders.append(JsonlBenchmarkQuestionSetLoader().open(scala_benchmark_storage))
         self._loaders.append(JsonlBenchmarkSubmissionLoader().open(scala_benchmark_storage))
         self._loaders.append(JsonlPathLoader().open(scala_kg_storage))
 

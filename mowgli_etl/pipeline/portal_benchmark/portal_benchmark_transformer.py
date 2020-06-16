@@ -95,6 +95,7 @@ class PortalBenchmarkTransformer(_Transformer):
         yield \
             BenchmarkSubmission(
                 benchmark_id=benchmark_id,
+                id="kagnet-commonsenseqa-dev",
                 question_set_id=question_set_id,
                 answers=tuple(answers)
             )

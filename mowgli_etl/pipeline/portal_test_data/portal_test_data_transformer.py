@@ -57,13 +57,21 @@ class PortalTestDataTransformer(_Transformer):
 
         for benchmark_i in range(3):
             benchmark_id = f"benchmark{benchmark_i}"
+            question_set_ids = ("dev", "test", "train")
             yield \
                 Benchmark(
                     id=benchmark_id,
-                    name=f"Benchmark {benchmark_i}"
+                    name=f"Benchmark {benchmark_i}",
+                    question_sets=tuple(
+                        BenchmarkQuestionSet(
+                            benchmark_id=benchmark_id,
+                            id=question_set_id,
+                        )
+                        for question_set_id in question_set_ids
+                    )
                 )
             answers = []
-            for question_set_id in ("dev", "test", "train"):
+            for question_set_id in question_set_ids:
                 question_ids = []
                 concepts = tuple(f"concept {concept_i}" for concept_i in range(5))
                 for question_i in range(100):
@@ -79,21 +87,15 @@ class PortalTestDataTransformer(_Transformer):
                             id=question_id,
                             text=f"Benchmark {benchmark_i} {question_set_id} set question {question_i}"
                         )
-                yield \
-                    BenchmarkQuestionSet(
-                        benchmark_id=benchmark_id,
-                        id=question_set_id,
-                    )
                 if question_set_id == "test":
-                    answers = []
                     for question_id in question_ids:
                         question_answer_node_pairs = []
                         for path_i in range(3):
-                            path = random.choice(paths)
+                            path = random.choice(paths).path
                             question_answer_node_pairs.append(
                                 BenchmarkQuestionAnswerNodePair(
                                     start_node_id=path[0],
-                                    end_node_id=path[1],
+                                    end_node_id=path[-1],
                                     score=random.random(),
                                     paths=(
                                         ScoredPath(
@@ -105,7 +107,7 @@ class PortalTestDataTransformer(_Transformer):
                             )
                         answers.append(
                             BenchmarkAnswer(
-                                choice_label=random.choice(choices),
+                                choice_label=random.choice(choices).label,
                                 explanation=BenchmarkAnswerExplanation(
                                     question_answer_node_pairs=tuple(question_answer_node_pairs)
                                 ),
@@ -117,6 +119,7 @@ class PortalTestDataTransformer(_Transformer):
                         BenchmarkSubmission(
                             answers=tuple(answers),
                             benchmark_id=benchmark_id,
+                            id=f"{benchmark_id}-submission",
                             question_set_id=question_set_id
                         )
 
