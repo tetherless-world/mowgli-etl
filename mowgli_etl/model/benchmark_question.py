@@ -4,7 +4,6 @@ from mowgli_etl.model.benchmark_question_choice import BenchmarkQuestionChoice
 
 
 class BenchmarkQuestion(NamedTuple):
-    benchmark_id: str
     choices: Tuple[BenchmarkQuestionChoice, ...]
     id: str
     question_set_id: str

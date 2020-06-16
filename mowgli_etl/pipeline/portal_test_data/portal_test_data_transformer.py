@@ -56,40 +56,39 @@ class PortalTestDataTransformer(_Transformer):
             text=f"Choice {choice_i}"
         ) for choice_i in range(4))
 
+        question_set_types = ("dev", "test", "train")
         for benchmark_i in range(3):
             benchmark_id = f"benchmark{benchmark_i}"
-            question_set_ids = ("dev", "test", "train")
+            question_set_ids = tuple(f"{benchmark_id}-{suffix}" for suffix in question_set_types)
             yield \
                 Benchmark(
                     id=benchmark_id,
                     name=f"Benchmark {benchmark_i}",
                     question_sets=tuple(
                         BenchmarkQuestionSet(
-                            benchmark_id=benchmark_id,
                             id=question_set_id,
+                            name=f"Benchmark {benchmark_i} {question_set_type} set"
                         )
-                        for question_set_id in question_set_ids
+                        for question_set_id, question_set_type in zip(question_set_ids, question_set_types)
                     )
                 )
             submission_id = f"{benchmark_id}-submission"
-            answers = []
-            for question_set_id in question_set_ids:
+            for question_set_id, question_set_type in zip(question_set_ids, question_set_types):
                 question_ids = []
                 concepts = tuple(f"concept {concept_i}" for concept_i in range(5))
                 for question_i in range(100):
-                    question_id = f"benchmark{benchmark_i}-{question_set_id}-{question_i}"
+                    question_id = f"{question_set_id}-{question_i}"
                     question_ids.append(question_id)
                     yield \
                         BenchmarkQuestion(
-                            benchmark_id=benchmark_id,
                             question_set_id=question_set_id,
                             choices=choices,
                             concept=random.choice(concepts),
                             correct_choice_label=random.choice(choices).label,
                             id=question_id,
-                            text=f"Benchmark {benchmark_i} {question_set_id} set question {question_i}"
+                            text=f"Benchmark {benchmark_i} {question_set_type} set question {question_i}"
                         )
-                if question_set_id == "test":
+                if question_set_type == "test":
                     for question_id in question_ids:
                         choice_analyses = []
                         for choice in choices:
