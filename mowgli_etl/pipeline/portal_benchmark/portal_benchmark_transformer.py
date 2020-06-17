@@ -11,7 +11,7 @@ from mowgli_etl.model.benchmark_question_answer_path import BenchmarkQuestionAns
 from mowgli_etl.model.benchmark_question_answer_paths import BenchmarkQuestionAnswerPaths
 from mowgli_etl.model.benchmark_question_choice import BenchmarkQuestionChoice
 from mowgli_etl.model.benchmark_question_choice_analysis import BenchmarkQuestionChoiceAnalysis
-from mowgli_etl.model.benchmark_question_set import BenchmarkQuestionSet
+from mowgli_etl.model.benchmark_dataset import BenchmarkDataset
 from mowgli_etl.model.benchmark_submission import BenchmarkSubmission
 from mowgli_etl.model.path import Path
 
@@ -28,33 +28,33 @@ class PortalBenchmarkTransformer(_Transformer):
 
     def __transform_kagnet_commonsenseqa_benchmark_submission(self, jsonl_bz2_file_path):
         benchmark_id = "commonsenseqa"
-        question_set_type = "dev"
-        question_set_id = f"{benchmark_id}-{question_set_type}"
+        dataset_type = "dev"
+        dataset_id = f"{benchmark_id}-{dataset_type}"
         yield \
             Benchmark(
                 id=benchmark_id,
                 name="CommonsenseQA",
-                question_sets=(
-                    BenchmarkQuestionSet(
-                        id=question_set_id,
-                        name=f"CommonsenseQA {question_set_type} set"
+                datasets=(
+                    BenchmarkDataset(
+                        id=dataset_id,
+                        name=f"CommonsenseQA {dataset_type} set"
                     ),
                 )
             )
 
-        submission_id = f"kagnet-{question_set_id}"
+        submission_id = f"kagnet-{dataset_id}"
         yield \
             BenchmarkSubmission(
                 benchmark_id=benchmark_id,
                 id=submission_id,
-                question_set_id=question_set_id
+                dataset_id=dataset_id
             )
 
         with bz2.open(jsonl_bz2_file_path) as jsonl_bz2_file:
             for line in jsonl_bz2_file:
                 obj = json.loads(line)
                 question_obj = obj["question"]
-                question_id = question_set_id + "-" + obj["id"]
+                question_id = dataset_id + "-" + obj["id"]
                 yield \
                     BenchmarkQuestion(
                         choices=tuple(
@@ -67,7 +67,7 @@ class PortalBenchmarkTransformer(_Transformer):
                         concept=question_obj["question_concept"],
                         correct_choice_label=obj["answerKey"],
                         id=question_id,
-                        question_set_id=question_set_id,
+                        dataset_id=dataset_id,
                         text=question_obj["stem"],
                     )
                 yield \

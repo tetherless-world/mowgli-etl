@@ -1,6 +1,6 @@
 from typing import NamedTuple, Tuple
 
 
-class BenchmarkQuestionSet(NamedTuple):
+class BenchmarkDataset(NamedTuple):
     id: str
     name: str
