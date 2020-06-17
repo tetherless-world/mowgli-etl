@@ -7,16 +7,16 @@ from mowgli_etl.model.benchmark import Benchmark
 from mowgli_etl.model.benchmark_answer import BenchmarkAnswer
 from mowgli_etl.model.benchmark_answer_explanation import BenchmarkAnswerExplanation
 from mowgli_etl.model.benchmark_question import BenchmarkQuestion
+from mowgli_etl.model.benchmark_question_answer_path import BenchmarkQuestionAnswerPath
 from mowgli_etl.model.benchmark_question_answer_paths import BenchmarkQuestionAnswerPaths
 from mowgli_etl.model.benchmark_question_choice import BenchmarkQuestionChoice
 from mowgli_etl.model.benchmark_question_choice_analysis import BenchmarkQuestionChoiceAnalysis
-from mowgli_etl.model.benchmark_question_set import BenchmarkQuestionSet
+from mowgli_etl.model.benchmark_dataset import BenchmarkDataset
 from mowgli_etl.model.benchmark_submission import BenchmarkSubmission
 from mowgli_etl.model.edge import Edge
 from mowgli_etl.model.model import Model
 from mowgli_etl.model.node import Node
 from mowgli_etl.model.path import Path
-from mowgli_etl.model.scored_path import ScoredPath
 from mowgli_etl.pipeline.portal_test_data.portal_test_data_pipeline import PortalTestDataPipeline
 import random
 from tqdm import tqdm
@@ -56,39 +56,39 @@ class PortalTestDataTransformer(_Transformer):
             text=f"Choice {choice_i}"
         ) for choice_i in range(4))
 
-        question_set_types = ("dev", "test", "train")
+        dataset_types = ("dev", "test", "train")
         for benchmark_i in range(3):
             benchmark_id = f"benchmark{benchmark_i}"
-            question_set_ids = tuple(f"{benchmark_id}-{suffix}" for suffix in question_set_types)
+            dataset_ids = tuple(f"{benchmark_id}-{suffix}" for suffix in dataset_types)
             yield \
                 Benchmark(
                     id=benchmark_id,
                     name=f"Benchmark {benchmark_i}",
-                    question_sets=tuple(
-                        BenchmarkQuestionSet(
-                            id=question_set_id,
-                            name=f"Benchmark {benchmark_i} {question_set_type} set"
+                    datasets=tuple(
+                        BenchmarkDataset(
+                            id=dataset_id,
+                            name=f"Benchmark {benchmark_i} {dataset_type} set"
                         )
-                        for question_set_id, question_set_type in zip(question_set_ids, question_set_types)
+                        for dataset_id, dataset_type in zip(dataset_ids, dataset_types)
                     )
                 )
             submission_id = f"{benchmark_id}-submission"
-            for question_set_id, question_set_type in zip(question_set_ids, question_set_types):
+            for dataset_id, dataset_type in zip(dataset_ids, dataset_types):
                 question_ids = []
                 concepts = tuple(f"concept {concept_i}" for concept_i in range(5))
                 for question_i in range(100):
-                    question_id = f"{question_set_id}-{question_i}"
+                    question_id = f"{dataset_id}-{question_i}"
                     question_ids.append(question_id)
                     yield \
                         BenchmarkQuestion(
-                            question_set_id=question_set_id,
+                            dataset_id=dataset_id,
                             choices=choices,
                             concept=random.choice(concepts),
                             correct_choice_label=random.choice(choices).label,
                             id=question_id,
-                            text=f"Benchmark {benchmark_i} {question_set_type} set question {question_i}"
+                            text=f"Benchmark {benchmark_i} {dataset_type} set question {question_i}"
                         )
-                if question_set_type == "test":
+                if dataset_type == "test":
                     for question_id in question_ids:
                         choice_analyses = []
                         for choice in choices:
@@ -101,7 +101,7 @@ class PortalTestDataTransformer(_Transformer):
                                         end_node_id=path[-1],
                                         score=random.random(),
                                         paths=(
-                                            ScoredPath(
+                                            BenchmarkQuestionAnswerPath(
                                                 path=path,
                                                 score=random.random()
                                             ),
@@ -128,7 +128,7 @@ class PortalTestDataTransformer(_Transformer):
                         BenchmarkSubmission(
                             benchmark_id=benchmark_id,
                             id=submission_id,
-                            question_set_id=question_set_id
+                            dataset_id=dataset_id
                         )
 
     def __transform_kg_edges(self, nodes: Tuple[Node, ...]) -> Generator[Edge, None, None]:
