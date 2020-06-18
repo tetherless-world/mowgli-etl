@@ -128,7 +128,8 @@ class PortalTestDataTransformer(_Transformer):
                         BenchmarkSubmission(
                             benchmark_id=benchmark_id,
                             id=submission_id,
-                            dataset_id=dataset_id
+                            dataset_id=dataset_id,
+                            name=f"Benchmark {benchmark_i} test submission"
                         )
 
     def __transform_kg_edges(self, nodes: Tuple[Node, ...]) -> Generator[Edge, None, None]:
