@@ -7,14 +7,16 @@
   xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
   xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
   <owl:Ontology rdf:about="urn:absolute:ontosenticnet"/>
-  
-  
-  
+
   <owl:NamedIndividual rdf:about="urn:absolute:ontosenticnet#face">
+    <rdf:type rdf:resource="urn:absolute:ontosenticnet#SenticConcept"/>
+    <text>face</text>
     <semantics rdf:resource="urn:absolute:ontosenticnet#book"/>
     <semantics rdf:resource="urn:absolute:ontosenticnet#time"/>
     <semantics rdf:resource="urn:absolute:ontosenticnet#lift"/>
     <semantics rdf:resource="urn:absolute:ontosenticnet#mask"/>
+    <primitiveURI rdf:resource="urn:absolute:ontosenticnet#joy"/>
+    <primitiveURI rdf:resource="urn:absolute:ontosenticnet#admiration"/>
     <pleasantness rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0</pleasantness>
     <attention rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.1</attention>
     <sensitivity rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.416</sensitivity>
@@ -23,11 +25,15 @@
   </owl:NamedIndividual>
 	
   <owl:NamedIndividual rdf:about="urn:absolute:ontosenticnet#half">
+    <rdf:type rdf:resource="urn:absolute:ontosenticnet#SenticConcept"/>
+    <text>half</text>
     <semantics rdf:resource="urn:absolute:ontosenticnet#life"/>
     <semantics rdf:resource="urn:absolute:ontosenticnet#whole"/>
     <semantics rdf:resource="urn:absolute:ontosenticnet#part"/>
     <semantics rdf:resource="urn:absolute:ontosenticnet#split"/>
     <semantics rdf:resource="urn:absolute:ontosenticnet#full"/>
+    <primitiveURI rdf:resource="urn:absolute:ontosenticnet#sadness"/>
+    <primitiveURI rdf:resource="urn:absolute:ontosenticnet#anger"/>
     <pleasantness rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">-0.74</pleasantness>
     <attention rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0</attention>
     <sensitivity rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.882</sensitivity>
@@ -36,10 +42,14 @@
   </owl:NamedIndividual>
 
   <owl:NamedIndividual rdf:about="urn:absolute:ontosenticnet#swing">
+    <rdf:type rdf:resource="urn:absolute:ontosenticnet#SenticConcept"/>
+    <text>swing</text>
     <semantics rdf:resource="urn:absolute:ontosenticnet#bat"/>
     <semantics rdf:resource="urn:absolute:ontosenticnet#dance"/>
     <semantics rdf:resource="urn:absolute:ontosenticnet#set"/>
     <semantics rdf:resource="urn:absolute:ontosenticnet#sway"/>
+    <primitiveURI rdf:resource="urn:absolute:ontosenticnet#joy"/>
+    <primitiveURI rdf:resource="urn:absolute:ontosenticnet#admiration"/>
     <pleasantness rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">-0.04</pleasantness>
     <attention rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">0.127</attention>
     <sensitivity rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">-0.12</sensitivity>

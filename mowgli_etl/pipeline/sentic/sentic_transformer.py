@@ -2,12 +2,16 @@ from typing import Generator, Union
 
 from xml.dom.minidom import parse
 
-from mowgli_etl.model.concept_net_predicates import RELATED_TO
 from mowgli_etl.model.edge import Edge
 from mowgli_etl.model.node import Node
 from mowgli_etl._transformer import _Transformer
+from mowgli_etl.pipeline.sentic import sentic_types
 from mowgli_etl.pipeline.sentic.sentic_constants import SENTIC_FILE_KEY
-from mowgli_etl.pipeline.sentic.sentic_mappers import sentic_edge, sentic_node
+from mowgli_etl.pipeline.sentic.sentic_mappers import (
+    sentic_edge,
+    sentic_id,
+    sentic_node,
+)
 
 
 class SENTICTransformer(_Transformer):
@@ -15,63 +19,69 @@ class SENTICTransformer(_Transformer):
 
         self._logger.info("transform %s", SENTIC_FILE_KEY)
 
-        with open(kwds[SENTIC_FILE_KEY], mode="r") as strength_file:
-            # print(strength_file.read())
-            dom = parse(strength_file)
+        with open(kwds[SENTIC_FILE_KEY], mode="r") as sentic_file:
+            dom = parse(sentic_file)
 
-            namedinds = dom.getElementsByTagName("owl:NamedIndividual")
-
-            sentfields = (
+            sentic_fields = (
                 "pleasantness",
                 "attention",
                 "sensitivity",
                 "aptitude",
                 "polarity",
             )
-            sentnodes = {
-                sen: sentic_node(sen, other={"sentiment": True}) for sen in sentfields
-            }
 
-            for sen_node in sentnodes.values():
-                yield sen_node
+            for named_ind_ele in dom.getElementsByTagName("owl:NamedIndividual"):
+                id = named_ind_ele.getAttribute("rdf:about").split("#")[-1]
 
-            for ind in namedinds:
-                subjectword = ind.getAttribute("rdf:about").split("#")[-1]
+                type_ele = named_ind_ele.getElementsByTagName("rdf:type")[0]
+                type = type_ele.getAttribute("rdf:resource").split("#")[-1]
 
-                subjectnode = sentic_node(subjectword)
-
-                semrows = ind.getElementsByTagName("semantics")
-
-                if ind.hasChildNodes() == False:
+                if type != sentic_types.CONCEPT:
                     continue
 
-                childnames = {child.nodeName for child in ind.childNodes}
+                label = named_ind_ele.getElementsByTagName("text")[
+                    0
+                ].firstChild.nodeValue
 
-                for row in semrows:
+                subject_node = sentic_node(
+                    id=id, label=label, sentic_type=sentic_types.CONCEPT
+                )
+                yield subject_node
 
-                    targetword = row.getAttribute("rdf:resource").split("#")[-1]
-                    targetnode = sentic_node(targetword)
-                    edge = sentic_edge(subject=subjectnode, object_=targetnode)
+                for semantic_ele in named_ind_ele.getElementsByTagName("semantics"):
+                    related_nid = sentic_id(
+                        semantic_ele.getAttribute("rdf:resource").split("#")[-1]
+                    )
+                    yield sentic_edge(subject=subject_node.id, object_=related_nid)
 
-                    yield subjectnode
-                    yield targetnode
-                    yield edge
-
-                for sen in sentfields:
-                    sent_value = ""
-
-                    if sen not in childnames:
+                for sentic_name in sentic_fields:
+                    sentic_eles = named_ind_ele.getElementsByTagName(sentic_name)
+                    if len(sentic_eles) == 0:
                         continue
 
-                    sent_value = ind.getElementsByTagName(sen)[0].childNodes[0].data
-
-                    sent_weight = float(sent_value)
-                    sent_node = sentnodes[sen]
-                    sent_edge = sentic_edge(
-                        subject=subjectnode,
-                        object_=sent_node,
-                        weight=sent_weight,
-                        predicate=RELATED_TO,
+                    raw_weight = (
+                        named_ind_ele.getElementsByTagName(sentic_name)[0]
+                        .childNodes[0]
+                        .data
                     )
 
-                    yield sent_edge
+                    weight = float(raw_weight)
+                    object_node = sentic_node(
+                        id=sentic_name, sentic_type=sentic_types.SENTIC
+                    )
+                    yield object_node
+                    yield sentic_edge(
+                        subject=subject_node.id, object_=object_node.id, weight=weight,
+                    )
+
+                for primitive_ele in named_ind_ele.getElementsByTagName("primitiveURI"):
+                    primitive = primitive_ele.getAttribute("rdf:resource").split("#")[
+                        -1
+                    ]
+                    primitive_node = sentic_node(
+                        id=primitive, sentic_type=sentic_types.PRIMITIVE
+                    )
+                    yield primitive_node
+                    yield sentic_edge(
+                        subject=subject_node.id, object_=primitive_node.id,
+                    )
