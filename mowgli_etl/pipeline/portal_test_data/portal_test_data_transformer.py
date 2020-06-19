@@ -108,12 +108,12 @@ class PortalTestDataTransformer(_Transformer):
                                         ),
                                     )
                                 )
-                                choice_analyses.append(
-                                    BenchmarkQuestionChoiceAnalysis(
-                                        choice_label=choice.label,
-                                        question_answer_paths=tuple(question_answer_paths)
-                                    )
+                            choice_analyses.append(
+                                BenchmarkQuestionChoiceAnalysis(
+                                    choice_label=choice.label,
+                                    question_answer_paths=tuple(question_answer_paths)
                                 )
+                            )
                         yield \
                             BenchmarkAnswer(
                                 choice_label=random.choice(choices).label,
