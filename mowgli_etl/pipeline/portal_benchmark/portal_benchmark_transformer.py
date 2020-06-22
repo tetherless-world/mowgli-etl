@@ -47,7 +47,8 @@ class PortalBenchmarkTransformer(_Transformer):
             BenchmarkSubmission(
                 benchmark_id=benchmark_id,
                 id=submission_id,
-                dataset_id=dataset_id
+                dataset_id=dataset_id,
+                name=f"KagNet on CommonsenseQA"
             )
 
         with bz2.open(jsonl_bz2_file_path) as jsonl_bz2_file:
