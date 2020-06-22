@@ -152,14 +152,3 @@ def sample_sentic_edges():
 @pytest.fixture
 def sentic_zip_url():
     return "https://mowgli.com/sentic_test_data.zip"
-
-
-@pytest.fixture
-def senticclient():
-    client = MockEtlHttpClient()
-
-    client.add_file_mock_response(
-        "https://mowgli.com/sentic_test_data.zip",
-        str(Path(__file__).parent / "sentic_test_data.zip"),
-    )
-    return client
