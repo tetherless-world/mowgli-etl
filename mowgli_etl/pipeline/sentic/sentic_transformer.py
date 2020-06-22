@@ -31,12 +31,12 @@ class SENTICTransformer(_Transformer):
             )
 
             for named_ind_ele in dom.getElementsByTagName("owl:NamedIndividual"):
-                id = named_ind_ele.getAttribute("rdf:about").split("#")[-1]
+                subj_sentic_id = named_ind_ele.getAttribute("rdf:about").split("#")[-1]
 
                 type_ele = named_ind_ele.getElementsByTagName("rdf:type")[0]
-                type = type_ele.getAttribute("rdf:resource").split("#")[-1]
+                subj_type = type_ele.getAttribute("rdf:resource").split("#")[-1]
 
-                if type != sentic_types.CONCEPT:
+                if subj_type != sentic_types.CONCEPT:
                     continue
 
                 label = named_ind_ele.getElementsByTagName("text")[
@@ -44,15 +44,20 @@ class SENTICTransformer(_Transformer):
                 ].firstChild.nodeValue
 
                 subject_node = sentic_node(
-                    id=id, label=label, sentic_type=sentic_types.CONCEPT
+                    id=subj_sentic_id, label=label, sentic_type=sentic_types.CONCEPT
                 )
                 yield subject_node
 
+                # Dataset contains duplicate semantic relation designations
+                yielded_related_nids = set()
                 for semantic_ele in named_ind_ele.getElementsByTagName("semantics"):
                     related_nid = sentic_id(
-                        semantic_ele.getAttribute("rdf:resource").split("#")[-1]
+                        semantic_ele.getAttribute("rdf:resource").split("#")[-1],
+                        sentic_types.CONCEPT,
                     )
-                    yield sentic_edge(subject=subject_node.id, object_=related_nid)
+                    if related_nid not in yielded_related_nids:
+                        yield sentic_edge(subject=subject_node.id, object_=related_nid)
+                        yielded_related_nids.add(related_nid)
 
                 for sentic_name in sentic_fields:
                     sentic_eles = named_ind_ele.getElementsByTagName(sentic_name)
@@ -74,14 +79,18 @@ class SENTICTransformer(_Transformer):
                         subject=subject_node.id, object_=object_node.id, weight=weight,
                     )
 
+                # Dataset contains duplicate primitive assignments
+                yielded_primitives = set()
                 for primitive_ele in named_ind_ele.getElementsByTagName("primitiveURI"):
                     primitive = primitive_ele.getAttribute("rdf:resource").split("#")[
                         -1
                     ]
-                    primitive_node = sentic_node(
-                        id=primitive, sentic_type=sentic_types.PRIMITIVE
-                    )
-                    yield primitive_node
-                    yield sentic_edge(
-                        subject=subject_node.id, object_=primitive_node.id,
-                    )
+                    if primitive not in yielded_primitives:
+                        primitive_node = sentic_node(
+                            id=primitive, sentic_type=sentic_types.PRIMITIVE
+                        )
+                        yield primitive_node
+                        yield sentic_edge(
+                            subject=subject_node.id, object_=primitive_node.id,
+                        )
+                        yielded_primitives.add(primitive)

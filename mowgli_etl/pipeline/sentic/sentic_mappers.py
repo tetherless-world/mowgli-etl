@@ -6,12 +6,12 @@ from mowgli_etl.model.edge import Edge
 from mowgli_etl.model.node import Node
 from mowgli_etl.pipeline.sentic.sentic_constants import (
     SENTIC_DATASOURCE_ID,
-    SENTIC_NAMESPACE,
+    SENTIC_NAMESPACE, SENTIC_TYPE_KEY,
 )
 
 
-def sentic_id(id: str) -> str:
-    return f"{SENTIC_NAMESPACE}:{quote(id)}"
+def sentic_id(id: str, type: str) -> str:
+    return f"{SENTIC_NAMESPACE}:{type}:{quote(id)}"
 
 
 def sentic_node(*, id: str, label: str = None, sentic_type: str) -> Node:
@@ -19,9 +19,9 @@ def sentic_node(*, id: str, label: str = None, sentic_type: str) -> Node:
         label = id
     return Node(
         datasource=SENTIC_DATASOURCE_ID,
-        id=sentic_id(id),
+        id=sentic_id(id, sentic_type),
         label=label,
-        other={"sentic_type": sentic_type},
+        other={SENTIC_TYPE_KEY: sentic_type},
     )
 
 
