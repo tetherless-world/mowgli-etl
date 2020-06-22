@@ -12,7 +12,10 @@ from mowgli_etl.pipeline_storage import PipelineStorage
 
 class PortalBenchmarkLoader(CompositeLoader):
     def open(self, *args, **kwds):
-        storage = PipelineStorage(pipeline_id=PortalBenchmarkPipeline.ID, root_data_dir_path=PROJECT_ROOT, loaded_data_dir_path=PROJECT_ROOT.parent / "mcs-portal" / "data" / "import" / "benchmark")
+        mcs_portal_dir_path = PROJECT_ROOT.parent / "mcs-portal"
+        assert mcs_portal_dir_path.is_dir(), f"expected mcs-portal checkout at ${mcs_portal_dir_path}"
+
+        storage = PipelineStorage(pipeline_id=PortalBenchmarkPipeline.ID, root_data_dir_path=PROJECT_ROOT, loaded_data_dir_path=mcs_portal_dir_path / "conf" / "data" / "import" / "benchmark")
         self._loaders.append(JsonlBenchmarkLoader().open(storage))
         self._loaders.append(JsonlBenchmarkAnswerLoader().open(storage))
         self._loaders.append(JsonlBenchmarkQuestionLoader().open(storage))
