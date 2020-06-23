@@ -28,15 +28,13 @@ class McsBenchmarkTransformer(_Transformer):
                     correct_choice_label = benchmark_sample[self._CORRECT_CHOICE_LABEL]
 
                 choices = tuple(
-                    BenchmarkQuestionChoice(label=choice["identifier"], text=choice["text"])
-                    # TODO: change to "choices" when fixed
-                    for choice in benchmark_sample["choice"][self._LIST]
+                    BenchmarkQuestionChoice(label=choice["name"], text=choice["text"])
+                    for choice in benchmark_sample["choices"][self._LIST]
                 )
 
                 yield BenchmarkQuestion(
                     id=benchmark_sample["@id"],
-                    # TODO: change to "included" when data is fixed
-                    dataset_id=benchmark_sample["inludedInDataset"],
+                    dataset_id=benchmark_sample["includedInDataset"],
                     text=question_text,
                     correct_choice_label=correct_choice_label,
                     choices=choices
