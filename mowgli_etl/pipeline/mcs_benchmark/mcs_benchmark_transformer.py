@@ -6,14 +6,26 @@ from mowgli_etl._transformer import _Transformer
 from mowgli_etl.model.benchmark_answer import BenchmarkAnswer
 from mowgli_etl.model.benchmark_question import BenchmarkQuestion
 from mowgli_etl.model.benchmark_question_choice import BenchmarkQuestionChoice
+from mowgli_etl.model.benchmark_question_choice_type import BenchmarkQuestionChoiceType
+from mowgli_etl.model.benchmark_question_prompt import BenchmarkQuestionPrompt
+from mowgli_etl.model.benchmark_question_prompt_type import BenchmarkQuestionPromptType
+from mowgli_etl.model.benchmark_question_type import BenchmarkQuestionType
 from mowgli_etl.model.model import Model
 
 
 class McsBenchmarkTransformer(_Transformer):
-    _TYPE = "@type"
-    _LIST = "itemListElement"
-    _QUESTION_TYPES = {"BenchmarkGoal", "BenchmarkQuestion", "BenchmarkObservation"}
-    _CORRECT_CHOICE_LABEL = "correctChoiceLabel"
+    __TYPE = "@type"
+    __LIST = "itemListElement"
+    __CORRECT_CHOICE_LABEL = "correctChoiceLabel"
+    __QUESTION_PROMPT_TYPE_DICT = {
+        "BenchmarkGoal": BenchmarkQuestionPromptType.GOAL,
+        "BenchmarkObservation": BenchmarkQuestionPromptType.OBSERVATION,
+        "BenchmarkQuestion": BenchmarkQuestionPromptType.QUESTION,
+    }
+    __QUESTION_TYPE_DICT = {
+        "multiple choice": BenchmarkQuestionType.MULTIPLE_CHOICE,
+        "true/false": BenchmarkQuestionType.TRUE_FALSE,
+    }
 
     def __init__(self):
         super().__init__()
@@ -29,7 +41,7 @@ class McsBenchmarkTransformer(_Transformer):
             with open(jsonl_path) as jsonl_file:
                 for line in jsonl_file.readlines():
                     resource = json.loads(line)
-                    resource_type = resource[self._TYPE]
+                    resource_type = resource[self.__TYPE]
                     if resource_type not in self.__transformers:
                         raise ValueError(f"Unhandled top level type: {resource_type}")
                     transformer = self.__transformers[resource_type]
@@ -38,18 +50,33 @@ class McsBenchmarkTransformer(_Transformer):
     def transform_benchmark_sample(
         self, benchmark_sample_json
     ) -> Generator[BenchmarkQuestion, None, None]:
-        question_text = ""
-        for antecedent_item in benchmark_sample_json["antecedent"][self._LIST]:
-            antecedent_type = antecedent_item[self._TYPE]
-            if antecedent_type in self._QUESTION_TYPES:
-                question_text += antecedent_item["text"]
+        prompts = []
+        categories = None
+        question_type = None
+        for antecedent_item in benchmark_sample_json["antecedent"][self.__LIST]:
+            antecedent_type = antecedent_item[self.__TYPE]
+            if antecedent_type in self.__QUESTION_PROMPT_TYPE_DICT:
+                prompts.append(
+                    BenchmarkQuestionPrompt(
+                        type=self.__QUESTION_PROMPT_TYPE_DICT[antecedent_type],
+                        text=antecedent_item["text"],
+                    )
+                )
+            elif antecedent_type == "BenchmarkQuestionCategory":
+                categories = tuple(antecedent_item["text"])
+            elif antecedent_type == "BenchmarkQuestionType":
+                assert antecedent_item["text"] in self.__QUESTION_TYPE_DICT, "Unknown question"
         correct_choice_label = None
-        if self._CORRECT_CHOICE_LABEL in benchmark_sample_json:
-            correct_choice_label = benchmark_sample_json[self._CORRECT_CHOICE_LABEL]
+        if self.__CORRECT_CHOICE_LABEL in benchmark_sample_json:
+            correct_choice_label = benchmark_sample_json[self.__CORRECT_CHOICE_LABEL]
 
         choices = tuple(
-            BenchmarkQuestionChoice(label=choice["name"], text=choice["text"])
-            for choice in benchmark_sample_json["choices"][self._LIST]
+            BenchmarkQuestionChoice(
+                label=choice["name"],
+                text=choice["text"],
+                type=BenchmarkQuestionChoiceType.from_value(choice[self.__TYPE]),
+            )
+            for choice in benchmark_sample_json["choices"][self.__LIST]
         )
 
         yield BenchmarkQuestion(
