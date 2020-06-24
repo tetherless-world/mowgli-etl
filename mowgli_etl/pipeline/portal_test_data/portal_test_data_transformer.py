@@ -12,6 +12,9 @@ from mowgli_etl.model.benchmark_question_answer_paths import BenchmarkQuestionAn
 from mowgli_etl.model.benchmark_question_choice import BenchmarkQuestionChoice
 from mowgli_etl.model.benchmark_question_choice_analysis import BenchmarkQuestionChoiceAnalysis
 from mowgli_etl.model.benchmark_dataset import BenchmarkDataset
+from mowgli_etl.model.benchmark_question_choice_type import BenchmarkQuestionChoiceType
+from mowgli_etl.model.benchmark_question_prompt import BenchmarkQuestionPrompt
+from mowgli_etl.model.benchmark_question_prompt_type import BenchmarkQuestionPromptType
 from mowgli_etl.model.benchmark_submission import BenchmarkSubmission
 from mowgli_etl.model.edge import Edge
 from mowgli_etl.model.model import Model
@@ -53,7 +56,9 @@ class PortalTestDataTransformer(_Transformer):
     def __transform_benchmarks(self, *, paths: Tuple[Path, ...]) -> Generator[Model, None, None]:
         choices = tuple(BenchmarkQuestionChoice(
             label=chr(ord('A')+choice_i),
-            text=f"Choice {choice_i}"
+            text=f"Choice {choice_i}",
+            # Using a single choice type for now since all questions have the same answer set
+            type=BenchmarkQuestionChoiceType.ANSWER,
         ) for choice_i in range(4))
 
         dataset_types = ("dev", "test", "train")
@@ -79,6 +84,7 @@ class PortalTestDataTransformer(_Transformer):
                 for question_i in range(100):
                     question_id = f"{dataset_id}-{question_i}"
                     question_ids.append(question_id)
+                    prompt_type = random.choice(list(BenchmarkQuestionPromptType))
                     yield \
                         BenchmarkQuestion(
                             dataset_id=dataset_id,
@@ -86,7 +92,12 @@ class PortalTestDataTransformer(_Transformer):
                             concept=random.choice(concepts),
                             correct_choice_label=random.choice(choices).label,
                             id=question_id,
-                            text=f"Benchmark {benchmark_i} {dataset_type} set question {question_i}"
+                            prompts=tuple(
+                                BenchmarkQuestionPrompt(
+                                    type=prompt_type,
+                                    text=f"Benchmark {benchmark_i} {dataset_type} set {prompt_type} {question_i}"
+                                ),
+                            ),
                         )
                 if dataset_type == "test":
                     for question_id in question_ids:
@@ -164,8 +175,8 @@ class PortalTestDataTransformer(_Transformer):
         return \
             tuple(
                 Node(
+                    aliases=(f"Node{node_i}", f"NodeAlias{node_i}"),
                     datasource=PortalTestDataPipeline.ID,
-                    aliases=(f"Node {node_i}", f"Node alias {node_i}"),
                     id=f"portal_test_data:{node_i}",
                     label=f"Test node {node_i}",
                     other={"index": node_i},
