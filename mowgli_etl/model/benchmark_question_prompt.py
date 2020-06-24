@@ -4,5 +4,5 @@ from mowgli_etl.model.benchmark_question_prompt_type import BenchmarkQuestionPro
 
 
 class BenchmarkQuestionPrompt(NamedTuple):
-    type: BenchmarkQuestionPromptType
     text: str
+    type: BenchmarkQuestionPromptType

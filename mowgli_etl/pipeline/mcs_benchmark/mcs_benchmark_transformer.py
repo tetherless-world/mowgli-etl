@@ -36,9 +36,9 @@ class McsBenchmarkTransformer(_Transformer):
     def __init__(self):
         super().__init__()
         self.__transformers = {
-            "BenchmarkSample": self.transform_benchmark_sample,
-            "Submission": self.transform_submission,
-            "SubmissionSample": self.transform_submission_sample,
+            "BenchmarkSample": self.__transform_benchmark_sample,
+            "Submission": self.__transform_submission,
+            "SubmissionSample": self.__transform_submission_sample,
         }
 
     def transform(
@@ -49,12 +49,12 @@ class McsBenchmarkTransformer(_Transformer):
                 for line in jsonl_file.readlines():
                     resource = json.loads(line)
                     resource_type = resource[self.__TYPE]
-                    if resource_type not in self.__transformers:
+                    transformer = self.__transformers.get(resource_type)
+                    if transformer is None:
                         raise ValueError(f"Unhandled top level type: {resource_type}")
-                    transformer = self.__transformers[resource_type]
                     yield from transformer(resource)
 
-    def transform_benchmark_sample(
+    def __transform_benchmark_sample(
         self, benchmark_sample_json
     ) -> Generator[BenchmarkQuestion, None, None]:
         prompts = []
@@ -105,12 +105,12 @@ class McsBenchmarkTransformer(_Transformer):
             type=question_type,
         )
 
-    def transform_submission(
+    def __transform_submission(
         self, submission_sample_json
     ) -> Generator[BenchmarkSubmission, None, None]:
         yield from []
 
-    def transform_submission_sample(
+    def __transform_submission_sample(
         self, submission_sample_json
     ) -> Generator[BenchmarkAnswer, None, None]:
         yield from []
