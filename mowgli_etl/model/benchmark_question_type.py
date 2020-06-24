@@ -1,12 +1,7 @@
 from enum import auto, Enum
 
 
-class BenchmarkQuestionType(Enum):
-    MULTIPLE_CHOICE = auto()
-    TRUE_FALSE = auto()
+class BenchmarkQuestionType(str, Enum):
+    MULTIPLE_CHOICE = "MULTIPLE_CHOICE"
+    TRUE_FALSE = "TRUE_FALSE"
 
-    @classmethod
-    def from_value(cls, value: str):
-        if value not in val_dict:
-            raise ValueError(f"Unknown question type value {value}")
-        return val_dict[value]

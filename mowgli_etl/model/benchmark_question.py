@@ -10,7 +10,7 @@ class BenchmarkQuestion(NamedTuple):
     id: str
     dataset_id: str
     prompts: Tuple[BenchmarkQuestionPrompt]
-    type: BenchmarkQuestionType
     categories: Optional[Tuple[str]] = None
     concept: Optional[str] = None
     correct_choice_label: Optional[str] = None
+    type: Optional[BenchmarkQuestionType] = BenchmarkQuestionType.MULTIPLE_CHOICE
