@@ -55,7 +55,7 @@ class PortalTestDataTransformer(_Transformer):
 
     def __transform_benchmarks(self, *, paths: Tuple[Path, ...]) -> Generator[Model, None, None]:
         choices = tuple(BenchmarkQuestionChoice(
-            label=chr(ord('A')+choice_i),
+            id=chr(ord('A')+choice_i),
             text=f"Choice {choice_i}",
             # Using a single choice type for now since all questions have the same answer set
             type=BenchmarkQuestionChoiceType.ANSWER,
@@ -90,7 +90,7 @@ class PortalTestDataTransformer(_Transformer):
                             dataset_id=dataset_id,
                             choices=choices,
                             concept=random.choice(concepts),
-                            correct_choice_label=random.choice(choices).label,
+                            correct_choice_id=random.choice(choices).id,
                             id=question_id,
                             prompts=tuple(
                                 BenchmarkQuestionPrompt(
@@ -121,13 +121,13 @@ class PortalTestDataTransformer(_Transformer):
                                 )
                             choice_analyses.append(
                                 BenchmarkQuestionChoiceAnalysis(
-                                    choice_label=choice.label,
+                                    choice_id=choice.id,
                                     question_answer_paths=tuple(question_answer_paths)
                                 )
                             )
                         yield \
                             BenchmarkAnswer(
-                                choice_label=random.choice(choices).label,
+                                choice_id=random.choice(choices).id,
                                 explanation=BenchmarkAnswerExplanation(
                                     choice_analyses=tuple(choice_analyses)
                                 ),

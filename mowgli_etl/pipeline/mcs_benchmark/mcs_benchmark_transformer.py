@@ -17,7 +17,6 @@ from mowgli_etl.model.model import Model
 class McsBenchmarkTransformer(_Transformer):
     __TYPE = "@type"
     __LIST = "itemListElement"
-    __CORRECT_CHOICE_LABEL = "correctChoiceLabel"
     __QUESTION_CHOICE_TYPE_DICT = {
         "BenchmarkAnswer": BenchmarkQuestionChoiceType.ANSWER,
         "BenchmarkHypothesis": BenchmarkQuestionChoiceType.HYPOTHESIS,
@@ -81,13 +80,13 @@ class McsBenchmarkTransformer(_Transformer):
                 ), f"Unknown question type {question_type_val}"
                 question_type = self.__QUESTION_TYPE_DICT[question_type_val]
 
-        correct_choice_label = None
-        if self.__CORRECT_CHOICE_LABEL in benchmark_sample_json:
-            correct_choice_label = benchmark_sample_json[self.__CORRECT_CHOICE_LABEL]
+        correct_choice_id = str(benchmark_sample_json["correctChoice"])
+
+        has_id = all("identifier" in choice for choice in benchmark_sample_json["choices"][self.__LIST])
 
         choices = tuple(
             BenchmarkQuestionChoice(
-                label=choice["name"],
+                id=choice["identifier"] if has_id else str(choice["position"]),
                 text=choice["text"],
                 type=self.__QUESTION_CHOICE_TYPE_DICT[choice[self.__TYPE]],
             )
@@ -100,7 +99,7 @@ class McsBenchmarkTransformer(_Transformer):
             categories=categories,
             concept=concept,
             choices=choices,
-            correct_choice_label=correct_choice_label,
+            correct_choice_id=correct_choice_id,
             prompts=tuple(prompts),
             type=question_type,
         )
