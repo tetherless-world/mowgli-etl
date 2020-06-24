@@ -92,7 +92,7 @@ class PortalTestDataTransformer(_Transformer):
                             concept=random.choice(concepts),
                             correct_choice_id=random.choice(choices).id,
                             id=question_id,
-                            prompts=tuple(
+                            prompts=(
                                 BenchmarkQuestionPrompt(
                                     type=prompt_type,
                                     text=f"Benchmark {benchmark_i} {dataset_type} set {prompt_type} {question_i}"
