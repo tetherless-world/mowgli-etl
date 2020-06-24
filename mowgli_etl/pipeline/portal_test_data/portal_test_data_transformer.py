@@ -175,8 +175,8 @@ class PortalTestDataTransformer(_Transformer):
         return \
             tuple(
                 Node(
+                    aliases=(f"Node{node_i}", f"NodeAlias{node_i}"),
                     datasource=PortalTestDataPipeline.ID,
-                    aliases=(f"Node {node_i}", f"Node alias {node_i}"),
                     id=f"portal_test_data:{node_i}",
                     label=f"Test node {node_i}",
                     other={"index": node_i},
