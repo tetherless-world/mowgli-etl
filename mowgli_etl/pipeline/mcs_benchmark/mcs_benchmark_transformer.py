@@ -4,8 +4,16 @@ from typing import Dict, Generator, Tuple
 
 from mowgli_etl._transformer import _Transformer
 from mowgli_etl.model.benchmark_answer import BenchmarkAnswer
+from mowgli_etl.model.benchmark_answer_explanation import BenchmarkAnswerExplanation
 from mowgli_etl.model.benchmark_question import BenchmarkQuestion
+from mowgli_etl.model.benchmark_question_answer_path import BenchmarkQuestionAnswerPath
+from mowgli_etl.model.benchmark_question_answer_paths import (
+    BenchmarkQuestionAnswerPaths,
+)
 from mowgli_etl.model.benchmark_question_choice import BenchmarkQuestionChoice
+from mowgli_etl.model.benchmark_question_choice_analysis import (
+    BenchmarkQuestionChoiceAnalysis,
+)
 from mowgli_etl.model.benchmark_question_choice_type import BenchmarkQuestionChoiceType
 from mowgli_etl.model.benchmark_question_prompt import BenchmarkQuestionPrompt
 from mowgli_etl.model.benchmark_question_prompt_type import BenchmarkQuestionPromptType
@@ -82,7 +90,10 @@ class McsBenchmarkTransformer(_Transformer):
 
         correct_choice_id = str(benchmark_sample_json["correctChoice"])
 
-        has_id = all("identifier" in choice for choice in benchmark_sample_json["choices"][self.__LIST])
+        has_id = all(
+            "identifier" in choice
+            for choice in benchmark_sample_json["choices"][self.__LIST]
+        )
 
         choices = tuple(
             BenchmarkQuestionChoice(
@@ -112,4 +123,38 @@ class McsBenchmarkTransformer(_Transformer):
     def __transform_submission_sample(
         self, submission_sample_json
     ) -> Generator[BenchmarkAnswer, None, None]:
-        yield from []
+        explanation = None
+        explanation_json = submission_sample_json.get("explanation")
+        if explanation_json is not None:
+            explanation = BenchmarkAnswerExplanation(
+                choice_analyses=tuple(
+                    BenchmarkQuestionChoiceAnalysis(
+                        choice_id=choice_analysis_json["identifier"],
+                        question_answer_paths=tuple(
+                            BenchmarkQuestionAnswerPaths(
+                                start_node_id=answer_paths_json["questionConcept"],
+                                end_node_id=answer_paths_json["answerOptionConcept"],
+                                score=answer_paths_json["score"],
+                                paths=tuple(
+                                    BenchmarkQuestionAnswerPath(
+                                        path=tuple(path_json["member"]),
+                                        score=path_json["score"],
+                                    )
+                                    for path_json in answer_paths_json["path"]
+                                ),
+                            )
+                            for answer_paths_json in choice_analysis_json[
+                                "explanation"
+                            ]["member"]
+                        ),
+                    )
+                    for choice_analysis_json in explanation_json
+                )
+            )
+
+        yield BenchmarkAnswer(
+            choice_id=submission_sample_json["value"],
+            question_id=submission_sample_json["about"],
+            submission_id=submission_sample_json["includedInDataset"],
+            explanation=explanation,
+        )
