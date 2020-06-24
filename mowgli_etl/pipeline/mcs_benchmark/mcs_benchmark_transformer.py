@@ -10,6 +10,7 @@ from mowgli_etl.model.benchmark_question_choice_type import BenchmarkQuestionCho
 from mowgli_etl.model.benchmark_question_prompt import BenchmarkQuestionPrompt
 from mowgli_etl.model.benchmark_question_prompt_type import BenchmarkQuestionPromptType
 from mowgli_etl.model.benchmark_question_type import BenchmarkQuestionType
+from mowgli_etl.model.benchmark_submission import BenchmarkSubmission
 from mowgli_etl.model.model import Model
 
 
@@ -36,6 +37,7 @@ class McsBenchmarkTransformer(_Transformer):
         super().__init__()
         self.__transformers = {
             "BenchmarkSample": self.transform_benchmark_sample,
+            "Submission": self.transform_submission,
             "SubmissionSample": self.transform_submission_sample,
         }
 
@@ -74,7 +76,9 @@ class McsBenchmarkTransformer(_Transformer):
                 concept = antecedent_item["text"]
             elif antecedent_type == "BenchmarkQuestionType":
                 question_type_val = antecedent_item["text"]
-                assert question_type_val in self.__QUESTION_TYPE_DICT, f"Unknown question type {question_type_val}"
+                assert (
+                    question_type_val in self.__QUESTION_TYPE_DICT
+                ), f"Unknown question type {question_type_val}"
                 question_type = self.__QUESTION_TYPE_DICT[question_type_val]
 
         correct_choice_label = None
@@ -100,6 +104,11 @@ class McsBenchmarkTransformer(_Transformer):
             prompts=tuple(prompts),
             type=question_type,
         )
+
+    def transform_submission(
+        self, submission_sample_json
+    ) -> Generator[BenchmarkSubmission, None, None]:
+        yield from []
 
     def transform_submission_sample(
         self, submission_sample_json
