@@ -18,7 +18,7 @@ class _JsonlLoader(_Loader):
         if self.__bzip:
             self._bzip_file(Path(self.__jsonl_file.name))
 
-    def _load_model(self, model: NamedTuple, bzip: bool = False):
+    def _load_model(self, model: NamedTuple):
         json.dump(_JsonLoader._convert_to_json(model), self.__jsonl_file)
         self.__jsonl_file.write("\n")
 
