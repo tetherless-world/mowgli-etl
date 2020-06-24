@@ -21,5 +21,4 @@ class McsBenchmarkPipeline(_Pipeline):
             id=self.ID,
             loader=McsBenchmarkLoader(),
             transformer=McsBenchmarkTransformer(),
-            **kwargs
         )
