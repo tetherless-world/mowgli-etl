@@ -4,8 +4,8 @@ from mowgli_etl.pipeline.mcs_benchmark.mcs_benchmark_pipeline import McsBenchmar
 from mowgli_etl.pipeline_wrapper import PipelineWrapper
 
 
-@pytest.mark.skip("Pipeline components assume external dependencies")
+# @pytest.mark.skip("Pipeline components assume external dependencies")
 def test_mcs_benchmark_pipeline(pipeline_storage):
-    pipeline = McsBenchmarkPipeline()
+    pipeline = McsBenchmarkPipeline(bzip=False)
     wrapper = PipelineWrapper(pipeline, pipeline_storage)
     wrapper.run()

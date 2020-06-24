@@ -17,6 +17,10 @@ from mowgli_etl.pipeline_storage import PipelineStorage
 
 
 class McsBenchmarkLoader(CompositeLoader):
+    def __init__(self, bzip: bool = True):
+        CompositeLoader.__init__(self)
+        self.__bzip = bzip
+
     def open(self, *args, **kwds):
         mcs_portal_dir_path = PROJECT_ROOT.parent / "mcs-portal"
         assert (
@@ -32,8 +36,8 @@ class McsBenchmarkLoader(CompositeLoader):
             / "import"
             / "benchmark",
         )
-        self._loaders.append(JsonlBenchmarkLoader().open(storage))
-        self._loaders.append(JsonlBenchmarkAnswerLoader().open(storage))
-        self._loaders.append(JsonlBenchmarkQuestionLoader().open(storage))
-        self._loaders.append(JsonlBenchmarkSubmissionLoader().open(storage))
+        self._loaders.append(JsonlBenchmarkLoader(bzip=self.__bzip).open(storage))
+        self._loaders.append(JsonlBenchmarkAnswerLoader(bzip=self.__bzip).open(storage))
+        self._loaders.append(JsonlBenchmarkQuestionLoader(bzip=self.__bzip).open(storage))
+        self._loaders.append(JsonlBenchmarkSubmissionLoader(bzip=self.__bzip).open(storage))
         return self

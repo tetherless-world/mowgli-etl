@@ -4,7 +4,7 @@ from mowgli_etl._pipeline import _Pipeline
 class McsBenchmarkPipeline(_Pipeline):
     ID = "mcs_benchmark"
 
-    def __init__(self, **kwargs):
+    def __init__(self, bzip: bool = True, **kwargs):
         from mowgli_etl.pipeline.mcs_benchmark.mcs_benchmark_extractor import (
             McsBenchmarkExtractor,
         )
@@ -19,6 +19,6 @@ class McsBenchmarkPipeline(_Pipeline):
             self,
             extractor=McsBenchmarkExtractor(),
             id=self.ID,
-            loader=McsBenchmarkLoader(),
+            loader=McsBenchmarkLoader(bzip=bzip),
             transformer=McsBenchmarkTransformer(),
         )
