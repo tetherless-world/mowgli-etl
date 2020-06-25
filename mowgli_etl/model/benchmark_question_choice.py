@@ -7,3 +7,4 @@ class BenchmarkQuestionChoice(NamedTuple):
     id: str
     text: str
     type: BenchmarkQuestionChoiceType
+    label: Optional[str] = None

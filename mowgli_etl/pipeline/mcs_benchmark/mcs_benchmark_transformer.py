@@ -90,14 +90,10 @@ class McsBenchmarkTransformer(_Transformer):
 
         correct_choice_id = str(benchmark_sample_json["correctChoice"])
 
-        has_id = all(
-            "identifier" in choice
-            for choice in benchmark_sample_json["choices"][self.__LIST]
-        )
-
         choices = tuple(
             BenchmarkQuestionChoice(
-                id=choice["identifier"] if has_id else str(choice["position"]),
+                id=choice["@id"],
+                label=choice.get("identifier"),
                 text=choice["text"],
                 type=self.__QUESTION_CHOICE_TYPE_DICT[choice[self.__TYPE]],
             )
@@ -129,7 +125,7 @@ class McsBenchmarkTransformer(_Transformer):
             explanation = BenchmarkAnswerExplanation(
                 choice_analyses=tuple(
                     BenchmarkQuestionChoiceAnalysis(
-                        choice_id=choice_analysis_json["identifier"],
+                        choice_id=choice_analysis_json["@id"],
                         question_answer_paths=tuple(
                             BenchmarkQuestionAnswerPaths(
                                 start_node_id=answer_paths_json["questionConcept"],
