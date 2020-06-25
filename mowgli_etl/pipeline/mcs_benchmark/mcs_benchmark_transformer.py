@@ -112,9 +112,19 @@ class McsBenchmarkTransformer(_Transformer):
         )
 
     def __transform_submission(
-        self, submission_sample_json
+        self, submission_json
     ) -> Generator[BenchmarkSubmission, None, None]:
-        yield from []
+        dev_dataset_id = [
+            score["isBasedOn"]
+            for score in submission_json["contentRating"]
+            if score["@type"] == "DevScore"
+        ][0]
+        yield BenchmarkSubmission(
+            benchmark_id=submission_json["isBasedOn"],
+            id=submission_json["@id"],
+            dataset_id=dev_dataset_id,
+            name=submission_json["name"],
+        )
 
     def __transform_submission_sample(
         self, submission_sample_json
