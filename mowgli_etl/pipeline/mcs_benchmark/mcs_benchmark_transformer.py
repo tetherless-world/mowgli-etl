@@ -93,7 +93,8 @@ class McsBenchmarkTransformer(_Transformer):
         choices = tuple(
             BenchmarkQuestionChoice(
                 id=choice["@id"],
-                label=choice.get("identifier"),
+                identifier=choice.get("identifier"),
+                position=choice["position"],
                 text=choice["text"],
                 type=self.__QUESTION_CHOICE_TYPE_DICT[choice[self.__TYPE]],
             )

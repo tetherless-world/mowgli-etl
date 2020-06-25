@@ -5,6 +5,7 @@ from mowgli_etl.model.benchmark_question_choice_type import BenchmarkQuestionCho
 
 class BenchmarkQuestionChoice(NamedTuple):
     id: str
+    position: int
     text: str
     type: BenchmarkQuestionChoiceType
-    label: Optional[str] = None
+    identifier: Optional[str] = None

@@ -91,7 +91,8 @@ class PortalTestDataTransformer(_Transformer):
                     choices = tuple(
                         BenchmarkQuestionChoice(
                             id=f"{question_id}-{choice_i}",
-                            label=chr(ord("A") + choice_i),
+                            identifier=chr(ord("A") + choice_i),
+                            position=choice_i,
                             text=f"Choice {choice_i}",
                             type=choice_type,
                         )
