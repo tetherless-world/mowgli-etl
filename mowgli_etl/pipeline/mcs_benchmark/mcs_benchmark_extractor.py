@@ -10,12 +10,26 @@ class McsBenchmarkExtractor(_Extractor):
         self, *, force: bool, storage: PipelineStorage
     ) -> Optional[Dict[str, object]]:
         jsonl_paths = []
-        benchmark_project_path = PROJECT_ROOT.parent / "CommonsenseBenchmark"
-        if benchmark_project_path.exists():
-            for benchmark_path in (benchmark_project_path / "converted").iterdir():
-                for benchmark_jsonl_path in benchmark_path.glob("*.jsonl"):
-                    jsonl_paths.append(benchmark_jsonl_path)
+        benchmark_source_path = (
+            PROJECT_ROOT.parent / "CommonsenseBenchmark" / "converted"
+        )
+        assert (
+            benchmark_source_path.exists()
+        ), f"Could not find benchmark source directory: {benchmark_source_path}"
+
+        benchmark_file_path = benchmark_source_path / "benchmarks.json"
+        assert (
+            benchmark_file_path.exists()
+        ), f"Could not find benchmark file: {benchmark_file_path}"
+
+        for benchmark_path in benchmark_source_path.iterdir():
+            for benchmark_jsonl_path in benchmark_path.glob("*.jsonl"):
+                jsonl_paths.append(benchmark_jsonl_path)
         assert (
             len(jsonl_paths) > 0
-        ), f"No benchmark jsonl files found in {benchmark_project_path}"
-        return {"benchmark_jsonl_paths": tuple(jsonl_paths)}
+        ), f"No benchmark jsonl files found in {benchmark_source_path}"
+
+        return {
+            "benchmark_file_path": benchmark_file_path,
+            "benchmark_jsonl_paths": tuple(jsonl_paths),
+        }

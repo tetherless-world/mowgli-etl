@@ -3,8 +3,10 @@ from pathlib import Path
 from typing import Dict, Generator, Tuple
 
 from mowgli_etl._transformer import _Transformer
+from mowgli_etl.model.benchmark import Benchmark
 from mowgli_etl.model.benchmark_answer import BenchmarkAnswer
 from mowgli_etl.model.benchmark_answer_explanation import BenchmarkAnswerExplanation
+from mowgli_etl.model.benchmark_dataset import BenchmarkDataset
 from mowgli_etl.model.benchmark_question import BenchmarkQuestion
 from mowgli_etl.model.benchmark_question_answer_path import BenchmarkQuestionAnswerPath
 from mowgli_etl.model.benchmark_question_answer_paths import (
@@ -49,8 +51,12 @@ class McsBenchmarkTransformer(_Transformer):
         }
 
     def transform(
-        self, benchmark_jsonl_paths: Tuple[Path]
+        self, *, benchmark_file_path: Path, benchmark_jsonl_paths: Tuple[Path]
     ) -> Generator[Model, None, None]:
+        with open(benchmark_file_path) as benchmark_file:
+            benchmark_list_json = json.load(benchmark_file)
+            for benchmark_json in benchmark_list_json:
+                yield from self.__transform_benchmark(benchmark_json)
         for jsonl_path in benchmark_jsonl_paths:
             with open(jsonl_path) as jsonl_file:
                 for line in jsonl_file.readlines():
@@ -60,6 +66,16 @@ class McsBenchmarkTransformer(_Transformer):
                     if transformer is None:
                         raise ValueError(f"Unhandled top level type: {resource_type}")
                     yield from transformer(resource)
+
+    def __transform_benchmark(self, benchmark_json):
+        yield Benchmark(
+            datasets=tuple(
+                BenchmarkDataset(id=dataset["@id"], name=dataset["name"])
+                for dataset in benchmark_json["dataset"]
+            ),
+            id=benchmark_json["@id"],
+            name=benchmark_json["name"],
+        )
 
     def __transform_benchmark_sample(
         self, benchmark_sample_json
