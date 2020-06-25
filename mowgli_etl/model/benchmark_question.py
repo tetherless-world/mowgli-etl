@@ -12,5 +12,5 @@ class BenchmarkQuestion(NamedTuple):
     prompts: Tuple[BenchmarkQuestionPrompt]
     categories: Optional[Tuple[str]] = None
     concept: Optional[str] = None
-    correct_choice_label: Optional[str] = None
+    correct_choice_id: Optional[str] = None
     type: Optional[BenchmarkQuestionType] = BenchmarkQuestionType.MULTIPLE_CHOICE
