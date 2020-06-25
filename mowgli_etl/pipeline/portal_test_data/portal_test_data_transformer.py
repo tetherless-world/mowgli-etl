@@ -100,6 +100,7 @@ class PortalTestDataTransformer(_Transformer):
                     )
                     question = BenchmarkQuestion(
                         dataset_id=dataset_id,
+                        categories=("category1", "category2"),
                         choices=choices,
                         concept=random.choice(concepts),
                         correct_choice_id=random.choice(choices).id,
