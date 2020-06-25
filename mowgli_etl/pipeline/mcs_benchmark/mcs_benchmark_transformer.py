@@ -45,18 +45,15 @@ class McsBenchmarkTransformer(_Transformer):
     def __init__(self):
         super().__init__()
         self.__transformers = {
+            "Benchmark": self.__transform_benchmark,
             "BenchmarkSample": self.__transform_benchmark_sample,
             "Submission": self.__transform_submission,
             "SubmissionSample": self.__transform_submission_sample,
         }
 
     def transform(
-        self, *, benchmark_file_path: Path, benchmark_jsonl_paths: Tuple[Path]
+        self, *, benchmark_jsonl_paths: Tuple[Path]
     ) -> Generator[Model, None, None]:
-        with open(benchmark_file_path) as benchmark_file:
-            benchmark_list_json = json.load(benchmark_file)
-            for benchmark_json in benchmark_list_json:
-                yield from self.__transform_benchmark(benchmark_json)
         for jsonl_path in benchmark_jsonl_paths:
             with open(jsonl_path) as jsonl_file:
                 for line in jsonl_file.readlines():

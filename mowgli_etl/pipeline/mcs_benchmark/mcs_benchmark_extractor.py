@@ -17,11 +17,6 @@ class McsBenchmarkExtractor(_Extractor):
             benchmark_source_path.exists()
         ), f"Could not find benchmark source directory: {benchmark_source_path}"
 
-        benchmark_file_path = benchmark_source_path / "benchmarks.json"
-        assert (
-            benchmark_file_path.exists()
-        ), f"Could not find benchmark file: {benchmark_file_path}"
-
         for benchmark_path in benchmark_source_path.iterdir():
             for benchmark_jsonl_path in benchmark_path.glob("*.jsonl"):
                 jsonl_paths.append(benchmark_jsonl_path)
@@ -30,6 +25,5 @@ class McsBenchmarkExtractor(_Extractor):
         ), f"No benchmark jsonl files found in {benchmark_source_path}"
 
         return {
-            "benchmark_file_path": benchmark_file_path,
             "benchmark_jsonl_paths": tuple(jsonl_paths),
         }
