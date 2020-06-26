@@ -80,9 +80,8 @@ class PortalTestDataTransformer(_Transformer):
                     for dataset_id, dataset_type in zip(dataset_ids, dataset_types)
                 ),
             )
-            submission_id = f"{benchmark_id}-submission"
             for dataset_id, dataset_type in zip(dataset_ids, dataset_types):
-                questions = []
+                submission_id = f"{dataset_id}-submission"
                 concepts = tuple(f"concept {concept_i}" for concept_i in range(5))
                 for question_i in range(100):
                     question_id = f"{dataset_id}-{question_i}"
@@ -112,49 +111,46 @@ class PortalTestDataTransformer(_Transformer):
                             ),
                         ),
                     )
-                    questions.append(question)
                     yield question
-                if dataset_type == "test":
-                    for question in questions:
-                        question_id = question.id
-                        choice_analyses = []
-                        for choice in question.choices:
-                            question_answer_paths = []
-                            for path_i in range(3):
-                                path = random.choice(paths).path
-                                question_answer_paths.append(
-                                    BenchmarkQuestionAnswerPaths(
-                                        start_node_id=path[0],
-                                        end_node_id=path[-1],
-                                        score=random.random(),
-                                        paths=(
-                                            BenchmarkQuestionAnswerPath(
-                                                path=path, score=random.random()
-                                            ),
+
+                    choice_analyses = []
+                    for choice in question.choices:
+                        question_answer_paths = []
+                        for path_i in range(3):
+                            path = random.choice(paths).path
+                            question_answer_paths.append(
+                                BenchmarkQuestionAnswerPaths(
+                                    start_node_id=path[0],
+                                    end_node_id=path[-1],
+                                    score=random.random(),
+                                    paths=(
+                                        BenchmarkQuestionAnswerPath(
+                                            path=path, score=random.random()
                                         ),
-                                    )
-                                )
-                            choice_analyses.append(
-                                BenchmarkQuestionChoiceAnalysis(
-                                    choice_id=choice.id,
-                                    question_answer_paths=tuple(question_answer_paths),
+                                    ),
                                 )
                             )
-                        yield BenchmarkAnswer(
-                            choice_id=random.choice(question.choices).id,
-                            explanation=BenchmarkAnswerExplanation(
-                                choice_analyses=tuple(choice_analyses)
-                            ),
-                            question_id=question_id,
-                            submission_id=submission_id,
+                        choice_analyses.append(
+                            BenchmarkQuestionChoiceAnalysis(
+                                choice_id=choice.id,
+                                question_answer_paths=tuple(question_answer_paths),
+                            )
                         )
-
-                    yield BenchmarkSubmission(
-                        benchmark_id=benchmark_id,
-                        id=submission_id,
-                        dataset_id=dataset_id,
-                        name=f"Benchmark {benchmark_i} test submission",
+                    yield BenchmarkAnswer(
+                        choice_id=random.choice(question.choices).id,
+                        explanation=BenchmarkAnswerExplanation(
+                            choice_analyses=tuple(choice_analyses)
+                        ),
+                        question_id=question_id,
+                        submission_id=submission_id,
                     )
+
+                yield BenchmarkSubmission(
+                    benchmark_id=benchmark_id,
+                    id=submission_id,
+                    dataset_id=dataset_id,
+                    name=f"Benchmark {benchmark_i} test submission",
+                )
 
     def __transform_kg_edges(
         self, nodes: Tuple[Node, ...]
