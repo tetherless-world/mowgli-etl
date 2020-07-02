@@ -31,6 +31,7 @@ class RpiCombinedPipeline(_Pipeline):
         from mowgli_etl.pipeline.eat.eat_pipeline import EatPipeline
         from mowgli_etl.pipeline.food_on.food_on_pipeline import FoodOnPipeline
         from mowgli_etl.pipeline.has_part.has_part_pipeline import HasPartPipeline
+        from mowgli_etl.pipeline.sentic.sentic_pipeline import SenticPipeline
         from mowgli_etl.pipeline.swow.swow_pipeline import SwowPipeline
         from mowgli_etl.pipeline.usf.usf_pipeline import UsfPipeline
         # from mowgli_etl.pipeline.web_child.web_child_pipeline import WebChildPipeline
@@ -40,6 +41,7 @@ class RpiCombinedPipeline(_Pipeline):
             EatPipeline(),
             FoodOnPipeline(),
             HasPartPipeline(),
+            SenticPipeline(),
             SwowPipeline(),
             UsfPipeline(),
             # WebChildPipeline(),  # Takes a long time to run and produces dubious triples

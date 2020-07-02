@@ -6,11 +6,10 @@ from mowgli_etl.pipeline.sentic.sentic_constants import SENTIC_FILE_KEY
 from mowgli_etl.pipeline.sentic.sentic_transformer import SENTICTransformer
 
 
-def test_transform(sample_sentic_nodes, sample_sentic_edges):
+def test_transform(sample_sentic_file_path, sample_sentic_nodes, sample_sentic_edges):
     transformer = SENTICTransformer()
 
-    filepath = pathlib.Path(__file__).parent / "test_data.owl"
-    kwdargs = {SENTIC_FILE_KEY: filepath}
+    kwdargs = {SENTIC_FILE_KEY: sample_sentic_file_path}
     nodes, edges = set(), set()
     for result in transformer.transform(**kwdargs):
         if isinstance(result, Node):
