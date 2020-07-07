@@ -43,7 +43,7 @@ class DriveUploadCommand(_Command):
         self._logger.info("file uploaded %s", file)
 
     def __create_drive_client(self, service_account_file_path: Path):
-        scopes = ["https://www.googleapis.com/auth/drive.file"]
+        scopes = ["https://www.googleapis.com/auth/drive"]
         credentials = service_account.Credentials.from_service_account_file(
             service_account_file_path, scopes=scopes
         )
