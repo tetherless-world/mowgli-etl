@@ -75,6 +75,7 @@ jobs:
           name: Upload CSKG to Drive (master branch only)
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
+               echo "skipping drive upload"
 #              service_file_path="service_file_key.json"
 #              echo "$GCLOUD_SERVICE_KEY" > "$service_file_path"
 #              python3 -m mowgli_etl.cli drive-upload --file-path=cskg.tar.bz2  --file-id="$CSKG_FILE_ID" --service-account-file="$service_file_path"
