@@ -24,8 +24,8 @@ class PortalTestDataLoader(CompositeLoader):
         mcs_portal_dir_path = PROJECT_ROOT.parent / "mcs-portal"
         assert mcs_portal_dir_path.is_dir(), f"expected mcs-portal checkout at ${mcs_portal_dir_path}"
 
-        ts_benchmark_storage = PipelineStorage(pipeline_id=PortalTestDataPipeline.ID, root_data_dir_path=PROJECT_ROOT, loaded_data_dir_path= mcs_portal_dir_path / "test" / "integration" / "cypress" / "fixtures" / "benchmark")
-        ts_kg_storage = PipelineStorage(pipeline_id=PortalTestDataPipeline.ID, root_data_dir_path=PROJECT_ROOT, loaded_data_dir_path=mcs_portal_dir_path / "test" / "integration" / "cypress" / "fixtures" / "kg")
+        ts_benchmark_storage = PipelineStorage(pipeline_id=PortalTestDataPipeline.ID, root_data_dir_path=PROJECT_ROOT, loaded_data_dir_path= mcs_portal_dir_path / "integration" / "cypress" / "fixtures" / "benchmark")
+        ts_kg_storage = PipelineStorage(pipeline_id=PortalTestDataPipeline.ID, root_data_dir_path=PROJECT_ROOT, loaded_data_dir_path=mcs_portal_dir_path / "integration" / "cypress" / "fixtures" / "kg")
         self._loaders.append(JsonBenchmarkLoader().open(ts_benchmark_storage))
         self._loaders.append(JsonBenchmarkAnswerLoader().open(ts_benchmark_storage))
         self._loaders.append(JsonBenchmarkQuestionLoader().open(ts_benchmark_storage))
@@ -34,8 +34,8 @@ class PortalTestDataLoader(CompositeLoader):
         self._loaders.append(JsonNodeLoader().open(ts_kg_storage))
         self._loaders.append(JsonPathLoader().open(ts_kg_storage))
 
-        scala_benchmark_storage = PipelineStorage(pipeline_id=PortalTestDataPipeline.ID, root_data_dir_path=PROJECT_ROOT, loaded_data_dir_path=mcs_portal_dir_path / "conf" / "data" / "test" / "benchmark")
-        scala_kg_storage = PipelineStorage(pipeline_id=PortalTestDataPipeline.ID, root_data_dir_path=PROJECT_ROOT, loaded_data_dir_path=mcs_portal_dir_path / "conf" / "data" / "test" / "kg")
+        scala_benchmark_storage = PipelineStorage(pipeline_id=PortalTestDataPipeline.ID, root_data_dir_path=PROJECT_ROOT, loaded_data_dir_path=mcs_portal_dir_path / "lib"/ "scala" / "benchmark" / "src" / "main" / "resources" / "data" / "test" / "benchmark")
+        scala_kg_storage = PipelineStorage(pipeline_id=PortalTestDataPipeline.ID, root_data_dir_path=PROJECT_ROOT, loaded_data_dir_path=mcs_portal_dir_path / "lib" / "scala" / "kg" / "src" / "main" / "resources" / "data" / "test" / "kg")
         self._loaders.append(CskgCsvEdgeLoader(bzip=True).open(scala_kg_storage))
         self._loaders.append(CskgCsvNodeLoader(bzip=True).open(scala_kg_storage))
         self._loaders.append(JsonlBenchmarkAnswerLoader(bzip=True).open(scala_benchmark_storage))

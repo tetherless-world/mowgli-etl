@@ -31,6 +31,8 @@ class McsBenchmarkLoader(CompositeLoader):
             pipeline_id=McsBenchmarkPipeline.ID,
             root_data_dir_path=PROJECT_ROOT,
             loaded_data_dir_path=mcs_portal_dir_path
+            / "app"
+            / "benchmark"
             / "conf"
             / "data"
             / "import"
