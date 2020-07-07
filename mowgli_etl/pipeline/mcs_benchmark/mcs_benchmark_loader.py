@@ -22,15 +22,15 @@ class McsBenchmarkLoader(CompositeLoader):
         self.__bzip = bzip
 
     def open(self, *args, **kwds):
-        mcs_portal_dir_path = PROJECT_ROOT.parent / "mcs-portal"
+        mcs_apps_dir_path = PROJECT_ROOT.parent / "mcs-apps"
         assert (
-            mcs_portal_dir_path.is_dir()
-        ), f"expected mcs-portal checkout at ${mcs_portal_dir_path}"
+            mcs_apps_dir_path.is_dir()
+        ), f"expected mcs-portal checkout at ${mcs_apps_dir_path}"
 
         storage = PipelineStorage(
             pipeline_id=McsBenchmarkPipeline.ID,
             root_data_dir_path=PROJECT_ROOT,
-            loaded_data_dir_path=mcs_portal_dir_path
+            loaded_data_dir_path=mcs_apps_dir_path
             / "app"
             / "benchmark"
             / "conf"
