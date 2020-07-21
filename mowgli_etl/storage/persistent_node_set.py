@@ -1,4 +1,6 @@
 import pickle
+from pathlib import Path
+from tempfile import mkdtemp
 from typing import Optional, Generator
 
 from mowgli_etl.model.node import Node
@@ -6,19 +8,26 @@ from mowgli_etl.storage._node_set import _NodeSet
 from mowgli_etl.storage.level_db import LevelDb
 
 
-class PersistentNodeSet(_NodeSet, LevelDb):
-    def __init__(self, **kwds):
+class PersistentNodeSet(_NodeSet):
+    def __init__(self, **level_db_kwds):
         _NodeSet.__init__(self)
-        LevelDb.__init__(self, **kwds)
+        self.__level_db = LevelDb(**level_db_kwds)
 
     def add(self, node: Node) -> None:
         key = self.__construct_node_key(node.id)
         value = pickle.dumps(node)
-        self._db.put(key, value)
+        self.__level_db.put(key, value)
 
     def delete(self, node_id: str) -> None:
         key = self.__construct_node_key(node_id)
-        self._db.delete(key)
+        self.__level_db.delete(key)
+
+    def close(self):
+        self.__level_db.close()
+
+    @property
+    def closed(self):
+        return self.__level_db.closed
 
     @staticmethod
     def __construct_node_key(node_id: str) -> bytes:
@@ -26,22 +35,22 @@ class PersistentNodeSet(_NodeSet, LevelDb):
 
     def __contains__(self, node_id: str):
         key = self.__construct_node_key(node_id)
-        value = self._db.get(key)
+        value = self.__level_db.get(key)
         return value is not None
 
     def get(self, node_id: str, default: Optional[Node] = None) -> Optional[Node]:
         key = self.__construct_node_key(node_id)
-        value = self._db.get(key)
+        value = self.__level_db.get(key)
         if value is not None:
             return pickle.loads(value)
         else:
             return default
 
     def keys(self) -> Generator[str, None, None]:
-        with self._db.iterator(include_value=False) as it:
+        with self.__level_db.iterator(include_value=False) as it:
             for key in it:
                 yield key.decode("utf-8")
 
     @classmethod
     def temporary(cls):
-        return LevelDb.temporary(cls)
+        return cls(directory_path=Path(mkdtemp()), delete_on_close=True)
