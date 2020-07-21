@@ -9,17 +9,17 @@ from mowgli_etl._pipeline import _Pipeline
 from mowgli_etl.model.kg_path import KgPath
 from mowgli_etl.pipeline_storage import PipelineStorage
 from mowgli_etl.storage._edge_set import _EdgeSet
-from mowgli_etl.storage._node_id_set import _NodeIdSet
+from mowgli_etl.storage._id_set import _IdSet
 from mowgli_etl.storage._node_set import _NodeSet
 import stringcase
 
 try:
     from mowgli_etl.storage.persistent_edge_set import PersistentEdgeSet as EdgeSet
-    from mowgli_etl.storage.persistent_node_id_set import PersistentNodeIdSet as NodeIdSet
+    from mowgli_etl.storage.persistent_id_set import PersistentIdSet as NodeIdSet
     from mowgli_etl.storage.persistent_node_set import PersistentNodeSet as NodeSet
 except ImportError:
     from mowgli_etl.storage.mem_edge_set import MemEdgeSet as EdgeSet
-    from mowgli_etl.storage.mem_node_id_set import MemNodeIdSet as NodeIdSet
+    from mowgli_etl.storage.mem_id_set import MemIdSet as NodeIdSet
     from mowgli_etl.storage.mem_node_set import MemNodeSet as NodeSet
 
 
@@ -107,7 +107,7 @@ class PipelineWrapper:
             edge_set: _EdgeSet,
             node_set: _NodeSet,
             transform_generator: Generator[Model, None, None],
-            used_node_ids_set: _NodeIdSet
+            used_node_ids_set: _IdSet
     ) -> Generator[Model, None, None]:
         for model in transform_generator:
             try:
