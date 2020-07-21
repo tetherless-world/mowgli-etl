@@ -9,22 +9,17 @@ from mowgli_etl._closeable import _Closeable
 
 class LevelDb(_Closeable):
     def __init__(self, *, directory_path: Path, create_if_missing=True, delete_on_close=False, **kwds):
-        self._db = plyvel.DB(name=str(directory_path), create_if_missing=create_if_missing, **kwds)
+        self.__db = plyvel.DB(name=str(directory_path), create_if_missing=create_if_missing, **kwds)
         self.__delete_on_close = delete_on_close
         self.__directory_path = directory_path
 
-    @property
-    def db(self) -> plyvel.DB:
-        return self._db
-
     def close(self):
-        self._db.close()
+        self.__db.close()
         if self.__delete_on_close:
             rmtree(self.__directory_path)
 
-    @property
-    def closed(self):
-        return self._db.closed
+    def __getattr__(self, attr):
+        return getattr(self.__db, attr)
 
     @classmethod
     def temporary(cls):

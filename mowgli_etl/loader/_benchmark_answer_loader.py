@@ -6,7 +6,7 @@ from mowgli_etl.model.benchmark_answer import BenchmarkAnswer
 from mowgli_etl.model.benchmark_question import BenchmarkQuestion
 from mowgli_etl.model.benchmark_dataset import BenchmarkDataset
 from mowgli_etl.model.benchmark_submission import BenchmarkSubmission
-from mowgli_etl.model.edge import Edge
+from mowgli_etl.model.kg_edge import KgEdge
 
 
 class _BenchmarkAnswerLoader(_Loader):

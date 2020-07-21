@@ -4,8 +4,8 @@ from typing import Optional, Tuple
 from rdflib import Graph, RDF, OWL, RDFS, URIRef
 
 from mowgli_etl.model import concept_net_predicates
-from mowgli_etl.model.edge import Edge
-from mowgli_etl.model.node import Node
+from mowgli_etl.model.kg_edge import KgEdge
+from mowgli_etl.model.kg_node import KgNode
 from mowgli_etl._transformer import _Transformer
 
 
@@ -21,7 +21,7 @@ class FoodOnTransformer(_Transformer):
             self.uri = uri
 
             self.node = \
-                Node(
+                KgNode.legacy(
                     datasource=FoodOnTransformer._DATASOURCE,
                     id="foodon:" + str(uri)[len(self._URI_PREFIX):],
                     label=label
@@ -73,7 +73,7 @@ class FoodOnTransformer(_Transformer):
                     yield parent_class.node
                     parent_class.node_yielded = True
                 edge = \
-                    Edge(
+                    KgEdge.legacy(
                         datasource=self._DATASOURCE,
                         subject=class_.node.id,
                         predicate=concept_net_predicates.IS_A,

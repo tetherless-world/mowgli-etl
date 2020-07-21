@@ -3,8 +3,8 @@ from collections import Counter
 from pathlib import Path
 from typing import Generator, Union
 
-from mowgli_etl.model.edge import Edge
-from mowgli_etl.model.node import Node
+from mowgli_etl.model.kg_edge import KgEdge
+from mowgli_etl.model.kg_node import KgNode
 from mowgli_etl._transformer import _Transformer
 from mowgli_etl.pipeline.swow.swow_mappers import swow_edge, swow_node, SwowResponseType
 
@@ -18,7 +18,7 @@ class SwowTransformer(_Transformer):
 
     def transform(
         self, *, swow_csv_file: Path
-    ) -> Generator[Union[Node, Edge], None, None]:
+    ) -> Generator[Union[KgNode, KgEdge], None, None]:
         """
         Generate nodes and edges from a SWOW csv file.
         """

@@ -1,7 +1,7 @@
 from typing import Optional, Dict, List, Generator, Union, Iterable
 
-from mowgli_etl.model.edge import Edge
-from mowgli_etl.model.node import Node
+from mowgli_etl.model.kg_edge import KgEdge
+from mowgli_etl.model.kg_node import KgNode
 from mowgli_etl._extractor import _Extractor
 from mowgli_etl._pipeline import _Pipeline
 from mowgli_etl._transformer import _Transformer
@@ -16,10 +16,10 @@ class MockExtractor(_Extractor):
 
 
 class MockTransformer(_Transformer):
-    def __init__(self, graph_iterator: Iterable[Union[Node, Edge]] = tuple()):
+    def __init__(self, graph_iterator: Iterable[Union[KgNode, KgEdge]] = tuple()):
         self.__graph_iterator = graph_iterator
 
-    def transform(self, **kwds) -> Generator[Union[Node, Edge], None, None]:
+    def transform(self, **kwds) -> Generator[Union[KgNode, KgEdge], None, None]:
         yield from self.__graph_iterator
 
 

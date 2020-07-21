@@ -2,8 +2,8 @@ from typing import Tuple, Union
 
 from pytest import fail
 
-from mowgli_etl.model.edge import Edge
-from mowgli_etl.model.node import Node
+from mowgli_etl.model.kg_edge import KgEdge
+from mowgli_etl.model.kg_node import KgNode
 from mowgli_etl._extractor import _Extractor
 from mowgli_etl._pipeline import _Pipeline
 from mowgli_etl._transformer import _Transformer
@@ -20,7 +20,7 @@ class NopExtractor(_Extractor):
 
 
 class MockTransformer(_Transformer):
-    def __init__(self, node_edge_sequence: Tuple[Union[Node, Edge], ...]):
+    def __init__(self, node_edge_sequence: Tuple[Union[KgNode, KgEdge], ...]):
         self.__node_edge_sequence = node_edge_sequence
 
     def transform(self, **kwds):
@@ -28,7 +28,7 @@ class MockTransformer(_Transformer):
 
 
 class MockPipeline(_Pipeline):
-    def __init__(self, node_edge_sequence: Tuple[Union[Node, Edge], ...]):
+    def __init__(self, node_edge_sequence: Tuple[Union[KgNode, KgEdge], ...]):
         _Pipeline.__init__(
             self,
             extractor=NopExtractor(),
@@ -37,15 +37,15 @@ class MockPipeline(_Pipeline):
         )
 
 
-def run(node_edge_sequence: Tuple[Union[Node, Edge], ...], pipeline_storage: PipelineStorage):
+def run(node_edge_sequence: Tuple[Union[KgNode, KgEdge], ...], pipeline_storage: PipelineStorage):
     return PipelineWrapper(MockPipeline(node_edge_sequence), pipeline_storage).run()
 
 
-SUBJECT_NODE = Node(id="testid", label="test label", pos="n", datasource=DATASOURCE)
-EXACT_DUPLICATE_SUBJECT_NODE = Node(id="testid", label="test label", pos="n", datasource=DATASOURCE)
-INEXACT_DUPLICATE_SUBJECT_NODE = Node(id="testid", label="test label variation", pos="n", datasource=DATASOURCE)
-OBJECT_NODE = Node(id="testobject", label="test object", pos="n", datasource=DATASOURCE)
-EDGE = Edge(subject=SUBJECT_NODE.id, object=OBJECT_NODE.id, predicate=DATASOURCE, datasource=DATASOURCE)
+SUBJECT_NODE = KgNode.legacy(id="testid", label="test label", pos="n", datasource=DATASOURCE)
+EXACT_DUPLICATE_SUBJECT_NODE = KgNode.legacy(id="testid", label="test label", pos="n", datasource=DATASOURCE)
+INEXACT_DUPLICATE_SUBJECT_NODE = KgNode.legacy(id="testid", label="test label variation", pos="n", datasource=DATASOURCE)
+OBJECT_NODE = KgNode.legacy(id="testobject", label="test object", pos="n", datasource=DATASOURCE)
+EDGE = KgEdge.legacy(subject=SUBJECT_NODE.id, object=OBJECT_NODE.id, predicate=DATASOURCE, datasource=DATASOURCE)
 
 
 def test_exact_duplicate_node(pipeline_storage):
@@ -64,7 +64,7 @@ def test_inexact_duplicate_node(pipeline_storage):
 def test_extraneous_node(pipeline_storage):
     try:
         run((SUBJECT_NODE, OBJECT_NODE,
-             Edge(subject=SUBJECT_NODE.id, object="externalnode", predicate=DATASOURCE,
+             KgEdge.legacy(subject=SUBJECT_NODE.id, object="externalnode", predicate=DATASOURCE,
                   datasource=DATASOURCE)), pipeline_storage)
         fail()
     except ValueError:
@@ -74,7 +74,7 @@ def test_extraneous_node(pipeline_storage):
 def test_mixed_datasource(pipeline_storage):
     try:
         run((SUBJECT_NODE, OBJECT_NODE,
-             Edge(subject=SUBJECT_NODE.id, object="externalnode", predicate=DATASOURCE,
+             KgEdge.legacy(subject=SUBJECT_NODE.id, object="externalnode", predicate=DATASOURCE,
                   datasource="otherdatasource")), pipeline_storage)
         fail()
     except ValueError:

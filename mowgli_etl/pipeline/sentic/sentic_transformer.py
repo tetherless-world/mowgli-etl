@@ -2,8 +2,8 @@ from typing import Generator, Union
 
 from xml.dom.minidom import parse
 
-from mowgli_etl.model.edge import Edge
-from mowgli_etl.model.node import Node
+from mowgli_etl.model.kg_edge import KgEdge
+from mowgli_etl.model.kg_node import KgNode
 from mowgli_etl._transformer import _Transformer
 from mowgli_etl.pipeline.sentic import sentic_types
 from mowgli_etl.pipeline.sentic.sentic_constants import SENTIC_FILE_KEY
@@ -15,7 +15,7 @@ from mowgli_etl.pipeline.sentic.sentic_mappers import (
 
 
 class SENTICTransformer(_Transformer):
-    def transform(self, **kwds) -> Generator[Union[Node, Edge], None, None]:
+    def transform(self, **kwds) -> Generator[Union[KgNode, KgEdge], None, None]:
 
         self._logger.info("transform %s", SENTIC_FILE_KEY)
 

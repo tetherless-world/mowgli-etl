@@ -4,9 +4,9 @@ from typing import Generator, Set, Dict
 from urllib.parse import quote
 
 from mowgli_etl.model.concept_net_predicates import HAS_A, PART_OF
-from mowgli_etl.model.edge import Edge
+from mowgli_etl.model.kg_edge import KgEdge
 from mowgli_etl.model.mowgli_predicates import SAME_AS
-from mowgli_etl.model.node import Node
+from mowgli_etl.model.kg_node import KgNode
 from mowgli_etl._transformer import _Transformer
 from mowgli_etl.model.word_net_id import WordNetId
 
@@ -34,7 +34,7 @@ class HasPartTransformer(_Transformer):
             id_ += ":" + pos
 
         return \
-            Node(
+            KgNode.legacy(
                 datasource=self.__DATASOURCE,
                 id=id_,
                 label=label,
@@ -73,10 +73,10 @@ class HasPartTransformer(_Transformer):
                         same_as_edges_yielded=same_as_edges_yielded
                     )
 
-    def __yield_has_part_edges(self, *, arg1_node: Node, arg2_node: Node, average_score: float) -> Generator[
-        Edge, None, None]:
+    def __yield_has_part_edges(self, *, arg1_node: KgNode, arg2_node: KgNode, average_score: float) -> Generator[
+        KgEdge, None, None]:
         # arg1 HasA arg2
-        yield Edge(
+        yield KgEdge.legacy(
             datasource=self.__DATASOURCE,
             subject=arg1_node.id,
             object=arg2_node.id,
@@ -85,7 +85,7 @@ class HasPartTransformer(_Transformer):
         )
 
         # Inverse, arg2 PartOf arg2
-        yield Edge(
+        yield KgEdge.legacy(
             datasource=self.__DATASOURCE,
             subject=arg2_node.id,
             object=arg1_node.id,
@@ -93,9 +93,9 @@ class HasPartTransformer(_Transformer):
             weight=average_score,
         )
 
-    def __yield_same_as_edges(self, *, arg1_node: Node, arg1_object, arg2_node: Node, arg2_object,
+    def __yield_same_as_edges(self, *, arg1_node: KgNode, arg1_object, arg2_node: KgNode, arg2_object,
                               same_as_edges_yielded: Dict[str, Set[str]]) -> Generator[
-        Edge, None, None]:
+        KgEdge, None, None]:
         for arg_node, arg_object in (
                 (arg1_node, arg1_object),
                 (arg2_node, arg2_object),
@@ -114,7 +114,7 @@ class HasPartTransformer(_Transformer):
                 wn_node_id = "wn:" + synset[len("wn."):]
                 if wn_node_id in node_same_as_edges_yielded:
                     continue
-                yield Edge(
+                yield KgEdge.legacy(
                     datasource=self.__DATASOURCE,
                     object=wn_node_id,
                     predicate=SAME_AS,
@@ -127,7 +127,7 @@ class HasPartTransformer(_Transformer):
                 wikipedia_node_id = "wikipedia:" + quote(wikipedia_primary_page)
                 if wikipedia_node_id in node_same_as_edges_yielded:
                     continue
-                yield Edge(
+                yield KgEdge.legacy(
                     datasource=self.__DATASOURCE,
                     object=wikipedia_node_id,
                     predicate=SAME_AS,

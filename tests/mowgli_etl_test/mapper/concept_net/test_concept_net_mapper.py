@@ -1,7 +1,7 @@
 import pytest
 
 from mowgli_etl.model import mowgli_predicates
-from mowgli_etl.model.node import Node
+from mowgli_etl.model.kg_node import KgNode
 
 try:
     from mowgli_etl.mapper.concept_net.concept_net_mapper import ConceptNetMapper
@@ -15,20 +15,20 @@ if ConceptNetMapper is not None:
 
 
     def test_map_unqualified_node(concept_net_mapper):
-        edges = tuple(concept_net_mapper.map(Node(id="a", datasource="test", label="a")))
+        edges = tuple(concept_net_mapper.map(KgNode.legacy(id="a", datasource="test", label="a")))
         assert len(edges) == 1
         edge = edges[0]
         assert edge.subject == "a"
         assert edge.object == "/c/en/a"
         assert edge.predicate == mowgli_predicates.SAME_AS
-        assert edge.datasource == "test"
+        assert edge.sources == ("test",)
 
 
     def test_map_node_with_pos(concept_net_mapper):
-        edges = tuple(concept_net_mapper.map(Node(id="nid30", datasource="test", label="30", pos="a")))
+        edges = tuple(concept_net_mapper.map(KgNode.legacy(id="nid30", datasource="test", label="30", pos="a")))
         assert len(edges) == 1
         edge = edges[0]
         assert edge.subject == "nid30"
         assert edge.object == "/c/en/30/a/wn"
         assert edge.predicate == mowgli_predicates.SAME_AS
-        assert edge.datasource == "test"
+        assert edge.sources == ("test",)

@@ -1,27 +1,26 @@
 import logging
 from typing import Generator, Union, Dict, Optional, Tuple
 
-from mowgli_etl.model.edge import Edge
+from mowgli_etl.model.kg_edge import KgEdge
 from mowgli_etl.model.model import Model
-from mowgli_etl.model.node import Node
+from mowgli_etl.model.kg_node import KgNode
 from mowgli_etl._mapper import _Mapper
 from mowgli_etl._pipeline import _Pipeline
-from mowgli_etl.model.path import Path
+from mowgli_etl.model.kg_path import KgPath
 from mowgli_etl.pipeline_storage import PipelineStorage
-from mowgli_etl.storage._edge_set import _EdgeSet
-from mowgli_etl.storage._node_id_set import _NodeIdSet
-from mowgli_etl.storage._node_set import _NodeSet
-from mowgli_etl.storage.mem_edge_set import MemEdgeSet
-from mowgli_etl.storage.mem_node_id_set import MemNodeIdSet
-from mowgli_etl.storage.mem_node_set import MemNodeSet
+from mowgli_etl.storage._kg_edge_set import _KgEdgeSet
+from mowgli_etl.storage._id_set import _IdSet
+from mowgli_etl.storage._kg_node_set import _KgNodeSet
 import stringcase
 
 try:
-    from mowgli_etl.storage.persistent_edge_set import PersistentEdgeSet
-    from mowgli_etl.storage.persistent_node_id_set import PersistentNodeIdSet
-    from mowgli_etl.storage.persistent_node_set import PersistentNodeSet
+    from mowgli_etl.storage.persistent_kg_edge_set import PersistentKgEdgeSet as EdgeSet
+    from mowgli_etl.storage.persistent_id_set import PersistentIdSet as NodeIdSet
+    from mowgli_etl.storage.persistent_kg_node_set import PersistentKgNodeSet as NodeSet
 except ImportError:
-    PersistentEdgeSet = PersistentNodeSet = PersistentNodeIdSet = None
+    from mowgli_etl.storage.mem_kg_edge_set import MemKgEdgeSet as EdgeSet
+    from mowgli_etl.storage.mem_id_set import MemIdSet as NodeIdSet
+    from mowgli_etl.storage.mem_kg_node_set import MemKgNodeSet as NodeSet
 
 
 class PipelineWrapper:
@@ -44,7 +43,7 @@ class PipelineWrapper:
         Model, None, None]:
         for model in model_generator:
             yield model
-            if isinstance(model, Node):
+            if isinstance(model, KgNode):
                 node = model
                 for mapper in mappers:
                     yield from mapper.map(node)
@@ -92,42 +91,34 @@ class PipelineWrapper:
             yield from transform_generator
             return
 
-        if PersistentEdgeSet is not None:
-            with PersistentEdgeSet.temporary() as edge_set:
-                with PersistentNodeSet.temporary() as node_set:
-                    with PersistentNodeIdSet.temporary() as used_node_ids_set:
-                        yield from self.__transform(
-                            edge_set=edge_set,
-                            node_set=node_set,
-                            transform_generator=transform_generator,
-                            used_node_ids_set=used_node_ids_set
-                        )
-        else:
-            yield from self.__transform(
-                edge_set=MemEdgeSet(),
-                node_set=MemNodeSet(),
-                transform_generator=transform_generator,
-                used_node_ids_set=MemNodeIdSet()
-            )
+        with EdgeSet.temporary() as edge_set:
+            with NodeSet.temporary() as node_set:
+                with NodeIdSet.temporary() as used_node_ids_set:
+                    yield from self.__transform(
+                        edge_set=edge_set,
+                        node_set=node_set,
+                        transform_generator=transform_generator,
+                        used_node_ids_set=used_node_ids_set
+                    )
 
     def __transform(
             self,
             *,
-            edge_set: _EdgeSet,
-            node_set: _NodeSet,
+            edge_set: _KgEdgeSet,
+            node_set: _KgNodeSet,
             transform_generator: Generator[Model, None, None],
-            used_node_ids_set: _NodeIdSet
+            used_node_ids_set: _IdSet
     ) -> Generator[Model, None, None]:
         for model in transform_generator:
             try:
-                if self.__pipeline.single_datasource and model.datasource != self.__pipeline.id:
+                if self.__pipeline.single_source and model.source != self.__pipeline.id:
                     raise ValueError(f"pipeline can only yield one datasource, the same as the pipeline id: expected={self.id}, actual={model.datasource}")
             except AttributeError:
                 pass
 
-            if isinstance(model, Node):
+            if isinstance(model, KgNode):
                 node = model
-                # Node ID's should be unique in the CSKG.
+                # KgNode ID's should be unique in the CSKG.
                 existing_node = node_set.get(node.id)
                 if existing_node is not None:
                     if existing_node == node:
@@ -143,11 +134,10 @@ class PipelineWrapper:
                         )
                 else:
                     node_set.add(node)
-            elif isinstance(model, Edge):
+            elif isinstance(model, KgEdge):
                 edge = model
                 # Edges should be unique in the CSKG, meaning that the tuple of (subject, predicate, object) should be unique.
-                existing_edge = edge_set.get(object=edge.object, predicate=edge.predicate,
-                                             subject=edge.subject)
+                existing_edge = edge_set.get(edge.id)
                 if existing_edge is not None:
                     # Don't try to handle the exact duplicate case differently. It should never happen.
                     raise ValueError(

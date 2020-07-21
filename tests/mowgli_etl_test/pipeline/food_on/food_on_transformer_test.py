@@ -1,5 +1,5 @@
 from mowgli_etl.model.concept_net_predicates import IS_A
-from mowgli_etl.model.edge import Edge
+from mowgli_etl.model.kg_edge import KgEdge
 from mowgli_etl.pipeline.food_on.food_on_extractor import FoodOnExtractor
 from mowgli_etl.pipeline.food_on.food_on_transformer import FoodOnTransformer
 
@@ -11,7 +11,7 @@ def test_food_on_transformer(pipeline_storage):
     edges = []
     nodes_by_id = {}
     for result in transformer.transform(**extract_result):
-        if isinstance(result, Edge):
+        if isinstance(result, KgEdge):
             edges.append(result)
         else:
             assert result.id not in nodes_by_id

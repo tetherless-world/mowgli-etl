@@ -1,7 +1,7 @@
 from configargparse import ArgParser
 
-from mowgli_etl.model.edge import Edge
-from mowgli_etl.model.node import Node
+from mowgli_etl.model.kg_edge import KgEdge
+from mowgli_etl.model.kg_node import KgNode
 from mowgli_etl.pipeline.sentic import sentic_types
 from mowgli_etl.pipeline.sentic.sentic_constants import SENTIC_TYPE_KEY
 from mowgli_etl.pipeline.sentic.sentic_pipeline import SenticPipeline
@@ -39,22 +39,23 @@ def test_sentic_pipeline(
     sentic_ids = set()
     edges_by_subject = {}
     for node_or_edge in graph_generator:
-        if isinstance(node_or_edge, Node):
+        if isinstance(node_or_edge, KgNode):
             node = node_or_edge
             nodes_by_id[node.id] = node
-            type = node.other[SENTIC_TYPE_KEY]
+            type = node.id.split(":", 2)[1]
             if type == sentic_types.PRIMITIVE:
                 primitive_ids.add(node.id)
             elif type == sentic_types.SENTIC:
                 sentic_ids.add(node.id)
-        elif isinstance(node_or_edge, Edge):
+        elif isinstance(node_or_edge, KgEdge):
             edge = node_or_edge
             subject_edges = edges_by_subject.setdefault(edge.subject, [])
             subject_edges.append(node_or_edge)
 
     # assert that all concept nodes are related to sentics, primitives and other concepts
     for id, node in nodes_by_id.items():
-        if node.other[SENTIC_TYPE_KEY] != sentic_types.CONCEPT:
+        type = node.id.split(":", 2)[1]
+        if type != sentic_types.CONCEPT:
             continue
         assert id in edges_by_subject
         concept_edges, primitive_edges, sentic_edges = [], [], []

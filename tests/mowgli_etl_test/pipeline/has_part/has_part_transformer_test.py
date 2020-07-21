@@ -1,5 +1,5 @@
 from mowgli_etl.model.concept_net_predicates import HAS_A, PART_OF
-from mowgli_etl.model.edge import Edge
+from mowgli_etl.model.kg_edge import KgEdge
 from mowgli_etl.model.mowgli_predicates import SAME_AS
 from mowgli_etl.pipeline.has_part.has_part_extractor import HasPartExtractor
 from mowgli_etl.pipeline.has_part.has_part_transformer import HasPartTransformer
@@ -11,7 +11,7 @@ def test_has_part_transformer(pipeline_storage):
 
     nodes, edges = [], []
     for result in transformer.transform(**extract_result):
-        if isinstance(result, Edge):
+        if isinstance(result, KgEdge):
             edges.append(result)
 
         if len(edges) >= 10:

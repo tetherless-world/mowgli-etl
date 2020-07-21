@@ -2,8 +2,8 @@ from typing import Generator, Union
 
 from xml.dom.minidom import parse
 
-from mowgli_etl.model.edge import Edge
-from mowgli_etl.model.node import Node
+from mowgli_etl.model.kg_edge import KgEdge
+from mowgli_etl.model.kg_node import KgNode
 from mowgli_etl._transformer import _Transformer
 from mowgli_etl.pipeline.usf.usf_constants import STRENGTH_FILE_KEY
 from mowgli_etl.pipeline.usf.usf_mappers import usf_edge, usf_node
@@ -28,7 +28,7 @@ Read more: http://datavis.ca/papers/twp.pdf
 
 class USFTransformer(_Transformer):
 
-    def transform(self, **kwds) -> Generator[Union[Node, Edge], None, None]:
+    def transform(self, **kwds) -> Generator[Union[KgNode, KgEdge], None, None]:
 
         self._logger.info("transform %s", STRENGTH_FILE_KEY)
 

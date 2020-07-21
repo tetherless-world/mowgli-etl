@@ -1,16 +1,16 @@
 import pytest
 
-from mowgli_etl.model.node import Node
+from mowgli_etl.model.kg_node import KgNode
 
 
 @pytest.fixture
 def node():
-    return Node(id="testid", label="test label", pos="n", datasource="test", other={"test": 1})
+    return KgNode.legacy(id="testid", label="test label", pos="n", datasource="test", other={"test": 1})
 
 
-def test_constructor(node: Node):
+def test_constructor(node: KgNode):
     pass
 
 
-def test_hash(node: Node):
+def test_hash(node: KgNode):
     hash(node)

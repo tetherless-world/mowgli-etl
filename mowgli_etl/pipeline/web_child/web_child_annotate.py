@@ -9,7 +9,7 @@ except ImportError:
     sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..")))
 
 from mowgli_etl.pipeline.web_child.web_child_transformer import WebChildTransformer
-from mowgli_etl.model.edge import Edge
+from mowgli_etl.model.kg_edge import KgEdge
 
 
 def annotate():
@@ -31,7 +31,7 @@ def annotate():
     print("Mapping Edges to Scores")
 
     for edge in triplegen:
-        if isinstance(edge, Edge):
+        if isinstance(edge, KgEdge):
             if scores.get(edge.subject) is None:
                 scores[edge.subject] = {edge.object:edge.weight}
             else:
