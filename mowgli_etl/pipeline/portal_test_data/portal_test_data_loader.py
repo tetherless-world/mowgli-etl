@@ -13,6 +13,7 @@ from mowgli_etl.loader.json.jsonl_benchmark_loader import JsonlBenchmarkLoader
 from mowgli_etl.loader.json.jsonl_benchmark_question_loader import JsonlBenchmarkQuestionLoader
 from mowgli_etl.loader.json.jsonl_benchmark_submission_loader import JsonlBenchmarkSubmissionLoader
 from mowgli_etl.loader.json.jsonl_path_loader import JsonlPathLoader
+from mowgli_etl.loader.kgtk.kgtk_edges_tsv_loader import KgtkEdgesTsvLoader
 from mowgli_etl.paths import PROJECT_ROOT
 from mowgli_etl.pipeline_storage import PipelineStorage
 
@@ -35,13 +36,14 @@ class PortalTestDataLoader(CompositeLoader):
         self._loaders.append(JsonPathLoader().open(ts_kg_storage))
 
         scala_benchmark_storage = PipelineStorage(pipeline_id=PortalTestDataPipeline.ID, root_data_dir_path=PROJECT_ROOT, loaded_data_dir_path=mcs_apps_dir_path / "lib"/ "scala" / "benchmark" / "src" / "main" / "resources" / "data" / "test" / "benchmark")
-        scala_kg_storage = PipelineStorage(pipeline_id=PortalTestDataPipeline.ID, root_data_dir_path=PROJECT_ROOT, loaded_data_dir_path=mcs_apps_dir_path / "lib" / "scala" / "kg" / "src" / "main" / "resources" / "data" / "test" / "kg")
-        self._loaders.append(CskgCsvEdgeLoader(bzip=True).open(scala_kg_storage))
-        self._loaders.append(CskgCsvNodeLoader(bzip=True).open(scala_kg_storage))
+        scala_kg_legacy_storage = PipelineStorage(pipeline_id=PortalTestDataPipeline.ID, root_data_dir_path=PROJECT_ROOT, loaded_data_dir_path=mcs_apps_dir_path / "lib" / "scala" / "kg" / "src" / "main" / "resources" / "data" / "test" / "kg" / "legacy")
+        self._loaders.append(CskgCsvEdgeLoader(bzip=True).open(scala_kg_legacy_storage))
+        self._loaders.append(CskgCsvNodeLoader(bzip=True).open(scala_kg_legacy_storage))
+        self._loaders.append(KgtkEdgesTsvLoader(bzip=True).open(PipelineStorage(pipeline_id=PortalTestDataPipeline.ID, root_data_dir_path=PROJECT_ROOT, loaded_data_dir_path=mcs_apps_dir_path / "lib" / "scala" / "kg" / "src" / "main" / "resources" / "data" / "test" / "kg" / "kgtk")))
         self._loaders.append(JsonlBenchmarkAnswerLoader(bzip=True).open(scala_benchmark_storage))
         self._loaders.append(JsonlBenchmarkLoader(bzip=True).open(scala_benchmark_storage))
         self._loaders.append(JsonlBenchmarkQuestionLoader(bzip=True).open(scala_benchmark_storage))
         self._loaders.append(JsonlBenchmarkSubmissionLoader(bzip=True).open(scala_benchmark_storage))
-        self._loaders.append(JsonlPathLoader().open(scala_kg_storage))
+        self._loaders.append(JsonlPathLoader().open(PipelineStorage(pipeline_id=PortalTestDataPipeline.ID, root_data_dir_path=PROJECT_ROOT, loaded_data_dir_path=mcs_apps_dir_path / "lib" / "scala" / "kg" / "src" / "main" / "resources" / "data" / "test")))
 
         return self

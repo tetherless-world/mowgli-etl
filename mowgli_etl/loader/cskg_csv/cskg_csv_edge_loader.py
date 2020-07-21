@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import Dict, Callable
 
 from mowgli_etl.loader._edge_loader import _EdgeLoader
-from mowgli_etl.model.edge import Edge
+from mowgli_etl.model.kg_edge import KgEdge
 
 
 class CskgCsvEdgeLoader(_EdgeLoader):
@@ -19,7 +19,7 @@ class CskgCsvEdgeLoader(_EdgeLoader):
     def open(self, storage):
         self.__edge_file = open(storage.loaded_data_dir_path / "edges.csv", "w+")
         writer_opts = {'delimiter': '\t', 'lineterminator': '\n'}
-        self.__edge_writer = DictWriter(self.__edge_file, Edge._fields, **writer_opts)
+        self.__edge_writer = DictWriter(self.__edge_file, KgEdge._fields, **writer_opts)
         self.__edge_writer.writeheader()
         return self
 
@@ -28,7 +28,7 @@ class CskgCsvEdgeLoader(_EdgeLoader):
         if self.__bzip:
             self._bzip_file(Path(self.__edge_file.name))
 
-    def load_edge(self, edge: Edge):
+    def load_edge(self, edge: KgEdge):
         self._write_csv_line(self.__edge_writer, self.__EDGE_CSV_FIELDS, edge)
 
     # Internal methods

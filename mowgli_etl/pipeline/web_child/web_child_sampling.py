@@ -9,8 +9,8 @@ except ImportError:
     sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..")))
 
 from mowgli_etl.pipeline.web_child.web_child_transformer import WebChildTransformer
-from mowgli_etl.model.edge import Edge
-from mowgli_etl.model.node import Node
+from mowgli_etl.model.kg_edge import KgEdge
+from mowgli_etl.model.kg_node import KgNode
 from mowgli_etl.model.mowgli_predicates import WN_SYNSET
 from random import sample
 import csv
@@ -43,10 +43,10 @@ def loadcsv():
     print('Mapping edges and nodes')
     for node_or_edge in triplegen:
 
-        if isinstance(node_or_edge, Node):
+        if isinstance(node_or_edge, KgNode):
             node = node_or_edge
             nodes[node.id] = node
-        elif isinstance(node_or_edge, Edge):
+        elif isinstance(node_or_edge, KgEdge):
             edge = node_or_edge
             if edge.predicate == WN_SYNSET:
                 continue

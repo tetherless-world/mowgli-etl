@@ -1,11 +1,11 @@
 from abc import abstractmethod
 
 from mowgli_etl._loader import _Loader
-from mowgli_etl.model.edge import Edge
-from mowgli_etl.model.node import Node
+from mowgli_etl.model.kg_edge import KgEdge
+from mowgli_etl.model.kg_node import KgNode
 
 
 class _NodeLoader(_Loader):
     @abstractmethod
-    def load_node(self, node: Node):
+    def load_node(self, node: KgNode):
         raise NotImplementedError

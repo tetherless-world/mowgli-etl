@@ -4,8 +4,8 @@ from typing import Generator, Union
 import pytest
 from itertools import count
 
-from mowgli_etl.model.edge import Edge
-from mowgli_etl.model.node import Node
+from mowgli_etl.model.kg_edge import KgEdge
+from mowgli_etl.model.kg_node import KgNode
 from mowgli_etl.pipeline_storage import PipelineStorage
 
 
@@ -28,7 +28,7 @@ def pipeline_storage(tmp_path_factory) -> PipelineStorage:
 
 
 @pytest.fixture
-def graph_generator() -> Generator[Union[Node, Edge], None, None]:
+def graph_generator() -> Generator[Union[KgNode, KgEdge], None, None]:
     """
     Return a generator that yields test nodes and edges
     """
@@ -36,7 +36,7 @@ def graph_generator() -> Generator[Union[Node, Edge], None, None]:
         nid_counter = count(1)
         while True:
             nodes = tuple(
-                Node(
+                KgNode(
                     datasource='test_datasource',
                     id=f'test_node_{next(nid_counter)}',
                     label='test node'
@@ -44,7 +44,7 @@ def graph_generator() -> Generator[Union[Node, Edge], None, None]:
                 for _ in range(2)
             )
             yield from nodes
-            yield Edge(
+            yield KgEdge(
                 datasource='test_datasource',
                 object=nodes[1].id,
                 predicate='test_predicate',

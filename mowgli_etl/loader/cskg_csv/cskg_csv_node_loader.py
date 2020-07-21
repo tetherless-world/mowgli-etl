@@ -5,8 +5,8 @@ from typing import Dict, Callable
 from mowgli_etl.loader._edge_loader import _EdgeLoader
 from mowgli_etl.loader._node_loader import _NodeLoader
 from mowgli_etl.loader.cskg_csv.cskg_csv_edge_loader import CskgCsvEdgeLoader
-from mowgli_etl.model.edge import Edge
-from mowgli_etl.model.node import Node
+from mowgli_etl.model.kg_edge import KgEdge
+from mowgli_etl.model.kg_node import KgNode
 
 
 class CskgCsvNodeLoader(_NodeLoader):
@@ -22,7 +22,7 @@ class CskgCsvNodeLoader(_NodeLoader):
     def open(self, storage):
         self.__node_file = open(storage.loaded_data_dir_path / "nodes.csv", "w+")
         writer_opts = {'delimiter': '\t', 'lineterminator': '\n'}
-        self.__node_writer = DictWriter(self.__node_file, Node._fields, **writer_opts)
+        self.__node_writer = DictWriter(self.__node_file, KgNode._fields, **writer_opts)
         self.__node_writer.writeheader()
         return self
 
@@ -31,5 +31,5 @@ class CskgCsvNodeLoader(_NodeLoader):
         if self.__bzip:
             self._bzip_file(Path(self.__node_file.name))
 
-    def load_node(self, node: Node):
+    def load_node(self, node: KgNode):
         CskgCsvEdgeLoader._write_csv_line(self.__node_writer, self.__NODE_CSV_FIELDS, node)

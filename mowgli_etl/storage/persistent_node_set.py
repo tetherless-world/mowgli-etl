@@ -3,7 +3,7 @@ from pathlib import Path
 from tempfile import mkdtemp
 from typing import Optional, Generator
 
-from mowgli_etl.model.node import Node
+from mowgli_etl.model.kg_node import KgNode
 from mowgli_etl.storage._node_set import _NodeSet
 from mowgli_etl.storage.level_db import LevelDb
 
@@ -13,7 +13,7 @@ class PersistentNodeSet(_NodeSet):
         _NodeSet.__init__(self)
         self.__level_db = LevelDb(**level_db_kwds)
 
-    def add(self, node: Node) -> None:
+    def add(self, node: KgNode) -> None:
         key = self.__construct_node_key(node.id)
         value = pickle.dumps(node)
         self.__level_db.put(key, value)
@@ -38,7 +38,7 @@ class PersistentNodeSet(_NodeSet):
         value = self.__level_db.get(key)
         return value is not None
 
-    def get(self, node_id: str, default: Optional[Node] = None) -> Optional[Node]:
+    def get(self, node_id: str, default: Optional[KgNode] = None) -> Optional[KgNode]:
         key = self.__construct_node_key(node_id)
         value = self.__level_db.get(key)
         if value is not None:

@@ -5,8 +5,8 @@ from urllib.parse import quote
 
 from mowgli_etl.model.concept_net_predicates import IS_A, HAS_A, PART_OF, LOCATED_NEAR, HAS_FIRST_SUBEVENT, CAUSES, \
     CREATED_BY, HAS_PREREQUISITE, AT_LOCATION
-from mowgli_etl.model.edge import Edge
-from mowgli_etl.model.node import Node
+from mowgli_etl.model.kg_edge import KgEdge
+from mowgli_etl.model.kg_node import KgNode
 from mowgli_etl._transformer import _Transformer
 from mowgli_etl.model.word_net_id import WordNetId
 
@@ -41,18 +41,18 @@ class AristoTransformer(_Transformer):
         "within": __PredToConceptNetPredicateMapping(PART_OF)
     }
 
-    def __create_type_edge(self, *, arg_node: Node, type_word_net_id: WordNetId) -> Edge:
+    def __create_type_edge(self, *, arg_node: KgNode, type_word_net_id: WordNetId) -> KgEdge:
         # arg node IsA WordNet node
         # Only yield this once, when the arg is yielded.
         return \
-            Edge(
+            KgEdge(
                 datasource=self.__DATASOURCE,
                 object="wn:" + str(type_word_net_id),
                 predicate=IS_A,
                 subject=arg_node.id,
             )
 
-    def __parse_arg(self, *, arg: str, provenance: str, type_: str) -> Node:
+    def __parse_arg(self, *, arg: str, provenance: str, type_: str) -> KgNode:
         # Put the type in the id in case words are reused
         if type_ != "Thing":
             word_net_type = type_.rsplit('_', 1)
@@ -63,7 +63,7 @@ class AristoTransformer(_Transformer):
             type_word_net_id = None
 
         node = \
-            Node(
+            KgNode(
                 datasource=self.__DATASOURCE,
                 id=f"{self.__DATASOURCE}:{type_}:{quote(arg)}",
                 label=arg,
@@ -159,7 +159,7 @@ class AristoTransformer(_Transformer):
                     if type_word_net_id is not None:
                         yield self.__create_type_edge(arg_node=arg_node, type_word_net_id=type_word_net_id)
 
-                # Yield the tuple as an Edge if an equivalent edge hasn't been yielded before
+                # Yield the tuple as an KgEdge if an equivalent edge hasn't been yielded before
                 if reverse_args:
                     # The pred -> predicate mapping above told us that the object should be the subject and the subject the object
                     # ConceptNet has few symmetric relations. For example, it has "CreatedBy" but not "Creates".
@@ -170,7 +170,7 @@ class AristoTransformer(_Transformer):
                     continue
 
                 yield \
-                    Edge(
+                    KgEdge(
                         datasource=self.__DATASOURCE,
                         predicate=concept_net_predicate,
                         subject=subject_node.id,

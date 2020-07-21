@@ -20,10 +20,10 @@ from mowgli_etl.model.benchmark_question_choice_type import BenchmarkQuestionCho
 from mowgli_etl.model.benchmark_question_prompt import BenchmarkQuestionPrompt
 from mowgli_etl.model.benchmark_question_prompt_type import BenchmarkQuestionPromptType
 from mowgli_etl.model.benchmark_submission import BenchmarkSubmission
-from mowgli_etl.model.edge import Edge
+from mowgli_etl.model.kg_edge import KgEdge
 from mowgli_etl.model.model import Model
-from mowgli_etl.model.node import Node
-from mowgli_etl.model.path import Path
+from mowgli_etl.model.kg_node import KgNode
+from mowgli_etl.model.kg_path import KgPath
 from mowgli_etl.pipeline.portal_test_data.portal_test_data_pipeline import (
     PortalTestDataPipeline,
 )
@@ -62,7 +62,7 @@ class PortalTestDataTransformer(_Transformer):
         yield from self.__transform_benchmarks(paths=paths)
 
     def __transform_benchmarks(
-        self, *, paths: Tuple[Path, ...]
+        self, *, paths: Tuple[KgPath, ...]
     ) -> Generator[Model, None, None]:
 
         dataset_types = ("dev", "test", "train")
@@ -153,8 +153,8 @@ class PortalTestDataTransformer(_Transformer):
                 )
 
     def __transform_kg_edges(
-        self, nodes: Tuple[Node, ...]
-    ) -> Generator[Edge, None, None]:
+        self, nodes: Tuple[KgNode, ...]
+    ) -> Generator[KgEdge, None, None]:
         concept_net_predicates = tuple(
             getattr(mowgli_etl.model.concept_net_predicates, attr)
             for attr in dir(mowgli_etl.model.concept_net_predicates)
@@ -170,7 +170,7 @@ class PortalTestDataTransformer(_Transformer):
                     while object_node.id == subject_node.id:
                         object_node = random.choice(nodes)
                     predicate = random.choice(concept_net_predicates)
-                    edge = Edge(
+                    edge = KgEdge(
                         datasource=PortalTestDataPipeline.ID,
                         object=object_node.id,
                         predicate=predicate,
@@ -183,12 +183,12 @@ class PortalTestDataTransformer(_Transformer):
                     edge_set.add(edge)
                     break
 
-    def __transform_kg_nodes(self) -> Tuple[Node, ...]:
+    def __transform_kg_nodes(self) -> Tuple[KgNode, ...]:
         pos = ("a", "n", "r", "v")
 
         return tuple(
-            Node(
-                aliases=(f"Node{node_i}", f"NodeAlias{node_i}"),
+            KgNode(
+                aliases=(f"KgNode{node_i}", f"NodeAlias{node_i}"),
                 datasource=PortalTestDataPipeline.ID,
                 id=f"portal_test_data:{node_i}",
                 label=f"Test node {node_i}",
@@ -199,8 +199,8 @@ class PortalTestDataTransformer(_Transformer):
         )
 
     def __transform_kg_paths(
-        self, *, edges_by_subject: Dict[str, List[Edge]], nodes: Tuple[Node, ...]
-    ) -> Generator[Path, None, None]:
+        self, *, edges_by_subject: Dict[str, List[KgEdge]], nodes: Tuple[KgNode, ...]
+    ) -> Generator[KgPath, None, None]:
         for path_i in range(10):
             current_node_id = start_node_id = random.choice(nodes).id
             path_length = expo_int(max=20, min=4, mean=10)
@@ -219,7 +219,7 @@ class PortalTestDataTransformer(_Transformer):
                 path.append(choose_edge.object)
                 path_node_ids.add(choose_edge.object)
                 current_node_id = choose_edge.object
-            yield Path(
+            yield KgPath(
                 datasource=PortalTestDataPipeline.ID,
                 id="portal_test_data_path_" + str(path_i),
                 path=tuple(path),

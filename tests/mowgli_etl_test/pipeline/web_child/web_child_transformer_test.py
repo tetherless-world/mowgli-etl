@@ -1,6 +1,6 @@
-from mowgli_etl.model.edge import Edge
+from mowgli_etl.model.kg_edge import KgEdge
 from mowgli_etl.model.mowgli_predicates import WN_SYNSET
-from mowgli_etl.model.node import Node
+from mowgli_etl.model.kg_node import KgNode
 from mowgli_etl.pipeline.web_child.web_child_transformer import WebChildTransformer
 
 
@@ -10,9 +10,9 @@ def test_web_child_transform(web_child_transform_args):
     wordnet_edges = {}
     part_whole_edges = []
     for node_or_edge in transformer.transform(**web_child_transform_args):
-        if isinstance(node_or_edge, Node):
+        if isinstance(node_or_edge, KgNode):
             nodes[node_or_edge.id] = node_or_edge
-        elif isinstance(node_or_edge, Edge):
+        elif isinstance(node_or_edge, KgEdge):
             edge = node_or_edge
             if edge.predicate == WN_SYNSET:
                 assert (

@@ -1,7 +1,7 @@
 import pathlib
 
-from mowgli_etl.model.edge import Edge
-from mowgli_etl.model.node import Node
+from mowgli_etl.model.kg_edge import KgEdge
+from mowgli_etl.model.kg_node import KgNode
 from mowgli_etl.pipeline.usf.usf_constants import STRENGTH_FILE_KEY
 from mowgli_etl.pipeline.usf.usf_mappers import usf_edge, usf_node
 from mowgli_etl.pipeline.usf.usf_transformer import USFTransformer
@@ -14,9 +14,9 @@ def test_transform():
     kwdargs = {STRENGTH_FILE_KEY: file_path}
     nodes, edges = set(), set()
     for result in transformer.transform(**kwdargs):
-        if isinstance(result, Node):
+        if isinstance(result, KgNode):
             nodes.add(result)
-        elif isinstance(result, Edge):
+        elif isinstance(result, KgEdge):
             edges.add(result)
 
     expected_node_names = {'face': [9999,'N'], 'book': [117,'N',3.23], 'time':[426,'N',1.17] ,

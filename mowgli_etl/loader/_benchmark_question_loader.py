@@ -4,7 +4,7 @@ from mowgli_etl._loader import _Loader
 from mowgli_etl.model.benchmark import Benchmark
 from mowgli_etl.model.benchmark_question import BenchmarkQuestion
 from mowgli_etl.model.benchmark_dataset import BenchmarkDataset
-from mowgli_etl.model.edge import Edge
+from mowgli_etl.model.kg_edge import KgEdge
 
 
 class _BenchmarkQuestionLoader(_Loader):

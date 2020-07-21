@@ -2,8 +2,8 @@ from mowgli_etl.loader._edge_loader import _EdgeLoader
 from mowgli_etl.loader._node_loader import _NodeLoader
 from mowgli_etl.loader.cskg_csv.cskg_csv_edge_loader import CskgCsvEdgeLoader
 from mowgli_etl.loader.cskg_csv.cskg_csv_node_loader import CskgCsvNodeLoader
-from mowgli_etl.model.edge import Edge
-from mowgli_etl.model.node import Node
+from mowgli_etl.model.kg_edge import KgEdge
+from mowgli_etl.model.kg_node import KgNode
 
 
 class CskgCsvLoader(_EdgeLoader, _NodeLoader):
@@ -20,8 +20,8 @@ class CskgCsvLoader(_EdgeLoader, _NodeLoader):
         self.__edge_loader.close()
         self.__node_loader.close()
 
-    def load_edge(self, edge: Edge):
+    def load_edge(self, edge: KgEdge):
         self.__edge_loader.load_edge(edge)
 
-    def load_node(self, node: Node):
+    def load_node(self, node: KgNode):
         self.__node_loader.load_node(node)

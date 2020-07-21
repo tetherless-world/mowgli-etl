@@ -1,12 +1,12 @@
 import logging
 from typing import Generator, Union, Dict, Optional, Tuple
 
-from mowgli_etl.model.edge import Edge
+from mowgli_etl.model.kg_edge import KgEdge
 from mowgli_etl.model.model import Model
-from mowgli_etl.model.node import Node
+from mowgli_etl.model.kg_node import KgNode
 from mowgli_etl._mapper import _Mapper
 from mowgli_etl._pipeline import _Pipeline
-from mowgli_etl.model.path import Path
+from mowgli_etl.model.kg_path import KgPath
 from mowgli_etl.pipeline_storage import PipelineStorage
 from mowgli_etl.storage._edge_set import _EdgeSet
 from mowgli_etl.storage._node_id_set import _NodeIdSet
@@ -43,7 +43,7 @@ class PipelineWrapper:
         Model, None, None]:
         for model in model_generator:
             yield model
-            if isinstance(model, Node):
+            if isinstance(model, KgNode):
                 node = model
                 for mapper in mappers:
                     yield from mapper.map(node)
@@ -116,9 +116,9 @@ class PipelineWrapper:
             except AttributeError:
                 pass
 
-            if isinstance(model, Node):
+            if isinstance(model, KgNode):
                 node = model
-                # Node ID's should be unique in the CSKG.
+                # KgNode ID's should be unique in the CSKG.
                 existing_node = node_set.get(node.id)
                 if existing_node is not None:
                     if existing_node == node:
@@ -134,7 +134,7 @@ class PipelineWrapper:
                         )
                 else:
                     node_set.add(node)
-            elif isinstance(model, Edge):
+            elif isinstance(model, KgEdge):
                 edge = model
                 # Edges should be unique in the CSKG, meaning that the tuple of (subject, predicate, object) should be unique.
                 existing_edge = edge_set.get(object=edge.object, predicate=edge.predicate,

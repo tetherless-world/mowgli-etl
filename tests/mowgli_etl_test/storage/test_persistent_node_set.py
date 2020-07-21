@@ -1,4 +1,4 @@
-from mowgli_etl.model.node import Node
+from mowgli_etl.model.kg_node import KgNode
 
 try:
     from mowgli_etl.storage.persistent_node_set import PersistentNodeSet
@@ -14,12 +14,12 @@ if PersistentNodeSet is not None:
         assert node_set.closed
 
 
-    def test_add(node: Node, tmpdir):
+    def test_add(node: KgNode, tmpdir):
         with PersistentNodeSet(directory_path=tmpdir.mkdir("test"), create_if_missing=True) as node_set:
             node_set.add(node)
 
 
-    def test_delete(node: Node, tmpdir):
+    def test_delete(node: KgNode, tmpdir):
         with PersistentNodeSet(directory_path=tmpdir.mkdir("test"), create_if_missing=True) as node_set:
             node_set.add(node)
             assert node.id in node_set
@@ -27,12 +27,12 @@ if PersistentNodeSet is not None:
             assert node.id not in node_set
 
 
-    def test_get_extant(node: Node, tmpdir):
+    def test_get_extant(node: KgNode, tmpdir):
         with PersistentNodeSet(directory_path=tmpdir.mkdir("test"), create_if_missing=True) as node_set:
             node_set.add(node)
             assert node_set.get(node_id=node.id) == node
 
 
-    def test_get_nonextant(node: Node, tmpdir):
+    def test_get_nonextant(node: KgNode, tmpdir):
         with PersistentNodeSet(directory_path=tmpdir.mkdir("test"), create_if_missing=True) as node_set:
             assert node_set.get(node_id=node.id) is None

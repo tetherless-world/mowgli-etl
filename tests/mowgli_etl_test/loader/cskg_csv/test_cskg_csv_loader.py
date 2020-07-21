@@ -1,5 +1,5 @@
-from mowgli_etl.model.edge import Edge
-from mowgli_etl.model.node import Node
+from mowgli_etl.model.kg_edge import KgEdge
+from mowgli_etl.model.kg_node import KgNode
 from mowgli_etl.loader.cskg_csv.cskg_csv_loader import CskgCsvLoader
 
 _EXPECTED_NODE_HEADER = 'id\tlabel\taliases\tpos\tdatasource\tother'
@@ -7,11 +7,11 @@ _EXPECTED_EDGE_HEADER = 'subject\tpredicate\tobject\tdatasource\tweight\tother'
 
 
 def test_write_node(pipeline_storage):
-    test_node = Node(
+    test_node = KgNode(
         datasource='test_datasource',
         id='test_nid',
-        label='Test Node',
-        aliases=('t-node', 'Node Test'),
+        label='Test KgNode',
+        aliases=('t-node', 'KgNode Test'),
         other={'datasets': ['test_dataset', 'other_test_dataset']},
         pos='N'
     )
@@ -23,7 +23,7 @@ def test_write_node(pipeline_storage):
 
     expected_node_text = (
             _EXPECTED_NODE_HEADER + '\n'
-            + 'test_nid\tTest Node\tt-node Node Test\tN\ttest_datasource\t'
+            + 'test_nid\tTest KgNode\tt-node KgNode Test\tN\ttest_datasource\t'
             + "{'datasets': ['test_dataset', 'other_test_dataset']}\n"
     )
 
@@ -35,7 +35,7 @@ def test_write_node(pipeline_storage):
 
 
 def test_write_edge(pipeline_storage):
-    test_edge = Edge(
+    test_edge = KgEdge(
         datasource='test_datasource',
         object='test_obj',
         predicate='test_rel',

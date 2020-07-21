@@ -4,8 +4,8 @@ from typing import Union
 from urllib.parse import quote
 
 from mowgli_etl.model.concept_net_predicates import RELATED_TO
-from mowgli_etl.model.edge import Edge
-from mowgli_etl.model.node import Node
+from mowgli_etl.model.kg_edge import KgEdge
+from mowgli_etl.model.kg_node import KgNode
 from mowgli_etl.pipeline.swow.swow_constants import SWOW_DATASOURCE_ID, SWOW_NAMESPACE
 
 """ 
@@ -23,14 +23,14 @@ def swow_node_id(word: str) -> str:
     return f"{SWOW_NAMESPACE}:{quote(word)}"
 
 
-def swow_node(*, word: str, response_counts: Counter) -> Node:
+def swow_node(*, word: str, response_counts: Counter) -> KgNode:
     """
     Create a cskg node from a SWOW cue or response.
     :param word: a SWOW cue or response
     :param response_counts: counts of responses to this word
     """
     assert all(k in SwowResponseType.__members__ for k in response_counts.keys())
-    return Node(
+    return KgNode(
         datasource=SWOW_DATASOURCE_ID,
         id=swow_node_id(word),
         label=word,
@@ -44,11 +44,11 @@ def swow_node(*, word: str, response_counts: Counter) -> Node:
 
 def swow_edge(
     *,
-    cue: Union[Node, str],
-    response: Union[Node, str],
+    cue: Union[KgNode, str],
+    response: Union[KgNode, str],
     cue_response_counts: Counter,
     response_counts: Counter,
-) -> Edge:
+) -> KgEdge:
     """
     Create a cskg edge from a SWOW cue, response, and strength value.
     :param cue: cue phrase
@@ -72,10 +72,10 @@ def swow_edge(
             for rt in SwowResponseType.__members__.keys()
         },
     }
-    return Edge(
+    return KgEdge(
         datasource=SWOW_DATASOURCE_ID,
-        subject=cue.id if isinstance(cue, Node) else swow_node_id(cue),
-        object=response.id if isinstance(response, Node) else swow_node_id(response),
+        subject=cue.id if isinstance(cue, KgNode) else swow_node_id(cue),
+        object=response.id if isinstance(response, KgNode) else swow_node_id(response),
         predicate=RELATED_TO,
         weight=strength_r123,
         other=other,

@@ -4,8 +4,8 @@ import sys
 from abc import ABC, abstractmethod
 from pathlib import Path
 
-from mowgli_etl.model.edge import Edge
-from mowgli_etl.model.node import Node
+from mowgli_etl.model.kg_edge import KgEdge
+from mowgli_etl.model.kg_node import KgNode
 from mowgli_etl.pipeline_storage import PipelineStorage
 
 

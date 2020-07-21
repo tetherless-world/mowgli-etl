@@ -2,9 +2,9 @@ import logging
 from abc import ABC, abstractmethod
 from typing import Generator, Union
 
-from mowgli_etl.model.edge import Edge
+from mowgli_etl.model.kg_edge import KgEdge
 from mowgli_etl.model.model import Model
-from mowgli_etl.model.node import Node
+from mowgli_etl.model.kg_node import KgNode
 
 
 class _Transformer(ABC):

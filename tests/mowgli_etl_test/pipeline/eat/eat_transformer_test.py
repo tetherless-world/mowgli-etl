@@ -1,8 +1,8 @@
 import os
 import pathlib
 
-from mowgli_etl.model.edge import Edge
-from mowgli_etl.model.node import Node
+from mowgli_etl.model.kg_edge import KgEdge
+from mowgli_etl.model.kg_node import KgNode
 from mowgli_etl.pipeline.eat.eat_transformer import EatTransformer
 
 
@@ -13,17 +13,17 @@ def test_eat_tranform():
 
     nodes, edges = set(), set()
     for result in transformer.transform(xml_file_path=test_file_path):
-        if isinstance(result, Node):
+        if isinstance(result, KgNode):
             nodes.add(result)
-        elif isinstance(result, Edge):
+        elif isinstance(result, KgEdge):
             edges.add(result)
 
-    expected_stimulus_nodes = set(Node(datasource="eat", id="eat:" + stim_word, label=stim_word) for stim_word in [
+    expected_stimulus_nodes = set(KgNode(datasource="eat", id="eat:" + stim_word, label=stim_word) for stim_word in [
         'SPECIAL',
         'SET'
     ])
 
-    expected_response_nodes = set(Node(datasource="eat", id="eat:" + response_word, label=response_word) for response_word in [
+    expected_response_nodes = set(KgNode(datasource="eat", id="eat:" + response_word, label=response_word) for response_word in [
         'TRAIN',
         'PARTICULAR',
         'EXTRA',
@@ -47,7 +47,7 @@ def test_eat_tranform():
     expected_nodes = expected_stimulus_nodes | expected_response_nodes
 
     expected_edges = set(
-        Edge(datasource="eat", object="eat:" + stim_node, predicate="cn:RelatedTo", subject="eat:" + response_node,
+        KgEdge(datasource="eat", object="eat:" + stim_node, predicate="cn:RelatedTo", subject="eat:" + response_node,
              weight=response_weight) for (stim_node, response_node, response_weight) in [
             ('SPECIAL', 'TRAIN', 0.07),
             ('SPECIAL', 'PARTICULAR', 0.05),

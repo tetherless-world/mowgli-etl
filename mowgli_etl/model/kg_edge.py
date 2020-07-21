@@ -2,7 +2,7 @@ import json
 from typing import Optional, Dict, NamedTuple
 
 
-class Edge(NamedTuple):
+class KgEdge(NamedTuple):
     subject: str
     predicate: str
     object: str

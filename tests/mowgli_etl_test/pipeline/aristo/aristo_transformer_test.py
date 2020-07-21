@@ -1,4 +1,4 @@
-from mowgli_etl.model.edge import Edge
+from mowgli_etl.model.kg_edge import KgEdge
 from mowgli_etl.pipeline.aristo.aristo_extractor import AristoExtractor
 from mowgli_etl.pipeline.aristo.aristo_transformer import AristoTransformer
 
@@ -13,7 +13,7 @@ def test_aristo_transformer(pipeline_storage):
     edges = []
     for result in transformer.transform(**extract_result):
         # print(result)
-        if isinstance(result, Edge):
+        if isinstance(result, KgEdge):
             edge = result
             edges_by_predicate = edges_tree.setdefault(edge.subject, {}).setdefault(edge.object, {})
             assert edge.predicate not in edges_by_predicate

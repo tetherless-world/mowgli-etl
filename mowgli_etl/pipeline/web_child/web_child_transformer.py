@@ -4,9 +4,9 @@ from typing import Generator, Tuple, Union
 
 from mowgli_etl._closeable import _Closeable
 from mowgli_etl.model.concept_net_predicates import HAS_A, MADE_OF, PART_OF
-from mowgli_etl.model.edge import Edge
+from mowgli_etl.model.kg_edge import KgEdge
 from mowgli_etl.model.mowgli_predicates import WN_SYNSET
-from mowgli_etl.model.node import Node
+from mowgli_etl.model.kg_node import KgNode
 from mowgli_etl._transformer import _Transformer
 from mowgli_etl.storage._node_set import _NodeSet
 from mowgli_etl.storage.mem_node_set import MemNodeSet
@@ -31,8 +31,8 @@ class WebChildTransformer(_Transformer):
     def __webchild_nid(self, ssid: str):
         return f"{self.__NAMESPACE}:{ssid}"
 
-    def __webchild_node(self, *, ssid: str, word: str) -> Node:
-        return Node(
+    def __webchild_node(self, *, ssid: str, word: str) -> KgNode:
+        return KgNode(
             datasource=self.__DATASOURCE_ID,
             id=self.__webchild_nid(ssid),
             label=word,
@@ -40,7 +40,7 @@ class WebChildTransformer(_Transformer):
             pos="n",
         )
 
-    def __read_webchild_csv_row(self, row: dict) -> Tuple[Node, Node, Edge]:
+    def __read_webchild_csv_row(self, row: dict) -> Tuple[KgNode, KgNode, KgEdge]:
         subject_node = self.__webchild_node(ssid=row["to_ss"], word=row["to_word"])
         object_node = self.__webchild_node(ssid=row["from_ss"], word=row["from_word"])
 
@@ -52,7 +52,7 @@ class WebChildTransformer(_Transformer):
             "cardinality": row["cardinality"].strip(),
         }
         score = float(row["score"])
-        edge = Edge(
+        edge = KgEdge(
             datasource=self.__DATASOURCE_ID,
             object=object_node.id,
             predicate=relation,
@@ -64,7 +64,7 @@ class WebChildTransformer(_Transformer):
 
     def __transform_webchild_file(
             self, *, csv_file_path: Path, yielded_words: _NodeSet
-    ) -> Generator[Union[Node, Edge], None, None]:
+    ) -> Generator[Union[KgNode, KgEdge], None, None]:
         self._logger.info("transforming %s", csv_file_path)
         with open(csv_file_path) as csv_file:
             csv_reader = csv.DictReader(
@@ -80,7 +80,7 @@ class WebChildTransformer(_Transformer):
 
     def __transform_wordnet_csv(
             self, *, wordnet_csv_file_path: Path, yielded_words: _NodeSet
-    ) -> Generator[Union[Node, Edge], None, None]:
+    ) -> Generator[Union[KgNode, KgEdge], None, None]:
         self._logger.info("transforming wordnet mappings from %s", wordnet_csv_file_path)
         with open(wordnet_csv_file_path) as csv_file:
             csv_reader = csv.DictReader(
@@ -97,7 +97,7 @@ class WebChildTransformer(_Transformer):
                 lemma = "_".join(word.split())
                 sense_num = row["sense-number"]
                 synset_nid = f"wn:{lemma}.n.{int(sense_num):02d}"
-                yield Edge(
+                yield KgEdge(
                     datasource=self.__DATASOURCE_ID,
                     object=synset_nid,
                     predicate=WN_SYNSET,
@@ -114,7 +114,7 @@ class WebChildTransformer(_Transformer):
             physical_csv_file_path: Path,
             substanceof_csv_file_path: Path,
             wordnet_csv_file_path: Path,
-    ) -> Generator[Union[Node, Edge], None, None]:
+    ) -> Generator[Union[KgNode, KgEdge], None, None]:
         if PersistentNodeSet is not None:
             yielded_words = PersistentNodeSet.temporary()
         else:

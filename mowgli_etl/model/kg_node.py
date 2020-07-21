@@ -2,7 +2,7 @@ import json
 from typing import Optional, Tuple, Dict, NamedTuple
 
 
-class Node(NamedTuple):
+class KgNode(NamedTuple):
     id: str
     label: str
     aliases: Optional[Tuple[str, ...]] = None

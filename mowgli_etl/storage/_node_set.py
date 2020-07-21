@@ -2,11 +2,11 @@ from abc import ABC, abstractmethod
 from typing import Optional, Generator
 
 from mowgli_etl._closeable import _Closeable
-from mowgli_etl.model.node import Node
+from mowgli_etl.model.kg_node import KgNode
 
 
 class _NodeSet(_Closeable):
-    def add(self, node: Node) -> None:
+    def add(self, node: KgNode) -> None:
         """
         Add a node to the set.
         """
@@ -21,7 +21,7 @@ class _NodeSet(_Closeable):
         """
 
     @abstractmethod
-    def get(self, node_id: str, default: Optional[Node] = None) -> Optional[Node]:
+    def get(self, node_id: str, default: Optional[KgNode] = None) -> Optional[KgNode]:
         """
         Get a node by id from the set.
         :return: the node corresponding to the id if the former is in the set, otherwise None
