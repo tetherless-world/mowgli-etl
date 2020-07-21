@@ -45,6 +45,8 @@ def expo_int(*, max: int, mean: int, min: int):
 
 
 class PortalTestDataTransformer(_Transformer):
+    __SECONDARY_SOURCES = tuple(f"portal_test_data_secondary_{i}" for i in range(3))
+
     def transform(self, **kwds):
         nodes = self.__transform_kg_nodes()
         yield from nodes
@@ -170,11 +172,12 @@ class PortalTestDataTransformer(_Transformer):
                     while object_node.id == subject_node.id:
                         object_node = random.choice(nodes)
                     predicate = random.choice(concept_net_predicates)
-                    edge = KgEdge.legacy(
-                        datasource=PortalTestDataPipeline.ID,
+                    edge = KgEdge.with_generated_id(
                         object=object_node.id,
+                        labels=(f"Test edge label {edge_i}",),
                         predicate=predicate,
                         subject=subject_node.id,
+                        sources=(PortalTestDataPipeline.ID, random.choice(self.__SECONDARY_SOURCES)),
                         weight=floor(random.random() * 100.0) / 100.0,
                     )
                     if edge in edge_set:
@@ -187,13 +190,11 @@ class PortalTestDataTransformer(_Transformer):
         pos = ("a", "n", "r", "v")
 
         return tuple(
-            KgNode.legacy(
-                aliases=(f"KgNode{node_i}", f"NodeAlias{node_i}"),
-                datasource=PortalTestDataPipeline.ID,
+            KgNode(
                 id=f"portal_test_data:{node_i}",
-                label=f"Test node {node_i}",
-                other={"index": node_i},
+                labels=(f"Test node {node_i}", f"KgNode{node_i}", f"NodeAlias{node_i}"),
                 pos=random.choice(pos),
+                sources=(PortalTestDataPipeline.ID, random.choice(self.__SECONDARY_SOURCES)),
             )
             for node_i in range(1000)
         )

@@ -17,7 +17,7 @@ class _KgEdgeSet(_Closeable):
         """
 
     def __contains__(self, edge: KgEdge) -> bool:
-        return self.get(id=edge.id) is not None
+        return self.get(edge.id) is not None
 
     @abstractmethod
     def get(self, edge_id: str, default: Optional[KgEdge] = None) -> Optional[KgEdge]:
