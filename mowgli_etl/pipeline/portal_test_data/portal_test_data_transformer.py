@@ -170,7 +170,7 @@ class PortalTestDataTransformer(_Transformer):
                     while object_node.id == subject_node.id:
                         object_node = random.choice(nodes)
                     predicate = random.choice(concept_net_predicates)
-                    edge = KgEdge(
+                    edge = KgEdge.legacy(
                         datasource=PortalTestDataPipeline.ID,
                         object=object_node.id,
                         predicate=predicate,
@@ -187,7 +187,7 @@ class PortalTestDataTransformer(_Transformer):
         pos = ("a", "n", "r", "v")
 
         return tuple(
-            KgNode(
+            KgNode.legacy(
                 aliases=(f"KgNode{node_i}", f"NodeAlias{node_i}"),
                 datasource=PortalTestDataPipeline.ID,
                 id=f"portal_test_data:{node_i}",

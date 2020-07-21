@@ -22,7 +22,7 @@ class ConceptNetMapper(_Closeable):
         if concept_net_id is None:
             return
         yield \
-            KgEdge(
+            KgEdge.legacy(
                 datasource=node.datasource,
                 object=concept_net_id,
                 predicate=mowgli_predicates.SAME_AS,

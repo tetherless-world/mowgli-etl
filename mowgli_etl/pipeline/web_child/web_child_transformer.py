@@ -32,7 +32,7 @@ class WebChildTransformer(_Transformer):
         return f"{self.__NAMESPACE}:{ssid}"
 
     def __webchild_node(self, *, ssid: str, word: str) -> KgNode:
-        return KgNode(
+        return KgNode.legacy(
             datasource=self.__DATASOURCE_ID,
             id=self.__webchild_nid(ssid),
             label=word,
@@ -52,7 +52,7 @@ class WebChildTransformer(_Transformer):
             "cardinality": row["cardinality"].strip(),
         }
         score = float(row["score"])
-        edge = KgEdge(
+        edge = KgEdge.legacy(
             datasource=self.__DATASOURCE_ID,
             object=object_node.id,
             predicate=relation,
@@ -97,7 +97,7 @@ class WebChildTransformer(_Transformer):
                 lemma = "_".join(word.split())
                 sense_num = row["sense-number"]
                 synset_nid = f"wn:{lemma}.n.{int(sense_num):02d}"
-                yield KgEdge(
+                yield KgEdge.legacy(
                     datasource=self.__DATASOURCE_ID,
                     object=synset_nid,
                     predicate=WN_SYNSET,

@@ -18,7 +18,7 @@ class EatTransformer(_Transformer):
 
         for stimulus in stimuli:
             stim_word = str(stimulus.attributes['word'].value)
-            stim_node = KgNode(datasource="eat", id="eat:" + quote(stim_word), label=stim_word)
+            stim_node = KgNode.legacy(datasource="eat", id="eat:" + quote(stim_word), label=stim_word)
             yield stim_node
 
             responses = stimulus.getElementsByTagName('response')
@@ -26,7 +26,7 @@ class EatTransformer(_Transformer):
             for response in responses:
                 response_word = str(response.attributes['word'].value)
                 percent = float(response.attributes['r'].value)
-                response_node = KgNode(datasource="eat", id="eat:" + quote(response_word), label=response_word)
+                response_node = KgNode.legacy(datasource="eat", id="eat:" + quote(response_word), label=response_word)
                 yield response_node
-                yield KgEdge(datasource="eat", object=stim_node.id, predicate="cn:RelatedTo", subject=response_node.id,
+                yield KgEdge.legacy(datasource="eat", object=stim_node.id, predicate="cn:RelatedTo", subject=response_node.id,
                            weight=percent)

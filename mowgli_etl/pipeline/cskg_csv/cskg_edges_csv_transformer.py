@@ -20,7 +20,7 @@ class CskgEdgesCsvTransformer(_CsvTransformer):
         for csv_row in csv_reader:
             # Edges may refer to nodes that are outside of the ones we've created e.g., WordNet.
             yield \
-                KgEdge(
+                KgEdge.legacy(
                     datasource=self._get_required_column(csv_row, "datasource"),
                     object=self._get_required_column(csv_row, "object"),
                     other=csv_row.get("other"),

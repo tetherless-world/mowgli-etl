@@ -17,7 +17,7 @@ def sentic_id(id: str, type: str) -> str:
 def sentic_node(*, id: str, label: str = None, sentic_type: str) -> KgNode:
     if label is None:
         label = id
-    return KgNode(
+    return KgNode.legacy(
         datasource=SENTIC_DATASOURCE_ID,
         id=sentic_id(id, sentic_type),
         label=label,
@@ -32,7 +32,7 @@ def sentic_edge(
     weight: Optional[float] = None,
 ) -> KgEdge:
 
-    return KgEdge(
+    return KgEdge.legacy(
         datasource=SENTIC_DATASOURCE_ID,
         subject=subject,
         object=object_,

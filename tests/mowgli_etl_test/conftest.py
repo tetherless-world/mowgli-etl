@@ -36,7 +36,7 @@ def graph_generator() -> Generator[Union[KgNode, KgEdge], None, None]:
         nid_counter = count(1)
         while True:
             nodes = tuple(
-                KgNode(
+                KgNode.legacy(
                     datasource='test_datasource',
                     id=f'test_node_{next(nid_counter)}',
                     label='test node'
@@ -44,7 +44,7 @@ def graph_generator() -> Generator[Union[KgNode, KgEdge], None, None]:
                 for _ in range(2)
             )
             yield from nodes
-            yield KgEdge(
+            yield KgEdge.legacy(
                 datasource='test_datasource',
                 object=nodes[1].id,
                 predicate='test_predicate',

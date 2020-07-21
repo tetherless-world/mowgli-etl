@@ -15,7 +15,7 @@ if ConceptNetMapper is not None:
 
 
     def test_map_unqualified_node(concept_net_mapper):
-        edges = tuple(concept_net_mapper.map(KgNode(id="a", datasource="test", label="a")))
+        edges = tuple(concept_net_mapper.map(KgNode.legacy(id="a", datasource="test", label="a")))
         assert len(edges) == 1
         edge = edges[0]
         assert edge.subject == "a"
@@ -25,7 +25,7 @@ if ConceptNetMapper is not None:
 
 
     def test_map_node_with_pos(concept_net_mapper):
-        edges = tuple(concept_net_mapper.map(KgNode(id="nid30", datasource="test", label="30", pos="a")))
+        edges = tuple(concept_net_mapper.map(KgNode.legacy(id="nid30", datasource="test", label="30", pos="a")))
         assert len(edges) == 1
         edge = edges[0]
         assert edge.subject == "nid30"

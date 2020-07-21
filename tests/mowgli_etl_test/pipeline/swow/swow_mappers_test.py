@@ -12,7 +12,7 @@ def test_swow_node():
     node = swow_node(
         word="test response", response_counts=Counter(R1=3, R2=2, R3=0)
     )
-    expected_node = KgNode(
+    expected_node = KgNode.legacy(
         datasource=SWOW_DATASOURCE_ID,
         id=f'{SWOW_NAMESPACE}:{quote("test response")}',
         label="test response",
@@ -28,7 +28,7 @@ def test_swow_edge():
         cue_response_counts=Counter(R1=2, R3=4),
         response_counts=Counter(R1=1, R3=1),
     )
-    expected_edge = KgEdge(
+    expected_edge = KgEdge.legacy(
         datasource=SWOW_DATASOURCE_ID,
         subject=f"{SWOW_NAMESPACE}:test",
         object=f'{SWOW_NAMESPACE}:{quote("test response")}',

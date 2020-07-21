@@ -20,7 +20,7 @@ class CskgNodesCsvTransformer(_CsvTransformer):
         for csv_row_i, csv_row in enumerate(csv_reader):
             try:
                 yield \
-                    KgNode(
+                    KgNode.legacy(
                         aliases=self._get_optional_column(csv_row, "aliases"),
                         datasource=self._get_required_column(csv_row, "datasource"),
                         id=self._get_required_column(csv_row, "id"),

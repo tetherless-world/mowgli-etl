@@ -34,7 +34,7 @@ class HasPartTransformer(_Transformer):
             id_ += ":" + pos
 
         return \
-            KgNode(
+            KgNode.legacy(
                 datasource=self.__DATASOURCE,
                 id=id_,
                 label=label,
@@ -76,7 +76,7 @@ class HasPartTransformer(_Transformer):
     def __yield_has_part_edges(self, *, arg1_node: KgNode, arg2_node: KgNode, average_score: float) -> Generator[
         KgEdge, None, None]:
         # arg1 HasA arg2
-        yield KgEdge(
+        yield KgEdge.legacy(
             datasource=self.__DATASOURCE,
             subject=arg1_node.id,
             object=arg2_node.id,
@@ -85,7 +85,7 @@ class HasPartTransformer(_Transformer):
         )
 
         # Inverse, arg2 PartOf arg2
-        yield KgEdge(
+        yield KgEdge.legacy(
             datasource=self.__DATASOURCE,
             subject=arg2_node.id,
             object=arg1_node.id,
@@ -114,7 +114,7 @@ class HasPartTransformer(_Transformer):
                 wn_node_id = "wn:" + synset[len("wn."):]
                 if wn_node_id in node_same_as_edges_yielded:
                     continue
-                yield KgEdge(
+                yield KgEdge.legacy(
                     datasource=self.__DATASOURCE,
                     object=wn_node_id,
                     predicate=SAME_AS,
@@ -127,7 +127,7 @@ class HasPartTransformer(_Transformer):
                 wikipedia_node_id = "wikipedia:" + quote(wikipedia_primary_page)
                 if wikipedia_node_id in node_same_as_edges_yielded:
                     continue
-                yield KgEdge(
+                yield KgEdge.legacy(
                     datasource=self.__DATASOURCE,
                     object=wikipedia_node_id,
                     predicate=SAME_AS,

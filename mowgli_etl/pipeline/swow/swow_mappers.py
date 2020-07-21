@@ -30,7 +30,7 @@ def swow_node(*, word: str, response_counts: Counter) -> KgNode:
     :param response_counts: counts of responses to this word
     """
     assert all(k in SwowResponseType.__members__ for k in response_counts.keys())
-    return KgNode(
+    return KgNode.legacy(
         datasource=SWOW_DATASOURCE_ID,
         id=swow_node_id(word),
         label=word,
@@ -72,7 +72,7 @@ def swow_edge(
             for rt in SwowResponseType.__members__.keys()
         },
     }
-    return KgEdge(
+    return KgEdge.legacy(
         datasource=SWOW_DATASOURCE_ID,
         subject=cue.id if isinstance(cue, KgNode) else swow_node_id(cue),
         object=response.id if isinstance(response, KgNode) else swow_node_id(response),

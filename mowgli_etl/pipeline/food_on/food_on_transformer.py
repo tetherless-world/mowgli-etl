@@ -21,7 +21,7 @@ class FoodOnTransformer(_Transformer):
             self.uri = uri
 
             self.node = \
-                KgNode(
+                KgNode.legacy(
                     datasource=FoodOnTransformer._DATASOURCE,
                     id="foodon:" + str(uri)[len(self._URI_PREFIX):],
                     label=label
@@ -73,7 +73,7 @@ class FoodOnTransformer(_Transformer):
                     yield parent_class.node
                     parent_class.node_yielded = True
                 edge = \
-                    KgEdge(
+                    KgEdge.legacy(
                         datasource=self._DATASOURCE,
                         subject=class_.node.id,
                         predicate=concept_net_predicates.IS_A,

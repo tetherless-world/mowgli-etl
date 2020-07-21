@@ -7,7 +7,7 @@ _EXPECTED_EDGE_HEADER = 'subject\tpredicate\tobject\tdatasource\tweight\tother'
 
 
 def test_write_node(pipeline_storage):
-    test_node = KgNode(
+    test_node = KgNode.legacy(
         datasource='test_datasource',
         id='test_nid',
         label='Test KgNode',
@@ -35,7 +35,7 @@ def test_write_node(pipeline_storage):
 
 
 def test_write_edge(pipeline_storage):
-    test_edge = KgEdge(
+    test_edge = KgEdge.legacy(
         datasource='test_datasource',
         object='test_obj',
         predicate='test_rel',

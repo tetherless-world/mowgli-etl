@@ -8,7 +8,7 @@ from mowgli_etl.pipeline.usf.usf_constants import USF_DATASOURCE_ID, USF_NAMESPA
 
 
 def usf_node(cueOrResponse: str, pos: str, other: dict = {}) -> KgNode:
-    return KgNode(
+    return KgNode.legacy(
         datasource=USF_DATASOURCE_ID,
         id=f'{USF_NAMESPACE}:{quote("%(cueOrResponse)s-%(pos)s" % locals())}',
         label=cueOrResponse,
@@ -19,7 +19,7 @@ def usf_node(cueOrResponse: str, pos: str, other: dict = {}) -> KgNode:
 
 def usf_edge(*, cue: Union[KgNode, str], response: Union[KgNode, str], strength: float) -> KgEdge:
 
-    return KgEdge(
+    return KgEdge.legacy(
         datasource=USF_DATASOURCE_ID,
         subject=cue.id if isinstance(cue, KgNode) else usf_node(cue, "", ),
         object=response.id if isinstance(response, KgNode) else usf_node(response, ""),

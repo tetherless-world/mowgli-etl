@@ -18,12 +18,12 @@ def test_eat_tranform():
         elif isinstance(result, KgEdge):
             edges.add(result)
 
-    expected_stimulus_nodes = set(KgNode(datasource="eat", id="eat:" + stim_word, label=stim_word) for stim_word in [
+    expected_stimulus_nodes = set(KgNode.legacy(datasource="eat", id="eat:" + stim_word, label=stim_word) for stim_word in [
         'SPECIAL',
         'SET'
     ])
 
-    expected_response_nodes = set(KgNode(datasource="eat", id="eat:" + response_word, label=response_word) for response_word in [
+    expected_response_nodes = set(KgNode.legacy(datasource="eat", id="eat:" + response_word, label=response_word) for response_word in [
         'TRAIN',
         'PARTICULAR',
         'EXTRA',
@@ -47,7 +47,7 @@ def test_eat_tranform():
     expected_nodes = expected_stimulus_nodes | expected_response_nodes
 
     expected_edges = set(
-        KgEdge(datasource="eat", object="eat:" + stim_node, predicate="cn:RelatedTo", subject="eat:" + response_node,
+        KgEdge.legacy(datasource="eat", object="eat:" + stim_node, predicate="cn:RelatedTo", subject="eat:" + response_node,
              weight=response_weight) for (stim_node, response_node, response_weight) in [
             ('SPECIAL', 'TRAIN', 0.07),
             ('SPECIAL', 'PARTICULAR', 0.05),

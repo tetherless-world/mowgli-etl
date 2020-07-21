@@ -10,6 +10,18 @@ class KgEdge(NamedTuple):
     weight: Optional[float] = None
     other: Optional[Dict[str, object]] = None
 
+    @classmethod
+    def legacy(cls, *, datasource: str, object: str, predicate: str, subject: str, other: Optional[Dict[str, object]] = None, weight: Optional[float] = None):
+        return \
+            cls(
+                datasource=datasource,
+                object=object,
+                other=other,
+                predicate=predicate,
+                subject=subject,
+                weight=weight
+            )
+
     def __hash__(self):
         return hash((
             self.datasource,

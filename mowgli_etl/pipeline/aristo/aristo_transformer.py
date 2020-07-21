@@ -45,7 +45,7 @@ class AristoTransformer(_Transformer):
         # arg node IsA WordNet node
         # Only yield this once, when the arg is yielded.
         return \
-            KgEdge(
+            KgEdge.legacy(
                 datasource=self.__DATASOURCE,
                 object="wn:" + str(type_word_net_id),
                 predicate=IS_A,
@@ -63,7 +63,7 @@ class AristoTransformer(_Transformer):
             type_word_net_id = None
 
         node = \
-            KgNode(
+            KgNode.legacy(
                 datasource=self.__DATASOURCE,
                 id=f"{self.__DATASOURCE}:{type_}:{quote(arg)}",
                 label=arg,
@@ -170,7 +170,7 @@ class AristoTransformer(_Transformer):
                     continue
 
                 yield \
-                    KgEdge(
+                    KgEdge.legacy(
                         datasource=self.__DATASOURCE,
                         predicate=concept_net_predicate,
                         subject=subject_node.id,
