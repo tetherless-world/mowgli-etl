@@ -14,9 +14,13 @@ def test_load(graph_generator, pipeline_storage):
             elif isinstance(edge_or_node, Edge):
                 loader.load_edge(edge_or_node)
                 loaded_edge_count += 1
+                break
         assert loaded_edge_count == 1
         assert loaded_node_count == 2
 
     with open(pipeline_storage.loaded_data_dir_path / "edges.tsv") as f:
-        assert f.read() == """\
+        contents = f.read()
+        assert contents == """\
+node1\trelation\tnode2\tnode1;label\tnode2;label\trelation;label\trelation;dimension\tweight\tsource\torigin\tsentence\tquestion\tid
+test_node_1\ttest_predicate\ttest_node_2\ttest node\ttest node\t\t\t\ttest_datasource\t\t\t\ttest_node_1-test_predicate-test_node_2
 """
