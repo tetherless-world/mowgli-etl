@@ -92,7 +92,7 @@ class WebChildTransformer(_Transformer):
                 # Skip edge generation if the word node already has a wn mapping,
                 # or if the word is not represented in the yielded nodes,
                 yielded_word = yielded_words.get(word_nid)
-                if yielded_word is None or yielded_word.label.lower() != word.lower():
+                if yielded_word is None or yielded_word.labels[0].lower() != word.lower():
                     continue
                 lemma = "_".join(word.split())
                 sense_num = row["sense-number"]

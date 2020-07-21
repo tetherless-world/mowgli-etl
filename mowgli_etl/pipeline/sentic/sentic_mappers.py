@@ -21,7 +21,7 @@ def sentic_node(*, id: str, label: str = None, sentic_type: str) -> KgNode:
         datasource=SENTIC_DATASOURCE_ID,
         id=sentic_id(id, sentic_type),
         label=label,
-        other={SENTIC_TYPE_KEY: sentic_type},
+        # other={SENTIC_TYPE_KEY: sentic_type},
     )
 
 

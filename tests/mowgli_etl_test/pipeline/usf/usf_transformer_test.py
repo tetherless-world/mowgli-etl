@@ -53,9 +53,9 @@ def test_transform():
         cue= None
         res= None
         for el in expected_nodes:
-            if el.label == c:
+            if el.labels[0] == c:
                 cue = el
-            if el.label == r:
+            if el.labels[0] == r:
                 res = el
         expected_edges.add(usf_edge(cue=cue,response=res, strength=s))
 

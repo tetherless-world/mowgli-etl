@@ -42,7 +42,7 @@ def test_sentic_pipeline(
         if isinstance(node_or_edge, KgNode):
             node = node_or_edge
             nodes_by_id[node.id] = node
-            type = node.other[SENTIC_TYPE_KEY]
+            type = node.id.split(":", 2)[1]
             if type == sentic_types.PRIMITIVE:
                 primitive_ids.add(node.id)
             elif type == sentic_types.SENTIC:
@@ -54,7 +54,8 @@ def test_sentic_pipeline(
 
     # assert that all concept nodes are related to sentics, primitives and other concepts
     for id, node in nodes_by_id.items():
-        if node.other[SENTIC_TYPE_KEY] != sentic_types.CONCEPT:
+        type = node.id.split(":", 2)[1]
+        if type != sentic_types.CONCEPT:
             continue
         assert id in edges_by_subject
         concept_edges, primitive_edges, sentic_edges = [], [], []
