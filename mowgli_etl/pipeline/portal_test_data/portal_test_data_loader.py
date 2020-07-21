@@ -44,6 +44,6 @@ class PortalTestDataLoader(CompositeLoader):
         self._loaders.append(JsonlBenchmarkLoader(bzip=True).open(scala_benchmark_storage))
         self._loaders.append(JsonlBenchmarkQuestionLoader(bzip=True).open(scala_benchmark_storage))
         self._loaders.append(JsonlBenchmarkSubmissionLoader(bzip=True).open(scala_benchmark_storage))
-        self._loaders.append(JsonlPathLoader().open(PipelineStorage(pipeline_id=PortalTestDataPipeline.ID, root_data_dir_path=PROJECT_ROOT, loaded_data_dir_path=mcs_apps_dir_path / "lib" / "scala" / "kg" / "src" / "main" / "resources" / "data" / "test")))
+        self._loaders.append(JsonlPathLoader().open(PipelineStorage(pipeline_id=PortalTestDataPipeline.ID, root_data_dir_path=PROJECT_ROOT, loaded_data_dir_path=mcs_apps_dir_path / "lib" / "scala" / "kg" / "src" / "main" / "resources" / "data" / "test" / "kg")))
 
         return self

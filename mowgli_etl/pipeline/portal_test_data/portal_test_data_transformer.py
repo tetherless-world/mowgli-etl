@@ -220,7 +220,7 @@ class PortalTestDataTransformer(_Transformer):
                 path_node_ids.add(choose_edge.object)
                 current_node_id = choose_edge.object
             yield KgPath(
-                datasource=PortalTestDataPipeline.ID,
+                sources=(PortalTestDataPipeline.ID,),
                 id="portal_test_data_path_" + str(path_i),
                 path=tuple(path),
             )
