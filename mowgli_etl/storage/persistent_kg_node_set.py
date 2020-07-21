@@ -4,13 +4,13 @@ from tempfile import mkdtemp
 from typing import Optional, Generator
 
 from mowgli_etl.model.kg_node import KgNode
-from mowgli_etl.storage._node_set import _NodeSet
+from mowgli_etl.storage._kg_node_set import _KgNodeSet
 from mowgli_etl.storage.level_db import LevelDb
 
 
-class PersistentNodeSet(_NodeSet):
+class PersistentKgNodeSet(_KgNodeSet):
     def __init__(self, **level_db_kwds):
-        _NodeSet.__init__(self)
+        _KgNodeSet.__init__(self)
         self.__level_db = LevelDb(**level_db_kwds)
 
     def add(self, node: KgNode) -> None:

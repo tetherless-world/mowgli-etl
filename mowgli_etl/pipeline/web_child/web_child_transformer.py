@@ -8,13 +8,13 @@ from mowgli_etl.model.kg_edge import KgEdge
 from mowgli_etl.model.mowgli_predicates import WN_SYNSET
 from mowgli_etl.model.kg_node import KgNode
 from mowgli_etl._transformer import _Transformer
-from mowgli_etl.storage._node_set import _NodeSet
-from mowgli_etl.storage.mem_node_set import MemNodeSet
+from mowgli_etl.storage._kg_node_set import _KgNodeSet
+from mowgli_etl.storage.mem_kg_node_set import MemKgNodeSet
 
 try:
-    from mowgli_etl.storage.persistent_node_set import PersistentNodeSet
+    from mowgli_etl.storage.persistent_kg_node_set import PersistentKgNodeSet
 except ImportError:
-    PersistentNodeSet = None
+    PersistentKgNodeSet = None
 
 
 class WebChildTransformer(_Transformer):
@@ -63,7 +63,7 @@ class WebChildTransformer(_Transformer):
         return subject_node, object_node, edge
 
     def __transform_webchild_file(
-            self, *, csv_file_path: Path, yielded_words: _NodeSet
+            self, *, csv_file_path: Path, yielded_words: _KgNodeSet
     ) -> Generator[Union[KgNode, KgEdge], None, None]:
         self._logger.info("transforming %s", csv_file_path)
         with open(csv_file_path) as csv_file:
@@ -79,7 +79,7 @@ class WebChildTransformer(_Transformer):
                 yield edge
 
     def __transform_wordnet_csv(
-            self, *, wordnet_csv_file_path: Path, yielded_words: _NodeSet
+            self, *, wordnet_csv_file_path: Path, yielded_words: _KgNodeSet
     ) -> Generator[Union[KgNode, KgEdge], None, None]:
         self._logger.info("transforming wordnet mappings from %s", wordnet_csv_file_path)
         with open(wordnet_csv_file_path) as csv_file:
@@ -115,10 +115,10 @@ class WebChildTransformer(_Transformer):
             substanceof_csv_file_path: Path,
             wordnet_csv_file_path: Path,
     ) -> Generator[Union[KgNode, KgEdge], None, None]:
-        if PersistentNodeSet is not None:
-            yielded_words = PersistentNodeSet.temporary()
+        if PersistentKgNodeSet is not None:
+            yielded_words = PersistentKgNodeSet.temporary()
         else:
-            yielded_words = MemNodeSet()
+            yielded_words = MemKgNodeSet()
         try:
             part_whole_csv_files = (
                 memberof_csv_file_path,

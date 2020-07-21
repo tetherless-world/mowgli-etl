@@ -5,7 +5,7 @@ from mowgli_etl._closeable import _Closeable
 from mowgli_etl.model.kg_node import KgNode
 
 
-class _NodeSet(_Closeable):
+class _KgNodeSet(_Closeable):
     def add(self, node: KgNode) -> None:
         """
         Add a node to the set.

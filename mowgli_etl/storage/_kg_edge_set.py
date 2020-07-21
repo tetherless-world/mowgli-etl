@@ -5,7 +5,7 @@ from mowgli_etl._closeable import _Closeable
 from mowgli_etl.model.kg_edge import KgEdge
 
 
-class _EdgeSet(_Closeable):
+class _KgEdgeSet(_Closeable):
     """
     Abstract base class for edge set data structure implementations.
     """

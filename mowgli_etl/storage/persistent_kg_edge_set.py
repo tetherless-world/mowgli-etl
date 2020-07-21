@@ -4,13 +4,13 @@ from tempfile import mkdtemp
 from typing import Optional
 
 from mowgli_etl.model.kg_edge import KgEdge
-from mowgli_etl.storage._edge_set import _EdgeSet
+from mowgli_etl.storage._kg_edge_set import _KgEdgeSet
 from mowgli_etl.storage.level_db import LevelDb
 
 
-class PersistentEdgeSet(_EdgeSet):
+class PersistentKgEdgeSet(_KgEdgeSet):
     def __init__(self, **level_db_kwds):
-        _EdgeSet.__init__(self)
+        _KgEdgeSet.__init__(self)
         self.__level_db = LevelDb(**level_db_kwds)
 
     def add(self, edge: KgEdge) -> None:

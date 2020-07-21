@@ -2,12 +2,12 @@ from typing import Optional, Generator
 
 from mowgli_etl._closeable import _Closeable
 from mowgli_etl.model.kg_node import KgNode
-from mowgli_etl.storage._node_set import _NodeSet
+from mowgli_etl.storage._kg_node_set import _KgNodeSet
 
 
-class MemNodeSet(_NodeSet, _Closeable):
+class MemKgNodeSet(_KgNodeSet, _Closeable):
     def __init__(self, **kwds):
-        _NodeSet.__init__(self)
+        _KgNodeSet.__init__(self)
         _Closeable.__init__(self)
         self.__nodes = {}
 

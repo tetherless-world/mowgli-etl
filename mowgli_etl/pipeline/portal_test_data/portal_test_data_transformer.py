@@ -30,7 +30,7 @@ from mowgli_etl.pipeline.portal_test_data.portal_test_data_pipeline import (
 import random
 from tqdm import tqdm
 
-from mowgli_etl.storage.mem_edge_set import MemEdgeSet
+from mowgli_etl.storage.mem_kg_edge_set import MemKgEdgeSet
 
 
 # Helper functions
@@ -161,7 +161,7 @@ class PortalTestDataTransformer(_Transformer):
             if not attr.startswith("_")
         )
 
-        edge_set = MemEdgeSet()
+        edge_set = MemKgEdgeSet()
         for subject_node in tqdm(nodes):
             out_degree = expo_int(min=10, max=200, mean=50)
             for edge_i in range(out_degree):

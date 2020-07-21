@@ -6,9 +6,9 @@ from mowgli_etl.loader._kg_node_loader import _KgNodeLoader
 from mowgli_etl.model.kg_edge import KgEdge
 from mowgli_etl.model.kg_node import KgNode
 try:
-    from mowgli_etl.storage.persistent_node_set import PersistentNodeSet as NodeSet
+    from mowgli_etl.storage.persistent_kg_node_set import PersistentKgNodeSet as NodeSet
 except ImportError:
-    from mowgli_etl.storage.mem_node_set import MemNodeSet as NodeSet
+    from mowgli_etl.storage.mem_kg_node_set import MemKgNodeSet as NodeSet
 
 
 class KgtkEdgesTsvLoader(_KgEdgeLoader, _KgNodeLoader):
