@@ -1,33 +1,35 @@
 import json
-from typing import Optional, Dict, NamedTuple
+from typing import Optional, Dict, NamedTuple, Tuple
 
 
 class KgEdge(NamedTuple):
-    subject: str
-    predicate: str
+    id: str
     object: str
-    datasource: str
+    predicate: str
+    sources: Tuple[str, ...]
+    subject: str
+    labels: Optional[Tuple[str, ...]] = None
     weight: Optional[float] = None
-    other: Optional[Dict[str, object]] = None
 
     @classmethod
     def legacy(cls, *, datasource: str, object: str, predicate: str, subject: str, other: Optional[Dict[str, object]] = None, weight: Optional[float] = None):
         return \
-            cls(
-                datasource=datasource,
+            cls.with_generated_id(
                 object=object,
-                other=other,
+                labels=None,
                 predicate=predicate,
+                sources=(datasource,),
                 subject=subject,
                 weight=weight
             )
 
-    def __hash__(self):
-        return hash((
-            self.datasource,
-            self.object,
-            json.dumps(self.other, sort_keys=True),
-            self.predicate,
-            self.subject,
-            self.weight
-        ))
+    @classmethod
+    def with_generated_id(cls, object: str, predicate: str, subject: str, **kwds):
+        return \
+            cls(
+                id=f"{subject}-{predicate}-{object}",
+                object=object,
+                predicate=predicate,
+                subject=subject,
+                **kwds
+            )

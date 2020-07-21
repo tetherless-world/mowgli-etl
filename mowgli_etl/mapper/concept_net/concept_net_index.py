@@ -32,13 +32,14 @@ class ConceptNetIndex(_Closeable):
         if report_progress:
             nodes = tqdm(nodes)
         for node_i, node in enumerate(nodes):
-            if node.label.lower() != node.label:
-                raise AssertionError(f"label is not lower-case: {node.label}")
-            if node.aliases:
-                raise AssertionError(f"node has aliases: {node.aliases}")
+            if len(node.labels) != 1:
+                raise AssertionError(f"node {node.id} has aliases")
+            node_label = node.labels[0]
+            if node_label.lower() != node_label:
+                raise AssertionError(f"label is not lower-case: {node_label}")
 
-            assert '/' not in node.label
-            key = cls.__label_to_key(node.label)
+            assert '/' not in node_label
+            key = cls.__label_to_key(node_label)
 
             # Store the node ID(s) as the value
             # Other information, such as the part of speech, can be reconstructed from it.
@@ -56,7 +57,7 @@ class ConceptNetIndex(_Closeable):
             else:
                 new_values = node.id
 
-            db.put(node.label.encode("utf-8"), pickle.dumps(new_values))
+            db.put(node_label.encode("utf-8"), pickle.dumps(new_values))
 
             if limit is not None and node_i + 1 == limit:
                 break

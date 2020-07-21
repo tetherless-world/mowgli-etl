@@ -10,15 +10,13 @@ class MemEdgeSet(_EdgeSet):
         self.__edges = {}
 
     def add(self, edge: KgEdge) -> None:
-        key = self._construct_edge_key(object=edge.object, predicate=edge.predicate, subject=edge.subject)
-        self.__edges[key] = edge
+        self.__edges[edge.id] = edge
 
     def close(self):
         pass
 
-    def get(self, *, object: str, predicate: str, subject: str, default: Optional[KgEdge] = None) -> Optional[KgEdge]:
-        key = self._construct_edge_key(object=object, predicate=predicate, subject=subject)
-        return self.__edges.get(key, default)
+    def get(self, edge_id: str, default: Optional[KgEdge] = None) -> Optional[KgEdge]:
+        return self.__edges.get(edge_id, default)
 
     @classmethod
     def temporary(cls):

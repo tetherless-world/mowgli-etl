@@ -21,7 +21,7 @@ if ConceptNetMapper is not None:
         assert edge.subject == "a"
         assert edge.object == "/c/en/a"
         assert edge.predicate == mowgli_predicates.SAME_AS
-        assert edge.datasource == "test"
+        assert edge.sources == ("test",)
 
 
     def test_map_node_with_pos(concept_net_mapper):
@@ -31,4 +31,4 @@ if ConceptNetMapper is not None:
         assert edge.subject == "nid30"
         assert edge.object == "/c/en/30/a/wn"
         assert edge.predicate == mowgli_predicates.SAME_AS
-        assert edge.datasource == "test"
+        assert edge.sources == ("test",)

@@ -111,7 +111,7 @@ class PipelineWrapper:
     ) -> Generator[Model, None, None]:
         for model in transform_generator:
             try:
-                if self.__pipeline.single_datasource and model.datasource != self.__pipeline.id:
+                if self.__pipeline.single_source and model.source != self.__pipeline.id:
                     raise ValueError(f"pipeline can only yield one datasource, the same as the pipeline id: expected={self.id}, actual={model.datasource}")
             except AttributeError:
                 pass
@@ -137,8 +137,7 @@ class PipelineWrapper:
             elif isinstance(model, KgEdge):
                 edge = model
                 # Edges should be unique in the CSKG, meaning that the tuple of (subject, predicate, object) should be unique.
-                existing_edge = edge_set.get(object=edge.object, predicate=edge.predicate,
-                                             subject=edge.subject)
+                existing_edge = edge_set.get(edge.id)
                 if existing_edge is not None:
                     # Don't try to handle the exact duplicate case differently. It should never happen.
                     raise ValueError(

@@ -16,16 +16,13 @@ class _EdgeSet(_Closeable):
         Add an edge to the set.
         """
 
-    def _construct_edge_key(self, *, object: str, predicate: str, subject: str) -> str:
-        return f"{subject}\t{predicate}\t{object}"
-
     def __contains__(self, edge: KgEdge) -> bool:
-        return self.get(object=edge.object, predicate=edge.predicate, subject=edge.subject) is not None
+        return self.get(id=edge.id) is not None
 
     @abstractmethod
-    def get(self, *, object: str, predicate: str, subject: str, default: Optional[KgEdge] = None) -> Optional[KgEdge]:
+    def get(self, edge_id: str, default: Optional[KgEdge] = None) -> Optional[KgEdge]:
         """
-        Get an edge by its "signature" parameters.
+        Get an edge by id.
         :return: the edge if it's part of the set, otherwise None
         """
 

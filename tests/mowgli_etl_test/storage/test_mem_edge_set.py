@@ -9,8 +9,8 @@ def test_add(edge: KgEdge):
 def test_get_extant(edge: KgEdge):
     edge_set = MemEdgeSet()
     edge_set.add(edge)
-    assert edge_set.get(object=edge.object, predicate=edge.predicate, subject=edge.subject) == edge
+    assert edge_set.get(edge.id) == edge
 
 
 def test_get_nonextant(edge: KgEdge):
-    assert MemEdgeSet().get(object=edge.object, predicate=edge.predicate, subject=edge.subject) is None
+    assert MemEdgeSet().get(edge.id) is None

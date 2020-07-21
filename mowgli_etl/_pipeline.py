@@ -10,7 +10,7 @@ from mowgli_etl.loader.cskg_csv.cskg_csv_loader import CskgCsvLoader
 
 
 class _Pipeline(ABC):
-    def __init__(self, *, extractor: _Extractor, id: str, transformer: _Transformer, loader: Optional[Union[_Loader, str]] = None, single_datasource=True, **kwds):
+    def __init__(self, *, extractor: _Extractor, id: str, transformer: _Transformer, loader: Optional[Union[_Loader, str]] = None, single_source=True, **kwds):
         """
         Construct an extract-transform pipeline.
         :param extractor: extractor implementation
@@ -23,7 +23,7 @@ class _Pipeline(ABC):
         if not isinstance(loader, _Loader):
             loader = self.__create_loader(id=id, loader=loader, **kwds)
         self.__loader = loader
-        self.__single_datasource = single_datasource
+        self.__single_source = single_source
         self.__transformer = transformer
 
     @classmethod
@@ -61,8 +61,8 @@ class _Pipeline(ABC):
         return self.__loader
 
     @property
-    def single_datasource(self) -> bool:
-        return self.__single_datasource
+    def single_source(self) -> bool:
+        return self.__single_source
 
     @property
     def transformer(self) -> _Transformer:

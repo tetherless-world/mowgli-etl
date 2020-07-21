@@ -8,7 +8,7 @@ from tests.mowgli_etl_test.etl_mocks import MockPipeline, MockTransformer
 
 def test_rpi_combined_extractor(pipeline_storage, graph_generator):
     pipelines = tuple(
-        MockPipeline(id=f'pipe_{pipe_num}', single_datasource=False, transformer=MockTransformer(tuple(islice(graph_generator, 6))))
+        MockPipeline(id=f'pipe_{pipe_num}', single_source=False, transformer=MockTransformer(tuple(islice(graph_generator, 6))))
         for pipe_num in range(1, 4)
     )
 

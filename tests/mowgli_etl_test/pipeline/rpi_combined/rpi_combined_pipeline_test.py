@@ -10,7 +10,7 @@ def test_rpi_combined_pipeline(pipeline_storage, graph_generator):
 
     pipelines = tuple(
         MockPipeline(id=f'pipe_{pipe_num}',
-                     single_datasource=False,
+                     single_source=False,
                      transformer=MockTransformer(tuple(islice(graph_generator, rows_per_pipeline))))
         for pipe_num in range(1, 4)
     )

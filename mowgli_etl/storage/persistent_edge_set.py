@@ -14,9 +14,8 @@ class PersistentEdgeSet(_EdgeSet):
         self.__level_db = LevelDb(**level_db_kwds)
 
     def add(self, edge: KgEdge) -> None:
-        key = self.__construct_edge_key(object=edge.object, predicate=edge.predicate, subject=edge.subject)
         value = pickle.dumps(edge)
-        self.__level_db.put(key, value)
+        self.__level_db.put(edge.id.encode("utf-8"), value)
 
     def close(self):
         self.__level_db.close()
@@ -25,16 +24,12 @@ class PersistentEdgeSet(_EdgeSet):
     def closed(self):
         return self.__level_db.closed
 
-    def __construct_edge_key(self, *, object: str, predicate: str, subject: str) -> bytes:
-        return self._construct_edge_key(object=object, predicate=predicate, subject=subject).encode("utf-8")
-
-    def get(self, *, object: str, predicate: str, subject: str) -> Optional[KgEdge]:
-        key = self.__construct_edge_key(object=object, predicate=predicate, subject=subject)
-        value = self.__level_db.get(key)
+    def get(self, edge_id, default: Optional[KgEdge] = None) -> Optional[KgEdge]:
+        value = self.__level_db.get(edge_id.encode("utf-8"))
         if value is not None:
             return pickle.loads(value)
         else:
-            return None
+            return default
 
     @classmethod
     def temporary(cls):

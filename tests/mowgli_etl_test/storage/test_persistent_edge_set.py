@@ -21,9 +21,9 @@ if PersistentEdgeSet is not None:
     def test_get_extant(edge: KgEdge, tmpdir):
         with PersistentEdgeSet(directory_path=tmpdir.mkdir("test"), create_if_missing=True) as edge_set:
             edge_set.add(edge)
-            assert edge_set.get(object=edge.object, predicate=edge.predicate, subject=edge.subject) == edge
+            assert edge_set.get(edge.id) == edge
 
 
     def test_get_nonextant(edge: KgEdge, tmpdir):
         with PersistentEdgeSet(directory_path=tmpdir.mkdir("test"), create_if_missing=True) as edge_set:
-            assert edge_set.get(object=edge.object, predicate=edge.predicate, subject=edge.subject) is None
+            assert edge_set.get(edge.id) is None
