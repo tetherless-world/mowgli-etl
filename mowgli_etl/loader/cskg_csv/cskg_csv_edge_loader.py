@@ -2,18 +2,18 @@ from csv import DictWriter
 from pathlib import Path
 from typing import Dict, Callable
 
-from mowgli_etl.loader._edge_loader import _EdgeLoader
+from mowgli_etl.loader._kg_edge_loader import _KgEdgeLoader
 from mowgli_etl.model.kg_edge import KgEdge
 
 
-class CskgCsvEdgeLoader(_EdgeLoader):
+class CskgCsvEdgeLoader(_KgEdgeLoader):
     __EDGE_CSV_FIELDS = {
         'weight': lambda edge: edge.weight if edge.weight is not None else 1.0,
         'other': lambda obj: str(obj.other) if obj.other is not None else None
     }
 
     def __init__(self, *, bzip: bool = False):
-        _EdgeLoader.__init__(self)
+        _KgEdgeLoader.__init__(self)
         self.__bzip = bzip
 
     def open(self, storage):
@@ -28,7 +28,7 @@ class CskgCsvEdgeLoader(_EdgeLoader):
         if self.__bzip:
             self._bzip_file(Path(self.__edge_file.name))
 
-    def load_edge(self, edge: KgEdge):
+    def load_kg_edge(self, edge: KgEdge):
         self._write_csv_line(self.__edge_writer, self.__EDGE_CSV_FIELDS, edge)
 
     # Internal methods

@@ -1,10 +1,10 @@
 from abc import abstractmethod
 
 from mowgli_etl._loader import _Loader
-from mowgli_etl.model.kg_edge import KgEdge
+from mowgli_etl.model.kg_path import KgPath
 
 
-class _EdgeLoader(_Loader):
+class _KgPathLoader(_Loader):
     @abstractmethod
-    def load_edge(self, edge: KgEdge):
+    def load_kg_path(self, path: KgPath):
         raise NotImplementedError

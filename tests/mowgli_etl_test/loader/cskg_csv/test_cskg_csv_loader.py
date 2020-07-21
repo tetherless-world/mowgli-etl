@@ -17,9 +17,9 @@ def test_write_node(pipeline_storage):
     )
 
     with CskgCsvLoader().open(pipeline_storage) as loader:
-        loader.load_node(test_node)
+        loader.load_kg_node(test_node)
         # 20200310 MG: duplicate removal has been moved to the PipelineWrapper
-        # loader.load_node(test_node)
+        # loader.load_kg_node(test_node)
 
     expected_node_text = (
             _EXPECTED_NODE_HEADER + '\n'
@@ -45,10 +45,10 @@ def test_write_edge(pipeline_storage):
     )
 
     with CskgCsvLoader().open(pipeline_storage) as loader:
-        loader.load_edge(test_edge)
+        loader.load_kg_edge(test_edge)
         # Load twice to test handling of redundant edges
         # 20200310 MG: duplicate removal has been moved to the PipelineWrapper
-        # loader.load_edge(test_edge)
+        # loader.load_kg_edge(test_edge)
 
     expected_edge_text = (
             _EXPECTED_EDGE_HEADER + '\n'

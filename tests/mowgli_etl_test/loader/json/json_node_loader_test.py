@@ -10,7 +10,7 @@ def test_load_node(graph_generator, pipeline_storage: PipelineStorage):
     with JsonNodeLoader().open(pipeline_storage) as loader:
         for node in islice(graph_generator, 100):
             if isinstance(node, KgNode):
-                loader.load_node(node)
+                loader.load_kg_node(node)
     file_path = pipeline_storage.loaded_data_dir_path / "nodes.json"
     assert file_path.stat().st_size > 0
     with open(file_path) as json_file:

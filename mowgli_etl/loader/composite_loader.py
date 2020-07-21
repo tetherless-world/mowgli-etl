@@ -6,12 +6,12 @@ from mowgli_etl.loader._benchmark_answer_loader import _BenchmarkAnswerLoader
 from mowgli_etl.loader._benchmark_loader import _BenchmarkLoader
 from mowgli_etl.loader._benchmark_question_loader import _BenchmarkQuestionLoader
 from mowgli_etl.loader._benchmark_submission_loader import _BenchmarkSubmissionLoader
-from mowgli_etl.loader._edge_loader import _EdgeLoader
-from mowgli_etl.loader._node_loader import _NodeLoader
-from mowgli_etl.loader._path_loader import _PathLoader
+from mowgli_etl.loader._kg_edge_loader import _KgEdgeLoader
+from mowgli_etl.loader._kg_node_loader import _KgNodeLoader
+from mowgli_etl.loader._kg_path_loader import _KgPathLoader
 
 
-class CompositeLoader(_BenchmarkLoader, _BenchmarkAnswerLoader, _BenchmarkQuestionLoader, _BenchmarkSubmissionLoader, _EdgeLoader, _NodeLoader, _PathLoader):
+class CompositeLoader(_BenchmarkLoader, _BenchmarkAnswerLoader, _BenchmarkQuestionLoader, _BenchmarkSubmissionLoader, _KgEdgeLoader, _KgNodeLoader, _KgPathLoader):
     def __init__(self, loaders: Optional[Sequence[_Loader]] = None):
         self._loaders = []
         if loaders is not None:
@@ -33,8 +33,8 @@ class CompositeLoader(_BenchmarkLoader, _BenchmarkAnswerLoader, _BenchmarkQuesti
     def load_benchmark_submission(self, benchmark_submission):
         self.__load_model(loader_class=_BenchmarkSubmissionLoader, load_method_name="load_benchmark_submission", model=benchmark_submission)
 
-    def load_edge(self, edge):
-        self.__load_model(loader_class=_EdgeLoader, load_method_name="load_edge", model=edge)
+    def load_kg_edge(self, edge):
+        self.__load_model(loader_class=_KgEdgeLoader, load_method_name="load_kg_edge", model=edge)
 
     def __load_model(self, loader_class, load_method_name: str, model) -> None:
         loaded = False
@@ -47,11 +47,11 @@ class CompositeLoader(_BenchmarkLoader, _BenchmarkAnswerLoader, _BenchmarkQuesti
         if not loaded:
             raise RuntimeError(f"no loader for {model.__class__.__name__}")
 
-    def load_node(self, node):
-        self.__load_model(loader_class=_NodeLoader, load_method_name="load_node", model=node)
+    def load_kg_node(self, node):
+        self.__load_model(loader_class=_KgNodeLoader, load_method_name="load_kg_node", model=node)
 
-    def load_path(self, path):
-        self.__load_model(loader_class=_PathLoader, load_method_name="load_path", model=path)
+    def load_kg_path(self, path):
+        self.__load_model(loader_class=_KgPathLoader, load_method_name="load_kg_path", model=path)
 
     def open(self, storage):
         for loader in self._loaders:

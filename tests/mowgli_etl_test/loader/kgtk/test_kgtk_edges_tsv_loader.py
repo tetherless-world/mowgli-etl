@@ -9,10 +9,10 @@ def test_load(graph_generator, pipeline_storage):
         loaded_node_count = 0
         for edge_or_node in graph_generator:
             if isinstance(edge_or_node, KgNode):
-                loader.load_node(edge_or_node)
+                loader.load_kg_node(edge_or_node)
                 loaded_node_count += 1
             elif isinstance(edge_or_node, KgEdge):
-                loader.load_edge(edge_or_node)
+                loader.load_kg_edge(edge_or_node)
                 loaded_edge_count += 1
                 break
         assert loaded_edge_count == 1

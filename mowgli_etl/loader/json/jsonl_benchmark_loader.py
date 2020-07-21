@@ -1,5 +1,5 @@
 from mowgli_etl.loader._benchmark_loader import _BenchmarkLoader
-from mowgli_etl.loader._path_loader import _PathLoader
+from mowgli_etl.loader._kg_path_loader import _KgPathLoader
 from mowgli_etl.loader.json._jsonl_loader import _JsonlLoader
 
 

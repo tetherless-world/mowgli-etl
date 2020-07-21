@@ -5,7 +5,7 @@ from mowgli_etl.model.kg_edge import KgEdge
 from mowgli_etl.model.kg_node import KgNode
 
 
-class _NodeLoader(_Loader):
+class _KgNodeLoader(_Loader):
     @abstractmethod
-    def load_node(self, node: KgNode):
+    def load_kg_node(self, node: KgNode):
         raise NotImplementedError
