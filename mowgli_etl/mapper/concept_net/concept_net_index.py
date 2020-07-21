@@ -44,7 +44,7 @@ class ConceptNetIndex(_Closeable):
             # Other information, such as the part of speech, can be reconstructed from it.
             value = node.id
 
-            existing_values = db.db.get(key)
+            existing_values = db.get(key)
             if existing_values is not None:
                 existing_values = pickle.loads(existing_values)
                 if isinstance(existing_values, str):
@@ -56,11 +56,11 @@ class ConceptNetIndex(_Closeable):
             else:
                 new_values = node.id
 
-            db.db.put(node.label.encode("utf-8"), pickle.dumps(new_values))
+            db.put(node.label.encode("utf-8"), pickle.dumps(new_values))
 
             if limit is not None and node_i + 1 == limit:
                 break
-        db.db.compact_range()  # Compact the underlying storage
+        db.compact_range()  # Compact the underlying storage
         logger.info("built ConceptNet index")
 
     def close(self):
@@ -114,7 +114,7 @@ class ConceptNetIndex(_Closeable):
         """
         Get the ConceptNet node ID corresponding to a label and optional part of speech.
         """
-        value = self.__db.db.get(self.__label_to_key(label))
+        value = self.__db.get(self.__label_to_key(label))
         if value is None:
             return None
         node_id = pickle.loads(value)
