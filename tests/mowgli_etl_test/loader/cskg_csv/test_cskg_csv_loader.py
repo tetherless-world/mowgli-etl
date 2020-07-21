@@ -12,7 +12,7 @@ def test_write_node(pipeline_storage):
         id='test_nid',
         label='Test KgNode',
         aliases=('t-node', 'KgNode Test'),
-        other={'datasets': ['test_dataset', 'other_test_dataset']},
+        # other={'datasets': ['test_dataset', 'other_test_dataset']},
         pos='N'
     )
 
@@ -23,8 +23,7 @@ def test_write_node(pipeline_storage):
 
     expected_node_text = (
             _EXPECTED_NODE_HEADER + '\n'
-            + 'test_nid\tTest KgNode\tt-node KgNode Test\tN\ttest_datasource\t'
-            + "{'datasets': ['test_dataset', 'other_test_dataset']}\n"
+            + 'test_nid\tTest KgNode\tt-node KgNode Test\tN\ttest_datasource\t\n'
     )
 
     with open(pipeline_storage.loaded_data_dir_path / "edges.csv") as f:
@@ -40,7 +39,7 @@ def test_write_edge(pipeline_storage):
         object='test_obj',
         predicate='test_rel',
         subject='test_subject',
-        other={'datasets': ['test_dataset', 'other_test_dataset']},
+        # other={'datasets': ['test_dataset', 'other_test_dataset']},
         weight=0.999
     )
 
@@ -52,8 +51,7 @@ def test_write_edge(pipeline_storage):
 
     expected_edge_text = (
             _EXPECTED_EDGE_HEADER + '\n'
-            + 'test_subject\ttest_rel\ttest_obj\ttest_datasource\t0.999\t'
-            + "{'datasets': ['test_dataset', 'other_test_dataset']}\n"
+            + 'test_subject\ttest_rel\ttest_obj\ttest_datasource\t0.999\t\n'
     )
 
     with open(pipeline_storage.loaded_data_dir_path / "edges.csv") as f:

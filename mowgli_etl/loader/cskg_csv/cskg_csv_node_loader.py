@@ -10,26 +10,34 @@ from mowgli_etl.model.kg_node import KgNode
 
 
 class CskgCsvNodeLoader(_KgNodeLoader):
-    __NODE_CSV_FIELDS = {
-        'aliases': lambda node: ' '.join(node.aliases) if node.aliases is not None else None,
-        'other': lambda obj: str(obj.other) if obj.other is not None else None
-    }
+    __FIELDS = (
+        ("id", lambda node: node.id),
+        ("label", lambda node: node.labels[0]),
+        ('aliases', lambda node: ' '.join(node.labels[1:]) if len(node.labels) > 1 else None),
+        ("pos", lambda node: node.pos),
+        ("datasource", lambda node: node.sources[0]),
+        ("other", lambda node: None),
+    )
 
     def __init__(self, *, bzip: bool = False):
         _KgNodeLoader.__init__(self)
         self.__bzip = bzip
 
     def open(self, storage):
-        self.__node_file = open(storage.loaded_data_dir_path / "nodes.csv", "w+")
+        self.__file = open(storage.loaded_data_dir_path / "nodes.csv", "w+")
         writer_opts = {'delimiter': '\t', 'lineterminator': '\n'}
-        self.__node_writer = DictWriter(self.__node_file, KgNode._fields, **writer_opts)
-        self.__node_writer.writeheader()
+        self.__writer = DictWriter(self.__file, tuple(field[0] for field in self.__FIELDS), **writer_opts)
+        self.__writer.writeheader()
         return self
 
     def close(self):
-        self.__node_file.close()
+        self.__file.close()
         if self.__bzip:
-            self._bzip_file(Path(self.__node_file.name))
+            self._bzip_file(Path(self.__file.name))
 
     def load_kg_node(self, node: KgNode):
-        CskgCsvEdgeLoader._write_csv_line(self.__node_writer, self.__NODE_CSV_FIELDS, node)
+        row = {}
+        for field in self.__FIELDS:
+            value = field[1](node)
+            row[field[0]] = value if value is not None else ''
+        self.__writer.writerow(row)

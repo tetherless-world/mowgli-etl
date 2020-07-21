@@ -42,14 +42,14 @@ class KgtkEdgesTsvLoader(_KgEdgeLoader, _KgNodeLoader):
             raise ValueError(f"missing edge subject node {edge.subject}")
 
         self.__edges_writer.writerow({
-            "id": f"{edge.subject}-{edge.predicate}-{edge.object}",
+            "id": edge.id,
             "node1": edge.subject,
-            "node1;label": subject_node.label,
+            "node1;label": "|".join(subject_node.labels),
             "node2": edge.object,
-            "node2;label": object_node.label,
+            "node2;label": "|".join(object_node.labels),
             "relation": edge.predicate,
-            "source": edge.datasource,
-            "weight": edge.weight,
+            "source": "|".join(edge.sources),
+            "weight": edge.weight if edge.weight is not None else "",
         })
 
     def load_kg_node(self, node: KgNode):
