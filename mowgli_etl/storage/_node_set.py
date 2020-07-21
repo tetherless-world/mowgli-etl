@@ -1,10 +1,11 @@
 from abc import ABC, abstractmethod
 from typing import Optional, Generator
 
+from mowgli_etl._closeable import _Closeable
 from mowgli_etl.model.node import Node
 
 
-class _NodeSet(ABC):
+class _NodeSet(_Closeable):
     def add(self, node: Node) -> None:
         """
         Add a node to the set.
@@ -30,4 +31,11 @@ class _NodeSet(ABC):
     def keys(self) -> Generator[str, None, None]:
         """
         Iterate over the node id's in the set as a generator.
+        """
+
+    @classmethod
+    @abstractmethod
+    def temporary(cls):
+        """
+        Factory method to create a temporary node set.
         """

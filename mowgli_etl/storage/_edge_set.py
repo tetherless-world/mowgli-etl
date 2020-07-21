@@ -1,10 +1,11 @@
 from abc import ABC, abstractmethod
 from typing import Optional
 
+from mowgli_etl._closeable import _Closeable
 from mowgli_etl.model.edge import Edge
 
 
-class _EdgeSet(ABC):
+class _EdgeSet(_Closeable):
     """
     Abstract base class for edge set data structure implementations.
     """
@@ -26,4 +27,11 @@ class _EdgeSet(ABC):
         """
         Get an edge by its "signature" parameters.
         :return: the edge if it's part of the set, otherwise None
+        """
+
+    @classmethod
+    @abstractmethod
+    def temporary(cls):
+        """
+        Factory method to create a temporary edge set.
         """

@@ -20,3 +20,7 @@ class PersistentNodeIdSet(_NodeIdSet, LevelDb):
         key = self.__construct_node_key(node_id=node_id)
         value = self._db.get(key)
         return value is not None
+
+    @classmethod
+    def temporary(cls):
+        return LevelDb.temporary(cls)

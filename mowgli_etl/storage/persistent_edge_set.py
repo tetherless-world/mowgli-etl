@@ -26,3 +26,7 @@ class PersistentEdgeSet(_EdgeSet, LevelDb):
             return pickle.loads(value)
         else:
             return None
+
+    @classmethod
+    def temporary(cls):
+        return LevelDb.temporary(cls)

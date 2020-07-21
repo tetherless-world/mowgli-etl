@@ -14,6 +14,9 @@ class MemNodeSet(_NodeSet, _Closeable):
     def add(self, node: Node) -> None:
         self.__nodes[node.id] = node
 
+    def close(self):
+        pass
+
     def delete(self, node_id: str) -> None:
         del self.__nodes[node_id]
 
@@ -22,3 +25,7 @@ class MemNodeSet(_NodeSet, _Closeable):
 
     def keys(self) -> Generator[str, None, None]:
         yield from self.__nodes.keys()
+
+    @classmethod
+    def temporary(cls):
+        return cls()

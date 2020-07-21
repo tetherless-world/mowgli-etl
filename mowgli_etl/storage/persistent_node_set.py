@@ -41,3 +41,7 @@ class PersistentNodeSet(_NodeSet, LevelDb):
         with self._db.iterator(include_value=False) as it:
             for key in it:
                 yield key.decode("utf-8")
+
+    @classmethod
+    def temporary(cls):
+        return LevelDb.temporary(cls)
