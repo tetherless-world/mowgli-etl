@@ -11,17 +11,16 @@ from mowgli_etl.pipeline_storage import PipelineStorage
 from mowgli_etl.storage._edge_set import _EdgeSet
 from mowgli_etl.storage._node_id_set import _NodeIdSet
 from mowgli_etl.storage._node_set import _NodeSet
-from mowgli_etl.storage.mem_edge_set import MemEdgeSet
-from mowgli_etl.storage.mem_node_id_set import MemNodeIdSet
-from mowgli_etl.storage.mem_node_set import MemNodeSet
 import stringcase
 
 try:
-    from mowgli_etl.storage.persistent_edge_set import PersistentEdgeSet
-    from mowgli_etl.storage.persistent_node_id_set import PersistentNodeIdSet
-    from mowgli_etl.storage.persistent_node_set import PersistentNodeSet
+    from mowgli_etl.storage.persistent_edge_set import PersistentEdgeSet as EdgeSet
+    from mowgli_etl.storage.persistent_node_id_set import PersistentNodeIdSet as NodeIdSet
+    from mowgli_etl.storage.persistent_node_set import PersistentNodeSet as NodeSet
 except ImportError:
-    PersistentEdgeSet = PersistentNodeSet = PersistentNodeIdSet = None
+    from mowgli_etl.storage.mem_edge_set import MemEdgeSet as EdgeSet
+    from mowgli_etl.storage.mem_node_id_set import MemNodeIdSet as NodeIdSet
+    from mowgli_etl.storage.mem_node_set import MemNodeSet as NodeSet
 
 
 class PipelineWrapper:
@@ -92,23 +91,15 @@ class PipelineWrapper:
             yield from transform_generator
             return
 
-        if PersistentEdgeSet is not None:
-            with PersistentEdgeSet.temporary() as edge_set:
-                with PersistentNodeSet.temporary() as node_set:
-                    with PersistentNodeIdSet.temporary() as used_node_ids_set:
-                        yield from self.__transform(
-                            edge_set=edge_set,
-                            node_set=node_set,
-                            transform_generator=transform_generator,
-                            used_node_ids_set=used_node_ids_set
-                        )
-        else:
-            yield from self.__transform(
-                edge_set=MemEdgeSet(),
-                node_set=MemNodeSet(),
-                transform_generator=transform_generator,
-                used_node_ids_set=MemNodeIdSet()
-            )
+        with EdgeSet.temporary() as edge_set:
+            with NodeSet.temporary() as node_set:
+                with NodeIdSet.temporary() as used_node_ids_set:
+                    yield from self.__transform(
+                        edge_set=edge_set,
+                        node_set=node_set,
+                        transform_generator=transform_generator,
+                        used_node_ids_set=used_node_ids_set
+                    )
 
     def __transform(
             self,
