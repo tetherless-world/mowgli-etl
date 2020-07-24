@@ -35,6 +35,9 @@ from mowgli_etl.storage.mem_kg_edge_set import MemKgEdgeSet
 
 # Helper functions
 def expo_int(*, max: int, mean: int, min: int):
+    assert min >= 1
+    assert min < max
+    assert mean > min and mean < max
     value = floor(random.expovariate(1.0 / mean))
     if value < min:
         return min
@@ -165,7 +168,7 @@ class PortalTestDataTransformer(_Transformer):
 
         edge_set = MemKgEdgeSet()
         for subject_node in tqdm(nodes):
-            out_degree = expo_int(min=10, max=200, mean=50)
+            out_degree = expo_int(min=len(nodes) // 100, max=len(nodes) // 2, mean=len(nodes) // 10)
             for edge_i in range(out_degree):
                 while True:
                     object_node = random.choice(nodes)
@@ -196,7 +199,7 @@ class PortalTestDataTransformer(_Transformer):
                 pos=random.choice(pos),
                 sources=(PortalTestDataPipeline.ID, random.choice(self.__SECONDARY_SOURCES)),
             )
-            for node_i in range(1000)
+            for node_i in range(200)
         )
 
     def __transform_kg_paths(
@@ -204,7 +207,7 @@ class PortalTestDataTransformer(_Transformer):
     ) -> Generator[KgPath, None, None]:
         for path_i in range(10):
             current_node_id = start_node_id = random.choice(nodes).id
-            path_length = expo_int(max=20, min=4, mean=10)
+            path_length = expo_int(max=10, min=2, mean=4)
             path_node_ids = set(start_node_id)
             path = [start_node_id]
             # print("Start:", current_node_id)
