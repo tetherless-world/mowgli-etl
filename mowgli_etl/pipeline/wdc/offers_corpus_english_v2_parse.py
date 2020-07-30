@@ -19,14 +19,13 @@ for i in range(0, len(directory)):
 
 # Have user select which file to clean
 choice = directory[int(input("\nChosen file number: "))]
+print()
 
 data = []
 
-i = 0
 # Read the source data file into a list of JSON data objects
 with open(choice) as file:
 	for line in file:
-		i += 1
 		data.append(json.loads(line))
 
 count = 1
@@ -41,14 +40,10 @@ for line in data:
 	additional_info = line["specTableContent"]
 	category = line["category"]
 
-	# print("Options:")
-	# print(text)
-	# print(description)
-	# print(additional_info)
-	# print(category)
-
 	# Ignore product if there is no title
 	if text == None:
+		print("Insufficient data for product #{}\n".format(count))
+		count += 1
 		continue;
 
 	# Tokenize title
@@ -57,22 +52,38 @@ for line in data:
 	last_noun_name = ""
 
 	first_noun_sequence_name = ""
+	first_noun_flag = 0
 
 	last_noun_sequence_name = ""
+	last_noun_flag = 1
 
-	# Assume that general product name is last noun in title
-	for token in doc:
-		if token.pos_ == "NOUN":
-			last_noun_name = token.text
-
-	# Assume that general product name is the first sequence of just nouns (token.pos between 92 and 100 inlcusive)
 	for token in doc:
 		if token.pos in range(92, 101):
+			# Assume that general product name is last noun in title (token.pos between 92 and 100 inclusive)
+			last_noun_name = token.text
+
+			# Assume that general product name is the first sequence of just nouns (token.pos between 92 and 100 inlcusive)
+			# Make sure it's the first sequence
+			if first_noun_flag == 0:
+				if first_noun_sequence_name != "":
+					first_noun_sequence_name += " "
+				first_noun_sequence_name += token.text
+		
+			# Assume that general product name is the last sequence of just nouns (token.pos between 92 and 100 inclusive)	
+			# Check if we hit a new noun sequence
+			if last_noun_flag == 1:
+				last_noun_sequence_name = ""
+				last_noun_flag = 0
+			if last_noun_sequence_name != "":
+				last_noun_sequence_name += " "
+			last_noun_sequence_name += token.text
+		
+		# Throw flag to reset last_noun_sequence
+		else:
+			# Throw flag to terminate first_noun_sequence
 			if first_noun_sequence_name != "":
-				first_noun_sequence_name += " "
-			first_noun_sequence_name += token.text
-		elif first_noun_sequence_name != "":
-				break
+				first_noun_flag = 1
+			last_noun_flag = 1
 
 	first_noun_sequence_name.rstrip(" ")
 
@@ -117,6 +128,12 @@ for line in data:
 		print("No product name found.")
 	else:
 		print("The product is \"{}\"".format(first_noun_sequence_name), end=".\n")
+
+	print("Using the last-noun-sequence heuristic: ", end='')
+	if (last_noun_sequence_name == ""):
+		print("No product name found.")
+	else:
+		print("The product is \"{}\"".format(last_noun_sequence_name), end=".\n")
 
 
 	if len(dimensions) == 0:
