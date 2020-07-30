@@ -48,6 +48,9 @@ for line in data:
 
 	# Tokenize title
 	doc = nlp(text)
+	print("Noun_chunk is:")
+	for chunk in doc.noun_chunks:
+		print("\t{}".format(chunk.text))
 
 	last_noun_name = ""
 
