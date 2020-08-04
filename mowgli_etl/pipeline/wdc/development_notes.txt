@@ -1,0 +1,7 @@
+Possible heuristics for product type:
+	1 - Last noun in title
+	2 - All nouns from the first noun to the first non noun (e.g. "red sky crane handle for support" would be "sky crane handle")
+	3 - Same as (2), but using the last sequence instead of the first
+
+TO DO:
+	Refactor heuristics to be more efficient
