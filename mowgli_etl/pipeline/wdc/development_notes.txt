@@ -5,3 +5,10 @@ Possible heuristics for product type:
 
 TO DO:
 	Refactor heuristics to be more efficient
+
+
+
+IMPORTANT:
+	Refactor to Pipeline format
+	Use PEP-8 Standard
+	Build for testing
