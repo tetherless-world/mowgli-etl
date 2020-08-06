@@ -12,6 +12,7 @@ class KgEdge(NamedTuple):
     :param sources: one or more sources, the first must be the pipeline id (e.g., "swow")
     :param subject: subject node id
     :param labels: zero or more human-readable labels for the edge
+    :param weight: deprecated, do not use
     """
 
     id: str
@@ -20,6 +21,7 @@ class KgEdge(NamedTuple):
     sources: Tuple[str, ...]
     subject: str
     labels: Optional[Tuple[str, ...]] = None
+    weight: Optional[float] = None
 
     @classmethod
     def legacy(cls, *, datasource: str, object: str, predicate: str, subject: str, other: Optional[Dict[str, object]] = None, weight: Optional[float] = None):
@@ -30,6 +32,7 @@ class KgEdge(NamedTuple):
                 predicate=predicate,
                 sources=(datasource,),
                 subject=subject,
+                weight=weight
             )
 
     @classmethod
