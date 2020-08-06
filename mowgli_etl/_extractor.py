@@ -14,6 +14,12 @@ from mowgli_etl.pipeline_storage import PipelineStorage
 
 
 class _Extractor(ABC):
+    """
+    Abstract base class for extractors.
+
+    See the extract method.
+    """
+
     def __init__(self, http_client: EtlHttpClient = None, **kwargs):
         if http_client is None:
             http_client = RealEtlHttpClient()
@@ -46,7 +52,7 @@ class _Extractor(ABC):
         self, *, force: bool, storage: PipelineStorage
     ) -> Optional[Dict[str, object]]:
         """
-        Extract data from a source.
+        Extract data from a source. The source data is passed to the transformer.
         :param force: force extraction, ignoring any cached data
         :return a **kwds dictionary to merge with kwds to pass to transformer
         """
