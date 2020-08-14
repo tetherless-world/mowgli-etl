@@ -10,20 +10,11 @@ class WdcPipeline(_Pipeline):
 	https://webdatacommons.org
 	"""
 
-	def __init__(self, *, wdc_archive_path: str = WDC_ARCHIVE_PATH, **kwds):
+	def __init__(self, **kwds):
 		_Pipeline.__init__(
 			self,
-			extractor=WdcExtractor(wdc_archive_path=wdc_archive_path),
+			extractor=WdcExtractor(),
 			id="wdc",
 			transformer=WdcTransformer(),
 			**kwds
 		)
-
-	@classmethod
-	def add_arguments(cls, arg_parser):
-		_Pipeline.add_arguments(arg_parser)
-		arg_parser.add_arguments(
-			"--wdc-archive-path",
-			help="ath to a bz2 archive to use as a source of WDC data",
-			required=False,
-			default=WDC_ARCHIVE_PATH)
