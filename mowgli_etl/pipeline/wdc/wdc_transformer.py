@@ -13,105 +13,104 @@ from mowgli_etl.model.word_net_id import WordNetId
 from mowgli_etl.pipeline.wdc.constants import WDC_DATASOURCE_ID
 
 class WDCTransformer(_Transformer):
-	__DATASOURCE = "wdc"
-	__BAD_DUPLICATE = "\"brand\":"
+    __BAD_DUPLICATE = "\"brand\":"
 
-	def clean(self, wdc_jsonl_file_path: Path):
-		new_file_name = wdc_jsonl_file_path[0:-6] + "_clean.jsonl"
-		new_file = open(new_file_name, "w")
-		with open(wdc_jsonl_file_path, "r") as wdc_jsonl_file_file:
-			for line in wdc_jsonl_file_file:
-				if line.count(__BAD_DUPLICATE) > 1:
-					data_starts = []
-					val = 0
-					while val != -1:
-						val = line.find(__BAD_DUPLICATE, val + 1)
-						if line[val - 2] == ':' or val == -1:
-							continue
-						data_starts.append(val - 1)
+    def clean(self, wdc_jsonl_file_path: Path):
+        new_file_name = wdc_jsonl_file_path[0:-6] + "_clean.jsonl"
+        new_file = open(new_file_name, "w")
+        with open(wdc_jsonl_file_path, "r") as wdc_jsonl_file_file:
+            for line in wdc_jsonl_file_file:
+                if line.count(__BAD_DUPLICATE) > 1:
+                    data_starts = []
+                    val = 0
+                    while val != -1:
+                        val = line.find(__BAD_DUPLICATE, val + 1)
+                        if line[val - 2] == ':' or val == -1:
+                            continue
+                        data_starts.append(val - 1)
 
-					for i in range(len(data_starts)):
-						if i < len(data_starts - 1):
-							new_file.write(line[data_starts[i]:data_starts[i+1]] + '\n')
-						else:
-							new_file.write(line[data_starts[i]::])
-		close(new_file)
-		return new_file_name
+                    for i in range(len(data_starts)):
+                        if i < len(data_starts - 1):
+                            new_file.write(line[data_starts[i]:data_starts[i+1]] + '\n')
+                        else:
+                            new_file.write(line[data_starts[i]::])
+        close(new_file)
+        return new_file_name
 
-	def transform(self, wdc_jsonl_file_path: Path) -> Generator[Union[KgNode, KgEdge], None, None]:
-		# Prepare file and nlp
-		wdc_clean_file_path = self.clean(wdc_jsonl_file_path)
-		nlp = spacy.load("en_core_web_sm")
-		
-		# Parse file
-		with open(wdc_clean_file_path, mode="r") as data:
-			for row in data:
-				information = json.loads(row)
-				listing = information["title"]
-				description = information["description"]
+    def transform(self, wdc_jsonl_file_path: Path) -> Generator[Union[KgNode, KgEdge], None, None]:
+        # Prepare file and nlp
+        wdc_clean_file_path = self.clean(wdc_jsonl_file_path)
+        nlp = spacy.load("en_core_web_sm")
+        
+        # Parse file
+        with open(wdc_clean_file_path, mode="r") as data:
+            for row in data:
+                information = json.loads(row)
+                listing = information["title"]
+                description = information["description"]
 
-				# Ignore product if there is no listing name
-				if listing == None:
-					continue
+                # Ignore product if there is no listing name
+                if listing == None:
+                    continue
 
-				doc = nlp(listing)
+                doc = nlp(listing)
 
-				last_noun_name = ""
-				first_noun_sequence_name = ""
-				first_noun_flag = 0
-				last_noun_sequence_name = ""
-				last_noun_flag = 1
+                last_noun_name = ""
+                first_noun_sequence_name = ""
+                first_noun_flag = 0
+                last_noun_sequence_name = ""
+                last_noun_flag = 1
 
-				for token in doc:
-					if token.pos in range(92, 101):
-						# Assume that general product name is last noun in title
-						last_noun_name = token.text
+                for token in doc:
+                    if token.pos in range(92, 101):
+                        # Assume that general product name is last noun in title
+                        last_noun_name = token.text
 
-						# Assume that general product name is the first sequence of just nouns
-						if first_noun_flag == 0:
-							if first_noun_sequence_name != "":
-								first_noun_sequence_name += " "
-							first_noun_sequence_name += token.text
+                        # Assume that general product name is the first sequence of just nouns
+                        if first_noun_flag == 0:
+                            if first_noun_sequence_name != "":
+                                first_noun_sequence_name += " "
+                            first_noun_sequence_name += token.text
 
-						# Assume that general product name is the last sequence of just nouns
-						if last_noun_flag == 1:
-							last_noun_sequence_name = ""
-							last_noun_flag = 0
-						if last_noun_sequence_name != "":
-							last_noun_sequence_name += " "
-						last_noun_sequence_name += token.text
+                        # Assume that general product name is the last sequence of just nouns
+                        if last_noun_flag == 1:
+                            last_noun_sequence_name = ""
+                            last_noun_flag = 0
+                        if last_noun_sequence_name != "":
+                            last_noun_sequence_name += " "
+                        last_noun_sequence_name += token.text
 
-					else:
-						# Throw flag to terminate first noun sequence
-						if first_noun_sequence_name != "":
-							first_noun_flag = 1
-						last_noun_flag = 1
+                    else:
+                        # Throw flag to terminate first noun sequence
+                        if first_noun_sequence_name != "":
+                            first_noun_flag = 1
+                        last_noun_flag = 1
 
-				first_noun_sequence_name.rstrip(" ")
+                first_noun_sequence_name.rstrip(" ")
 
-				dimensions = []
+                dimensions = []
 
-				if description != None:
-					dimensions = re.findall("\d+(?: \d+)?\s?\w*\sx\s\d+(?: \d+)?\s?(?:x\s\d+\s?)?\w*", description)
+                if description != None:
+                    dimensions = re.findall("\d+(?: \d+)?\s?\w*\sx\s\d+(?: \d+)?\s?(?:x\s\d+\s?)?\w*", description)
 
-				if len(dimensions) == 0:
-					dimensions = re.findall("\d+\s?\w+\s\d+\s?\w+\slead\sx\s\d+\s?\w+", description)
+                if len(dimensions) == 0:
+                    dimensions = re.findall("\d+\s?\w+\s\d+\s?\w+\slead\sx\s\d+\s?\w+", description)
 
-				if len(dimensions) == 0:
-					dimensions = re.findall("\d+\s?\w*\sx\s\d+\s?\w*", text)
+                if len(dimensions) == 0:
+                    dimensions = re.findall("\d+\s?\w*\sx\s\d+\s?\w*", text)
 
-				if len(dimensions) == 0:
-					dimensions = re.findall("\d+\s?\w+\s\d+\s?\w+\slead\sx\s\d+\s?\w+", text)
+                if len(dimensions) == 0:
+                    dimensions = re.findall("\d+\s?\w+\s\d+\s?\w+\slead\sx\s\d+\s?\w+", text)
 
-				if len(dimensions) == 0:
-					if additional_info != None:
-						dimensions = re.findall("\d+(?: \d+)?\s?\w*\sx\s\d+(?: \d+)?\s?(?:x\s\d+\s?)?\w*", additional_info)
+                if len(dimensions) == 0:
+                    if additional_info != None:
+                        dimensions = re.findall("\d+(?: \d+)?\s?\w*\sx\s\d+(?: \d+)?\s?(?:x\s\d+\s?)?\w*", additional_info)
 
-						if len(dimensions) == 0:
-							dimensions = re.findall("\d+\s?\w+\s\d+\s?\w+\slead\sx\s\d+\s?\w+", additional_info)
+                        if len(dimensions) == 0:
+                            dimensions = re.findall("\d+\s?\w+\s\d+\s?\w+\slead\sx\s\d+\s?\w+", additional_info)
 
-				general_name = last_noun_name + " or " + first_noun_sequence_name + " or " + last_noun_sequence_name
+                general_name = last_noun_name + " or " + first_noun_sequence_name + " or " + last_noun_sequence_name
 
-				yield KgNode(id = "wdc:\"general_name\"",
-					sources = (WDC_DATASOURCE_ID,),
-					labels = dimensions if dimensions != None else ["NA"])
+                yield KgNode(id = "wdc:\"general_name\"",
+                    sources = (WDC_DATASOURCE_ID,),
+                    labels = dimensions if dimensions != None else ["NA"])

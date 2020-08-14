@@ -4,17 +4,17 @@ from mowgli_etl.pipeline.wdc.wdc_extractor import WdcExtractor
 from mowgli_etl.pipeline.wdc.wdc_transformer import WdcTransformer
 
 class WdcPipeline(_Pipeline):
-	"""
-	ETL pipeline that extracts from the Web Data Commons corpus.
+    """
+    ETL pipeline that extracts from the Web Data Commons corpus.
 
-	https://webdatacommons.org
-	"""
+    https://webdatacommons.org
+    """
 
-	def __init__(self, **kwds):
-		_Pipeline.__init__(
-			self,
-			extractor=WdcExtractor(),
-			id="wdc",
-			transformer=WdcTransformer(),
-			**kwds
-		)
+    def __init__(self, **kwds):
+        _Pipeline.__init__(
+            self,
+            extractor=WdcExtractor(),
+            id="wdc",
+            transformer=WdcTransformer(),
+            **kwds
+        )
