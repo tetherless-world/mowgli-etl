@@ -1,5 +1,5 @@
 from mowgli_etl._pipeline import _Pipeline
-from mowgli_etl.pipeline.wdc.wdc_constants import WDC_ARCHIVE_PATH
+from mowgli_etl.pipeline.wdc.wdc_constants import WDC_ARCHIVE_PATH, WDC_DATASOURCE_ID
 from mowgli_etl.pipeline.wdc.wdc_extractor import WdcExtractor
 from mowgli_etl.pipeline.wdc.wdc_transformer import WdcTransformer
 
@@ -14,7 +14,7 @@ class WdcPipeline(_Pipeline):
         _Pipeline.__init__(
             self,
             extractor=WdcExtractor(),
-            id="wdc",
+            id=WDC_DATASOURCE_ID,
             transformer=WdcTransformer(),
             **kwds
         )
