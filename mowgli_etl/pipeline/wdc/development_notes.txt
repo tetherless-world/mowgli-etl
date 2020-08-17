@@ -4,4 +4,15 @@ Possible heuristics for product type:
 	3 - Same as (2), but using the last sequence instead of the first
 
 TO DO:
-	Refactor heuristics to be more efficient
+	Switch to v1 corpus
+	Lots of cleaning to do
+	Temporary predicate to make life easier
+	Use temp node as dimension
+		
+	Consider the algebra of containers
+
+
+IMPORTANT:
+	Refactor to Pipeline format
+	Use PEP-8 Standard
+	Build for testing
