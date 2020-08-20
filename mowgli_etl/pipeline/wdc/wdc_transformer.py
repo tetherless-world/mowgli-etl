@@ -1,16 +1,16 @@
 import json
 from pathlib import Path
-from typing import Gereator, Set, Dict, Union
+from typing import Generator, Set, Dict, Union
 from urllib.parse import quote
 import spacy
 
-from mowgli_etl.model.concept_net_predicates import
+# from mowgli_etl.model.concept_net_predicates import
 from mowgli_etl.model.kg_edge import KgEdge
-from mowtli_etl.model.mowgli_predicates import
+# from mowtli_etl.model.mowgli_predicates import
 from mowgli_etl.model.kg_node import KgNode
 from mowgli_etl._transformer import _Transformer
 from mowgli_etl.model.word_net_id import WordNetId
-from mowgli_etl.pipeline.wdc.constants import WDC_DATASOURCE_ID
+from mowgli_etl.pipeline.wdc.constants import WDC_DATASOURCE_ID, WDC_HAS_DIMENSIONS
 
 class WDCTransformer(_Transformer):
     __BAD_DUPLICATE = "\"brand\":"
@@ -125,10 +125,19 @@ class WDCTransformer(_Transformer):
                         listing, 
                         additional_info)
 
+                specs = ""
+                if dimensions:
+                    for d in dimensions:
+                        specs += f" {d}"
+                    specs.rstrip(" ")
+                else:
+                    specs = "NA"
+
                 general_name = f"{last_noun_name} or\
                         {first_noun_sequence_name} or\
                         {last_noun_sequence_name}"
 
-                yield KgNode(id = f"{WDC_DATASOURCE_ID}:\"general_name\"",
-                    sources = (WDC_DATASOURCE_ID,),
-                    labels = dimensions if dimensions != None else ["NA"])
+                yield KgEdge.with_generated_id(subject = general_name, predicate = WDC_HAS_DIMENSIONS, object = specs)
+                # yield KgNode(id = f"{WDC_DATASOURCE_ID}:\"general_name\"",
+                #     sources = (WDC_DATASOURCE_ID,),
+                #     labels = dimensions if dimensions != None else ["NA"])
