@@ -86,9 +86,13 @@ class EtlCommand(_Command):
         self, file_path
     ) -> Optional[Tuple[str, Type[_Pipeline]]]:
         module_name = re.sub(r"\.py$", "", file_path.name)
-        spec = importlib.util.spec_from_file_location(module_name, file_path)
-        pipeline_module = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(pipeline_module)
+        try:
+            spec = importlib.util.spec_from_file_location(module_name, file_path)
+            pipeline_module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(pipeline_module)
+        except (ImportError, SyntaxError):
+            self._logger.error("error importing pipeline module %s", module_name, exc_info=True)
+            return
         for attr in dir(pipeline_module):
             value = getattr(pipeline_module, attr)
             if (
