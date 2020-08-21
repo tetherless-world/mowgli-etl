@@ -188,7 +188,8 @@ class PortalTestDataTransformer(_Transformer):
                         labels=(f"Test edge label {edge_i}",),
                         predicate=predicate,
                         subject=subject_node.id,
-                        sources=tuple(sorted(set(list(subject_node.sources) + list(object_node.sources)))),
+                        # sources=tuple(sorted(set(list(subject_node.sources) + list(object_node.sources)))),
+                        sources=subject_node.sources,
                         # weight=floor(random.random() * 100.0) / 100.0,
                     )
                     if edge in edge_set:
