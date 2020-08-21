@@ -30,6 +30,7 @@ from mowgli_etl.pipeline.portal_test_data.portal_test_data_pipeline import (
 import random
 from tqdm import tqdm
 
+from mowgli_etl.storage.mem_id_set import MemIdSet
 from mowgli_etl.storage.mem_kg_edge_set import MemKgEdgeSet
 
 
@@ -169,13 +170,14 @@ class PortalTestDataTransformer(_Transformer):
         )
 
         edge_set = MemKgEdgeSet()
+        object_node_ids = MemIdSet()
         for subject_node_i, subject_node in tqdm(enumerate(nodes)):
             out_degree = subject_node_i % len(nodes)
             while out_degree < 10 or out_degree > 30:
                 out_degree = (out_degree + 1) % len(nodes)
             for edge_i in range(out_degree):
                 while True:
-                    try_node_i = (subject_node_i * 10) % len(nodes)
+                    try_node_i = subject_node_i % len(nodes)
                     object_node = nodes[try_node_i]
                     while object_node.id == subject_node.id:
                         try_node_i = (try_node_i + 1) % len(nodes)
@@ -193,7 +195,11 @@ class PortalTestDataTransformer(_Transformer):
                         continue
                     yield edge
                     edge_set.add(edge)
+                    object_node_ids.add(edge.object)
                     break
+        for node in nodes:
+            if node.id not in object_node_ids:
+                raise AssertionError(f"{node.id} not an object of an edge")
 
     def __generate_kg_nodes(self) -> Tuple[KgNode, ...]:
         pos = ("a", "n", "r", "v")
@@ -206,7 +212,7 @@ class PortalTestDataTransformer(_Transformer):
                 pos=pos[node_i % len(pos)],
                 sources=(PortalTestDataPipeline.ID, self.__SECONDARY_SOURCES[node_i % len(self.__SECONDARY_SOURCES)]),
             )
-            for node_i in range(500)
+            for node_i in range(200)
         )
 
     def __generate_kg_paths(
