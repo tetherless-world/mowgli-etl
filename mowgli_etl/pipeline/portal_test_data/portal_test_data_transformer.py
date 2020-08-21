@@ -186,7 +186,7 @@ class PortalTestDataTransformer(_Transformer):
                         labels=(f"Test edge label {edge_i}",),
                         predicate=predicate,
                         subject=subject_node.id,
-                        sources=tuple(list(subject_node.sources) + list(object_node.sources)),
+                        sources=tuple(sorted(set(list(subject_node.sources) + list(object_node.sources)))),
                         # weight=floor(random.random() * 100.0) / 100.0,
                     )
                     if edge in edge_set:
@@ -197,11 +197,12 @@ class PortalTestDataTransformer(_Transformer):
 
     def __generate_kg_nodes(self) -> Tuple[KgNode, ...]:
         pos = ("a", "n", "r", "v")
+        shared_labels = tuple(f"Shared node label {label_i}" for label_i in range(100))
 
         return tuple(
             KgNode(
                 id=f"portal_test_data:{node_i}",
-                labels=(f"Test node {node_i}", f"KgNode{node_i}", f"NodeAlias{node_i}"),
+                labels=(shared_labels[node_i % len(shared_labels)], f"Test node {node_i}", f"KgNode{node_i}", f"NodeAlias{node_i}"),
                 pos=pos[node_i % len(pos)],
                 sources=(PortalTestDataPipeline.ID, self.__SECONDARY_SOURCES[node_i % len(self.__SECONDARY_SOURCES)]),
             )
@@ -219,7 +220,6 @@ class PortalTestDataTransformer(_Transformer):
             # print("Start:", current_node_id)
             for link_i in range(path_length):
                 current_node_edges = edges_by_subject[current_node_id]
-                try_edge_i = 0
                 for try_edge_i in range(len(current_node_edges)):
                     choose_edge = current_node_edges[(path_i * link_i + try_edge_i) % len(current_node_edges)]
                     if choose_edge.object not in path_node_ids:
