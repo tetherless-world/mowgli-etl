@@ -10,21 +10,24 @@ from mowgli_etl.model.kg_edge import KgEdge
 from mowgli_etl.model.kg_node import KgNode
 from mowgli_etl._transformer import _Transformer
 from mowgli_etl.model.word_net_id import WordNetId
-from mowgli_etl.pipeline.wdc.constants import WDC_DATASOURCE_ID, WDC_HAS_DIMENSIONS
+from mowgli_etl.pipeline.wdc.wdc_constants import WDC_DATASOURCE_ID, WDC_HAS_DIMENSIONS
 
 class WDCTransformer(_Transformer):
     __BAD_DUPLICATE = "\"brand\":"
 
     def __clean(self, wdc_jsonl_file_path: Path):
+        '''
+        Clean input file, particularly checking for multiple json items in one line, return file with original name + "_clean"
+        '''
         new_file_name = wdc_jsonl_file_path[0:-6] + "_clean.jsonl"
 
         with open(wdc_jsonl_file_path, "r") as wdc_jsonl_file_file, open(new_file_name, "w") as new_file:
             for line in wdc_jsonl_file_file:
-                if line.count(__BAD_DUPLICATE) > 1:
+                if line.count(self.__BAD_DUPLICATE) > 1:
                     data_starts = []
                     val = 0
                     while val != -1:
-                        val = line.find(__BAD_DUPLICATE, val + 1)
+                        val = line.find(self.__BAD_DUPLICATE, val + 1)
                         if line[val - 2] == ':' or val == -1:
                             continue
                         data_starts.append(val - 1)
@@ -38,6 +41,9 @@ class WDCTransformer(_Transformer):
         return new_file_name
 
     def __find_dimensions(desctiption, listing, additional_info):
+        '''
+        Extract dimension data using regex
+        '''
         dimensions = []
 
         if description != None:
@@ -61,15 +67,17 @@ class WDCTransformer(_Transformer):
                 dimensions = re.findall("\d+(?: \d+)?\s?\w*\sx\s\d+\
                         (?: \d+)?\s?(?:x\s\d+\s?)?\w*", additional_info)
 
-            if len(dimensions) == 0:
-                dimensions = re.findall("\d+\s?\w+\s\d+\s?\w+\
-                        \slead\sx\s\d+\s?\w+", additional_info)
+            if dimensions:
+                return dimensions
+
+        dimensions = re.findall("\d+\s?\w+\s\d+\s?\w+\
+                \slead\sx\s\d+\s?\w+", additional_info)
 
         return dimensions
 
     def transform(self, *, wdc_jsonl_file_path: Path)  -> Generator[Union[KgNode, KgEdge], None, None]:
         # Prepare file and nlp
-        wdc_clean_file_path = self.clean(wdc_jsonl_file_path)
+        wdc_clean_file_path = self.__clean(wdc_jsonl_file_path)
         nlp = spacy.load("en_core_web_sm")
         
         # Parse file
