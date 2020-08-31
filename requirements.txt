@@ -12,6 +12,7 @@ pyparsing==2.4.6
 pytest==5.3.4
 rdflib==4.2.2
 six==1.14.0
+spacy==2.2.1
 stringcase==1.2.0
 tqdm==4.46.0
 wcwidth==0.1.8
