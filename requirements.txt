@@ -13,6 +13,7 @@ pytest==5.3.4
 rdflib==4.2.2
 six==1.14.0
 spacy==2.2.1
+https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.2.0/en_core_web_sm-2.2.0.tar.gz#egg=en_core_web_sm
 stringcase==1.2.0
 tqdm==4.46.0
 wcwidth==0.1.8
