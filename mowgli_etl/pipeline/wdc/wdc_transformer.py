@@ -2,7 +2,9 @@ import json
 from pathlib import Path
 from typing import Generator, Set, Dict, Union
 from urllib.parse import quote
+import re
 import spacy
+import os.path
 
 # from mowgli_etl.model.concept_net_predicates import
 from mowgli_etl.model.kg_edge import KgEdge
@@ -19,7 +21,9 @@ class WDCTransformer(_Transformer):
         '''
         Clean input file, particularly checking for multiple json items in one line, return file with original name + "_clean"
         '''
-        new_file_name = wdc_jsonl_file_path[0:-6] + "_clean.jsonl"
+        wdc_jsonl_dir_path, wdc_jsonl_file_name = os.path.split(wdc_jsonl_file_path)
+        wdc_jsonl_file_base_name, _ext = os.path.splitext(wdc_jsonl_file_name)
+        new_file_name = wdc_jsonl_file_base_name + "_clean.jsonl"
 
         with open(wdc_jsonl_file_path, "r") as wdc_jsonl_file_file, open(new_file_name, "w") as new_file:
             for line in wdc_jsonl_file_file:
@@ -33,7 +37,7 @@ class WDCTransformer(_Transformer):
                         data_starts.append(val - 1)
 
                     for i in range(len(data_starts)):
-                        if i < len(data_starts - 1):
+                        if i < len(data_starts) - 1:
                             new_file.write(line[data_starts[i]:data_starts[i+1]] + '\n')
                         else:
                             new_file.write(line[data_starts[i]::])
