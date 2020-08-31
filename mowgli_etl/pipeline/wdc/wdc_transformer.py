@@ -15,11 +15,11 @@ from mowgli_etl.model.word_net_id import WordNetId
 from mowgli_etl.pipeline.wdc.wdc_constants import WDC_DATASOURCE_ID, WDC_HAS_DIMENSIONS
 
 class WDCTransformer(_Transformer):
-    __BAD_DUPLICATE = "\"brand\":"
+    __BAD_DUPLICATE = "{\"brand\":"
 
     def __clean(self, wdc_jsonl_file_path: Path):
         '''
-        Clean input file, particularly checking for multiple json items in one line, return file with original name + "_clean"
+        Clean input file, particularly checking for multiple json items in one line, or split json object; return file with original name + "_clean"
         '''
         wdc_jsonl_dir_path, wdc_jsonl_file_name = os.path.split(wdc_jsonl_file_path)
         wdc_jsonl_file_base_name, _ext = os.path.splitext(wdc_jsonl_file_name)
@@ -27,7 +27,9 @@ class WDCTransformer(_Transformer):
 
         with open(wdc_jsonl_file_path, "r") as wdc_jsonl_file_file, open(new_file_name, "w") as new_file:
             for line in wdc_jsonl_file_file:
+                # Catch duplicate objects
                 if line.count(self.__BAD_DUPLICATE) > 1:
+                    temp_line = ""
                     data_starts = []
                     val = 0
                     while val != -1:
@@ -38,13 +40,21 @@ class WDCTransformer(_Transformer):
 
                     for i in range(len(data_starts)):
                         if i < len(data_starts) - 1:
-                            new_file.write(line[data_starts[i]:data_starts[i+1]] + '\n')
+                            temp_line += line[data_starts[i]:data_starts[i+1]]
+                            if temp_line[-1] != '}':
+                                temp_line += '}'
+                            temp_line += '\n'
                         else:
-                            new_file.write(line[data_starts[i]::])
-        
+                            t = list(line[data_starts[i]::])
+                            t[0] = '{'
+                            temp_line += "".join(t)
+
+                        line = temp_line
+                new_file.write(line)
+
         return new_file_name
 
-    def __find_dimensions(desctiption, listing, additional_info):
+    def __find_dimensions(self, description, listing, additional_info):
         '''
         Extract dimension data using regex
         '''
@@ -55,8 +65,9 @@ class WDCTransformer(_Transformer):
                     (?: \d+)?\s?(?:x\s\d+\s?)?\w*", description)
 
         if len(dimensions) == 0:
-            dimensions = re.findall("\d+\s?\w+\s\d+\s?\w+\
-                    \slead\sx\s\d+\s?\w+", description)
+            if(description):
+                dimensions = re.findall("\d+\s?\w+\s\d+\s?\w+\
+                        \slead\sx\s\d+\s?\w+", description)
 
         if len(dimensions) == 0:
             dimensions = re.findall("\d+\s?\w*\sx\s\d+\
@@ -74,8 +85,8 @@ class WDCTransformer(_Transformer):
             if dimensions:
                 return dimensions
 
-        dimensions = re.findall("\d+\s?\w+\s\d+\s?\w+\
-                \slead\sx\s\d+\s?\w+", additional_info)
+        # dimensions = re.findall("\d+\s?\w+\s\d+\s?\w+\
+        #         \slead\sx\s\d+\s?\w+", additional_info)
 
         return dimensions
 
@@ -87,15 +98,18 @@ class WDCTransformer(_Transformer):
         # Parse file
         with open(wdc_clean_file_path, mode="r") as data:
             for row in data:
+                print(row)
                 information = json.loads(row)
                 listing = information["title"]
                 description = information["description"]
-                additional_info = line["specTableContent"]
-                category = line["category"]
+                additional_info = information["specTableContent"]
+                category = information["category"]
 
                 # Ignore product if there is no listing name
                 if listing == None:
-                    continue
+                    listing=description
+                    if listing == None:
+                        listing = category
 
                 doc = nlp(listing)
 
@@ -149,7 +163,7 @@ class WDCTransformer(_Transformer):
                         {first_noun_sequence_name} or\
                         {last_noun_sequence_name}"
 
-                yield KgEdge.with_generated_id(subject = general_name, predicate = WDC_HAS_DIMENSIONS, object = specs)
+                yield KgEdge.with_generated_id(subject = general_name, predicate = WDC_HAS_DIMENSIONS, object = specs, sources = (WDC_DATASOURCE_ID,))
                 # yield KgNode(id = f"{WDC_DATASOURCE_ID}:\"general_name\"",
                 #     sources = (WDC_DATASOURCE_ID,),
                 #     labels = dimensions if dimensions != None else ["NA"])
