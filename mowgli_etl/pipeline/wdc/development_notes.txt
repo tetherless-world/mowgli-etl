@@ -11,6 +11,10 @@ TO DO:
 		
 	Consider the algebra of containers
 
+	Use v1 data to find labels
+
+	Extractor just returns the path
+
 
 IMPORTANT:
 	Refactor to Pipeline format
