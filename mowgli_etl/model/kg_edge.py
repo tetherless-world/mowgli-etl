@@ -3,6 +3,18 @@ from typing import Optional, Dict, NamedTuple, Tuple
 
 
 class KgEdge(NamedTuple):
+    """
+    Edge model. Edges are (subject, predicate, object) triples such as (hand, hasPart, finger).
+
+    :param id: edge identifier, usually a concatenation of the subject, predicate and object
+    :param object: object node id
+    :param predicate: predicate id, should usually be a ConceptNet predicate (see concept_net_predicates.py)
+    :param sources: one or more sources, the first must be the pipeline id (e.g., "swow")
+    :param subject: subject node id
+    :param labels: zero or more human-readable labels for the edge
+    :param weight: deprecated, do not use
+    """
+
     id: str
     object: str
     predicate: str
