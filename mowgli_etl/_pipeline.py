@@ -10,11 +10,19 @@ from mowgli_etl.loader.cskg_csv.cskg_csv_loader import CskgCsvLoader
 
 
 class _Pipeline(ABC):
+    """
+    Abstract base class for extract-transform-load pipelines.
+
+    A pipeline consists of an extractor, a transformer, and a loader. Most pipeline implementations (subclasses) only supply the former two.
+    """
+
     def __init__(self, *, extractor: _Extractor, id: str, transformer: _Transformer, loader: Optional[Union[_Loader, str]] = None, single_source=True, **kwds):
         """
-        Construct an extract-transform pipeline.
+        Construct an extract-transform-load pipeline.
         :param extractor: extractor implementation
         :param id: unique identifier for this pipeline instance, may be adapted from arguments
+        :param loader: optional _Loader instance or loader name to use
+        :param single_source: indicates whether the pipeline emits a single source (per the sources fields in nodes and edges)
         :param transformer: transformer implementation
         :param kwds: ignored
         """

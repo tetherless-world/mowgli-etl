@@ -35,15 +35,12 @@ class PortalTestDataLoader(CompositeLoader):
         self._loaders.append(JsonNodeLoader().open(ts_kg_storage))
         self._loaders.append(JsonPathLoader().open(ts_kg_storage))
 
-        scala_benchmark_storage = PipelineStorage(pipeline_id=PortalTestDataPipeline.ID, root_data_dir_path=PROJECT_ROOT, loaded_data_dir_path=mcs_apps_dir_path / "lib"/ "scala" / "benchmark" / "src" / "main" / "resources" / "data" / "test" / "benchmark")
-        scala_kg_legacy_storage = PipelineStorage(pipeline_id=PortalTestDataPipeline.ID, root_data_dir_path=PROJECT_ROOT, loaded_data_dir_path=mcs_apps_dir_path / "lib" / "scala" / "kg" / "src" / "main" / "resources" / "data" / "test" / "kg" / "legacy")
-        self._loaders.append(CskgCsvEdgeLoader(bzip=True).open(scala_kg_legacy_storage))
-        self._loaders.append(CskgCsvNodeLoader(bzip=True).open(scala_kg_legacy_storage))
-        self._loaders.append(KgtkEdgesTsvLoader(bzip=True).open(PipelineStorage(pipeline_id=PortalTestDataPipeline.ID, root_data_dir_path=PROJECT_ROOT, loaded_data_dir_path=mcs_apps_dir_path / "lib" / "scala" / "kg" / "src" / "main" / "resources" / "data" / "test" / "kg" / "kgtk")))
+        scala_benchmark_storage = PipelineStorage(pipeline_id=PortalTestDataPipeline.ID, root_data_dir_path=PROJECT_ROOT, loaded_data_dir_path=mcs_apps_dir_path / "lib"/ "scala" / "benchmark" / "src" / "main" / "resources" / "io" / "github" / "tetherlessworld" / "mcsapps" / "lib" / "benchmark" / "data" / "test")
+        self._loaders.append(KgtkEdgesTsvLoader(bzip=True).open(PipelineStorage(pipeline_id=PortalTestDataPipeline.ID, root_data_dir_path=PROJECT_ROOT, loaded_data_dir_path=mcs_apps_dir_path / "lib" / "scala" / "kg" / "src" / "main" / "resources" / "io" / "github" / "tetherlessworld" / "mcsapps" / "lib" / "kg" / "data" / "test" / "kgtk")))
         self._loaders.append(JsonlBenchmarkAnswerLoader(bzip=True).open(scala_benchmark_storage))
         self._loaders.append(JsonlBenchmarkLoader(bzip=True).open(scala_benchmark_storage))
         self._loaders.append(JsonlBenchmarkQuestionLoader(bzip=True).open(scala_benchmark_storage))
         self._loaders.append(JsonlBenchmarkSubmissionLoader(bzip=True).open(scala_benchmark_storage))
-        self._loaders.append(JsonlPathLoader().open(PipelineStorage(pipeline_id=PortalTestDataPipeline.ID, root_data_dir_path=PROJECT_ROOT, loaded_data_dir_path=mcs_apps_dir_path / "lib" / "scala" / "kg" / "src" / "main" / "resources" / "data" / "test" / "kg")))
+        self._loaders.append(JsonlPathLoader().open(PipelineStorage(pipeline_id=PortalTestDataPipeline.ID, root_data_dir_path=PROJECT_ROOT, loaded_data_dir_path=mcs_apps_dir_path / "lib" / "scala" / "kg" / "src" / "main" / "resources" / "io" / "github" / "tetherlessworld" / "mcsapps" / "lib" / "kg" / "data" / "test")))
 
         return self
