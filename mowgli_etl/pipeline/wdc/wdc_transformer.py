@@ -14,7 +14,7 @@ from mowgli_etl._transformer import _Transformer
 from mowgli_etl.model.word_net_id import WordNetId
 from mowgli_etl.pipeline.wdc.wdc_constants import WDC_DATASOURCE_ID, WDC_HAS_DIMENSIONS
 
-class WDCTransformer(_Transformer):
+class WdcTransformer(_Transformer):
     __BAD_DUPLICATE = "{\"brand\":"
 
     def __clean(self, wdc_jsonl_file_path: Path):
@@ -94,7 +94,7 @@ class WDCTransformer(_Transformer):
         # Prepare file and nlp
         wdc_clean_file_path = self.__clean(wdc_jsonl_file_path)
         nlp = spacy.load("en_core_web_sm")
-        
+
         # Parse file
         with open(wdc_clean_file_path, mode="r") as data:
             for row in data:
@@ -148,7 +148,7 @@ class WDCTransformer(_Transformer):
 
                 dimensions = self.__find_dimensions(
                         description,
-                        listing, 
+                        listing,
                         additional_info)
 
                 specs = ""
