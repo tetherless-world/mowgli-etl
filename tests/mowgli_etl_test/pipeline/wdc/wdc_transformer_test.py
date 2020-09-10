@@ -15,4 +15,3 @@ def test_transform(wdc_jsonl_file_path: Path):
         if len(edges) == 100:
             break
     assert len(edges) == 100
-    

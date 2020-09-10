@@ -49,7 +49,7 @@ from mowgli_etl.storage.mem_kg_edge_set import MemKgEdgeSet
 
 
 class PortalTestDataTransformer(_Transformer):
-    __SECONDARY_SOURCES = tuple(f"portal_test_data_secondary_{i}" for i in range(3))
+    __SECONDARY_SOURCE_IDS = tuple(f"portal_test_data_secondary_{i}" for i in range(3))
 
     def transform(self, **kwds):
         nodes = self.__generate_kg_nodes()
@@ -189,7 +189,7 @@ class PortalTestDataTransformer(_Transformer):
                         predicate=predicate,
                         subject=subject_node.id,
                         # sources=tuple(sorted(set(list(subject_node.sources) + list(object_node.sources)))),
-                        sources=subject_node.sources,
+                        source_ids=subject_node.source_ids,
                         # weight=floor(random.random() * 100.0) / 100.0,
                     )
                     if edge in edge_set:
@@ -211,7 +211,7 @@ class PortalTestDataTransformer(_Transformer):
                 id=f"portal_test_data:{node_i}",
                 labels=(shared_labels[node_i % len(shared_labels)], f"Test node {node_i}", f"KgNode{node_i}", f"NodeAlias{node_i}"),
                 pos=pos[node_i % len(pos)],
-                sources=(PortalTestDataPipeline.ID, self.__SECONDARY_SOURCES[node_i % len(self.__SECONDARY_SOURCES)]),
+                source_ids=(PortalTestDataPipeline.ID, self.__SECONDARY_SOURCE_IDS[node_i % len(self.__SECONDARY_SOURCE_IDS)]),
             )
             for node_i in range(200)
         )
@@ -238,7 +238,7 @@ class PortalTestDataTransformer(_Transformer):
                 path_node_ids.add(choose_edge.object)
                 current_node_id = choose_edge.object
             yield KgPath(
-                sources=(PortalTestDataPipeline.ID,),
                 id="portal_test_data_path_" + str(path_i),
                 path=tuple(path),
+                source_ids=(PortalTestDataPipeline.ID,),
             )
