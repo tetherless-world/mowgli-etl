@@ -15,7 +15,7 @@ class CskgCsvNodeLoader(_KgNodeLoader):
         ("label", lambda node: node.labels[0]),
         ('aliases', lambda node: ' '.join(node.labels[1:]) if len(node.labels) > 1 else None),
         ("pos", lambda node: node.pos),
-        ("datasource", lambda node: node.sources[0]),
+        ("datasource", lambda node: node.source_ids[0]),
         ("other", lambda node: None),
     )
 
