@@ -9,7 +9,7 @@ class KgEdge(NamedTuple):
     :param id: edge identifier, usually a concatenation of the subject, predicate and object
     :param object: object node id
     :param predicate: predicate id, should usually be a ConceptNet predicate (see concept_net_predicates.py)
-    :param sources: one or more sources, the first must be the pipeline id (e.g., "swow")
+    :param source_ids: one or more source identifiers, the first must be the pipeline id (e.g., "swow")
     :param subject: subject node id
     :param labels: zero or more human-readable labels for the edge
     :param weight: deprecated, do not use
@@ -18,7 +18,7 @@ class KgEdge(NamedTuple):
     id: str
     object: str
     predicate: str
-    sources: Tuple[str, ...]
+    source_ids: Tuple[str, ...]
     subject: str
     labels: Optional[Tuple[str, ...]] = None
     weight: Optional[float] = None
@@ -30,7 +30,7 @@ class KgEdge(NamedTuple):
                 object=object,
                 labels=None,
                 predicate=predicate,
-                sources=(datasource,),
+                source_ids=(datasource,),
                 subject=subject,
                 weight=weight
             )

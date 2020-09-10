@@ -48,7 +48,7 @@ class KgtkEdgesTsvLoader(_KgEdgeLoader, _KgNodeLoader):
             "node2": edge.object,
             "node2;label": "|".join(object_node.labels),
             "relation": edge.predicate,
-            "source": "|".join(edge.sources),
+            "source": "|".join(edge.source_ids),
             "weight": edge.weight if edge.weight is not None else "",
         })
 

@@ -11,7 +11,7 @@ class CskgCsvEdgeLoader(_KgEdgeLoader):
         ("subject", lambda edge: edge.subject),
         ("predicate", lambda edge: edge.predicate),
         ("object", lambda edge: edge.object),
-        ("datasource", lambda edge: edge.sources[0]),
+        ("datasource", lambda edge: edge.source_ids[0]),
         ("weight", lambda edge: edge.weight if edge.weight is not None else 1.0),
         ("other", lambda edge: None)
     )

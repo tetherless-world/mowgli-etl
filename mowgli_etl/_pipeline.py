@@ -7,6 +7,7 @@ from mowgli_etl._extractor import _Extractor
 from mowgli_etl._loader import _Loader
 from mowgli_etl._transformer import _Transformer
 from mowgli_etl.loader.cskg_csv.cskg_csv_loader import CskgCsvLoader
+from mowgli_etl.loader.kgtk.kgtk_edges_tsv_loader import KgtkEdgesTsvLoader
 
 
 class _Pipeline(ABC):
@@ -53,6 +54,8 @@ class _Pipeline(ABC):
 
         if loader == "cskg_csv":
             return CskgCsvLoader()
+        elif loader == "kgtk_edges_tsv":
+            return KgtkEdgesTsvLoader()
         else:
             raise NotImplementedError(loader)
 

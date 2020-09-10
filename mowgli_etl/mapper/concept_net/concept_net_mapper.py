@@ -26,7 +26,7 @@ class ConceptNetMapper(_Closeable):
                 KgEdge.with_generated_id(
                     object=concept_net_id,
                     predicate=mowgli_predicates.SAME_AS,
-                    sources=node.sources,
+                    source_ids=node.source_ids,
                     subject=node.id,
                 )
             return
