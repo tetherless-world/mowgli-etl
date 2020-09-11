@@ -39,8 +39,11 @@ class PipelineWrapper:
     def id(self) -> str:
         return self.__pipeline.id
 
-    def map(self, model_generator: Generator[Model, None, None], mappers: Tuple[_Mapper, ...]) -> Generator[
-        Model, None, None]:
+    def map(
+        self,
+        model_generator: Generator[Model, None, None],
+        mappers: Tuple[_Mapper, ...],
+    ) -> Generator[Model, None, None]:
         for model in model_generator:
             yield model
             if isinstance(model, KgNode):
@@ -55,17 +58,20 @@ class PipelineWrapper:
                 try:
                     load_method = load_method_cache[model.__class__.__name__]
                 except KeyError:
-                    load_method_name = "load_" + stringcase.snakecase(model.__class__.__name__)
+                    load_method_name = "load_" + stringcase.snakecase(
+                        model.__class__.__name__
+                    )
                     load_method = getattr(loader, load_method_name)
                     load_method_cache[model.__class__.__name__] = load_method
 
                 load_method(model)
 
     def run(
-            self, *,
-            force: bool = False,
-            mappers: Tuple[_Mapper, ...] = (),
-            skip_whole_graph_check: Optional[bool] = False
+        self,
+        *,
+        force: bool = False,
+        mappers: Tuple[_Mapper, ...] = (),
+        skip_whole_graph_check: Optional[bool] = False,
     ):
         """
         Run the entire pipeline.
@@ -79,10 +85,10 @@ class PipelineWrapper:
         self.load(model_generator)
 
     def transform(
-            self,
-            force: bool = False,
-            skip_whole_graph_check: Optional[bool] = False,
-            **extract_kwds
+        self,
+        force: bool = False,
+        skip_whole_graph_check: Optional[bool] = False,
+        **extract_kwds,
     ) -> Generator[Model, None, None]:
         transform_generator = self.__pipeline.transformer.transform(**extract_kwds)
 
@@ -98,21 +104,23 @@ class PipelineWrapper:
                         edge_set=edge_set,
                         node_set=node_set,
                         transform_generator=transform_generator,
-                        used_node_ids_set=used_node_ids_set
+                        used_node_ids_set=used_node_ids_set,
                     )
 
     def __transform(
-            self,
-            *,
-            edge_set: _KgEdgeSet,
-            node_set: _KgNodeSet,
-            transform_generator: Generator[Model, None, None],
-            used_node_ids_set: _IdSet
+        self,
+        *,
+        edge_set: _KgEdgeSet,
+        node_set: _KgNodeSet,
+        transform_generator: Generator[Model, None, None],
+        used_node_ids_set: _IdSet,
     ) -> Generator[Model, None, None]:
         for model in transform_generator:
             try:
                 if self.__pipeline.single_source and model.source != self.__pipeline.id:
-                    raise ValueError(f"pipeline can only yield one datasource, the same as the pipeline id: expected={self.id}, actual={model.datasource}")
+                    raise ValueError(
+                        f"pipeline can only yield one datasource, the same as the pipeline id: expected={self.id}, actual={model.datasource}"
+                    )
             except AttributeError:
                 pass
 

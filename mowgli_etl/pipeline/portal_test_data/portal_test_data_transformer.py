@@ -130,10 +130,10 @@ class PortalTestDataTransformer(_Transformer):
                                 BenchmarkQuestionAnswerPaths(
                                     start_node_id=path[0],
                                     end_node_id=path[-1],
-                                    score=path_i * 0.20,
+                                    score=(path_i + 1) * 0.20,
                                     paths=(
                                         BenchmarkQuestionAnswerPath(
-                                            path=path, score=path_i * 0.15
+                                            path=path, score=(path_i + 1) * 0.15
                                         ),
                                     ),
                                 )
@@ -145,7 +145,9 @@ class PortalTestDataTransformer(_Transformer):
                             )
                         )
                     yield BenchmarkAnswer(
-                        choice_id=question.choices[question_i % len(question.choices)].id,
+                        choice_id=question.choices[
+                            question_i % len(question.choices)
+                        ].id,
                         explanation=BenchmarkAnswerExplanation(
                             choice_analyses=tuple(choice_analyses)
                         ),
@@ -182,7 +184,9 @@ class PortalTestDataTransformer(_Transformer):
                     while object_node.id == subject_node.id:
                         try_node_i = (try_node_i + 1) % len(nodes)
                         object_node = nodes[try_node_i]
-                    predicate = concept_net_predicates[edge_i % len(concept_net_predicates)]
+                    predicate = concept_net_predicates[
+                        edge_i % len(concept_net_predicates)
+                    ]
                     edge = KgEdge.with_generated_id(
                         object=object_node.id,
                         labels=(f"Test edge label {edge_i}",),
@@ -209,9 +213,19 @@ class PortalTestDataTransformer(_Transformer):
         return tuple(
             KgNode(
                 id=f"portal_test_data:{node_i}",
-                labels=(shared_labels[node_i % len(shared_labels)], f"Test node {node_i}", f"KgNode{node_i}", f"NodeAlias{node_i}"),
+                labels=(
+                    shared_labels[node_i % len(shared_labels)],
+                    f"Test node {node_i}",
+                    f"KgNode{node_i}",
+                    f"NodeAlias{node_i}",
+                ),
                 pos=pos[node_i % len(pos)],
-                source_ids=(PortalTestDataPipeline.ID, self.__SECONDARY_SOURCE_IDS[node_i % len(self.__SECONDARY_SOURCE_IDS)]),
+                source_ids=(
+                    PortalTestDataPipeline.ID,
+                    self.__SECONDARY_SOURCE_IDS[
+                        node_i % len(self.__SECONDARY_SOURCE_IDS)
+                    ],
+                ),
             )
             for node_i in range(200)
         )
@@ -228,7 +242,9 @@ class PortalTestDataTransformer(_Transformer):
             for link_i in range(path_length):
                 current_node_edges = edges_by_subject[current_node_id]
                 for try_edge_i in range(len(current_node_edges)):
-                    choose_edge = current_node_edges[(path_i * link_i + try_edge_i) % len(current_node_edges)]
+                    choose_edge = current_node_edges[
+                        (path_i * link_i + try_edge_i) % len(current_node_edges)
+                    ]
                     if choose_edge.object not in path_node_ids:
                         # Prevent loops
                         break
