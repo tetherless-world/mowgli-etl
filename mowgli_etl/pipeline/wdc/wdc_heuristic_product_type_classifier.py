@@ -1,3 +1,5 @@
+from spacy import load
+
 from mowgli_etl.pipeline.wdc.wdc_product_type import WdcProductType
 from mowgli_etl.pipeline.wdc.wdc_product_type_classifier import WdcProductTypeClassifier
 
@@ -7,6 +9,8 @@ class WdcHeuristicProductTypeClassifier(WdcProductTypeClassifier):
         '''
         Parse title/listing/other to pull ProductType with confidence value
         '''
+        nlp = load("en_core_web_sm")
+        
         doc = nlp(title)
 
         last_noun_name = ""
