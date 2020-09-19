@@ -13,6 +13,7 @@ from mowgli_etl.model.kg_node import KgNode
 from mowgli_etl._transformer import _Transformer
 from mowgli_etl.model.word_net_id import WordNetId
 from mowgli_etl.pipeline.wdc.wdc_constants import WDC_DATASOURCE_ID, WDC_HAS_DIMENSIONS
+from mowgli_etl.pipeline.wdc.wdc_heuristic_product_type_classifier import WdcHeuristicProductTypeClassifier as HPTC
 
 class WdcTransformer(_Transformer):
     __BAD_DUPLICATE = "{\"brand\":"
@@ -98,7 +99,7 @@ class WdcTransformer(_Transformer):
         # Parse file
         with open(wdc_clean_file_path, mode="r") as data:
             for row in data:
-                print(row)
+                # print(row)
                 information = json.loads(row)
                 listing = information["title"]
                 description = information["description"]
@@ -111,40 +112,42 @@ class WdcTransformer(_Transformer):
                     if listing == None:
                         listing = category
 
-                doc = nlp(listing)
+                product = HPTC().classify(title=listing)
 
-                last_noun_name = ""
-                first_noun_sequence_name = ""
-                first_noun_flag = 0
-                last_noun_sequence_name = ""
-                last_noun_flag = 1
+                # doc = nlp(listing)
 
-                for token in doc:
-                    if token.pos in range(92, 101):
-                        # Assume that general product name is last noun in title
-                        last_noun_name = token.text
+                # last_noun_name = ""
+                # first_noun_sequence_name = ""
+                # first_noun_flag = 0
+                # last_noun_sequence_name = ""
+                # last_noun_flag = 1
 
-                        # Assume that general product name is the first sequence of just nouns
-                        if first_noun_flag == 0:
-                            if first_noun_sequence_name != "":
-                                first_noun_sequence_name += " "
-                            first_noun_sequence_name += token.text
+                # for token in doc:
+                #     if token.pos in range(92, 101):
+                #         # Assume that general product name is last noun in title
+                #         last_noun_name = token.text
 
-                        # Assume that general product name is the last sequence of just nouns
-                        if last_noun_flag == 1:
-                            last_noun_sequence_name = ""
-                            last_noun_flag = 0
-                        if last_noun_sequence_name != "":
-                            last_noun_sequence_name += " "
-                        last_noun_sequence_name += token.text
+                #         # Assume that general product name is the first sequence of just nouns
+                #         if first_noun_flag == 0:
+                #             if first_noun_sequence_name != "":
+                #                 first_noun_sequence_name += " "
+                #             first_noun_sequence_name += token.text
 
-                    else:
-                        # Throw flag to terminate first noun sequence
-                        if first_noun_sequence_name != "":
-                            first_noun_flag = 1
-                        last_noun_flag = 1
+                #         # Assume that general product name is the last sequence of just nouns
+                #         if last_noun_flag == 1:
+                #             last_noun_sequence_name = ""
+                #             last_noun_flag = 0
+                #         if last_noun_sequence_name != "":
+                #             last_noun_sequence_name += " "
+                #         last_noun_sequence_name += token.text
 
-                first_noun_sequence_name.rstrip(" ")
+                #     else:
+                #         # Throw flag to terminate first noun sequence
+                #         if first_noun_sequence_name != "":
+                #             first_noun_flag = 1
+                #         last_noun_flag = 1
+
+                # first_noun_sequence_name.rstrip(" ")
 
                 dimensions = self.__find_dimensions(
                         description,
@@ -159,11 +162,11 @@ class WdcTransformer(_Transformer):
                 else:
                     specs = "NA"
 
-                general_name = f"{last_noun_name} or\
-                        {first_noun_sequence_name} or\
-                        {last_noun_sequence_name}"
+                # general_name = f"{last_noun_name} or\
+                #         {first_noun_sequence_name} or\
+                #         {last_noun_sequence_name}"
 
-                yield KgEdge.with_generated_id(subject = general_name, predicate = WDC_HAS_DIMENSIONS, object = specs, sources = (WDC_DATASOURCE_ID,))
+                yield KgEdge.with_generated_id(subject = product.name, predicate = WDC_HAS_DIMENSIONS, object = specs, sources = (WDC_DATASOURCE_ID,))
                 # yield KgNode(id = f"{WDC_DATASOURCE_ID}:\"general_name\"",
                 #     sources = (WDC_DATASOURCE_ID,),
                 #     labels = dimensions if dimensions != None else ["NA"])
