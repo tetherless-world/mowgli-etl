@@ -29,6 +29,3 @@ def test_heuristic_prdocut_type_classifier():
                 assert hpt.name=="shirt"
                 assert hpt.alternate[0]=="hanes mens tagless t shirt"
                 assert hpt.alternate[1]=="hanes mens tagless t shirt"
-            # print(hpt.name,hpt.confidence,"\nAlternate")
-            # for name in hpt.alternate:
-            #     print(f"\t{name}")
