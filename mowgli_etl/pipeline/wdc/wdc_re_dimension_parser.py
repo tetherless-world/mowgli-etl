@@ -4,7 +4,7 @@ from mowgli_etl.pipeline.wdc.wdc_product_dimensions import WdcProductDimensions
 from mowgli_etl.pipeline.wdc.wdc_dimension_parser import WdcDimensionParser
 
 class WdcREDimensionParser(WdcDimensionParser):
-    def classify(self,*,description:str) -> WdcProductDimensions:
+    def parse(self,*,information:dict) -> WdcProductDimensions:
         '''
         We want to find any case where there is a numberxnumberxnumber... combination
         Or number+d, number+w, number+h, number+l
@@ -36,6 +36,9 @@ class WdcREDimensionParser(WdcDimensionParser):
             in specTableContent: " 7 x10"
             in specTableContent: " xs 2 34 s 4 6 35 36 m 8 10 37 38 l 12 14 39 5 41 xl 16 18 42 5 44 5 2xl 20 46 3xl 22 47 5 4xl 24 49"
         '''
+        """
+        OLD CODE:
+        
         dimensions = []
 
         if description != None:
@@ -67,3 +70,15 @@ class WdcREDimensionParser(WdcDimensionParser):
         #         \slead\sx\s\d+\s?\w+", additional_info)
 
         return dimensions
+        """
+
+        title = information["title"]
+        description = information["description"]
+        specTableContent = information["specTableContent"]
+        keyValuePairs = information["keyValuePairs"]
+        
+        """
+        RE code goes here
+        """
+
+        return WdcProductDimensions(depth=None, height=None, length=None, width=None, unit=None)
