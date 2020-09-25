@@ -101,7 +101,7 @@ A pipeline consists of:
 
 #### Pipeline execution
 
-Running a pipeline with a command like
+Running a pipeline with a command such as
 
     python3 -m mowgli_etl.cli etl swow
 
@@ -172,3 +172,9 @@ We use the [GitHub flow](https://guides.github.com/introduction/flow/) with feat
 ## Continuous Integration
 
 We use [CircleCI](https://circleci.com/) for [continuous integration](https://en.wikipedia.org/wiki/Continuous_integration). CircleCI runs the tests in `tests/` on every push to `origin`. Merging a feature branch is contingent on having adequate tests and all tests passing. We encourage [test-driven development](https://en.wikipedia.org/wiki/Test-driven_development).
+
+# Resources
+
+* [conceptnet.io](http://conceptnet.io/) and the [ConceptNet paper](https://arxiv.org/abs/1612.03975) for understanding common sense knowledge graphs
+* The Storks et al. survey ["Recent Advances in Natural Language Inference"](https://arxiv.org/abs/1904.01172)
+* [The Missing Semester of Your CS Education](https://missing.csail.mit.edu/)
