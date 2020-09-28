@@ -69,20 +69,6 @@ The extract, transform, and load stages of the pipelines write data to the `data
 
 The `rpi_combined` pipeline "loads" the outputs of the other pipelines into its `data/rpi_combined/loaded` directory in the CSKG CSV format.
 
-# Augmenting a CSKG release
-
-Activate the virtual environment as above, then run:
-
-    python3 -m mowgli_etl.cli etl rpi_combined
-
-Download the latest CSKG release .zip file (e.g., `cskg_v004.zip`) into `data/cskg_release/extracted`. You can also pass an existing path to the command below as `--cskg-release-zip-file-path`.
-
-Run
-
-    python3 -m mowgli_etl.cli augment-cskg-release
-
-This produces an augmented .zip file in the same directory as the CSKG release .zip.
-
 # Development
 
 ## Overview
