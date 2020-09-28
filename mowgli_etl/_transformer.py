@@ -19,6 +19,9 @@ class _Transformer(ABC):
     def transform(self, **kwds) -> Generator[Model, None, None]:
         """
         Transform previously-extracted data into models (e.g., nodes and edges).
+
+        A transformer yields (generates) a series of models for the loader to load.
+
         :param kwds: merged dictionary of initial extract kwds and the result of extract
         :return: generator of models
         """

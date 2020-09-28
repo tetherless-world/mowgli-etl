@@ -17,7 +17,16 @@ class _Pipeline(ABC):
     A pipeline consists of an extractor, a transformer, and a loader. Most pipeline implementations (subclasses) only supply the former two.
     """
 
-    def __init__(self, *, extractor: _Extractor, id: str, transformer: _Transformer, loader: Optional[Union[_Loader, str]] = None, single_source=True, **kwds):
+    def __init__(
+        self,
+        *,
+        extractor: _Extractor,
+        id: str,
+        transformer: _Transformer,
+        loader: Optional[Union[_Loader, str]] = None,
+        single_source=True,
+        **kwds
+    ):
         """
         Construct an extract-transform-load pipeline.
         :param extractor: extractor implementation
@@ -46,7 +55,9 @@ class _Pipeline(ABC):
     def __add_loader_arguments(cls, arg_parser):
         arg_parser.add_argument("--loader", default="cskg_csv")
 
-    def __create_loader(self, id: str, loader: Optional[str] = None, **loader_kwds) -> _Loader:
+    def __create_loader(
+        self, id: str, loader: Optional[str] = None, **loader_kwds
+    ) -> _Loader:
         if loader is None:
             loader = "cskg_csv"
         else:
