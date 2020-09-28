@@ -18,11 +18,19 @@ class KgNode(NamedTuple):
     pos: Optional[str] = None
 
     @classmethod
-    def legacy(cls, *, datasource: str, id: str, label: str, aliases: Optional[Tuple[str, ...]] = None, pos: Optional[str] = None, other: Optional[Dict[str, object]] = None):
-        return \
-            cls(
-                id=id,
-                labels=((label,) if aliases is None else tuple([label] + list(aliases))),
-                pos=pos,
-                source_ids=(datasource,),
-            )
+    def legacy(
+        cls,
+        *,
+        datasource: str,
+        id: str,
+        label: str,
+        aliases: Optional[Tuple[str, ...]] = None,
+        pos: Optional[str] = None,
+        other: Optional[Dict[str, object]] = None
+    ):
+        return cls(
+            id=id,
+            labels=((label,) if aliases is None else tuple([label] + list(aliases))),
+            pos=pos,
+            source_ids=(datasource,),
+        )

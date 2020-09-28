@@ -5,6 +5,7 @@ from mowgli_etl.loader._kg_edge_loader import _KgEdgeLoader
 from mowgli_etl.loader._kg_node_loader import _KgNodeLoader
 from mowgli_etl.model.kg_edge import KgEdge
 from mowgli_etl.model.kg_node import KgNode
+
 try:
     from mowgli_etl.storage.persistent_kg_node_set import PersistentKgNodeSet as NodeSet
 except ImportError:
@@ -27,8 +28,10 @@ class KgtkEdgesTsvLoader(_KgEdgeLoader, _KgNodeLoader):
 
     def open(self, storage):
         self.__edges_file = open(storage.loaded_data_dir_path / "edges.tsv", "w+")
-        writer_opts = {'delimiter': '\t', 'lineterminator': '\n'}
-        self.__edges_writer = DictWriter(self.__edges_file, self.__HEADER.split(), **writer_opts)
+        writer_opts = {"delimiter": "\t", "lineterminator": "\n"}
+        self.__edges_writer = DictWriter(
+            self.__edges_file, self.__HEADER.split(), **writer_opts
+        )
         self.__edges_writer.writeheader()
         self.__node_set = NodeSet.temporary()
         return self
@@ -41,16 +44,18 @@ class KgtkEdgesTsvLoader(_KgEdgeLoader, _KgNodeLoader):
         if subject_node is None:
             raise ValueError(f"missing edge subject node {edge.subject}")
 
-        self.__edges_writer.writerow({
-            "id": edge.id,
-            "node1": edge.subject,
-            "node1;label": "|".join(subject_node.labels),
-            "node2": edge.object,
-            "node2;label": "|".join(object_node.labels),
-            "relation": edge.predicate,
-            "source": "|".join(edge.source_ids),
-            "weight": edge.weight if edge.weight is not None else "",
-        })
+        self.__edges_writer.writerow(
+            {
+                "id": edge.id,
+                "node1": edge.subject,
+                "node1;label": "|".join(subject_node.labels),
+                "node2": edge.object,
+                "node2;label": "|".join(object_node.labels),
+                "relation": edge.predicate,
+                "source": "|".join(edge.source_ids),
+                "weight": edge.weight if edge.weight is not None else "",
+            }
+        )
 
     def load_kg_node(self, node: KgNode):
         if node.id not in self.__node_set:
