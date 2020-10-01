@@ -1,9 +1,91 @@
 import re
+import json
+import sys
 
 from mowgli_etl.pipeline.wdc.wdc_product_dimensions import WdcProductDimensions
 from mowgli_etl.pipeline.wdc.wdc_dimension_parser import WdcDimensionParser
+from mowgli_etl.pipeline.wdc.wdc_constants import WDC_RE_DIMENSION_DECIMAL_STR, WDC_RE_DIMENSION_STR, WDC_RE_DIMENSION_UNIT_STR, WDC_UNITS
 
 class WdcREDimensionParser(WdcDimensionParser):
+    '''
+    Parse dimensions from the title
+    '''
+    def _parseTitle(self,*,title:str):
+        if not title:
+            return None
+        
+        dimensions = re.findall(WDC_RE_DIMENSION_DECIMAL_STR, title)
+        dimensions += re.findall(WDC_RE_DIMENSION_STR, title)
+        unit = re.findall(WDC_RE_DIMENSION_UNIT_STR, title)
+        unit = [val for val in unit if val in WDC_UNITS]
+                
+        return [dimensions, unit]
+
+    '''
+    Parse dimensions from the description
+    '''
+    def _parseDescription(self,*,description:str):
+        if not description:
+            return None
+        
+        dimensions = re.findall(WDC_RE_DIMENSION_DECIMAL_STR, description)
+        dimensions += re.findall(WDC_RE_DIMENSION_STR, description)
+        unit = re.findall(WDC_RE_DIMENSION_UNIT_STR, description)
+        unit = [val for val in unit if val in WDC_UNITS]
+        
+        return [dimensions, unit]
+
+    '''
+    Parse dimensions from the specTableContent
+    '''
+    def _parseSpecTableContent(self,*,specTableContent:str):
+        if not specTableContent:
+            return None
+        
+        dimensions = re.findall(WDC_RE_DIMENSION_DECIMAL_STR, specTableContent)
+        dimensions += re.findall(WDC_RE_DIMENSION_STR, specTableContent)
+        unit = re.findall(WDC_RE_DIMENSION_UNIT_STR, specTableContent)
+        unit = [val for val in unit if val in WDC_UNITS]
+        
+        return [dimensions, unit]
+
+    def _formatKVP(self,*,build:str, trigger:str):
+        build = build.split(" ")
+        build[-2] += trigger
+        return build
+
+    '''
+    Parse dimensions from the keyValuePairs
+    '''
+    def _parseKeyValuePairs(self,*,keyValuePairs:dict):
+        if not keyValuePairs:
+            return None
+        
+        dimensions = []
+        unit = []
+        if "width" in keyValuePairs.keys():
+            build = self._formatKVP(build=keyValuePairs["width"], trigger='w')
+            unit.append(build[-1])
+            build.pop(-1)
+            dimensions.append(' '.join(build))
+        if "depth" in keyValuePairs.keys():
+            build = self._formatKVP(build=keyValuePairs["depth"], trigger='d')
+            unit.append(build[-1])
+            build.pop(-1)
+            dimensions.append(' '.join(build))
+        if "length" in keyValuePairs.keys():
+            build = self._formatKVP(build=keyValuePairs["length"], trigger='l')
+            unit.append(build[-1])
+            build.pop(-1)
+            dimensions.append(' '.join(build))
+        if "height" in keyValuePairs.keys():
+            build = self._formatKVP(build=keyValuePairs["height"], trigger='h')
+            unit.append(build[-1])
+            build.pop(-1)
+            dimensions.append(' '.join(build))
+        
+        return [dimensions, unit]
+
     def parse(self,*,information:dict) -> WdcProductDimensions:
         '''
         We want to find any case where there is a numberxnumberxnumber... combination
@@ -71,14 +153,29 @@ class WdcREDimensionParser(WdcDimensionParser):
 
         return dimensions
         """
-
-        title = information["title"]
-        description = information["description"]
-        specTableContent = information["specTableContent"]
-        keyValuePairs = information["keyValuePairs"]
-        
+        titleDimensions = self._parseTitle(title=information["title"])
+        if titleDimensions and len(titleDimensions[0])>1:
+            print(titleDimensions)
+        descriptionDimensions = self._parseDescription(description=information["description"])
+        if descriptionDimensions and len(descriptionDimensions[0])>1:
+            print(descriptionDimensions)
+        specTableContentDimensions = self._parseSpecTableContent(specTableContent=information["specTableContent"])
+        if specTableContentDimensions and len(specTableContentDimensions[0])>1:
+            print(specTableContentDimensions)
+        keyValuePairsDimensions = self._parseKeyValuePairs(keyValuePairs=information["keyValuePairs"])
+        if keyValuePairsDimensions and len(keyValuePairsDimensions[0])>1:
+            print(keyValuePairsDimensions)
         """
         RE code goes here
         """
 
-        return WdcProductDimensions(depth=None, height=None, length=None, width=None, unit=None)
+        return WdcProductDimensions(depth=None, height=None, length=None, width=None, volume=None, mass=None,
+                                    depth_unit=None, height_unit=None, length_unit=None, width_unit=None, volume_unit=None, mass_unit=None)
+
+with open("Data_Exploration/offers_corpus_english_v2_random_100_clean.jsonl", "r") as data:
+    count = 0
+    for row in data:
+        count += 1
+        print(count)
+        info = json.loads(row)
+        WdcREDimensionParser().parse(information=info)
