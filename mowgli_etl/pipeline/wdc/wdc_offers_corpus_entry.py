@@ -9,19 +9,18 @@ from mowgli_etl.paths import DATA_DIR
 
 @dataclass_json
 @dataclass(frozen=True)
-class _WdcOffersCorpusEntryIdentifier:
-    sku: Optional[str] = None
-
-
-@dataclass_json
-@dataclass(frozen=True)
 class WdcOffersCorpusEntry:
+    @dataclass_json
+    @dataclass(frozen=True)
+    class __WdcOffersCorpusEntryIdentifier:
+        sku: Optional[str] = None
+
     brand: Optional[str]
     category: Optional[str]
     cluster_id: int
     description: Optional[str]
     id: int
-    identifiers: Optional[List[_WdcOffersCorpusEntryIdentifier]]
+    identifiers: Optional[List[__WdcOffersCorpusEntryIdentifier]]
     # {"brand":null,"category":"Clothing","cluster_id":3617395,"description":null,"id":210,"identifiers":[{"\/sku":"[codesku17smmtzi50x]"}],"keyValuePairs":null,"price":null,"specTableContent":null,"title":"selce zip t shirt montura maungashop"}
 
 
