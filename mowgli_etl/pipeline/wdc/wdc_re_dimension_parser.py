@@ -4,7 +4,7 @@ import sys
 
 from mowgli_etl.pipeline.wdc.wdc_product_dimensions import WdcProductDimensions
 from mowgli_etl.pipeline.wdc.wdc_dimension_parser import WdcDimensionParser
-from mowgli_etl.pipeline.wdc.wdc_constants import WDC_RE_DIMENSION_DECIMAL_STR, WDC_RE_DIMENSION_STR, WDC_RE_DIMENSION_UNIT_STR, WDC_UNITS
+from mowgli_etl.pipeline.wdc.wdc_constants import WDC_RE_DIMENSION_DECIMAL_STR, WDC_RE_DIMENSION_STR, WDC_RE_DIMENSION_UNIT_STR, WDC_UNITS, WDC_ARCHIVE_PATH
 
 class WdcREDimensionParser(WdcDimensionParser):
     '''
@@ -19,7 +19,7 @@ class WdcREDimensionParser(WdcDimensionParser):
         unit = re.findall(WDC_RE_DIMENSION_UNIT_STR, title)
         unit = [val for val in unit if val in WDC_UNITS]
                 
-        return [dimensions, unit]
+        return [list(set(dimensions)), unit]
 
     '''
     Parse dimensions from the description
@@ -33,7 +33,7 @@ class WdcREDimensionParser(WdcDimensionParser):
         unit = re.findall(WDC_RE_DIMENSION_UNIT_STR, description)
         unit = [val for val in unit if val in WDC_UNITS]
         
-        return [dimensions, unit]
+        return [list(set(dimensions)), unit]
 
     '''
     Parse dimensions from the specTableContent
@@ -47,7 +47,7 @@ class WdcREDimensionParser(WdcDimensionParser):
         unit = re.findall(WDC_RE_DIMENSION_UNIT_STR, specTableContent)
         unit = [val for val in unit if val in WDC_UNITS]
         
-        return [dimensions, unit]
+        return [list(set(dimensions)), unit]
 
     def _formatKVP(self,*,build:str, trigger:str):
         build = build.split(" ")
@@ -65,26 +65,22 @@ class WdcREDimensionParser(WdcDimensionParser):
         unit = []
         if "width" in keyValuePairs.keys():
             build = self._formatKVP(build=keyValuePairs["width"], trigger='w')
-            unit.append(build[-1])
-            build.pop(-1)
+            unit.append(build.pop(-1))
             dimensions.append(' '.join(build))
         if "depth" in keyValuePairs.keys():
             build = self._formatKVP(build=keyValuePairs["depth"], trigger='d')
-            unit.append(build[-1])
-            build.pop(-1)
+            unit.append(build.pop(-1))
             dimensions.append(' '.join(build))
         if "length" in keyValuePairs.keys():
             build = self._formatKVP(build=keyValuePairs["length"], trigger='l')
-            unit.append(build[-1])
-            build.pop(-1)
+            unit.append(build.pop(-1))
             dimensions.append(' '.join(build))
         if "height" in keyValuePairs.keys():
             build = self._formatKVP(build=keyValuePairs["height"], trigger='h')
-            unit.append(build[-1])
-            build.pop(-1)
+            unit.append(build.pop(-1))
             dimensions.append(' '.join(build))
         
-        return [dimensions, unit]
+        return [list(set(dimensions)), unit]
 
     def parse(self,*,information:dict) -> WdcProductDimensions:
         '''
@@ -155,16 +151,16 @@ class WdcREDimensionParser(WdcDimensionParser):
         """
         titleDimensions = self._parseTitle(title=information["title"])
         if titleDimensions and len(titleDimensions[0])>1:
-            print(titleDimensions)
+            print("from title:",titleDimensions,sep="\n\t")
         descriptionDimensions = self._parseDescription(description=information["description"])
         if descriptionDimensions and len(descriptionDimensions[0])>1:
-            print(descriptionDimensions)
+            print("from description:",descriptionDimensions,sep="\n\t")
         specTableContentDimensions = self._parseSpecTableContent(specTableContent=information["specTableContent"])
         if specTableContentDimensions and len(specTableContentDimensions[0])>1:
-            print(specTableContentDimensions)
+            print("from specTable:",specTableContentDimensions,sep="\n\t")
         keyValuePairsDimensions = self._parseKeyValuePairs(keyValuePairs=information["keyValuePairs"])
         if keyValuePairsDimensions and len(keyValuePairsDimensions[0])>1:
-            print(keyValuePairsDimensions)
+            print("from keyValuePairs:",keyValuePairsDimensions,sep="\n\t")
         """
         RE code goes here
         """
@@ -172,7 +168,7 @@ class WdcREDimensionParser(WdcDimensionParser):
         return WdcProductDimensions(depth=None, height=None, length=None, width=None, volume=None, mass=None,
                                     depth_unit=None, height_unit=None, length_unit=None, width_unit=None, volume_unit=None, mass_unit=None)
 
-with open("Data_Exploration/offers_corpus_english_v2_random_100_clean.jsonl", "r") as data:
+with open(WDC_ARCHIVE_PATH/"offers_corpus_english_v2_random_100_clean.jsonl", "r") as data:
     count = 0
     for row in data:
         count += 1
