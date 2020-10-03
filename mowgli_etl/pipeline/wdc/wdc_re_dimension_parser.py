@@ -4,86 +4,97 @@ import sys
 
 from mowgli_etl.pipeline.wdc.wdc_product_dimensions import WdcProductDimensions
 from mowgli_etl.pipeline.wdc.wdc_dimension_parser import WdcDimensionParser
-from mowgli_etl.pipeline.wdc.wdc_constants import WDC_RE_DIMENSION_DECIMAL_STR, WDC_RE_DIMENSION_STR, WDC_RE_DIMENSION_UNIT_STR, WDC_UNITS, WDC_ARCHIVE_PATH
+from mowgli_etl.pipeline.wdc.wdc_constants import WDC_ARCHIVE_PATH
+
 
 class WdcREDimensionParser(WdcDimensionParser):
-    '''
+
+    self.__RE_DIMENSION_DECIMAL_STR = r"\d+\s\d+[hwl]"
+    self.__RE_DIMENSION_STR = r"\d+[hwl]"
+    self.__RE_DIMENSION_UNIT_STR = r"(?<=\d\w\s)\w\w"
+    self.__UNITS = ["ml", "cm", "mm", "in", "ft", "m"]
+
+    """
     Parse dimensions from the title
-    '''
-    def _parseTitle(self,*,title:str):
+    """
+
+    def _parseTitle(self, *, title: str):
         if not title:
             return None
-        
-        dimensions = re.findall(WDC_RE_DIMENSION_DECIMAL_STR, title)
-        dimensions += re.findall(WDC_RE_DIMENSION_STR, title)
-        unit = re.findall(WDC_RE_DIMENSION_UNIT_STR, title)
-        unit = [val for val in unit if val in WDC_UNITS]
-                
+
+        dimensions = re.findall(self.__RE_DIMENSION_DECIMAL_STR, title)
+        dimensions += re.findall(self.__RE_DIMENSION_STR, title)
+        unit = re.findall(self.__RE_DIMENSION_UNIT_STR, title)
+        unit = [val for val in unit if val in self.__UNITS]
+
         return [list(set(dimensions)), unit]
 
-    '''
+    """
     Parse dimensions from the description
-    '''
-    def _parseDescription(self,*,description:str):
+    """
+
+    def _parseDescription(self, *, description: str):
         if not description:
             return None
-        
-        dimensions = re.findall(WDC_RE_DIMENSION_DECIMAL_STR, description)
-        dimensions += re.findall(WDC_RE_DIMENSION_STR, description)
-        unit = re.findall(WDC_RE_DIMENSION_UNIT_STR, description)
-        unit = [val for val in unit if val in WDC_UNITS]
-        
+
+        dimensions = re.findall(self.__RE_DIMENSION_DECIMAL_STR, description)
+        dimensions += re.findall(self.__RE_DIMENSION_STR, description)
+        unit = re.findall(self.__RE_DIMENSION_UNIT_STR, description)
+        unit = [val for val in unit if val in self.__UNITS]
+
         return [list(set(dimensions)), unit]
 
-    '''
+    """
     Parse dimensions from the specTableContent
-    '''
-    def _parseSpecTableContent(self,*,specTableContent:str):
+    """
+
+    def _parseSpecTableContent(self, *, specTableContent: str):
         if not specTableContent:
             return None
-        
-        dimensions = re.findall(WDC_RE_DIMENSION_DECIMAL_STR, specTableContent)
-        dimensions += re.findall(WDC_RE_DIMENSION_STR, specTableContent)
-        unit = re.findall(WDC_RE_DIMENSION_UNIT_STR, specTableContent)
-        unit = [val for val in unit if val in WDC_UNITS]
-        
+
+        dimensions = re.findall(self.__RE_DIMENSION_DECIMAL_STR, specTableContent)
+        dimensions += re.findall(self.__RE_DIMENSION_STR, specTableContent)
+        unit = re.findall(self.__RE_DIMENSION_UNIT_STR, specTableContent)
+        unit = [val for val in unit if val in self.__UNITS]
+
         return [list(set(dimensions)), unit]
 
-    def _formatKVP(self,*,build:str, trigger:str):
+    def _formatKVP(self, *, build: str, trigger: str):
         build = build.split(" ")
         build[-2] += trigger
         return build
 
-    '''
+    """
     Parse dimensions from the keyValuePairs
-    '''
-    def _parseKeyValuePairs(self,*,keyValuePairs:dict):
+    """
+
+    def _parseKeyValuePairs(self, *, keyValuePairs: dict):
         if not keyValuePairs:
             return None
-        
+
         dimensions = []
         unit = []
         if "width" in keyValuePairs.keys():
-            build = self._formatKVP(build=keyValuePairs["width"], trigger='w')
+            build = self._formatKVP(build=keyValuePairs["width"], trigger="w")
             unit.append(build.pop(-1))
-            dimensions.append(' '.join(build))
+            dimensions.append(" ".join(build))
         if "depth" in keyValuePairs.keys():
-            build = self._formatKVP(build=keyValuePairs["depth"], trigger='d')
+            build = self._formatKVP(build=keyValuePairs["depth"], trigger="d")
             unit.append(build.pop(-1))
-            dimensions.append(' '.join(build))
+            dimensions.append(" ".join(build))
         if "length" in keyValuePairs.keys():
-            build = self._formatKVP(build=keyValuePairs["length"], trigger='l')
+            build = self._formatKVP(build=keyValuePairs["length"], trigger="l")
             unit.append(build.pop(-1))
-            dimensions.append(' '.join(build))
+            dimensions.append(" ".join(build))
         if "height" in keyValuePairs.keys():
-            build = self._formatKVP(build=keyValuePairs["height"], trigger='h')
+            build = self._formatKVP(build=keyValuePairs["height"], trigger="h")
             unit.append(build.pop(-1))
-            dimensions.append(' '.join(build))
-        
+            dimensions.append(" ".join(build))
+
         return [list(set(dimensions)), unit]
 
-    def parse(self,*,information:dict) -> WdcProductDimensions:
-        '''
+    def parse(self, *, information: dict) -> WdcProductDimensions:
+        """
         We want to find any case where there is a numberxnumberxnumber... combination
         Or number+d, number+w, number+h, number+l
         Known dimensions:
@@ -113,7 +124,7 @@ class WdcREDimensionParser(WdcDimensionParser):
             in description: " 350ml or 400ml "
             in specTableContent: " 7 x10"
             in specTableContent: " xs 2 34 s 4 6 35 36 m 8 10 37 38 l 12 14 39 5 41 xl 16 18 42 5 44 5 2xl 20 46 3xl 22 47 5 4xl 24 49"
-        '''
+        """
         """
         OLD CODE:
         
@@ -150,25 +161,46 @@ class WdcREDimensionParser(WdcDimensionParser):
         return dimensions
         """
         titleDimensions = self._parseTitle(title=information["title"])
-        if titleDimensions and len(titleDimensions[0])>1:
-            print("from title:",titleDimensions,sep="\n\t")
-        descriptionDimensions = self._parseDescription(description=information["description"])
-        if descriptionDimensions and len(descriptionDimensions[0])>1:
-            print("from description:",descriptionDimensions,sep="\n\t")
-        specTableContentDimensions = self._parseSpecTableContent(specTableContent=information["specTableContent"])
-        if specTableContentDimensions and len(specTableContentDimensions[0])>1:
-            print("from specTable:",specTableContentDimensions,sep="\n\t")
-        keyValuePairsDimensions = self._parseKeyValuePairs(keyValuePairs=information["keyValuePairs"])
-        if keyValuePairsDimensions and len(keyValuePairsDimensions[0])>1:
-            print("from keyValuePairs:",keyValuePairsDimensions,sep="\n\t")
+        if titleDimensions and len(titleDimensions[0]) > 1:
+            print("from title:", titleDimensions, sep="\n\t")
+        descriptionDimensions = self._parseDescription(
+            description=information["description"]
+        )
+        if descriptionDimensions and len(descriptionDimensions[0]) > 1:
+            print("from description:", descriptionDimensions, sep="\n\t")
+        specTableContentDimensions = self._parseSpecTableContent(
+            specTableContent=information["specTableContent"]
+        )
+        if specTableContentDimensions and len(specTableContentDimensions[0]) > 1:
+            print("from specTable:", specTableContentDimensions, sep="\n\t")
+        keyValuePairsDimensions = self._parseKeyValuePairs(
+            keyValuePairs=information["keyValuePairs"]
+        )
+        if keyValuePairsDimensions and len(keyValuePairsDimensions[0]) > 1:
+            print("from keyValuePairs:", keyValuePairsDimensions, sep="\n\t")
         """
         RE code goes here
         """
 
-        return WdcProductDimensions(depth=None, height=None, length=None, width=None, volume=None, mass=None,
-                                    depth_unit=None, height_unit=None, length_unit=None, width_unit=None, volume_unit=None, mass_unit=None)
+        return WdcProductDimensions(
+            depth=None,
+            height=None,
+            length=None,
+            width=None,
+            volume=None,
+            mass=None,
+            depth_unit=None,
+            height_unit=None,
+            length_unit=None,
+            width_unit=None,
+            volume_unit=None,
+            mass_unit=None,
+        )
 
-with open(WDC_ARCHIVE_PATH/"offers_corpus_english_v2_random_100_clean.jsonl", "r") as data:
+
+with open(
+    WDC_ARCHIVE_PATH / "offers_corpus_english_v2_random_100_clean.jsonl", "r"
+) as data:
     count = 0
     for row in data:
         count += 1
