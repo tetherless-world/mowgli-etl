@@ -1,11 +1,13 @@
-from math import floor
 from typing import Generator, Tuple, Dict, List
 
-from mowgli_etl._transformer import _Transformer
+from tqdm import tqdm
+
 import mowgli_etl.model.concept_net_predicates
+from mowgli_etl._transformer import _Transformer
 from mowgli_etl.model.benchmark import Benchmark
 from mowgli_etl.model.benchmark_answer import BenchmarkAnswer
 from mowgli_etl.model.benchmark_answer_explanation import BenchmarkAnswerExplanation
+from mowgli_etl.model.benchmark_dataset import BenchmarkDataset
 from mowgli_etl.model.benchmark_question import BenchmarkQuestion
 from mowgli_etl.model.benchmark_question_answer_path import BenchmarkQuestionAnswerPath
 from mowgli_etl.model.benchmark_question_answer_paths import (
@@ -15,41 +17,24 @@ from mowgli_etl.model.benchmark_question_choice import BenchmarkQuestionChoice
 from mowgli_etl.model.benchmark_question_choice_analysis import (
     BenchmarkQuestionChoiceAnalysis,
 )
-from mowgli_etl.model.benchmark_dataset import BenchmarkDataset
 from mowgli_etl.model.benchmark_question_choice_type import BenchmarkQuestionChoiceType
 from mowgli_etl.model.benchmark_question_prompt import BenchmarkQuestionPrompt
 from mowgli_etl.model.benchmark_question_prompt_type import BenchmarkQuestionPromptType
 from mowgli_etl.model.benchmark_submission import BenchmarkSubmission
 from mowgli_etl.model.kg_edge import KgEdge
-from mowgli_etl.model.model import Model
 from mowgli_etl.model.kg_node import KgNode
 from mowgli_etl.model.kg_path import KgPath
+from mowgli_etl.model.model import Model
 from mowgli_etl.pipeline.portal_test_data.portal_test_data_pipeline import (
     PortalTestDataPipeline,
 )
-import random
-from tqdm import tqdm
-
 from mowgli_etl.storage.mem_id_set import MemIdSet
 from mowgli_etl.storage.mem_kg_edge_set import MemKgEdgeSet
 
 
-# Helper functions
-# def expo_int(*, max: int, mean: int, min: int):
-#     assert min >= 1
-#     assert min < max
-#     assert mean > min and mean < max
-#     value = floor(random.expovariate(1.0 / mean))
-#     if value < min:
-#         return min
-#     elif value > max:
-#         return max
-#     else:
-#         return value
-
-
 class PortalTestDataTransformer(_Transformer):
-    __SECONDARY_SOURCE_IDS = tuple(f"portal_test_data_secondary_{i}" for i in range(3))
+    __PRIMARY_SOURCE_ID = "P0"
+    __SECONDARY_SOURCE_IDS = tuple(f"P{i + 1}" for i in range(3))
 
     def transform(self, **kwds):
         nodes = self.__generate_kg_nodes()
@@ -212,7 +197,7 @@ class PortalTestDataTransformer(_Transformer):
 
         return tuple(
             KgNode(
-                id=f"portal_test_data:{node_i}",
+                id=f"{self.__PRIMARY_SOURCE_ID}:{node_i}",
                 labels=(
                     shared_labels[node_i % len(shared_labels)],
                     f"Test node {node_i}",
