@@ -21,6 +21,7 @@ from mowgli_etl.model.benchmark_question_choice_type import BenchmarkQuestionCho
 from mowgli_etl.model.benchmark_question_prompt import BenchmarkQuestionPrompt
 from mowgli_etl.model.benchmark_question_prompt_type import BenchmarkQuestionPromptType
 from mowgli_etl.model.benchmark_submission import BenchmarkSubmission
+from mowgli_etl.model.concept_net_predicate_labels import CONCEPT_NET_PREDICATE_LABELS
 from mowgli_etl.model.kg_edge import KgEdge
 from mowgli_etl.model.kg_node import KgNode
 from mowgli_etl.model.kg_path import KgPath
@@ -174,7 +175,12 @@ class PortalTestDataTransformer(_Transformer):
                     ]
                     edge = KgEdge.with_generated_id(
                         object=object_node.id,
-                        labels=(f"Test edge label {edge_i}",),
+                        labels=(
+                            CONCEPT_NET_PREDICATE_LABELS.get(
+                                predicate,
+                                f"Predicate {predicate}",
+                            ),
+                        ),
                         predicate=predicate,
                         subject=subject_node.id,
                         # sources=tuple(sorted(set(list(subject_node.sources) + list(object_node.sources)))),
