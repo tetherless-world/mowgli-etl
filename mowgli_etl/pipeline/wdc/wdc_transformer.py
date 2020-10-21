@@ -192,7 +192,7 @@ class WdcTransformer(_Transformer):
                     subject=product.name,
                     predicate=WDC_HAS_DIMENSIONS,
                     object=specs,
-                    sources=(WDC_DATASOURCE_ID,),
+                    source_ids=(WDC_DATASOURCE_ID,),
                 )
                 # yield KgNode(id = f"{WDC_DATASOURCE_ID}:\"general_name\"",
                 #     sources = (WDC_DATASOURCE_ID,),
