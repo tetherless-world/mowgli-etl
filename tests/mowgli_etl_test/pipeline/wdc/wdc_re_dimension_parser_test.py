@@ -1,4 +1,5 @@
 from json import loads
+from pathlib import Path
 
 from mowgli_etl.pipeline.wdc.wdc_re_dimension_parser import (
     WdcREDimensionParser as WdcReDP,
