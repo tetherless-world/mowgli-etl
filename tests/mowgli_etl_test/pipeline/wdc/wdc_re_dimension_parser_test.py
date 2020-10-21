@@ -5,8 +5,8 @@ from mowgli_etl.pipeline.wdc.wdc_re_dimension_parser import (
 )
 
 # Should have path argument. For now using clean file in directory
-def test_re_dimension_parser():
-    with open("offers_corpus_english_v2_random_100_clean.jsonl", "r") as data:
+def test_re_dimension_parser(wdc_json_clean_file_path: Path):
+    with open(wdc_json_clean_file_path, "r") as data:
         item_counter = 0
         for row in data:
             item_counter += 1

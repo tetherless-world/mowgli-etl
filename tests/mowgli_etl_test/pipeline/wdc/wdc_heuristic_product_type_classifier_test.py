@@ -6,8 +6,8 @@ from mowgli_etl.pipeline.wdc.wdc_heuristic_product_type_classifier import (
 )
 
 # Should have Path argument, for now using clean file already in directory
-def test_heuristic_prdocut_type_classifier():
-    with open("offers_corpus_english_v2_random_100_clean.jsonl", "r") as data:
+def test_heuristic_prdocut_type_classifier(wdc_json_clean_file_path: Path):
+    with open(wdc_json_clean_file_path, "r") as data:
         item_counter = 0
         for row in data:
             item_counter += 1
