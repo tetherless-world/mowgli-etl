@@ -13,6 +13,13 @@ class WdcOffersCorpusEntry:
     @dataclass_json
     @dataclass(frozen=True)
     class __WdcOffersCorpusEntryIdentifier:
+        gtin8: Optional[str] = None
+        gtin12: Optional[str] = None
+        gtin13: Optional[str] = None
+        gtin14: Optional[str] = None
+        identifier: Optional[str] = None
+        mpn: Optional[str] = None
+        productID: Optional[str] = None
         sku: Optional[str] = None
 
     brand: Optional[str]
@@ -30,5 +37,5 @@ if __name__ == "__main__":
     ) as offers_corpus_jsonl_file:
         for line in offers_corpus_jsonl_file:
             entry = WdcOffersCorpusEntry.from_json(line)
-            # print(entry)
-            print(entry.to_json())
+            print(entry.identifiers)
+            # print(entry.to_json())
