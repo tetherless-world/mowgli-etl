@@ -13,7 +13,7 @@ from mowgli_etl.model.kg_edge import KgEdge
 from mowgli_etl.model.kg_node import KgNode
 from mowgli_etl._transformer import _Transformer
 from mowgli_etl.model.word_net_id import WordNetId
-from mowgli_etl.pipeline.wdc.wdc_constants import WDC_DATASOURCE_ID, WDC_HAS_DIMENSIONS
+from mowgli_etl.pipeline.wdc.wdc_constants import WDC_DATASOURCE_ID, WDC_HAS_DIMENSIONS, WDC_ARCHIVE_PATH
 from mowgli_etl.pipeline.wdc.wdc_heuristic_product_type_classifier import (
     WdcHeuristicProductTypeClassifier as HPTC,
 )
@@ -28,7 +28,7 @@ class WdcTransformer(_Transformer):
         """
         wdc_jsonl_dir_path, wdc_jsonl_file_name = os.path.split(wdc_jsonl_file_path)
         wdc_jsonl_file_base_name, _ext = os.path.splitext(wdc_jsonl_file_name)
-        new_file_name = wdc_jsonl_file_base_name + "_clean.jsonl"
+        new_file_name = wdc_jsonl_dir_path + wdc_jsonl_file_base_name + "_clean.jsonl"
 
         with open(wdc_jsonl_file_path, "r") as wdc_jsonl_file_file, open(
             new_file_name, "w"
