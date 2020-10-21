@@ -7,6 +7,7 @@ from mowgli_etl._extractor import _Extractor
 from mowgli_etl._loader import _Loader
 from mowgli_etl._transformer import _Transformer
 from mowgli_etl.loader.cskg_csv.cskg_csv_loader import CskgCsvLoader
+from mowgli_etl.loader.kgtk.kgtk_edges_tsv_loader import KgtkEdgesTsvLoader
 
 
 class _Pipeline(ABC):
@@ -16,7 +17,16 @@ class _Pipeline(ABC):
     A pipeline consists of an extractor, a transformer, and a loader. Most pipeline implementations (subclasses) only supply the former two.
     """
 
-    def __init__(self, *, extractor: _Extractor, id: str, transformer: _Transformer, loader: Optional[Union[_Loader, str]] = None, single_source=True, **kwds):
+    def __init__(
+        self,
+        *,
+        extractor: _Extractor,
+        id: str,
+        transformer: _Transformer,
+        loader: Optional[Union[_Loader, str]] = None,
+        single_source=True,
+        **kwds
+    ):
         """
         Construct an extract-transform-load pipeline.
         :param extractor: extractor implementation
@@ -45,7 +55,9 @@ class _Pipeline(ABC):
     def __add_loader_arguments(cls, arg_parser):
         arg_parser.add_argument("--loader", default="cskg_csv")
 
-    def __create_loader(self, id: str, loader: Optional[str] = None, **loader_kwds) -> _Loader:
+    def __create_loader(
+        self, id: str, loader: Optional[str] = None, **loader_kwds
+    ) -> _Loader:
         if loader is None:
             loader = "cskg_csv"
         else:
@@ -53,6 +65,8 @@ class _Pipeline(ABC):
 
         if loader == "cskg_csv":
             return CskgCsvLoader()
+        elif loader == "kgtk_edges_tsv":
+            return KgtkEdgesTsvLoader()
         else:
             raise NotImplementedError(loader)
 

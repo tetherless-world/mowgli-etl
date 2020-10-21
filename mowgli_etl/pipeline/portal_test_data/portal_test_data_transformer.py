@@ -1,11 +1,13 @@
-from math import floor
 from typing import Generator, Tuple, Dict, List
 
-from mowgli_etl._transformer import _Transformer
+from tqdm import tqdm
+
 import mowgli_etl.model.concept_net_predicates
+from mowgli_etl._transformer import _Transformer
 from mowgli_etl.model.benchmark import Benchmark
 from mowgli_etl.model.benchmark_answer import BenchmarkAnswer
 from mowgli_etl.model.benchmark_answer_explanation import BenchmarkAnswerExplanation
+from mowgli_etl.model.benchmark_dataset import BenchmarkDataset
 from mowgli_etl.model.benchmark_question import BenchmarkQuestion
 from mowgli_etl.model.benchmark_question_answer_path import BenchmarkQuestionAnswerPath
 from mowgli_etl.model.benchmark_question_answer_paths import (
@@ -15,41 +17,25 @@ from mowgli_etl.model.benchmark_question_choice import BenchmarkQuestionChoice
 from mowgli_etl.model.benchmark_question_choice_analysis import (
     BenchmarkQuestionChoiceAnalysis,
 )
-from mowgli_etl.model.benchmark_dataset import BenchmarkDataset
 from mowgli_etl.model.benchmark_question_choice_type import BenchmarkQuestionChoiceType
 from mowgli_etl.model.benchmark_question_prompt import BenchmarkQuestionPrompt
 from mowgli_etl.model.benchmark_question_prompt_type import BenchmarkQuestionPromptType
 from mowgli_etl.model.benchmark_submission import BenchmarkSubmission
+from mowgli_etl.model.concept_net_predicate_labels import CONCEPT_NET_PREDICATE_LABELS
 from mowgli_etl.model.kg_edge import KgEdge
-from mowgli_etl.model.model import Model
 from mowgli_etl.model.kg_node import KgNode
 from mowgli_etl.model.kg_path import KgPath
+from mowgli_etl.model.model import Model
 from mowgli_etl.pipeline.portal_test_data.portal_test_data_pipeline import (
     PortalTestDataPipeline,
 )
-import random
-from tqdm import tqdm
-
 from mowgli_etl.storage.mem_id_set import MemIdSet
 from mowgli_etl.storage.mem_kg_edge_set import MemKgEdgeSet
 
 
-# Helper functions
-# def expo_int(*, max: int, mean: int, min: int):
-#     assert min >= 1
-#     assert min < max
-#     assert mean > min and mean < max
-#     value = floor(random.expovariate(1.0 / mean))
-#     if value < min:
-#         return min
-#     elif value > max:
-#         return max
-#     else:
-#         return value
-
-
 class PortalTestDataTransformer(_Transformer):
-    __SECONDARY_SOURCES = tuple(f"portal_test_data_secondary_{i}" for i in range(3))
+    __PRIMARY_SOURCE_ID = "P0"
+    __SECONDARY_SOURCE_IDS = tuple(f"P{i + 1}" for i in range(3))
 
     def transform(self, **kwds):
         nodes = self.__generate_kg_nodes()
@@ -130,10 +116,10 @@ class PortalTestDataTransformer(_Transformer):
                                 BenchmarkQuestionAnswerPaths(
                                     start_node_id=path[0],
                                     end_node_id=path[-1],
-                                    score=path_i * 0.20,
+                                    score=(path_i + 1) * 0.20,
                                     paths=(
                                         BenchmarkQuestionAnswerPath(
-                                            path=path, score=path_i * 0.15
+                                            path=path, score=(path_i + 1) * 0.15
                                         ),
                                     ),
                                 )
@@ -145,7 +131,9 @@ class PortalTestDataTransformer(_Transformer):
                             )
                         )
                     yield BenchmarkAnswer(
-                        choice_id=question.choices[question_i % len(question.choices)].id,
+                        choice_id=question.choices[
+                            question_i % len(question.choices)
+                        ].id,
                         explanation=BenchmarkAnswerExplanation(
                             choice_analyses=tuple(choice_analyses)
                         ),
@@ -182,14 +170,21 @@ class PortalTestDataTransformer(_Transformer):
                     while object_node.id == subject_node.id:
                         try_node_i = (try_node_i + 1) % len(nodes)
                         object_node = nodes[try_node_i]
-                    predicate = concept_net_predicates[edge_i % len(concept_net_predicates)]
+                    predicate = concept_net_predicates[
+                        edge_i % len(concept_net_predicates)
+                    ]
                     edge = KgEdge.with_generated_id(
                         object=object_node.id,
-                        labels=(f"Test edge label {edge_i}",),
+                        labels=(
+                            CONCEPT_NET_PREDICATE_LABELS.get(
+                                predicate,
+                                f"Predicate {predicate}",
+                            ),
+                        ),
                         predicate=predicate,
                         subject=subject_node.id,
                         # sources=tuple(sorted(set(list(subject_node.sources) + list(object_node.sources)))),
-                        sources=subject_node.sources,
+                        source_ids=subject_node.source_ids,
                         # weight=floor(random.random() * 100.0) / 100.0,
                     )
                     if edge in edge_set:
@@ -208,10 +203,20 @@ class PortalTestDataTransformer(_Transformer):
 
         return tuple(
             KgNode(
-                id=f"portal_test_data:{node_i}",
-                labels=(shared_labels[node_i % len(shared_labels)], f"Test node {node_i}", f"KgNode{node_i}", f"NodeAlias{node_i}"),
+                id=f"{self.__PRIMARY_SOURCE_ID}:{node_i}",
+                labels=(
+                    shared_labels[node_i % len(shared_labels)],
+                    f"Test node {node_i}",
+                    f"KgNode{node_i}",
+                    f"NodeAlias{node_i}",
+                ),
                 pos=pos[node_i % len(pos)],
-                sources=(PortalTestDataPipeline.ID, self.__SECONDARY_SOURCES[node_i % len(self.__SECONDARY_SOURCES)]),
+                source_ids=(
+                    PortalTestDataPipeline.ID,
+                    self.__SECONDARY_SOURCE_IDS[
+                        node_i % len(self.__SECONDARY_SOURCE_IDS)
+                    ],
+                ),
             )
             for node_i in range(200)
         )
@@ -228,7 +233,9 @@ class PortalTestDataTransformer(_Transformer):
             for link_i in range(path_length):
                 current_node_edges = edges_by_subject[current_node_id]
                 for try_edge_i in range(len(current_node_edges)):
-                    choose_edge = current_node_edges[(path_i * link_i + try_edge_i) % len(current_node_edges)]
+                    choose_edge = current_node_edges[
+                        (path_i * link_i + try_edge_i) % len(current_node_edges)
+                    ]
                     if choose_edge.object not in path_node_ids:
                         # Prevent loops
                         break
@@ -238,7 +245,7 @@ class PortalTestDataTransformer(_Transformer):
                 path_node_ids.add(choose_edge.object)
                 current_node_id = choose_edge.object
             yield KgPath(
-                sources=(PortalTestDataPipeline.ID,),
                 id="portal_test_data_path_" + str(path_i),
                 path=tuple(path),
+                source_ids=(PortalTestDataPipeline.ID,),
             )
