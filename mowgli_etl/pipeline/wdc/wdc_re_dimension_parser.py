@@ -198,12 +198,12 @@ class WdcREDimensionParser(WdcDimensionParser):
         )
 
 
-with open(
-    WDC_ARCHIVE_PATH / "offers_corpus_english_v2_random_100_clean.jsonl", "r"
-) as data:
-    count = 0
-    for row in data:
-        count += 1
-        print(count)
-        info = json.loads(row)
-        WdcREDimensionParser().parse(information=info)
+# with open(
+#     WDC_ARCHIVE_PATH / "offers_corpus_english_v2_random_100_clean.jsonl", "r"
+# ) as data:
+#     count = 0
+#     for row in data:
+#         count += 1
+#         print(count)
+#         info = json.loads(row)
+#         WdcREDimensionParser().parse(information=info)

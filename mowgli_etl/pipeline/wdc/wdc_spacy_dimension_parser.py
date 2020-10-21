@@ -33,11 +33,11 @@ class WdcSpacyDimensionParser(WdcDimensionParser):
                 print(f"\t{token}: {token.pos}")
 
 
-if __name__ == "__main__":
-    with open(
-        WDC_ARCHIVE_PATH / "offers_corpus_english_v2_1000.jsonl"
-    ) as offers_corpus_jsonl_file:
-        for line in offers_corpus_jsonl_file:
-            print("parsing...")
-            entry = WdcOffersCorpusEntry.from_json(line)
-            WdcSpacyDimensionParser().parse(information=entry)
+# if __name__ == "__main__":
+#     with open(
+#         WDC_ARCHIVE_PATH / "offers_corpus_english_v2_1000.jsonl"
+#     ) as offers_corpus_jsonl_file:
+#         for line in offers_corpus_jsonl_file:
+#             print("parsing...")
+#             entry = WdcOffersCorpusEntry.from_json(line)
+#             WdcSpacyDimensionParser().parse(information=entry)
