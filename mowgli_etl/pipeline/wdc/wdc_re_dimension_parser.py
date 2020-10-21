@@ -9,10 +9,11 @@ from mowgli_etl.pipeline.wdc.wdc_constants import WDC_ARCHIVE_PATH
 
 class WdcREDimensionParser(WdcDimensionParser):
 
-    self.__RE_DIMENSION_DECIMAL_STR = r"\d+\s\d+[hwl]"
-    self.__RE_DIMENSION_STR = r"\d+[hwl]"
-    self.__RE_DIMENSION_UNIT_STR = r"(?<=\d\w\s)\w\w"
-    self.__UNITS = ["ml", "cm", "mm", "in", "ft", "m"]
+    def __init__(self):
+        self.__RE_DIMENSION_DECIMAL_STR = r"\d+\s\d+[hwl]"
+        self.__RE_DIMENSION_STR = r"\d+[hwl]"
+        self.__RE_DIMENSION_UNIT_STR = r"(?<=\d\w\s)\w\w"
+        self.__UNITS = ["ml", "cm", "mm", "in", "ft", "m"]
 
     """
     Parse dimensions from the title
