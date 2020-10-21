@@ -28,7 +28,7 @@ class WdcTransformer(_Transformer):
         """
         wdc_jsonl_dir_path, wdc_jsonl_file_name = os.path.split(wdc_jsonl_file_path)
         wdc_jsonl_file_base_name, _ext = os.path.splitext(wdc_jsonl_file_name)
-        new_file_name = wdc_jsonl_dir_path + wdc_jsonl_file_base_name + "_clean.jsonl"
+        new_file_name = wdc_jsonl_dir_path + '/' + wdc_jsonl_file_base_name + "_clean.jsonl"
 
         with open(wdc_jsonl_file_path, "r") as wdc_jsonl_file_file, open(
             new_file_name, "w"
