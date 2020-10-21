@@ -8,7 +8,6 @@ from mowgli_etl.pipeline.wdc.wdc_constants import WDC_ARCHIVE_PATH
 
 
 class WdcREDimensionParser(WdcDimensionParser):
-
     def __init__(self):
         self.__RE_DIMENSION_DECIMAL_STR = r"\d+\s\d+[hwl]"
         self.__RE_DIMENSION_STR = r"\d+[hwl]"

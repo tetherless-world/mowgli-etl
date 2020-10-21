@@ -1,8 +1,10 @@
 from json import loads
 
-from mowgli_etl.pipeline.wdc.wdc_re_dimension_parser import WdcREDimensionParser as WdcReDP
+from mowgli_etl.pipeline.wdc.wdc_re_dimension_parser import (
+    WdcREDimensionParser as WdcReDP,
+)
 
-#Should have path argument. For now using clean file in directory
+# Should have path argument. For now using clean file in directory
 def test_re_dimension_parser():
     with open("offers_corpus_english_v2_random_100_clean.jsonl", "r") as data:
         item_counter = 0

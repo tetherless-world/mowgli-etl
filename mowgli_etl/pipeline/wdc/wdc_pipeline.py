@@ -25,7 +25,7 @@ class WdcPipeline(_Pipeline):
             self,
             extractor=WdcExtractor(),
             id=WDC_DATASOURCE_ID,
-            transformer=WdcTransformer(),#product_type_classifier=product_type_classifier_inst),
+            transformer=WdcTransformer(),  # product_type_classifier=product_type_classifier_inst),
             **kwds
         )
 

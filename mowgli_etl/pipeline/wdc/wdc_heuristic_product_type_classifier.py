@@ -6,11 +6,11 @@ from mowgli_etl.pipeline.wdc.wdc_product_type_classifier import WdcProductTypeCl
 
 class WdcHeuristicProductTypeClassifier(WdcProductTypeClassifier):
     def classify(self, *, title: str) -> WdcProductType:
-        '''
+        """
         Parse title/listing/other to pull ProductType with confidence value
-        '''
+        """
         nlp = load("en_core_web_sm")
-        
+
         doc = nlp(title)
 
         last_noun_name = ""
@@ -45,9 +45,8 @@ class WdcHeuristicProductTypeClassifier(WdcProductTypeClassifier):
                 last_noun_flag = 1
 
         first_noun_sequence_name.rstrip(" ")
-        return \
-            WdcProductType(
-                name=last_noun_name,
-                confidence=1/3,
-                alternate=[first_noun_sequence_name, last_noun_sequence_name]
-            )
+        return WdcProductType(
+            name=last_noun_name,
+            confidence=1 / 3,
+            alternate=[first_noun_sequence_name, last_noun_sequence_name],
+        )
