@@ -5,9 +5,12 @@ from mowgli_etl.pipeline.wdc.wdc_product_dimensions import WdcProductDimensions
 from mowgli_etl.pipeline.wdc.wdc_dimension_parser import WdcDimensionParser
 from mowgli_etl.pipeline.wdc.wdc_offers_corpus_entry import WdcOffersCorpusEntry
 from mowgli_etl.pipeline.wdc.wdc_constants import WDC_ARCHIVE_PATH
-from mowgli_etl.pipeline.wdc.parsimonious_parser.wdc_parsimonious_node_visitor import WdcParsimoniousNodeVisitor
+from mowgli_etl.pipeline.wdc.parsimonious_parser.wdc_parsimonious_node_visitor import (
+    WdcParsimoniousNodeVisitor,
+)
 
 from parsimonious import Grammar
+
 
 class WdcParsimoniousDimensionParser(WdcDimensionParser):
     def __init__(self):
@@ -34,6 +37,7 @@ class WdcParsimoniousDimensionParser(WdcDimensionParser):
             if self.__VISITOR.dictionary.keys():
                 print(self.__VISITOR.dictionary)
 
+
 if __name__ == "__main__":
     with open(
         WDC_ARCHIVE_PATH / "offers_corpus_english_v2_random_100_clean.jsonl", "r"
@@ -44,4 +48,3 @@ if __name__ == "__main__":
             WdcParsimoniousDimensionParser().parse(
                 entry=WdcOffersCorpusEntry.from_json(row)
             )
-
