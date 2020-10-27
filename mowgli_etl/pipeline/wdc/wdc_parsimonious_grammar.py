@@ -8,19 +8,18 @@ from mowgli_etl.pipeline.wdc.wdc_constants import WDC_ARCHIVE_PATH
 
 from parsimonious import Grammar
 
-
 class WdcParsimoniousDimensionParser(WdcDimensionParser):
     def __init__(self):
         self.__GRAMMAR = Grammar(
             """
-						bin 			= (space* word* number*)*
+						bin 			= (space/unit/decimal/dimensions/dimension/direction/number/word)*
 
 						unit			= 'cm'/'in'/'ft'/'mm'/'m'
-						dimensions 		= (dimension space*)+
-						dimension 		= number+ space direction
-						direction 		= 'h'/'w'/'d'/'l'
+                        decimal         = number+ space number+
+						dimensions 		= (dimension space "x" space)+ dimension
+						dimension 		= (number+/decimal) space direction
+						direction 		= ("h"/"w"/"d"/"l")
 						number 			= ~'[0-9]+'
-						words 			= word+
 						word 			= ~'[A-z]*'
 						space			= ~'\s'
 						"""
