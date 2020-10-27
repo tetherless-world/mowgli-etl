@@ -7,6 +7,21 @@ from mowgli_etl.pipeline.wdc.wdc_offers_corpus_entry import WdcOffersCorpusEntry
 from mowgli_etl.pipeline.wdc.wdc_constants import WDC_ARCHIVE_PATH
 
 from parsimonious import Grammar
+from parsimonious.nodes import NodeVisitor
+
+class WdcNodeVisitor(NodeVisitor):
+    def __init__(self):
+        self.dictionary = {}
+
+    def visit_dimension(self, node, visited_children):
+        value, key = node.text.split(' ')
+        self.dictionary[key] = value
+
+    def visit_unit(self, node, visited_children):
+        self.dictionary['unit'] = node.text
+
+    def generic_visit(self, node, visited_children):
+        return None
 
 class WdcParsimoniousDimensionParser(WdcDimensionParser):
     def __init__(self):
@@ -24,11 +39,13 @@ class WdcParsimoniousDimensionParser(WdcDimensionParser):
 						space			= ~'\s'
 						"""
         )
+        self.__VISITOR = WdcNodeVisitor()
 
     def parse(self, *, entry: WdcOffersCorpusEntry):
         if entry.description is not None:
             description = self.__GRAMMAR.parse(entry.description)
-            print(description)
+            self.__VISITOR.visit(description)
+            print(self.__VISITOR.dictionary)
 
 
 if __name__ == "__main__":
