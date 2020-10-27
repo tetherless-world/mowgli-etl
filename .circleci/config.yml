@@ -5,6 +5,9 @@ jobs:
   build:
     docker:
       - image: circleci/python:3.8
+        auth:
+          username: $DOCKER_USERNAME
+          password: $DOCKER_PASSWORD
     steps:
       - checkout
       - restore_cache:
