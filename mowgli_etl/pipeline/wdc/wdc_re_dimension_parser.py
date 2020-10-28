@@ -183,18 +183,6 @@ class WdcREDimensionParser(WdcDimensionParser):
         """
 
         return WdcProductDimensions(
-            depth=None,
-            height=None,
-            length=None,
-            width=None,
-            volume=None,
-            mass=None,
-            depth_unit=None,
-            height_unit=None,
-            length_unit=None,
-            width_unit=None,
-            volume_unit=None,
-            mass_unit=None,
         )
 
 
