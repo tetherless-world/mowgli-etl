@@ -7,74 +7,102 @@ from mowgli_etl.pipeline.wdc.parsimonious_parser.wdc_parsimonious_node_visitor i
 )
 
 from parsimonious import Grammar
+import dataclasses, json
 
 
 class WdcParsimoniousDimensionParser(WdcDimensionParser):
-    def __init__(self):
-        self.__GRAMMAR = Grammar(
-            """
-						bin 			= (space/alt/unit/dimensions/dimension/decimal/direction/number/word)*
+    __GRAMMAR = Grammar(
+        """
+					bin 			= (space/alt/unit/dimensions/dimension/decimal/direction/number/word)*
 
-						unit			= dimension space ('cm'/'in'/'ft'/'mm'/'m')
-						dimensions 		= (dimension space "x" space)+ dimension
-						dimension 		= (decimal/number) space direction
-                        decimal         = number+ space number+
-						direction 		= ("h"/"w"/"d"/"l") &(space/~'$')
-						number 			= ~'[0-9]+'
-						word 			= ~'[A-z]*'
-						space			= ~'\s'
-						alt             = ~'[^a-zA-Z\d\s:]'
-                        """
-        )
-        self.__VISITOR = WdcParsimoniousNodeVisitor()
-
-    def __generate_dimensions(self):
-        retVal = WdcProductDimensions.from_dict(self.__VISITOR.dictionary)
-        self.__VISITOR.dictionary = {}
-        return retVal
+					unit			= dimension space ('cm'/'in'/'ft'/'mm'/'m')
+					dimensions 		= (dimension space "x" space)+ dimension
+					dimension 		= (decimal/number) space direction
+                    decimal         = number+ space number+
+					direction 		= ("h"/"w"/"d"/"l") &(space/~'$')
+					number 			= ~'[0-9]+'
+					word 			= ~'[A-z]*'
+					space			= ~'\s'
+					alt             = ~'[^a-zA-Z\d\s:]'
+                    """
+    )
 
     def parse(self, *, entry: WdcOffersCorpusEntry):
         returns = []
         return_flag = False
-        if entry.keyValuePairs is not None:
-            if "dimensions" in entry.keyValuePairs.keys():
-                keyValuePairs = self.__GRAMMAR.parse(entry.keyValuePairs["dimensions"])
-                self.__VISITOR.visit(keyValuePairs)
-                returns.append((self.__generate_dimensions(), keyValuePairs))
+        __VISITOR = WdcParsimoniousNodeVisitor()
+
+        def __generate_dimensions():
+            retVal = WdcProductDimensions.from_dict(dataclasses.asdict(__VISITOR.dictionary))
+            __VISITOR.reset()
+            if retVal.width.value is None and retVal.length.value is None and retVal.depth.value is None and retVal.height.value is None:
+                return None
+            return retVal
+
+        if entry.KeyValuePairs is not None:
+            if "dimensions" in entry.KeyValuePairs.keys():
+                KeyValuePairs = self.__GRAMMAR.parse(entry.KeyValuePairs["dimensions"])
+                __VISITOR.visit(KeyValuePairs)
+                result = __generate_dimensions()
+                if result:
+                    returns.append((result, 'KeyValuePairs'))
 
         if entry.description is not None:
             description = self.__GRAMMAR.parse(entry.description)
-            self.__VISITOR.visit(description)
-            returns.append((self.__generate_dimensions(), description))
+            __VISITOR.visit(description)
+            result = __generate_dimensions()
+            if result:
+                returns.append((result, "description"))
 
         return returns
 
 
 if __name__ == "__main__":
-    import json, sys, time, dataclasses
+    import json, sys, time
 
     start = time.time()
-
+    count = 0
     with open(WDC_ARCHIVE_PATH / sys.argv[1], "r") as data:
-        count = 0
+        holder = {'source': sys.argv[1], 'dimensions': []}
         for row in data:
             count += 1
-            dimension = WdcParsimoniousDimensionParser().parse(
-                entry=WdcOffersCorpusEntry.from_json(row)
-            )
-            if dimension:
-                for d in dimension:
-                    output = ""
-                    spacing = "\t"
-                    data = d[0]
-                    for f in dataclasses.fields(data):
-                        if getattr(data, f.name) is not None:
-                            output += f"{spacing}{f.name}: {getattr(data,f.name)}\n"
-                    if output != "":
-                        print(
-                            f"NEW DIMENSION OBJECT from entry {count}\n{output}".strip()
-                        )
-                        if len(sys.argv) >= 3 and sys.argv[2] == "origin":
-                            print("\nWhich was produced from:\n")
-                            print(d[1])
-    print(f"Took {time.time()-start} to run {count} parses")
+            dimensions = WdcParsimoniousDimensionParser().parse(entry=WdcOffersCorpusEntry.from_json(row))
+            for dimension in dimensions:
+                holder['dimensions'].append(dataclasses.asdict(dimension[0]))
+                holder['dimensions'][-1]['line'] = count
+                holder['dimensions'][-1]['field'] = dimension[1]
+        with open(f"{sys.argv[1][0:-6]}_parsed.jsonl", "w") as output:
+            json.dump(holder, output, indent=4)
+
+        # count = 0
+        # for row in data:
+        #     count += 1
+        #     dimension = WdcParsimoniousDimensionParser().parse(
+        #         entry=WdcOffersCorpusEntry.from_json(row)
+        #     )
+        #     if dimension:
+        #         for d in dimension:
+        #             output = ""
+        #             spacing = "\t"
+        #             data = d[0]
+        #             for f in dataclasses.fields(data):
+        #                 if getattr(data, f.name) is not None and getattr(data, f.name).value is not None:
+        #                     output += f"\n{spacing}{f.name}:"
+        #                     values = getattr(data, f.name)
+        #                     if type(values).__name__ == "__Dimension":
+        #                         for subf in dataclasses.fields(values):
+        #                             if (
+        #                                 getattr(values, subf.name) is not None
+        #                                 or subf.name == "unit"
+        #                             ):
+        #                                 output += f"\n{spacing}{spacing}{subf.name}: {getattr(values, subf.name)}"
+        #                     else:
+        #                         output += f" {getattr(data, f.name)}"
+        #             if output != "":
+        #                 print(
+        #                     f"NEW DIMENSION OBJECT from entry {count}{output}".strip()
+        #                 )
+        #                 if len(sys.argv) >= 3 and sys.argv[2] == "origin":
+        #                     print("\nWhich was produced from:\n")
+        #                     print(d[1])
+    print(f"Took {time.time()-start} seconds to run {count} parses")
