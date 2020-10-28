@@ -4,6 +4,7 @@ from dataclasses import dataclass, fields
 from typing import Optional
 
 class WdcParsimoniousNodeVisitor(NodeVisitor):
+    KeyMap = {'l': "length", 'd': "depth", 'w': "width", 'h': "height"}
 
     @dataclass(frozen=True)
     class __Node:
@@ -27,15 +28,7 @@ class WdcParsimoniousNodeVisitor(NodeVisitor):
     def visit_dimension(self, node, visited_children):
         entries = node.text.split(" ")
         value = ".".join(entries[0:-1])
-        key = entries[-1]
-        if key == "l":
-            key = "length"
-        elif key == "d":
-            key = "depth"
-        elif key == "w":
-            key = "width"
-        elif key == "h":
-            key = "height"
+        key = WdcParsimoniousNodeVisitor.KeyMap[entries[-1]]
         self.dictionary.__getattribute__(key).value = float(value)
 
     def visit_unit(self, node, visited_children):
