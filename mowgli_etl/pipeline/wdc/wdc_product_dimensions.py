@@ -12,16 +12,12 @@ class WdcProductDimensions:
     How do we handle multiple dimensions?
     How do we handle clothing dimensions?
     """
+    @dataclass
+    class __Dimension:
+        value: Optional[float] = None
+        unit: Optional[str] = None
 
-    depth: Optional[float] = None
-    height: Optional[float] = None
-    length: Optional[float] = None
-    width: Optional[float] = None
-    volume: Optional[float] = None
-    mass: Optional[float] = None
-    depth_unit: Optional[str] = None
-    height_unit: Optional[str] = None
-    length_unit: Optional[str] = None
-    width_unit: Optional[str] = None
-    volume_unit: Optional[str] = None
-    mass_unit: Optional[str] = None
+    depth: Optional[__Dimension] = None
+    height: Optional[__Dimension] = None
+    length: Optional[__Dimension] = None
+    width: Optional[__Dimension] = None
