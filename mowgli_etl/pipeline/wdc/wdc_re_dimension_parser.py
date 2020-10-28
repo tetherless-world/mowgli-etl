@@ -182,8 +182,7 @@ class WdcREDimensionParser(WdcDimensionParser):
         RE code goes here
         """
 
-        return WdcProductDimensions(
-        )
+        return WdcProductDimensions()
 
 
 # with open(
