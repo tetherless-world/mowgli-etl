@@ -1,7 +1,7 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Optional, List
 
-from dataclasses_json import dataclass_json
+from dataclasses_json import dataclass_json, config
 
 from mowgli_etl.loader import json
 from mowgli_etl.paths import DATA_DIR
@@ -28,7 +28,7 @@ class WdcOffersCorpusEntry:
     description: Optional[str]
     id: int
     identifiers: Optional[List[__WdcOffersCorpusEntryIdentifier]]
-    keyValuePairs: Optional[dict]
+    KeyValuePairs: Optional[dict] = field(metadata=config(field_name="keyValuePairs"))
     # {"brand":null,"category":"Clothing","cluster_id":3617395,"description":null,"id":210,"identifiers":[{"\/sku":"[codesku17smmtzi50x]"}],"keyValuePairs":null,"price":null,"specTableContent":null,"title":"selce zip t shirt montura maungashop"}
 
 
