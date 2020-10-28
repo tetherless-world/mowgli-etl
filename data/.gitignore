@@ -1,5 +1,6 @@
 # Create exceptions here.
 /cskg_release/extracted/
+/generics_kb/extracted/
 indexed/
 loaded/
 /portal_benchmark/extracted/
