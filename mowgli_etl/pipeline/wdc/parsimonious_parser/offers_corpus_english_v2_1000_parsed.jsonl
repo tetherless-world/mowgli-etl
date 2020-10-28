@@ -1,0 +1,325 @@
+{
+    "source": "offers_corpus_english_v2_1000.jsonl",
+    "dimensions": [
+        {
+            "depth": {
+                "value": null,
+                "unit": null
+            },
+            "height": {
+                "value": null,
+                "unit": null
+            },
+            "length": {
+                "value": null,
+                "unit": null
+            },
+            "width": {
+                "value": 1.3,
+                "unit": null
+            },
+            "line": 147,
+            "field": "description"
+        },
+        {
+            "depth": {
+                "value": null,
+                "unit": null
+            },
+            "height": {
+                "value": null,
+                "unit": null
+            },
+            "length": {
+                "value": 2.0,
+                "unit": null
+            },
+            "width": {
+                "value": null,
+                "unit": null
+            },
+            "line": 151,
+            "field": "description"
+        },
+        {
+            "depth": {
+                "value": null,
+                "unit": null
+            },
+            "height": {
+                "value": 12.0,
+                "unit": null
+            },
+            "length": {
+                "value": 9.0,
+                "unit": null
+            },
+            "width": {
+                "value": null,
+                "unit": null
+            },
+            "line": 189,
+            "field": "description"
+        },
+        {
+            "depth": {
+                "value": 6.0,
+                "unit": null
+            },
+            "height": {
+                "value": 6.0,
+                "unit": null
+            },
+            "length": {
+                "value": null,
+                "unit": null
+            },
+            "width": {
+                "value": 6.0,
+                "unit": null
+            },
+            "line": 339,
+            "field": "description"
+        },
+        {
+            "depth": {
+                "value": 200.0,
+                "unit": null
+            },
+            "height": {
+                "value": 16.0,
+                "unit": null
+            },
+            "length": {
+                "value": null,
+                "unit": null
+            },
+            "width": {
+                "value": null,
+                "unit": null
+            },
+            "line": 461,
+            "field": "description"
+        },
+        {
+            "depth": {
+                "value": 37.0,
+                "unit": null
+            },
+            "height": {
+                "value": 36.0,
+                "unit": null
+            },
+            "length": {
+                "value": null,
+                "unit": null
+            },
+            "width": {
+                "value": null,
+                "unit": null
+            },
+            "line": 508,
+            "field": "KeyValuePairs"
+        },
+        {
+            "depth": {
+                "value": null,
+                "unit": null
+            },
+            "height": {
+                "value": 3.0,
+                "unit": null
+            },
+            "length": {
+                "value": null,
+                "unit": null
+            },
+            "width": {
+                "value": null,
+                "unit": null
+            },
+            "line": 513,
+            "field": "description"
+        },
+        {
+            "depth": {
+                "value": null,
+                "unit": null
+            },
+            "height": {
+                "value": 64.0,
+                "unit": null
+            },
+            "length": {
+                "value": 36.0,
+                "unit": null
+            },
+            "width": {
+                "value": 24.0,
+                "unit": null
+            },
+            "line": 519,
+            "field": "description"
+        },
+        {
+            "depth": {
+                "value": 32.0,
+                "unit": null
+            },
+            "height": {
+                "value": 36.0,
+                "unit": null
+            },
+            "length": {
+                "value": null,
+                "unit": null
+            },
+            "width": {
+                "value": 72.0,
+                "unit": null
+            },
+            "line": 542,
+            "field": "KeyValuePairs"
+        },
+        {
+            "depth": {
+                "value": null,
+                "unit": null
+            },
+            "height": {
+                "value": 36.0,
+                "unit": null
+            },
+            "length": {
+                "value": 72.0,
+                "unit": null
+            },
+            "width": {
+                "value": 32.0,
+                "unit": null
+            },
+            "line": 542,
+            "field": "description"
+        },
+        {
+            "depth": {
+                "value": 200.0,
+                "unit": null
+            },
+            "height": {
+                "value": null,
+                "unit": null
+            },
+            "length": {
+                "value": null,
+                "unit": null
+            },
+            "width": {
+                "value": null,
+                "unit": null
+            },
+            "line": 732,
+            "field": "description"
+        },
+        {
+            "depth": {
+                "value": 8.2,
+                "unit": null
+            },
+            "height": {
+                "value": null,
+                "unit": null
+            },
+            "length": {
+                "value": null,
+                "unit": null
+            },
+            "width": {
+                "value": null,
+                "unit": null
+            },
+            "line": 799,
+            "field": "description"
+        },
+        {
+            "depth": {
+                "value": 64.0,
+                "unit": null
+            },
+            "height": {
+                "value": 87.0,
+                "unit": null
+            },
+            "length": {
+                "value": null,
+                "unit": null
+            },
+            "width": {
+                "value": null,
+                "unit": null
+            },
+            "line": 838,
+            "field": "KeyValuePairs"
+        },
+        {
+            "depth": {
+                "value": null,
+                "unit": null
+            },
+            "height": {
+                "value": 30.0,
+                "unit": null
+            },
+            "length": {
+                "value": null,
+                "unit": null
+            },
+            "width": {
+                "value": null,
+                "unit": null
+            },
+            "line": 875,
+            "field": "description"
+        },
+        {
+            "depth": {
+                "value": null,
+                "unit": null
+            },
+            "height": {
+                "value": null,
+                "unit": null
+            },
+            "length": {
+                "value": null,
+                "unit": null
+            },
+            "width": {
+                "value": 75.0,
+                "unit": null
+            },
+            "line": 928,
+            "field": "description"
+        },
+        {
+            "depth": {
+                "value": 8.0,
+                "unit": "in"
+            },
+            "height": {
+                "value": 11.0,
+                "unit": "in"
+            },
+            "length": {
+                "value": null,
+                "unit": "in"
+            },
+            "width": {
+                "value": 34.0,
+                "unit": "in"
+            },
+            "line": 971,
+            "field": "description"
+        }
+    ]
+}

@@ -1,0 +1,45 @@
+{
+    "source": "offers_corpus_english_v2_random_100_clean.jsonl",
+    "dimensions": [
+        {
+            "depth": {
+                "value": 32.0,
+                "unit": null
+            },
+            "height": {
+                "value": 36.0,
+                "unit": null
+            },
+            "length": {
+                "value": null,
+                "unit": null
+            },
+            "width": {
+                "value": 72.0,
+                "unit": null
+            },
+            "line": 34,
+            "field": "KeyValuePairs"
+        },
+        {
+            "depth": {
+                "value": null,
+                "unit": null
+            },
+            "height": {
+                "value": 36.0,
+                "unit": null
+            },
+            "length": {
+                "value": 72.0,
+                "unit": null
+            },
+            "width": {
+                "value": 32.0,
+                "unit": null
+            },
+            "line": 34,
+            "field": "description"
+        }
+    ]
+}
