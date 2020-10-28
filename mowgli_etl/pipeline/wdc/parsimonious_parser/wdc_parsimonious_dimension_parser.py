@@ -1,6 +1,3 @@
-import json
-import sys
-
 from mowgli_etl.pipeline.wdc.wdc_product_dimensions import WdcProductDimensions
 from mowgli_etl.pipeline.wdc.wdc_dimension_parser import WdcDimensionParser
 from mowgli_etl.pipeline.wdc.wdc_offers_corpus_entry import WdcOffersCorpusEntry
@@ -9,8 +6,6 @@ from mowgli_etl.pipeline.wdc.parsimonious_parser.wdc_parsimonious_node_visitor i
     WdcParsimoniousNodeVisitor,
 )
 
-import dataclasses
-
 from parsimonious import Grammar
 
 
@@ -18,7 +13,7 @@ class WdcParsimoniousDimensionParser(WdcDimensionParser):
     def __init__(self):
         self.__GRAMMAR = Grammar(
             """
-						bin 			= (space/unit/dimensions/dimension/decimal/direction/number/word)*
+						bin 			= (space/alt/unit/dimensions/dimension/decimal/direction/number/word)*
 
 						unit			= dimension space ('cm'/'in'/'ft'/'mm'/'m')
 						dimensions 		= (dimension space "x" space)+ dimension
@@ -28,7 +23,8 @@ class WdcParsimoniousDimensionParser(WdcDimensionParser):
 						number 			= ~'[0-9]+'
 						word 			= ~'[A-z]*'
 						space			= ~'\s'
-						"""
+						alt             = ~'[^a-zA-Z\d\s:]'
+                        """
         )
         self.__VISITOR = WdcParsimoniousNodeVisitor()
 
@@ -55,9 +51,11 @@ class WdcParsimoniousDimensionParser(WdcDimensionParser):
 
 
 if __name__ == "__main__":
-    with open(
-        WDC_ARCHIVE_PATH / "offers_corpus_english_v2_random_100_clean.jsonl", "r"
-    ) as data:
+    import json, sys, time, dataclasses
+
+    start = time.time()
+
+    with open(WDC_ARCHIVE_PATH / sys.argv[1], "r") as data:
         count = 0
         for row in data:
             count += 1
@@ -76,6 +74,7 @@ if __name__ == "__main__":
                         print(
                             f"NEW DIMENSION OBJECT from entry {count}\n{output}".strip()
                         )
-                        if len(sys.argv) >= 2 and sys.argv[1] == "origin":
+                        if len(sys.argv) >= 3 and sys.argv[2] == "origin":
                             print("\nWhich was produced from:\n")
                             print(d[1])
+    print(f"Took {time.time()-start} to run {count} parses")
