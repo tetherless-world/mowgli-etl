@@ -33,9 +33,16 @@ class WdcParsimoniousDimensionParser(WdcDimensionParser):
         __VISITOR = WdcParsimoniousNodeVisitor()
 
         def __generate_dimensions():
-            retVal = WdcProductDimensions.from_dict(dataclasses.asdict(__VISITOR.dictionary))
+            retVal = WdcProductDimensions.from_dict(
+                dataclasses.asdict(__VISITOR.dictionary)
+            )
             __VISITOR.reset()
-            if retVal.width.value is None and retVal.length.value is None and retVal.depth.value is None and retVal.height.value is None:
+            if (
+                retVal.width.value is None
+                and retVal.length.value is None
+                and retVal.depth.value is None
+                and retVal.height.value is None
+            ):
                 return None
             return retVal
 
@@ -45,7 +52,7 @@ class WdcParsimoniousDimensionParser(WdcDimensionParser):
                 __VISITOR.visit(KeyValuePairs)
                 result = __generate_dimensions()
                 if result:
-                    returns.append((result, 'KeyValuePairs'))
+                    returns.append((result, "KeyValuePairs"))
 
         if entry.description is not None:
             description = self.__GRAMMAR.parse(entry.description)
@@ -63,14 +70,16 @@ if __name__ == "__main__":
     start = time.time()
     count = 0
     with open(WDC_ARCHIVE_PATH / sys.argv[1], "r") as data:
-        holder = {'source': sys.argv[1], 'dimensions': []}
+        holder = {"source": sys.argv[1], "dimensions": []}
         for row in data:
             count += 1
-            dimensions = WdcParsimoniousDimensionParser().parse(entry=WdcOffersCorpusEntry.from_json(row))
+            dimensions = WdcParsimoniousDimensionParser().parse(
+                entry=WdcOffersCorpusEntry.from_json(row)
+            )
             for dimension in dimensions:
-                holder['dimensions'].append(dataclasses.asdict(dimension[0]))
-                holder['dimensions'][-1]['line'] = count
-                holder['dimensions'][-1]['field'] = dimension[1]
+                holder["dimensions"].append(dataclasses.asdict(dimension[0]))
+                holder["dimensions"][-1]["line"] = count
+                holder["dimensions"][-1]["field"] = dimension[1]
         with open(f"{sys.argv[1][0:-6]}_parsed.jsonl", "w") as output:
             json.dump(holder, output, indent=4)
 

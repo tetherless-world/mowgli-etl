@@ -12,6 +12,7 @@ class WdcProductDimensions:
     How do we handle multiple dimensions?
     How do we handle clothing dimensions?
     """
+
     @dataclass
     class __Dimension:
         value: Optional[float] = None

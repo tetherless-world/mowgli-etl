@@ -3,8 +3,9 @@ from parsimonious.nodes import NodeVisitor
 from dataclasses import dataclass, fields
 from typing import Optional
 
+
 class WdcParsimoniousNodeVisitor(NodeVisitor):
-    KeyMap = {'l': "length", 'd': "depth", 'w': "width", 'h': "height"}
+    KeyMap = {"l": "length", "d": "depth", "w": "width", "h": "height"}
 
     @dataclass(frozen=True)
     class __Node:
@@ -12,6 +13,7 @@ class WdcParsimoniousNodeVisitor(NodeVisitor):
         class __Entry:
             value: Optional[float] = None
             unit: Optional[str] = None
+
         width: Optional[__Entry] = __Entry()
         depth: Optional[__Entry] = __Entry()
         height: Optional[__Entry] = __Entry()
@@ -22,8 +24,8 @@ class WdcParsimoniousNodeVisitor(NodeVisitor):
 
     def reset(self):
         for key in fields(self.dictionary):
-                getattr(self.dictionary, key.name).value = None
-                getattr(self.dictionary, key.name).unit = None
+            getattr(self.dictionary, key.name).value = None
+            getattr(self.dictionary, key.name).unit = None
 
     def visit_dimension(self, node, visited_children):
         entries = node.text.split(" ")
@@ -34,7 +36,7 @@ class WdcParsimoniousNodeVisitor(NodeVisitor):
     def visit_unit(self, node, visited_children):
         value = node.text.split(" ")[-1]
         for key in fields(self.dictionary):
-        	getattr(self.dictionary, key.name).unit = value
+            getattr(self.dictionary, key.name).unit = value
 
     def generic_visit(self, node, visited_children):
         return None
