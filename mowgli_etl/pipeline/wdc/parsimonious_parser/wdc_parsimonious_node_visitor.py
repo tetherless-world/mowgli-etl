@@ -9,14 +9,14 @@ class WdcParsimoniousNodeVisitor(NodeVisitor):
         entries = node.text.split(" ")
         value = ".".join(entries[0:-1])
         key = entries[-1]
-        if key=='l':
-        	key = 'length'
-        elif key=='d':
-        	key = 'depth'
-        elif key=='w':
-        	key = 'width'
-        elif key=='h':
-        	key = 'height'
+        if key == "l":
+            key = "length"
+        elif key == "d":
+            key = "depth"
+        elif key == "w":
+            key = "width"
+        elif key == "h":
+            key = "height"
         self.dictionary[key] = float(value)
 
     def visit_unit(self, node, visited_children):

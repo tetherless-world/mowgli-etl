@@ -44,9 +44,7 @@ class WdcParsimoniousDimensionParser(WdcDimensionParser):
             if "dimensions" in entry.keyValuePairs.keys():
                 keyValuePairs = self.__GRAMMAR.parse(entry.keyValuePairs["dimensions"])
                 self.__VISITOR.visit(keyValuePairs)
-                returns.append(
-                    (self.__generate_dimensions(), keyValuePairs)
-                )
+                returns.append((self.__generate_dimensions(), keyValuePairs))
 
         if entry.description is not None:
             description = self.__GRAMMAR.parse(entry.description)
@@ -75,7 +73,9 @@ if __name__ == "__main__":
                         if getattr(data, f.name) is not None:
                             output += f"{spacing}{f.name}: {getattr(data,f.name)}\n"
                     if output != "":
-                        print(f"NEW DIMENSION OBJECT from entry {count}\n{output}".strip())
+                        print(
+                            f"NEW DIMENSION OBJECT from entry {count}\n{output}".strip()
+                        )
                         if len(sys.argv) >= 2 and sys.argv[1] == "origin":
                             print("\nWhich was produced from:\n")
                             print(d[1])
