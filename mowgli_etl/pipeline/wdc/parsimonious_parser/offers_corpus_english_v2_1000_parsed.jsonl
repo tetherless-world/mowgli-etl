@@ -2,50 +2,24 @@
     "source": "offers_corpus_english_v2_1000.jsonl",
     "dimensions": [
         {
-            "depth": {
-                "value": null,
-                "unit": null
-            },
-            "height": {
-                "value": null,
-                "unit": null
-            },
-            "length": {
-                "value": null,
-                "unit": null
-            },
             "width": {
                 "value": 1.3,
                 "unit": null
             },
             "line": 147,
-            "field": "description"
+            "field": "description",
+            "raw_text": "long product name epson stylus photo r1800 inkjet 5760 x 1440dpi photo printer the short editorial description of epson stylus photo r1800 inkjet 5760 x 1440dpi photo printer stylus photo r1800 a3 5760dpi usb ,  more short summary description epson stylus photo r1800 inkjet 5760 x 1440dpi photo printer this short summary of the epson stylus photo r1800 inkjet 5760 x 1440dpi photo printer data sheet is auto generated and uses the product title and the first six key specs epson stylus photo r1800 inkjet 5760 x 1440 dpi a3 a4 a5 a6 b5 47 db 18 w long summary description epson stylus photo r1800 inkjet 5760 x 1440dpi photo printer epson stylus photo r1800 print technology inkjet maximum resolution 5760 x 1440 dpi iso a series sizes a0 a9 a3 a4 a5 a6 iso b series sizes b0 b9 b5 noise level 47 db power consumption standby 18 w power consumption sleep 1 3 w dimensions wxdxh 615 x 314 x 219 mm connectivity technology wired standard tray media types photo paper this is an auto generated long summary of epson stylus photo r1800 inkjet 5760 x 1440dpi photo printer based on the first three specs of the first five spec groups"
         },
         {
-            "depth": {
-                "value": null,
-                "unit": null
-            },
-            "height": {
-                "value": null,
-                "unit": null
-            },
             "length": {
                 "value": 2.0,
                 "unit": null
             },
-            "width": {
-                "value": null,
-                "unit": null
-            },
             "line": 151,
-            "field": "description"
+            "field": "description",
+            "raw_text": "each meticulously crafted and gm licensed replacement doorsill is made from premium aluminum billet featuring a brushed finish and accented with durable oem color matched paint as rich and lustrous as the paint on your camaro adhesive backed with automotive tape for easy installation fits all generation 5 camaros set of two one year manufacturer s warranty 29 1 2 l this product fits camaro 2010 2015"
         },
         {
-            "depth": {
-                "value": null,
-                "unit": null
-            },
             "height": {
                 "value": 12.0,
                 "unit": null
@@ -54,12 +28,9 @@
                 "value": 9.0,
                 "unit": null
             },
-            "width": {
-                "value": null,
-                "unit": null
-            },
             "line": 189,
-            "field": "description"
+            "field": "description",
+            "raw_text": "even the easter bunny himself would have a difficult time crafting a bouquet as perfect as this one tulips daisies anthos and limonium are skillfully arranged in a clear gathering vase to highlight every bloom and underscore how wonderfully they all blend together measures 12 h x 9 l includes hellip"
         },
         {
             "depth": {
@@ -70,16 +41,13 @@
                 "value": 6.0,
                 "unit": null
             },
-            "length": {
-                "value": null,
-                "unit": null
-            },
             "width": {
                 "value": 6.0,
                 "unit": null
             },
             "line": 339,
-            "field": "description"
+            "field": "description",
+            "raw_text": "buy bradburnhome moonshine petal ceramic votive 6 h x 6 w x 6 d at staples low price or read our customer reviews to learn more now"
         },
         {
             "depth": {
@@ -90,16 +58,9 @@
                 "value": 16.0,
                 "unit": null
             },
-            "length": {
-                "value": null,
-                "unit": null
-            },
-            "width": {
-                "value": null,
-                "unit": null
-            },
             "line": 461,
-            "field": "description"
+            "field": "description",
+            "raw_text": "description en d tails tarifs d gr ssifs description pavillon du burgenland avec deux oeillets en acier inoxydable dimensions 60 x 90 cm fabriqu en polyester haut de gamme de qualit marine gauche ce pavillon est renforc par un sangle de couleur blanche tandis que les autres bords disposent d une double couture pour une r sistance lev e contre les d chirures autres d tails pavillon de haute qualit pour une grande durabilit impression num rique avec excellente saturation des couleurs riches et brillantes lavable et repassable basse temp rature pour en savoir plus sur les drapeaux du burgenland vendre chez nous en d tails r f rence 8678 marque maxflags pavoisement et communication publicitaire dimensions env 60 x 90 cm mati res mat riels tissu polyester de qualit marine maille bloqu e 115 g m extr mement r sistant contre les d chirures longue dur e de vie accessoires pavillon avec double couture sur les bords deux oeillets en acier inoxydable utilisations utilisation priv e sur la maison et dans le jardin utilisation commerciale concessionnaires restaurants h tels bateaux livraison livraison rapide en 2 5 jours ouvr s et livraison gratuite d s 200 d achat dans toute la france m tropolitaine toute commande pass e et pay e en semaine avant 16 h 30 sera exp di e le jour m me recherche associ drapeau burgenland tarifs d gr ssifsles prix de nos pavillons oeillets pro 60 x 90 cm sont d gr ssifs en cas d achats de plusieurs pi ces composez votre panier et b n ficiez d une r duction dans la limite des stocks disponibles quantit de deux et plus 2 quantit de cinq et plus 5 quantit de dix et plus 10 cette offre est valable sur tous nos produits"
         },
         {
             "depth": {
@@ -110,42 +71,30 @@
                 "value": 36.0,
                 "unit": null
             },
-            "length": {
-                "value": null,
-                "unit": null
-            },
-            "width": {
-                "value": null,
-                "unit": null
-            },
             "line": 508,
-            "field": "KeyValuePairs"
+            "field": "key_value_pairs",
+            "raw_text": {
+                "item": "details",
+                "product id": "6442 000",
+                "sku": "harde10775",
+                "manufacturer": "harden furniture",
+                "dimensions": "w 37 d 36 h 37",
+                "room": "living room",
+                "category": "chairs",
+                "style": "traditional",
+                "type": "club"
+            }
         },
         {
-            "depth": {
-                "value": null,
-                "unit": null
-            },
             "height": {
                 "value": 3.0,
                 "unit": null
             },
-            "length": {
-                "value": null,
-                "unit": null
-            },
-            "width": {
-                "value": null,
-                "unit": null
-            },
             "line": 513,
-            "field": "description"
+            "field": "description",
+            "raw_text": "mixology tooth pick stirstick organizer 3 h stainless steel"
         },
         {
-            "depth": {
-                "value": null,
-                "unit": null
-            },
             "height": {
                 "value": 64.0,
                 "unit": null
@@ -159,7 +108,8 @@
                 "unit": null
             },
             "line": 519,
-            "field": "description"
+            "field": "description",
+            "raw_text": "camshelving elements starter unit 24 w x 36 l x 64 h withstands temperatures from 36 f 30 c to 190 f 88 c includes 4 non corrosive composite stationary posts with leveling feet installed pre assembled with glass filled polypropylene post connectors and resin polypropylene wedges 1 bag of 32 count resin nylon stationary traverse dovetails 4 reinforced polypropylene with camguard antimicrobial protection vented shelf plates 8 stationary traverses instructions brushed graphite nsf"
         },
         {
             "depth": {
@@ -170,22 +120,23 @@
                 "value": 36.0,
                 "unit": null
             },
-            "length": {
-                "value": null,
-                "unit": null
-            },
             "width": {
                 "value": 72.0,
                 "unit": null
             },
             "line": 542,
-            "field": "KeyValuePairs"
+            "field": "key_value_pairs",
+            "raw_text": {
+                "weight": "285 00 pound s",
+                "dimensions": "36 00 h x 72 00 w x 32 00 d",
+                "top width side side": "72 overall",
+                "table type": "island",
+                "base type": "open with undershelf",
+                "top construction": "wood",
+                "base construction": "wood"
+            }
         },
         {
-            "depth": {
-                "value": null,
-                "unit": null
-            },
             "height": {
                 "value": 36.0,
                 "unit": null
@@ -199,47 +150,26 @@
                 "unit": null
             },
             "line": 542,
-            "field": "description"
+            "field": "description",
+            "raw_text": "tuscan island 72 l x 32 w x 36 h 1 3 4 thick hard rock maple edge grain top with varnique finish 2 utensil drawers slatted undershelf painted base with sand through finish large rope legs"
         },
         {
             "depth": {
                 "value": 200.0,
                 "unit": null
             },
-            "height": {
-                "value": null,
-                "unit": null
-            },
-            "length": {
-                "value": null,
-                "unit": null
-            },
-            "width": {
-                "value": null,
-                "unit": null
-            },
             "line": 732,
-            "field": "description"
+            "field": "description",
+            "raw_text": "der tecowrap von vaude ist ein schlanker wickelbarer kulturbeutel mit vielseitigem innenleben f r beste ordnung der kulturbeutel hat einen haken zum aufh ngen zwei f cher mit rei verschluss diverse einsteckf cher zahnb rstenhalter und einen integrierten spiegel die geringen abmessungen sowie das flache design machen ihn zu einem platzsparenden begleiter vaude ist mitglied der fair wear foundation diese kulturtasche wird unter fairen bedingungen hergestellt und ist frei von kritischen chemikalien abmessungen ca 16 x 31 x 3 cm haken zum aufh ngen 2 rv f cher integrierter spiegel viele steckunterteilungen zahnb rstenhalter hauptstoff 100 polyester 600 d polyurethane coated kontrastmaterial 100 polyamid 210 d baby ripstop polyurethane coated futter 100 polyamid 200 d polyurethane coated"
         },
         {
             "depth": {
                 "value": 8.2,
                 "unit": null
             },
-            "height": {
-                "value": null,
-                "unit": null
-            },
-            "length": {
-                "value": null,
-                "unit": null
-            },
-            "width": {
-                "value": null,
-                "unit": null
-            },
             "line": 799,
-            "field": "description"
+            "field": "description",
+            "raw_text": "dise ador ronan y erwan bouroullec fabricante axor colecci n bouroullec tipo grifo grifo de lavabo estilo vanguardista plazo de entrega 8 20 d as garant a 2 a os incluido cuerpo empotrado ref 10303180 m s detalles"
         },
         {
             "depth": {
@@ -250,56 +180,37 @@
                 "value": 87.0,
                 "unit": null
             },
-            "length": {
-                "value": null,
-                "unit": null
-            },
-            "width": {
-                "value": null,
-                "unit": null
-            },
             "line": 838,
-            "field": "KeyValuePairs"
+            "field": "key_value_pairs",
+            "raw_text": {
+                "item": "details",
+                "product id": "955004",
+                "sku": "guild11236",
+                "manufacturer": "guildmaster",
+                "dimensions": "w 64 d 87 h 60",
+                "room": "bedroom",
+                "category": "beds",
+                "style": "transitional",
+                "type": "panel"
+            }
         },
         {
-            "depth": {
-                "value": null,
-                "unit": null
-            },
             "height": {
                 "value": 30.0,
                 "unit": null
             },
-            "length": {
-                "value": null,
-                "unit": null
-            },
-            "width": {
-                "value": null,
-                "unit": null
-            },
             "line": 875,
-            "field": "description"
+            "field": "description",
+            "raw_text": "storage shelfblue plywood30 h x 96 48 folded w x 15 30 folded d"
         },
         {
-            "depth": {
-                "value": null,
-                "unit": null
-            },
-            "height": {
-                "value": null,
-                "unit": null
-            },
-            "length": {
-                "value": null,
-                "unit": null
-            },
             "width": {
                 "value": 75.0,
                 "unit": null
             },
             "line": 928,
-            "field": "description"
+            "field": "description",
+            "raw_text": "12 vdc 6 25 a 75 w 9 36 vdc input range"
         },
         {
             "depth": {
@@ -310,16 +221,13 @@
                 "value": 11.0,
                 "unit": "in"
             },
-            "length": {
-                "value": null,
-                "unit": "in"
-            },
             "width": {
                 "value": 34.0,
                 "unit": "in"
             },
             "line": 971,
-            "field": "description"
+            "field": "description",
+            "raw_text": "long edge lit restaurant sign the edge lit restaurant sign like a lighted frame draws a great deal of attention to signage in a room with poor lighting pictures for the display can be created from a regular computer printer the led edge lit restaurant sign that is designed for lighting menus will accommodate two 11x17 sheets of paper showcase large graphics in this giant display the edge lit restaurant that is made of plastic has metal stand offs and has a short depth unlike most lighted frames this piece allows stores to highlight posters without sticking out far from a wall this extra big edge lit restaurant sign that plugs into a wall socket runs off less electricity than illuminated displays requiring traditional bulbs the light emitting diode panel inside the frame provides an intense light while remaining cool the large edge lit restaurant sign is superb to hang near an exits or any other high prominence areas this product displays posters in between a couple of acrylic panels that are secured together with metal standoffs this electric edge lit restaurant sign can hold a menu making it great signage in a restaurant near an entranceway posters can be changed out of the illuminated frame by unscrewing the four standoffs this light up display edge lit restaurant sign is made of acrylic making it weigh less than shadow boxes made of metal click here for wall mounting instructions please note allow for 1 4 border around your 34 x11 photo dimensions overall 39 1 4 w x 15 1 2 h x 1 1 8 d includes depth of stand off insert size 34 w x 11 h cord length 107 weight 12 lbs"
         }
     ]
 }

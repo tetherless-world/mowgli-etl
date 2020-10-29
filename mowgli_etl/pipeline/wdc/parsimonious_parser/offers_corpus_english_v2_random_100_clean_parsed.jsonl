@@ -10,22 +10,23 @@
                 "value": 36.0,
                 "unit": null
             },
-            "length": {
-                "value": null,
-                "unit": null
-            },
             "width": {
                 "value": 72.0,
                 "unit": null
             },
             "line": 34,
-            "field": "KeyValuePairs"
+            "field": "key_value_pairs",
+            "raw_text": {
+                "weight": "285 00 pound s",
+                "dimensions": "36 00 h x 72 00 w x 32 00 d",
+                "top width side side": "72 overall",
+                "table type": "island",
+                "base type": "open with undershelf",
+                "top construction": "wood",
+                "base construction": "wood"
+            }
         },
         {
-            "depth": {
-                "value": null,
-                "unit": null
-            },
             "height": {
                 "value": 36.0,
                 "unit": null
@@ -39,7 +40,8 @@
                 "unit": null
             },
             "line": 34,
-            "field": "description"
+            "field": "description",
+            "raw_text": "tuscan island 72 l x 32 w x 36 h 1 3 4 thick hard rock maple edge grain top with varnique finish 2 utensil drawers slatted undershelf painted base with sand through finish large rope legs"
         }
     ]
 }
