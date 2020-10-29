@@ -32,34 +32,35 @@ class WdcParsimoniousDimensionParser(WdcDimensionParser):
         return_flag = False
         __VISITOR = WdcParsimoniousNodeVisitor()
 
-        def __generate_dimensions():
+        def __generate_dimensions(source):
+            __VISITOR = WdcParsimoniousNodeVisitor()
+            __VISITOR.visit(source)
             retVal = WdcProductDimensions.from_dict(
                 dataclasses.asdict(__VISITOR.dictionary)
             )
-            __VISITOR.reset()
             if (
-                retVal.width.value is None
-                and retVal.length.value is None
-                and retVal.depth.value is None
-                and retVal.height.value is None
+                retVal.width is None
+                and retVal.length is None
+                and retVal.depth is None
+                and retVal.height is None
             ):
                 return None
             return retVal
 
-        if entry.KeyValuePairs is not None:
-            if "dimensions" in entry.KeyValuePairs.keys():
-                KeyValuePairs = self.__GRAMMAR.parse(entry.KeyValuePairs["dimensions"])
-                __VISITOR.visit(KeyValuePairs)
-                result = __generate_dimensions()
+        if entry.key_value_pairs is not None:
+            if "dimensions" in entry.key_value_pairs.keys():
+                key_value_pairs = self.__GRAMMAR.parse(
+                    entry.key_value_pairs["dimensions"]
+                )
+                result = __generate_dimensions(key_value_pairs)
                 if result:
-                    returns.append((result, "KeyValuePairs"))
+                    returns.append((result, "key_value_pairs", entry.key_value_pairs))
 
         if entry.description is not None:
             description = self.__GRAMMAR.parse(entry.description)
-            __VISITOR.visit(description)
-            result = __generate_dimensions()
+            result = __generate_dimensions(description)
             if result:
-                returns.append((result, "description"))
+                returns.append((result, "description", entry.description))
 
         return returns
 
@@ -77,9 +78,15 @@ if __name__ == "__main__":
                 entry=WdcOffersCorpusEntry.from_json(row)
             )
             for dimension in dimensions:
-                holder["dimensions"].append(dataclasses.asdict(dimension[0]))
+                clean_result = {
+                    k: v
+                    for k, v in dataclasses.asdict(dimension[0]).items()
+                    if v is not None
+                }
+                holder["dimensions"].append(clean_result)
                 holder["dimensions"][-1]["line"] = count
                 holder["dimensions"][-1]["field"] = dimension[1]
+                holder["dimensions"][-1]["raw_text"] = dimension[2]
         with open(f"{sys.argv[1][0:-6]}_parsed.jsonl", "w") as output:
             json.dump(holder, output, indent=4)
 
