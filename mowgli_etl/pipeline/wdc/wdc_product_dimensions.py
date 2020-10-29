@@ -22,3 +22,5 @@ class WdcProductDimensions:
     height: Optional[__Dimension] = None
     length: Optional[__Dimension] = None
     width: Optional[__Dimension] = None
+    power: Optional[__Dimension] = None
+    weight: Optional[__Dimension] = None

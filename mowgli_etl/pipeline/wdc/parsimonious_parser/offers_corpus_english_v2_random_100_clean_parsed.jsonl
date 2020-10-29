@@ -42,6 +42,41 @@
             "line": 34,
             "field": "description",
             "raw_text": "tuscan island 72 l x 32 w x 36 h 1 3 4 thick hard rock maple edge grain top with varnique finish 2 utensil drawers slatted undershelf painted base with sand through finish large rope legs"
+        },
+        {
+            "depth": {
+                "value": 32.0,
+                "unit": null
+            },
+            "height": {
+                "value": 36.0,
+                "unit": null
+            },
+            "width": {
+                "value": 72.0,
+                "unit": null
+            },
+            "line": 34,
+            "field": "spec_table_content",
+            "raw_text": "specs and details weight 285 00 pound s dimensions 36 00 h x 72 00 w x 32 00 d top width side side 72 overall table type island base type open with undershelf top construction wood base construction wood"
+        },
+        {
+            "length": {
+                "value": 38.4,
+                "unit": null
+            },
+            "line": 64,
+            "field": "spec_table_content",
+            "raw_text": "girl s plus sizes 0 6 equivalent sizes bust waist low hip 0 12 l 40 42 34 36 44 46 1 14 1x 42 44 36 38 46 48 16 2 18 2x 46 48 40 42 50 52 20 3 22 3x 50 54 44 48 54 58 24 4 24 4x 54 58 48 52 58 62 26 5 26 5x 58 62 52 56 64 68 28 6 30 6x 64 68 guy s tops us uk eu chest xs 34 36 87 91 34 36 sm 36 38 91 97 36 38 md 38 40 97 102 38 40 l 40 42 102 107 40 42 xl 44 107 114 42 45 xxl 46 114 122 45 48 3xl 50 122 130 48 51 4xl 52 130 137 51 54 guy s bottoms us international waist hip xs 71 76 28 30 34 36 sm 76 81 30 32 36 38 md 81 86 32 34 38 40 l 86 91 34 36 40 42 xl 91 97 36 39 42 45 2xl 97 101 39 41 45 48 3xl 101 107 41 44 48 51 4xl 107 112 44 47 51 54 shoes girls us euro uk inches centimeters 4 35 2 8 1875 20 8 4 5 35 2 5 8 375 21 3 5 35 36 3 8 5 21 6 5 5 36 3 5 8 75 22 2 6 36 37 4 8 875 22 5 6 5 37 4 5 9 0625 23 7 37 38 5 9 25 23 5 7 5 38 5 5 9 375 23 8 8 38 39 6 9 5 24 1 8 5 39 6 5 9 6875 24 6 9 39 40 7 9 875 25 1 9 5 40 7 5 10 25 4 10 40 41 8 10 1875 25 9 10 5 41 8 5 10 3125 26 2 11 41 42 9 10 5 26 7 11 5 42 9 5 10 6875 27 1 12 42 43 10 10 875 27 6 shoes guys us euro uk inches centimeters 6 39 5 5 9 25 23 5 6 5 39 6 9 5 24 1 7 40 6 5 9 625 24 4 7 5 40 41 7 9 75 24 8 8 41 7 5 9 9375 25 4 8 5 41 42 8 10 125 25 7 9 42 8 5 10 25 26 9 5 42 43 9 10 4375 26 7 10 43 9 5 10 5625 27 10 5 43 44 10 10 75 27 3 11 44 10 5 10 9375 27 9 11 5 44 45 11 11 125 28 3 12 45 11 5 11 25 28 6 13 46 12 5 11 5625 29 4 girl s plus sizes 0 6 equivalent sizes bust waist low hip 0 12 l 40 42 34 36 44 46 1 14 1x 42 44 36 38 46 48 16 2 18 2x 46 48 40 42 50 52 20 3 22 3x 50 54 44 48 54 58 24 4 24 4x 54 58 48 52 58 62 26 5 26 5x 58 62 52 56 64 68 28 6 30 6x 64 68 guy s tops us uk eu chest xs 34 36 87 91 34 36 sm 36 38 91 97 36 38 md 38 40 97 102 38 40 l 40 42 102 107 40 42 xl 44 107 114 42 45 xxl 46 114 122 45 48 3xl 50 122 130 48 51 4xl 52 130 137 51 54 guy s bottoms us international waist hip xs 71 76 28 30 34 36 sm 76 81 30 32 36 38 md 81 86 32 34 38 40 l 86 91 34 36 40 42 xl 91 97 36 39 42 45 2xl 97 101 39 41 45 48 3xl 101 107 41 44 48 51 4xl 107 112 44 47 51 54 shoes girls us euro uk inches centimeters 4 35 2 8 1875 20 8 4 5 35 2 5 8 375 21 3 5 35 36 3 8 5 21 6 5 5 36 3 5 8 75 22 2 6 36 37 4 8 875 22 5 6 5 37 4 5 9 0625 23 7 37 38 5 9 25 23 5 7 5 38 5 5 9 375 23 8 8 38 39 6 9 5 24 1 8 5 39 6 5 9 6875 24 6 9 39 40 7 9 875 25 1 9 5 40 7 5 10 25 4 10 40 41 8 10 1875 25 9 10 5 41 8 5 10 3125 26 2 11 41 42 9 10 5 26 7 11 5 42 9 5 10 6875 27 1 12 42 43 10 10 875 27 6 shoes guys us euro uk inches centimeters 6 39 5 5 9 25 23 5 6 5 39 6 9 5 24 1 7 40 6 5 9 625 24 4 7 5 40 41 7 9 75 24 8 8 41 7 5 9 9375 25 4 8 5 41 42 8 10 125 25 7 9 42 8 5 10 25 26 9 5 42 43 9 10 4375 26 7 10 43 9 5 10 5625 27 10 5 43 44 10 10 75 27 3 11 44 10 5 10 9375 27 9 11 5 44 45 11 11 125 28 3 12 45 11 5 11 25 28 6 13 46 12 5 11 5625 29 4"
+        },
+        {
+            "width": {
+                "value": 5.0,
+                "unit": null
+            },
+            "line": 88,
+            "field": "spec_table_content",
+            "raw_text": "schutzart ip20 umgebungstemperatur betrieb 25 c 55 c umgebungstemperatur lagerung transport 25 c 85 c zul ssige luftfeuchtigkeit betrieb 10 95 nach din en 61131 2 zul ssige luftfeuchtigkeit lagerung transport 10 95 nach din en 61131 2 luftdruck betrieb 70 kpa 106 kpa bis 3000 m nn luftdruck lagerung transport 70 kpa 106 kpa bis 3000 m nn schock 25g kriterium 1 nach iec 60068 2 27 vibration betrieb 5g schnittstelle interbus lokalbus master anschlussart inline datenrangierer bertragungsgeschwindigkeit 500 kbaud 2 mbaud umschaltbar schnittstelle parametrierung bedienung diagnose anschlussart rs 232 c 6 polige mini din buchse ps 2 ethernet 10 100 rj45 bertragungsgeschwindigkeit max 115 2 kbit s schnittstelle ethernet 10base t 100base tx anschlussart rj45 buchse bertragungsgeschwindigkeit 10 100 mbit s stromaufnahme typisch 210 ma stromaufnahme maximal 870 ma 370 ma logikversorgung 500 ma analog spannungsversorgung versorgungsspannung 24 v dc versorgungsspannungsbereich 19 2 v dc 30 v dc restwelligkeit 5 verlustleistung max 5 w anzahl der prozessdaten max 4096 bit interbus max 32768 bit interner modbus client anzahl der unterst tzten teilnehmer max 128 anzahl der anschlie baren lokalbus teilnehmer max 63 stromaufnahme ist zu beachten anzahl der teilnehmer mit parameterkanal max 24 anzahl unterst tzter abzweigklemmen mit fernbusstich max 3 benennung eingang digitale eing nge anzahl der eing nge 8 anschlussart inline potenzialverteiler beschreibung des eingangs en 61131 2 typ 1 npn pnp benennung ausgang digitale ausg nge anzahl der ausg nge 4 anschlusstechnik 2 3 4 leiter maximaler ausgangsstrom je kanal 500 ma ohne analogen eingang ja ohne analogen ausgang ja ohne puls richtungs ausgang ja ohne z hlereingang ja programmierwerkzeug pc worx pc worx express programmspeicher 512 kbyte 43 k anweisungen il datenspeicher 512 kbyte remanenter datenspeicher 48 kbyte nvram anzahl steuerungs tasks 8 echtzeituhr ja"
         }
     ]
 }

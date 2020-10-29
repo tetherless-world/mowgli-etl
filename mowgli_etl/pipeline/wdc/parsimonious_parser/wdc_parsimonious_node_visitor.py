@@ -5,7 +5,8 @@ from typing import Optional
 
 
 class WdcParsimoniousNodeVisitor(NodeVisitor):
-    KEY_MAP = {"l": "length", "d": "depth", "w": "width", "h": "height"}
+    COMMON_UNIT = ['l', 'd', 'w', 'h']
+    KEY_MAP = {"l": "length", "d": "depth", "w": "width", "h": "height", 'v': "power", 'mv': "volatage", 'kv': "power", 'lb': "weight", 'lbs': "weight", 'oz': "weight", 'g': "weight", 'mg': "weight", 'kg': "weight"}
 
     @dataclass
     class __Node:
@@ -18,6 +19,8 @@ class WdcParsimoniousNodeVisitor(NodeVisitor):
         depth: Optional[Entry] = None
         height: Optional[Entry] = None
         length: Optional[Entry] = None
+        weight: Optional[Entry] = None
+        power: Optional[Entry] = None
 
     def __init__(self):
         self.dictionary = WdcParsimoniousNodeVisitor.__Node()
@@ -32,9 +35,26 @@ class WdcParsimoniousNodeVisitor(NodeVisitor):
 
     def visit_unit(self, node, visited_children):
         value = node.text.split(" ")[-1]
-        for key in fields(self.dictionary):
-            if getattr(self.dictionary, key.name) is not None:
-                getattr(self.dictionary, key.name).unit = value
+        if value in WdcParsimoniousNodeVisitor.COMMON_UNIT:
+            for key in WdcParsimoniousNodeVisitor.COMMON_UNIT:
+                if getattr(self.dictionary, WdcParsimoniousNodeVisitor.KEY_MAP[key]) is not None:
+                    getattr(self.dictionary, WdcParsimoniousNodeVisitor.KEY_MAP[key]).unit = value
+
+    def visit_weight(self, node, visited_children):
+        entries = node.text.split(" ")
+        value = ".".join(entries[0:-1])
+        unit = entries[-1]
+        self.dictionary.weight = self.dictionary.Entry()
+        self.dictionary.weight.value = value
+        self.dictionary.weight.unit = unit
+
+    def visit_power(self, node, visited_children):
+        entries = node.text.split(" ")
+        value = ".".join(entries[0:-1])
+        unit = entries[-1]
+        self.dictionary.power = self.dictionary.Entry()
+        self.dictionary.power.value = value
+        self.dictionary.power.unit = unit
 
     def generic_visit(self, node, visited_children):
         return None
