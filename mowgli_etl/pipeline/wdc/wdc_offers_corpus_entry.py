@@ -28,7 +28,7 @@ class WdcOffersCorpusEntry:
     description: Optional[str]
     id: int
     identifiers: Optional[List[__WdcOffersCorpusEntryIdentifier]]
-    KeyValuePairs: Optional[dict] = field(metadata=config(field_name="keyValuePairs"))
+    key_value_pairs: Optional[dict] = field(metadata=config(field_name="keyValuePairs"))
     # {"brand":null,"category":"Clothing","cluster_id":3617395,"description":null,"id":210,"identifiers":[{"\/sku":"[codesku17smmtzi50x]"}],"keyValuePairs":null,"price":null,"specTableContent":null,"title":"selce zip t shirt montura maungashop"}
 
 
