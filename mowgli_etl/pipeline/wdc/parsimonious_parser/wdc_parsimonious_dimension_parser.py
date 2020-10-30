@@ -11,6 +11,7 @@ import dataclasses, json
 
 
 class WdcParsimoniousDimensionParser(WdcDimensionParser):
+    SOURCE_KEY = {"description": 1/2, "spec_table_content": 3/4, "key_value_pairs": 1}    
     __GRAMMAR = Grammar(
         """
 					bin 			= (space/alt/unit/dimensions/dimension/weight/power/decimal/direction/mass/current/number/word)*
@@ -22,7 +23,7 @@ class WdcParsimoniousDimensionParser(WdcDimensionParser):
 					dimension 		= (decimal/number) space direction
                     decimal         = number+ space number+
 					direction 		= ("h"/"w"/"d"/"l") &separator
-                    mass            = ("lbs"/"lb"/"oz"/"kg"/"mg"/"g")
+                    mass            = ("lbs"/"lb"/"oz"/"kg"/"mg"/"g") &separator
                     current         = ('kv'/'mv'/'v') &separator
 					number 			= ~'[0-9]+'
 					word 			= ~'[A-z]*'
@@ -104,6 +105,7 @@ if __name__ == "__main__":
                     if v is not None
                 }
                 holder["dimensions"].append(clean_result)
+                holder["dimensions"][-1]["accuracy"] = dimension[0].accuracy(WdcParsimoniousDimensionParser.SOURCE_KEY[dimension[1]])
                 holder["dimensions"][-1]["line"] = count
                 holder["dimensions"][-1]["field"] = dimension[1]
                 holder["dimensions"][-1]["raw_text"] = dimension[2]
