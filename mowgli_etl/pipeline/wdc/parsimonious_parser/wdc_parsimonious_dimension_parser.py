@@ -116,53 +116,58 @@ if __name__ == "__main__":
             elif MODE == "csv":
                 import csv
                 with open(f"{sys.argv[1][0:-6]}_parsed.csv", "w") as output:
-                    output.write("source\n")
-                    output.write(holder["source"])
-                    output.write('\n\n')
-
-                    fields = ["depth", "height", "length", "width", "weight", "power", "accuracy", "line", "field", "raw_text"]
+                    fields = ["source", "raw_text",
+                              "depth", "depth_unit",
+                              "height", "height_unit",
+                              "length", "length_unit",
+                              "width", "width_unit",
+                              "weight", "weight_unit",
+                              "power", "power_unit",
+                              "accuracy", "line", "field"]
                     writer = csv.DictWriter(output, fields)
                     writer.writeheader()
                     for entry in holder["dimensions"]:
-                        # entry["unit"] = None
                         for key in ("width", "height", "length", "depth", "power", "weight"):
+                            entry["source"] = holder["source"]
                             if key in entry.keys() and type(entry[key]) is dict:
-                                # entry["unit"] = entry[key]["unit"]
+                                entry[f"{key}_unit"] = entry[key]["unit"]
                                 entry[key] = entry[key]["value"]
                         writer.writerow(entry)
 
-
     elif MODE == "print":
         count = 0
-        for row in data:
-            count += 1
-            dimension = WdcParsimoniousDimensionParser().parse(
-                entry=WdcOffersCorpusEntry.from_json(row)
-            )
-            if dimension:
-                for d in dimension:
-                    output = ""
-                    spacing = "\t"
-                    data = d[0]
-                    for f in dataclasses.fields(data):
-                        if getattr(data, f.name) is not None and getattr(data, f.name).value is not None:
-                            output += f"\n{spacing}{f.name}:"
-                            values = getattr(data, f.name)
-                            if type(values).__name__ == "__Dimension":
-                                for subf in dataclasses.fields(values):
-                                    if (
-                                        getattr(values, subf.name) is not None
-                                        or subf.name == "unit"
-                                    ):
-                                        output += f"\n{spacing}{spacing}{subf.name}: {getattr(values, subf.name)}"
-                            else:
-                                output += f" {getattr(data, f.name)}"
-                    if output != "":
-                        print(
-                            f"NEW DIMENSION OBJECT from entry {count}{output}".strip()
-                        )
-                        if len(sys.argv) >= 3 and sys.argv[2] == "origin":
-                            print("\nWhich was produced from:\n")
-                            print(d[1])
+        items = 0
+        with open(WDC_ARCHIVE_PATH / sys.argv[1], 'r') as data:
+            for row in data:
+                count += 1
+                dimension = WdcParsimoniousDimensionParser().parse(
+                    entry=WdcOffersCorpusEntry.from_json(row)
+                )
+                if dimension:
+                    for d in dimension:
+                        output = ""
+                        spacing = "\t"
+                        data = d[0]
+                        for f in dataclasses.fields(data):
+                            if getattr(data, f.name) is not None and getattr(data, f.name).value is not None:
+                                output += f"\n{spacing}{f.name}:"
+                                values = getattr(data, f.name)
+                                if type(values).__name__ == "__Dimension":
+                                    for subf in dataclasses.fields(values):
+                                        if (
+                                            getattr(values, subf.name) is not None
+                                            or subf.name == "unit"
+                                        ):
+                                            output += f"\n{spacing}{spacing}{subf.name}: {getattr(values, subf.name)}"
+                                else:
+                                    output += f" {getattr(data, f.name)}"
+                        if output != "":
+                            items += 1
+                            print(
+                                f"NEW DIMENSION OBJECT from entry {count}{output}".strip()
+                            )
+                            if len(sys.argv) >= 3 and sys.argv[2] == "origin":
+                                print("\nWhich was produced from:\n")
+                                print(d[1])
 
     print(f"Took {time.time()-start} seconds to run {count} parses with {items} positive results")
