@@ -266,7 +266,7 @@
                 "value": "30",
                 "unit": "v"
             },
-            "accuracy": null,
+            "accuracy": 0.75,
             "line": 507,
             "field": "spec_table_content",
             "raw_text": "umgebungstemperatur betrieb 25 c 55 c umgebungstemperatur lagerung transport 25 c 85 c zul ssige luftfeuchtigkeit lagerung transport 95 luftdruck betrieb 80 kpa 106 kpa bis zu 2000 m nn luftdruck lagerung transport 70 kpa 106 kpa bis zu 3000 m nn schutzart ip65 ip67 feldbussystem profinet benennung profinet anschlussart m12 steckverbinder d kodiert bezeichnung anschlussstelle kupferkabel bertragungsgeschwindigkeit 100 mbit s autonegotiation polzahl 4 feldbussystem profinet benennung profinet bertragungsgeschwindigkeit 100 mbit s benennung lokalbus gateway anschlussart m12 steckverbinder b kodiert bertragungsrate 500 kbaud 2 mbaud umschaltbar max anzahl lokalbusteilnehmer 16 max l nge lokalbus 20 m anschlussart m12 steckverbinder benennung ul versorgungsspannung 24 v dc versorgungsspannungsbereich 18 v dc 30 v dc welligkeit eingeschlossen versorgungsstrom 100 ma benennung eingang digitale eing nge anschlussart m12 steckverbinder anschlusstechnik 2 3 4 leiter anzahl der eing nge 8 iec 61131 2 typ 1 schutzbeschaltung kurzschluss schutz berlastschutz der sensorversorgung verpolschutz filterzeit 3 ms eingangskennlinie iec 61131 2 typ 1 eingangsspannung 24 v dc eingangsspannungsbereich 0 signal 30 v dc 5 v dc eingangsspannungsbereich 1 signal 13 v dc 30 v dc"
