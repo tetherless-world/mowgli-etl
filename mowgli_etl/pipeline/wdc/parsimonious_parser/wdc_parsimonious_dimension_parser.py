@@ -11,7 +11,11 @@ import dataclasses, json
 
 
 class WdcParsimoniousDimensionParser(WdcDimensionParser):
-    SOURCE_KEY = {"description": 1/2, "spec_table_content": 3/4, "key_value_pairs": 1}    
+    SOURCE_KEY = {
+        "description": 1 / 2,
+        "spec_table_content": 3 / 4,
+        "key_value_pairs": 1,
+    }
     __GRAMMAR = Grammar(
         """
 					bin 			= (space/alt/unit/dimensions/dimension/weight/power/decimal/direction/mass/current/number/word)*
@@ -27,7 +31,7 @@ class WdcParsimoniousDimensionParser(WdcDimensionParser):
                     current         = ('kv'/'mv'/'v') &separator
 					number 			= ~'[0-9]+'
 					word 			= ~'[A-z]*'
-                    separator       = (space/'$')
+                    separator       = (space/~'$')
 					space			= ~'\s'
 					alt             = ~'[^a-zA-Z\d\s:]'
                     """
@@ -61,7 +65,9 @@ class WdcParsimoniousDimensionParser(WdcDimensionParser):
                     key_value_pairs = self.__GRAMMAR.parse(entry.key_value_pairs[key])
                     result = __generate_dimensions(key_value_pairs)
                     if result:
-                        returns.append((result, "key_value_pairs", entry.key_value_pairs))
+                        returns.append(
+                            (result, "key_value_pairs", entry.key_value_pairs)
+                        )
 
         if entry.description is not None:
             description = self.__GRAMMAR.parse(entry.description)
@@ -104,30 +110,52 @@ if __name__ == "__main__":
                         if v is not None
                     }
                     holder["dimensions"].append(clean_result)
-                    holder["dimensions"][-1]["accuracy"] = dimension[0].accuracy(WdcParsimoniousDimensionParser.SOURCE_KEY[dimension[1]])
+                    holder["dimensions"][-1]["accuracy"] = dimension[0].accuracy(
+                        WdcParsimoniousDimensionParser.SOURCE_KEY[dimension[1]]
+                    )
                     holder["dimensions"][-1]["line"] = count
                     holder["dimensions"][-1]["field"] = dimension[1]
                     holder["dimensions"][-1]["raw_text"] = dimension[2]
                     items += 1
             if MODE == "json":
                 import json
+
                 with open(f"{sys.argv[1][0:-6]}_parsed.jsonl", "w") as output:
                     json.dump(holder, output, indent=4)
             elif MODE == "csv":
                 import csv
+
                 with open(f"{sys.argv[1][0:-6]}_parsed.csv", "w") as output:
-                    fields = ["source", "raw_text",
-                              "depth", "depth_unit",
-                              "height", "height_unit",
-                              "length", "length_unit",
-                              "width", "width_unit",
-                              "weight", "weight_unit",
-                              "power", "power_unit",
-                              "accuracy", "line", "field"]
+                    fields = [
+                        "source",
+                        "raw_text",
+                        "depth",
+                        "depth_unit",
+                        "height",
+                        "height_unit",
+                        "length",
+                        "length_unit",
+                        "width",
+                        "width_unit",
+                        "weight",
+                        "weight_unit",
+                        "power",
+                        "power_unit",
+                        "accuracy",
+                        "line",
+                        "field",
+                    ]
                     writer = csv.DictWriter(output, fields)
                     writer.writeheader()
                     for entry in holder["dimensions"]:
-                        for key in ("width", "height", "length", "depth", "power", "weight"):
+                        for key in (
+                            "width",
+                            "height",
+                            "length",
+                            "depth",
+                            "power",
+                            "weight",
+                        ):
                             entry["source"] = holder["source"]
                             if key in entry.keys() and type(entry[key]) is dict:
                                 entry[f"{key}_unit"] = entry[key]["unit"]
@@ -137,7 +165,7 @@ if __name__ == "__main__":
     elif MODE == "print":
         count = 0
         items = 0
-        with open(WDC_ARCHIVE_PATH / sys.argv[1], 'r') as data:
+        with open(WDC_ARCHIVE_PATH / sys.argv[1], "r") as data:
             for row in data:
                 count += 1
                 dimension = WdcParsimoniousDimensionParser().parse(
@@ -149,7 +177,10 @@ if __name__ == "__main__":
                         spacing = "\t"
                         data = d[0]
                         for f in dataclasses.fields(data):
-                            if getattr(data, f.name) is not None and getattr(data, f.name).value is not None:
+                            if (
+                                getattr(data, f.name) is not None
+                                and getattr(data, f.name).value is not None
+                            ):
                                 output += f"\n{spacing}{f.name}:"
                                 values = getattr(data, f.name)
                                 if type(values).__name__ == "__Dimension":
@@ -170,4 +201,6 @@ if __name__ == "__main__":
                                 print("\nWhich was produced from:\n")
                                 print(d[1])
 
-    print(f"Took {time.time()-start} seconds to run {count} parses with {items} positive results")
+    print(
+        f"Took {time.time()-start} seconds to run {count} parses with {items} positive results"
+    )
