@@ -3,7 +3,7 @@
     "dimensions": [
         {
             "weight": {
-                "value": "4",
+                "value": 4.0,
                 "unit": "oz"
             },
             "accuracy": 0.5,
@@ -13,7 +13,7 @@
         },
         {
             "weight": {
-                "value": "1",
+                "value": 1.0,
                 "unit": "g"
             },
             "accuracy": 0.75,
@@ -23,7 +23,7 @@
         },
         {
             "weight": {
-                "value": "1.7",
+                "value": 1.7,
                 "unit": "oz"
             },
             "accuracy": 0.5,
@@ -33,7 +33,7 @@
         },
         {
             "weight": {
-                "value": "180",
+                "value": 180.0,
                 "unit": "g"
             },
             "accuracy": 0.5,
@@ -43,7 +43,7 @@
         },
         {
             "weight": {
-                "value": "706",
+                "value": 706.0,
                 "unit": "g"
             },
             "accuracy": 0.5,
@@ -53,7 +53,7 @@
         },
         {
             "weight": {
-                "value": "24",
+                "value": 24.0,
                 "unit": "oz"
             },
             "accuracy": 0.5,
@@ -63,7 +63,7 @@
         },
         {
             "weight": {
-                "value": "55",
+                "value": 55.0,
                 "unit": "g"
             },
             "accuracy": 0.5,
@@ -77,7 +77,7 @@
                 "unit": null
             },
             "power": {
-                "value": "86.58",
+                "value": 86.58,
                 "unit": "v"
             },
             "accuracy": 0.125,
@@ -87,7 +87,7 @@
         },
         {
             "weight": {
-                "value": "66",
+                "value": 66.0,
                 "unit": "lbs"
             },
             "accuracy": 0.5,
@@ -131,7 +131,25 @@
         },
         {
             "weight": {
-                "value": "368",
+                "value": 10.92,
+                "unit": "lbs"
+            },
+            "accuracy": 1,
+            "line": 191,
+            "field": "key_value_pairs",
+            "raw_text": {
+                "brand": "sugar kake",
+                "free of": "n a",
+                "weight": "10 92 lbs",
+                "count": "13 oz 368 g x 12",
+                "serving": "3 cookies",
+                "servings": "about 12 per pack",
+                "sanacause points": "20"
+            }
+        },
+        {
+            "weight": {
+                "value": 368.0,
                 "unit": "g"
             },
             "accuracy": 0.75,
@@ -141,7 +159,7 @@
         },
         {
             "weight": {
-                "value": "3.5",
+                "value": 3.5,
                 "unit": "kg"
             },
             "accuracy": 0.5,
@@ -155,7 +173,7 @@
                 "unit": null
             },
             "weight": {
-                "value": "3",
+                "value": 3.0,
                 "unit": "lb"
             },
             "accuracy": 0.125,
@@ -164,12 +182,22 @@
             "raw_text": "specific frequency 896 940 mhz gain dbi 5 15 dbi gain dbd 3 dbd maximum vswr 2 0 1 maximum power 100 w rf connectors n female connector placement bottom type of jumper included none type of hardware included none maximum rated wind velocity 100 item length 25 in item weight 3 lb mfg warranty 5 years"
         },
         {
+            "weight": {
+                "value": 0.015,
+                "unit": "kg"
+            },
+            "accuracy": 0.75,
+            "line": 225,
+            "field": "spec_table_content",
+            "raw_text": "marke hersteller projahn pr zisionswerkzeuge gmbh zustand neu sku artikelnr t 55483 sku hersteller 35063 gtin code ean 4000146350638 gewicht 0 015 kg"
+        },
+        {
             "width": {
                 "value": 5.0,
                 "unit": null
             },
             "power": {
-                "value": "30",
+                "value": 30.0,
                 "unit": "v"
             },
             "accuracy": 0.125,
@@ -179,7 +207,7 @@
         },
         {
             "weight": {
-                "value": "13",
+                "value": 13.0,
                 "unit": "g"
             },
             "accuracy": 0.5,
@@ -189,7 +217,7 @@
         },
         {
             "weight": {
-                "value": "4400",
+                "value": 4400.0,
                 "unit": "g"
             },
             "accuracy": 0.75,
@@ -217,7 +245,17 @@
         },
         {
             "weight": {
-                "value": "0.00",
+                "value": 1.4,
+                "unit": "oz"
+            },
+            "accuracy": 0.5,
+            "line": 355,
+            "field": "description",
+            "raw_text": "a fabulous sparkle of angelina in steely1 4 oz"
+        },
+        {
+            "weight": {
+                "value": 0.0,
                 "unit": "lbs"
             },
             "accuracy": 0.75,
@@ -235,7 +273,7 @@
                 "unit": null
             },
             "weight": {
-                "value": "115",
+                "value": 115.0,
                 "unit": "g"
             },
             "accuracy": 0.16666666666666666,
@@ -253,7 +291,7 @@
                 "unit": null
             },
             "weight": {
-                "value": "115",
+                "value": 115.0,
                 "unit": "g"
             },
             "accuracy": 0.25,
@@ -263,7 +301,7 @@
         },
         {
             "power": {
-                "value": "30",
+                "value": 30.0,
                 "unit": "v"
             },
             "accuracy": 0.75,
@@ -321,7 +359,7 @@
         },
         {
             "weight": {
-                "value": "9.00",
+                "value": 9.0,
                 "unit": "lbs"
             },
             "accuracy": 0.75,
@@ -349,7 +387,7 @@
         },
         {
             "weight": {
-                "value": "50",
+                "value": 50.0,
                 "unit": "lb"
             },
             "accuracy": 0.5,
@@ -368,6 +406,10 @@
             "raw_text": "garment dimensions size chest body length sleeve s 18 28 8 1 8 m 20 29 8 3 8 l 22 30 8 5 8 xl 24 31 8 7 8 2xl 26 33 9 5 8 3xl 28 34 10 1 8"
         },
         {
+            "depth": {
+                "value": 32.0,
+                "unit": null
+            },
             "height": {
                 "value": 36.0,
                 "unit": null
@@ -376,7 +418,7 @@
                 "value": 72.0,
                 "unit": null
             },
-            "accuracy": 0.3333333333333333,
+            "accuracy": 0.5,
             "line": 542,
             "field": "key_value_pairs",
             "raw_text": {
@@ -427,7 +469,7 @@
         },
         {
             "weight": {
-                "value": "280",
+                "value": 280.0,
                 "unit": "g"
             },
             "accuracy": 0.5,
@@ -437,13 +479,72 @@
         },
         {
             "weight": {
-                "value": "1500",
+                "value": 143.0,
+                "unit": "lbs"
+            },
+            "accuracy": 1,
+            "line": 629,
+            "field": "key_value_pairs",
+            "raw_text": {
+                "manufacturer": "aquatic",
+                "color": "almond",
+                "product collection": "gelcoat",
+                "other info": "drain included",
+                "trade tools": "plumbing",
+                "mpn": "1423cm al",
+                "shipping dimensions": "34 0 x 42 0 x 75 0",
+                "weight": "143 00 lbs"
+            }
+        },
+        {
+            "weight": {
+                "value": 143.0,
+                "unit": "lbs"
+            },
+            "accuracy": 0.75,
+            "line": 629,
+            "field": "spec_table_content",
+            "raw_text": "manufacturer aquatic color almond product collection gelcoat other info drain included trade tools plumbing mpn 1423cm al shipping dimensions 34 0 x 42 0 x 75 0 weight 143 00 lbs"
+        },
+        {
+            "weight": {
+                "value": 1500.0,
                 "unit": "lb"
             },
             "accuracy": 0.5,
             "line": 676,
             "field": "description",
             "raw_text": "this cap 135 lb bumper weight plate set is ideal for people who are looking to build muscle made with the seasoned lifter in mind this set includes two 45 lb bumper plates one 7 foot olympic power bar 45 pound net weight and one pair of muscle clamp collars made of high impact plastic which will protect your neck while lifting the heavy duty power bar can hold up to 1500 lb set includes 1 pair 2 each of 45 lb bumper plates 2 olympic 7 power bar black 45 lb net weight 1 pair of muscle clamp collars made of high impact plastic weightlifting choice for cross fit enthusiasts athletic trainers and personal trainers extremely durable and odorless max weight cap 1500 lb including bar"
+        },
+        {
+            "weight": {
+                "value": 33.4,
+                "unit": "oz"
+            },
+            "accuracy": 1,
+            "line": 679,
+            "field": "key_value_pairs",
+            "raw_text": {
+                "finish": "black",
+                "type": "revolver",
+                "action": "single",
+                "caliber": "22 long rifle 22 magnum",
+                "barrel length": "6 5",
+                "capacity": "6",
+                "grips": "cocobolo",
+                "sights": "adjustable",
+                "weight": "33 4 oz"
+            }
+        },
+        {
+            "weight": {
+                "value": 33.4,
+                "unit": "oz"
+            },
+            "accuracy": 0.75,
+            "line": 679,
+            "field": "spec_table_content",
+            "raw_text": "specifications finish black type revolver action single caliber 22 long rifle 22 magnum barrel length 6 5 capacity 6 grips cocobolo sights adjustable weight 33 4 oz"
         },
         {
             "depth": {
@@ -457,7 +558,7 @@
         },
         {
             "weight": {
-                "value": "296.4",
+                "value": 296.4,
                 "unit": "g"
             },
             "accuracy": 0.5,
@@ -484,6 +585,16 @@
             "line": 799,
             "field": "description",
             "raw_text": "dise ador ronan y erwan bouroullec fabricante axor colecci n bouroullec tipo grifo grifo de lavabo estilo vanguardista plazo de entrega 8 20 d as garant a 2 a os incluido cuerpo empotrado ref 10303180 m s detalles"
+        },
+        {
+            "weight": {
+                "value": 1.0,
+                "unit": "kg"
+            },
+            "accuracy": 0.75,
+            "line": 834,
+            "field": "spec_table_content",
+            "raw_text": "marke hersteller robert bosch gmbh power tools zustand nein sku artikelnr t 37936 sku hersteller 2608584620 gtin code ean 3165140262200 gewicht 1 000 kg"
         },
         {
             "depth": {
@@ -525,7 +636,7 @@
         },
         {
             "weight": {
-                "value": "22",
+                "value": 22.0,
                 "unit": "lbs"
             },
             "accuracy": 0.5,
@@ -555,7 +666,17 @@
         },
         {
             "weight": {
-                "value": "1.540",
+                "value": 200.0,
+                "unit": "lbs"
+            },
+            "accuracy": 0.75,
+            "line": 903,
+            "field": "spec_table_content",
+            "raw_text": "warranty rustic natural cedar comes with a 5 year manufacturers limited warranty and our other products come with a limited one year warranty quick ship yes features made in usa shipping usa only material family wood color beige material wood accommodates 2 type table width 28 5 in height 36 in brand rustic natural cedar usa made yes weight capacity 200 lbs"
+        },
+        {
+            "weight": {
+                "value": 1.54,
                 "unit": "lbs"
             },
             "accuracy": 0.75,
@@ -575,7 +696,17 @@
         },
         {
             "weight": {
-                "value": "2",
+                "value": 60.0,
+                "unit": "kg"
+            },
+            "accuracy": 0.5,
+            "line": 950,
+            "field": "description",
+            "raw_text": "trinkhorn methorn aus echtem horn ca 0 75 liter schon lange vor der zeit wikinger oder des mittelalters war das eines verbreitetsten trinkgef e hieraus wurde bei z nftigen gelagen nicht nur bekannte honigwein met genossen unsere trinkh rner meth dieser gr variieren und k nnen 700ml bis 899ml fassen die h sind von au en poliert was ihnen eine sehr glatte oberfl che verschafft innen sie lebensmittelecht lackiert bitte beachtet es gibt immer einzelst cke da sich um naturprodukte handelt farbw nsche nnt ihr in dem bermerkungsfeld bestellung hinterlegen diese werden so weit wie m glich ber cksichtigt auch tats chliche f llmenge kann vom nennvolumen abweichen llvolumen literversandgewicht 60 kg"
+        },
+        {
+            "weight": {
+                "value": 2.0,
                 "unit": "oz"
             },
             "accuracy": 0.5,
@@ -596,6 +727,10 @@
                 "value": 34.0,
                 "unit": null
             },
+            "weight": {
+                "value": 12.0,
+                "unit": "lbs"
+            },
             "accuracy": 0.25,
             "line": 971,
             "field": "description",
@@ -603,7 +738,7 @@
         },
         {
             "weight": {
-                "value": "16",
+                "value": 16.0,
                 "unit": "oz"
             },
             "accuracy": 0.75,
