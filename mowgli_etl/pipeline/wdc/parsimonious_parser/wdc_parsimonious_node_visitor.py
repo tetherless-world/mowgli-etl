@@ -5,8 +5,22 @@ from typing import Optional
 
 
 class WdcParsimoniousNodeVisitor(NodeVisitor):
-    COMMON_UNIT = ['l', 'd', 'w', 'h']
-    KEY_MAP = {"l": "length", "d": "depth", "w": "width", "h": "height", 'v': "power", 'mv': "volatage", 'kv': "power", 'lb': "weight", 'lbs': "weight", 'oz': "weight", 'g': "weight", 'mg': "weight", 'kg': "weight"}
+    COMMON_UNIT = ["l", "d", "w", "h"]
+    KEY_MAP = {
+        "l": "length",
+        "d": "depth",
+        "w": "width",
+        "h": "height",
+        "v": "power",
+        "mv": "volatage",
+        "kv": "power",
+        "lb": "weight",
+        "lbs": "weight",
+        "oz": "weight",
+        "g": "weight",
+        "mg": "weight",
+        "kg": "weight",
+    }
 
     @dataclass
     class __Node:
@@ -37,15 +51,20 @@ class WdcParsimoniousNodeVisitor(NodeVisitor):
         value = node.text.split(" ")[-1]
         if value in WdcParsimoniousNodeVisitor.COMMON_UNIT:
             for key in WdcParsimoniousNodeVisitor.COMMON_UNIT:
-                if getattr(self.dictionary, WdcParsimoniousNodeVisitor.KEY_MAP[key]) is not None:
-                    getattr(self.dictionary, WdcParsimoniousNodeVisitor.KEY_MAP[key]).unit = value
+                if (
+                    getattr(self.dictionary, WdcParsimoniousNodeVisitor.KEY_MAP[key])
+                    is not None
+                ):
+                    getattr(
+                        self.dictionary, WdcParsimoniousNodeVisitor.KEY_MAP[key]
+                    ).unit = value
 
     def visit_weight(self, node, visited_children):
         entries = node.text.split(" ")
         value = ".".join(entries[0:-1])
         unit = entries[-1]
         self.dictionary.weight = self.dictionary.Entry()
-        self.dictionary.weight.value = value
+        self.dictionary.weight.value = float(value)
         self.dictionary.weight.unit = unit
 
     def visit_power(self, node, visited_children):
@@ -53,7 +72,7 @@ class WdcParsimoniousNodeVisitor(NodeVisitor):
         value = ".".join(entries[0:-1])
         unit = entries[-1]
         self.dictionary.power = self.dictionary.Entry()
-        self.dictionary.power.value = value
+        self.dictionary.power.value = float(value)
         self.dictionary.power.unit = unit
 
     def generic_visit(self, node, visited_children):
