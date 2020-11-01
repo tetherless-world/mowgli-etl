@@ -18,13 +18,14 @@ class WdcParsimoniousDimensionParser(WdcDimensionParser):
     }
     __GRAMMAR = Grammar(
         """
-					bin 			= (space/alt/unit/dimensions/dimension/weight/power/decimal/direction/mass/current/number/word)*
+					bin 			= (space/alt/unit/dimensions/dimension/weight/power/complex/decimal/direction/mass/current/number/word)*
 
 					unit			= dimension space ('cm'/'in'/'ft'/'mm'/'m')
                     weight          = (decimal/number) space mass
                     power           = (decimal/number) space current
 					dimensions 		= (dimension space "x" space)+ dimension
 					dimension 		= (decimal/number) space direction
+                    complex         = number+ space number+ space number+
                     decimal         = number+ space number+
 					direction 		= ("h"/"w"/"d"/"l") &separator
                     mass            = ("lbs"/"lb"/"oz"/"kg"/"mg"/"g") &separator
@@ -57,7 +58,7 @@ class WdcParsimoniousDimensionParser(WdcDimensionParser):
                 and retVal.power is None
             ):
                 return None
-            return retVal
+            return retVal, __VISITOR.dictionary.source
 
         if entry.key_value_pairs is not None:
             for key in ("dimensions", "weight"):
@@ -66,20 +67,20 @@ class WdcParsimoniousDimensionParser(WdcDimensionParser):
                     result = __generate_dimensions(key_value_pairs)
                     if result:
                         returns.append(
-                            (result, "key_value_pairs", entry.key_value_pairs)
+                            (result[0], "key_value_pairs", entry.key_value_pairs, result[1])
                         )
 
         if entry.description is not None:
             description = self.__GRAMMAR.parse(entry.description)
             result = __generate_dimensions(description)
             if result:
-                returns.append((result, "description", entry.description))
+                returns.append((result[0], "description", entry.description, result[1]))
 
         if entry.spec_table_content is not None:
             spec_table_content = self.__GRAMMAR.parse(entry.spec_table_content)
             result = __generate_dimensions(spec_table_content)
             if result:
-                returns.append((result, "spec_table_content", entry.spec_table_content))
+                returns.append((result[0], "spec_table_content", entry.spec_table_content, result[1]))
 
         return returns
 
@@ -115,7 +116,8 @@ if __name__ == "__main__":
                     )
                     holder["dimensions"][-1]["line"] = count
                     holder["dimensions"][-1]["field"] = dimension[1]
-                    holder["dimensions"][-1]["raw_text"] = dimension[2]
+                    holder["dimensions"][-1]["text"] = dimension[3]
+                    holder["dimensions"][-1]["bin"] = dimension[2]
                     items += 1
             if MODE == "json":
                 import json
@@ -128,7 +130,7 @@ if __name__ == "__main__":
                 with open(f"{sys.argv[1][0:-6]}_parsed.csv", "w") as output:
                     fields = [
                         "source",
-                        "raw_text",
+                        "text",
                         "depth",
                         "depth_unit",
                         "height",
@@ -144,6 +146,7 @@ if __name__ == "__main__":
                         "accuracy",
                         "line",
                         "field",
+                        "bin"
                     ]
                     writer = csv.DictWriter(output, fields)
                     writer.writeheader()

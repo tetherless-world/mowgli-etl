@@ -13,7 +13,7 @@
         },
         {
             "weight": {
-                "value": 3.5,
+                "value": 5.0,
                 "unit": "kg"
             },
             "accuracy": 0.5,
@@ -95,7 +95,7 @@
         },
         {
             "length": {
-                "value": 38.4,
+                "value": 0.12,
                 "unit": null
             },
             "accuracy": 0.125,
