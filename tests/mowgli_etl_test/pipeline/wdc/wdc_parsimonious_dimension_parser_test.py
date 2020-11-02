@@ -24,7 +24,7 @@ def test_parsimonious_parser(wdc_json_clean_file_path: Path):
 
             elif count == 19:
                 dimension = WdcParsimoniousDimensionParser().parse(entry=entry)[0]
-                assert dimension[0].weight.value == 3.5
+                assert dimension[0].weight.value == 5.0
                 assert dimension[0].weight.unit == "kg"
                 assert dimension[0].accuracy(SOURCE_KEY[dimension[1]]) == 0.5
 
@@ -55,13 +55,7 @@ def test_parsimonious_parser_large(wdc_large_json_file_path: Path):
         for entry in data:
             count += 1
             entry = WdcOffersCorpusEntry.from_json(entry)
-            if count == 16:
-                dimension = WdcParsimoniousDimensionParser().parse(entry=entry)[0]
-                assert dimension[0].weight.value == 4.0
-                assert dimension[0].weight.unit == "oz"
-                assert dimension[0].accuracy(SOURCE_KEY[dimension[1]]) == 0.5
-
-            elif count == 24:
+            if count == 24:
                 dimension = WdcParsimoniousDimensionParser().parse(entry=entry)[0]
                 assert dimension[0].weight.value == 1.0
                 assert dimension[0].weight.unit == "g"
