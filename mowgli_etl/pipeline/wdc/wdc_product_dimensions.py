@@ -13,6 +13,8 @@ class WdcProductDimensions:
     class __Dimension:
         value: Optional[float] = None
         unit: Optional[str] = None
+        value_text: Optional[str] = None
+        unit_text: Optional[str] = None
 
     depth: Optional[__Dimension] = None
     height: Optional[__Dimension] = None
