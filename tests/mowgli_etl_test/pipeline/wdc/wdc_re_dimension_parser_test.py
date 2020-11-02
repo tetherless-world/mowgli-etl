@@ -42,14 +42,6 @@ def test_re_dimension_parser(wdc_json_clean_file_path: Path):
             Comment out once RE code is implemented
             """
             assert dimensions.depth == None
-            assert dimensions.height == None
-            assert dimensions.length == None
             assert dimensions.width == None
-            assert dimensions.volume == None
-            assert dimensions.mass == None
-            assert dimensions.depth_unit == None
-            assert dimensions.height_unit == None
-            assert dimensions.length_unit == None
-            assert dimensions.width_unit == None
-            assert dimensions.volume_unit == None
-            assert dimensions.mass_unit == None
+            assert dimensions.length == None
+            assert dimensions.height == None

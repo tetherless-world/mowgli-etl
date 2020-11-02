@@ -1,10 +1,12 @@
 attrs==19.3.0
 ConfigArgParse==1.0
+dataclasses-json==0.5.2
 google-api-python-client==1.8.0
 importlib-metadata==1.4.0
 isodate==0.6.0
 more-itertools==8.1.0
 packaging==20.0
+parsimonious==0.8.1
 pathvalidate==2.0.1
 pluggy==0.13.1
 py==1.8.1
