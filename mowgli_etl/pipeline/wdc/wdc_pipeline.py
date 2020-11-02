@@ -29,6 +29,7 @@ class WdcPipeline(_Pipeline):
             **kwds
         )
 
+    @classmethod
     def add_arguments(cls, arg_parser: ArgParser) -> None:
         _Pipeline.add_arguments(arg_parser)
         arg_parser.add_argument("--product-type-classifier", default="heuristic")
