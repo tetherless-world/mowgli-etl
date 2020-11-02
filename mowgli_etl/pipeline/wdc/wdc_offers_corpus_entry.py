@@ -1,13 +1,13 @@
 from dataclasses import dataclass, field
 from typing import Optional, List
 
-from dataclasses_json import dataclass_json, config
+from dataclasses_json import dataclass_json, LetterCase
 
 from mowgli_etl.loader import json
 from mowgli_etl.paths import DATA_DIR
 
 
-@dataclass_json
+@dataclass_json(letter_case=LetterCase.CAMEL)
 @dataclass(frozen=True)
 class WdcOffersCorpusEntry:
     @dataclass_json
@@ -28,10 +28,8 @@ class WdcOffersCorpusEntry:
     description: Optional[str]
     id: int
     identifiers: Optional[List[__WdcOffersCorpusEntryIdentifier]]
-    key_value_pairs: Optional[dict] = field(metadata=config(field_name="keyValuePairs"))
-    spec_table_content: Optional[str] = field(
-        metadata=config(field_name="specTableContent")
-    )
+    key_value_pairs: Optional[dict] = None
+    spec_table_content: Optional[str] = None
     # {"brand":null,"category":"Clothing","cluster_id":3617395,"description":null,"id":210,"identifiers":[{"\/sku":"[codesku17smmtzi50x]"}],"keyValuePairs":null,"price":null,"specTableContent":null,"title":"selce zip t shirt montura maungashop"}
 
 
