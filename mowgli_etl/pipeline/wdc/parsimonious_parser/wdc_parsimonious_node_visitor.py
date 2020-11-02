@@ -28,6 +28,8 @@ class WdcParsimoniousNodeVisitor(NodeVisitor):
         class Entry:
             value: Optional[float] = None
             unit: Optional[str] = None
+            value_text: Optional[str] = None
+            unit_text: Optional[str] = None
 
         width: Optional[Entry] = None
         depth: Optional[Entry] = None
@@ -35,7 +37,6 @@ class WdcParsimoniousNodeVisitor(NodeVisitor):
         length: Optional[Entry] = None
         weight: Optional[Entry] = None
         power: Optional[Entry] = None
-        source: Optional[str] = None
 
     def __init__(self):
         self.dictionary = WdcParsimoniousNodeVisitor.__Node()
@@ -49,23 +50,16 @@ class WdcParsimoniousNodeVisitor(NodeVisitor):
             return ".".join(values)
         return str(int(values[0]) + float(".".join(values[1:])))
 
-    def visit_dimensions(self, node, visited_children):
-        if self.dictionary.source is None:
-            self.dictionary.source = node.text
-
     def visit_dimension(self, node, visited_children):
-        if self.dictionary.source is None:
-            self.dictionary.source = node.text
         entries = node.text.split(" ")
         value = self.__parse_decimal(entries[0:-1])
         key = WdcParsimoniousNodeVisitor.KEY_MAP[entries[-1]]
         if getattr(self.dictionary, key) is None:
             setattr(self.dictionary, key, self.dictionary.Entry())
         getattr(self.dictionary, key).value = float(value)
+        getattr(self.dictionary, key).value_text = node.text
 
     def visit_unit(self, node, visited_children):
-        if self.dictionary.source is None:
-            self.dictionary.source = node.text
         value = node.text.split(" ")[-1]
         if value in WdcParsimoniousNodeVisitor.COMMON_UNIT:
             for key in WdcParsimoniousNodeVisitor.COMMON_UNIT:
@@ -76,26 +70,28 @@ class WdcParsimoniousNodeVisitor(NodeVisitor):
                     getattr(
                         self.dictionary, WdcParsimoniousNodeVisitor.KEY_MAP[key]
                     ).unit = value
+                    getattr(self.dictionary, WdcParsimoniousNodeVisitor.KEY_MAP[key]).unit_text = node.text
 
     def visit_weight(self, node, visited_children):
-        if self.dictionary.source is None:
-            self.dictionary.source = node.text
+        self.dictionary.source = node.text
         entries = node.text.split(" ")
         value = self.__parse_decimal(entries[0:-1])
         unit = entries[-1]
         self.dictionary.weight = self.dictionary.Entry()
         self.dictionary.weight.value = float(value)
+        self.dictionary.weight.value_text = node.text
         self.dictionary.weight.unit = unit
+        self.dictionary.weight.unit_text = node.text
 
     def visit_power(self, node, visited_children):
-        if self.dictionary.source is None:
-            self.dictionary.source = node.text
         entries = node.text.split(" ")
         value = self.__parse_decimal(entries[0:-1])
         unit = entries[-1]
         self.dictionary.power = self.dictionary.Entry()
         self.dictionary.power.value = float(value)
+        self.dictionary.power.value_text = node.text
         self.dictionary.power.unit = unit
+        self.dictionary.power.unit_text = node.text
 
     def generic_visit(self, node, visited_children):
         return None
