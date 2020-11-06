@@ -62,7 +62,8 @@ if __name__ == '__main__':
             for key in ["title", "description", "specTableContent", "category"]:
                 if line[key]:
                     product_type = WdcHeuristicProductTypeClassifier.classify(title=line[key])
+                    product_type.set_key(key)
                     print(f"From {key}={product_type.source}:")
                     print(f"\tFrom {len(product_type.possible)} options:")
                     for product_option in product_type.possible:
-                        print(f"\t\t{product_option.name}, {product_option.confidence:.3%} from {product_option.method}")
+                        print(f"\t\t{product_option.name}, {product_option.confidence*product_type.key_confidence:.3%} from {product_option.method}")
