@@ -21,7 +21,7 @@ def test_heuristic_prdocut_type_classifier(wdc_json_clean_file_path: Path):
                 listing = description
                 if listing == None:
                     listing = category
-            hpt = WdcHPTC().classify(title=listing)
+            hpt = WdcHPTC.classify(title=listing)
             # if item_counter == 1:
             #     assert hpt.name == "3"
             #     assert hpt.alternate[0] == "hella bitter citrus bitters 1 7"
