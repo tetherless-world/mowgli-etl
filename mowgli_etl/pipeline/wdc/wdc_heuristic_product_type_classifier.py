@@ -5,7 +5,7 @@ from mowgli_etl.pipeline.wdc.wdc_product_type_classifier import WdcProductTypeCl
 
 
 class WdcHeuristicProductTypeClassifier(WdcProductTypeClassifier):
-    def classify(self, *, title: str) -> WdcProductType:
+    def classify(*, title: str) -> WdcProductType:
         """
         Parse title/listing/other to pull ProductType with confidence value
         """
@@ -45,8 +45,24 @@ class WdcHeuristicProductTypeClassifier(WdcProductTypeClassifier):
                 last_noun_flag = 1
 
         first_noun_sequence_name.rstrip(" ")
-        return WdcProductType(
-            name=last_noun_name,
-            confidence=1 / 3,
-            alternate=[first_noun_sequence_name, last_noun_sequence_name],
-        )
+
+        selections = [WdcProductType.option(last_noun_name, 1/3, "last_noun_heuristic"),
+                    WdcProductType.option(first_noun_sequence_name, 1/3, "first_noun_sequence_heuristic"),
+                    WdcProductType.option(last_noun_sequence_name, 1/3, "last_noun_sequence_heuristic")]
+
+        return WdcProductType(options=selections, source=title)
+
+
+if __name__ == '__main__':
+    from mowgli_etl.pipeline.wdc.wdc_constants import WDC_ARCHIVE_PATH
+    from json import loads
+    with open(WDC_ARCHIVE_PATH / "offers_corpus_english_v2_random_100_clean.jsonl", "r") as data:
+        for line in data:
+            line = loads(line)
+            for key in ["title", "description", "specTableContent", "category"]:
+                if line[key]:
+                    product_type = WdcHeuristicProductTypeClassifier.classify(title=line[key])
+                    print(f"From {key}={product_type.source}:")
+                    print(f"\tFrom {len(product_type.possible)} options:")
+                    for product_option in product_type.possible:
+                        print(f"\t\t{product_option.name}, {product_option.confidence:.3%} from {product_option.method}")
