@@ -1,7 +1,13 @@
-from typing import NamedTuple, Optional, List
+from typing import Optional, List
+from dataclasses import dataclass
 
+@dataclass
+class WdcProductType:
 
-class WdcProductType(NamedTuple):
-    name: str
-    confidence: Optional[float] = None
-    alternate: Optional[List[str]] = None
+	@dataclass
+	class __Option:
+		name: str
+		confidence: float
+
+	expected_name: Optional[__Option] = None
+	possible_names: Optional[List[__Option]] = None
