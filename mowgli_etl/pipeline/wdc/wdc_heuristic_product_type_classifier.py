@@ -7,10 +7,21 @@ from mowgli_etl.pipeline.wdc.wdc_product_type_classifier import WdcProductTypeCl
 class WdcHeuristicProductTypeClassifier(WdcProductTypeClassifier):
     NLP = load('en_core_web_sm')
 
+    def __clean_words(line):
+        words = line.split(' ')
+        for i in range(len(words)):
+            words[i] = words[i].split('_')
+        pure_words = []
+        for sequence in words:
+            pure_words.extend(sequence)
+        return ' '.join([word for word in pure_words if word.isalpha()])
+
     def classify(*, title: str) -> WdcProductType:
         """
         Parse title/listing/other to pull ProductType with confidence value
         """
+        title = WdcHeuristicProductTypeClassifier.__clean_words(title)
+        
         doc = WdcHeuristicProductTypeClassifier.NLP(title)
 
         last_noun_name = ""
