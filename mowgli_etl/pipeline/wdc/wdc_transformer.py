@@ -141,7 +141,7 @@ class WdcTransformer(_Transformer):
                     if listing == None:
                         listing = category
 
-                product = HPTC().classify(title=listing)
+                product = HPTC.classify(title=listing)
 
                 # doc = nlp(listing)
 
@@ -195,7 +195,7 @@ class WdcTransformer(_Transformer):
                 #         {last_noun_sequence_name}"
 
                 yield KgEdge.with_generated_id(
-                    subject=product.name,
+                    subject=product.expected.name,
                     predicate=WDC_HAS_DIMENSIONS,
                     object=specs,
                     source_ids=(WDC_DATASOURCE_ID,),
