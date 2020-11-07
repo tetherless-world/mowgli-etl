@@ -18,6 +18,8 @@ from mowgli_etl.pipeline.wdc.wdc_constants import (
     WDC_HAS_DIMENSIONS,
     WDC_ARCHIVE_PATH,
 )
+from mowgli_etl.pipeline.wdc.wdc_dimension_parser import WdcDimensionParser
+from mowgli_etl.pipeline.wdc.wdc_product_type_classifier import WdcProductTypeClassifier
 from mowgli_etl.pipeline.wdc.wdc_heuristic_product_type_classifier import (
     WdcHeuristicProductTypeClassifier as HPTC,
 )
@@ -67,66 +69,65 @@ class WdcTransformer(_Transformer):
 
         return new_file_name
 
-    def __find_dimensions(self, description, listing, additional_info):
-        """
-        Extract dimension data using regex
-        """
-        dimensions = []
+    # def __find_dimensions(self, description, listing, additional_info):
+    #     """
+    #     Extract dimension data using regex
+    #     """
+    #     dimensions = []
 
-        if description != None:
-            dimensions = re.findall(
-                "\d+(?: \d+)?\s?\w*\sx\s\d+\
-                    (?: \d+)?\s?(?:x\s\d+\s?)?\w*",
-                description,
-            )
+    #     if description != None:
+    #         dimensions = re.findall(
+    #             "\d+(?: \d+)?\s?\w*\sx\s\d+\
+    #                 (?: \d+)?\s?(?:x\s\d+\s?)?\w*",
+    #             description,
+    #         )
 
-        if len(dimensions) == 0:
-            if description:
-                dimensions = re.findall(
-                    "\d+\s?\w+\s\d+\s?\w+\
-                        \slead\sx\s\d+\s?\w+",
-                    description,
-                )
+    #     if len(dimensions) == 0:
+    #         if description:
+    #             dimensions = re.findall(
+    #                 "\d+\s?\w+\s\d+\s?\w+\
+    #                     \slead\sx\s\d+\s?\w+",
+    #                 description,
+    #             )
 
-        if len(dimensions) == 0:
-            dimensions = re.findall(
-                "\d+\s?\w*\sx\s\d+\
-                    \s?\w*",
-                listing,
-            )
+    #     if len(dimensions) == 0:
+    #         dimensions = re.findall(
+    #             "\d+\s?\w*\sx\s\d+\
+    #                 \s?\w*",
+    #             listing,
+    #         )
 
-        if len(dimensions) == 0:
-            dimensions = re.findall(
-                "\d+\s?\w+\s\d+\s?\w+\
-                    \slead\sx\s\d+\s?\w+",
-                listing,
-            )
+    #     if len(dimensions) == 0:
+    #         dimensions = re.findall(
+    #             "\d+\s?\w+\s\d+\s?\w+\
+    #                 \slead\sx\s\d+\s?\w+",
+    #             listing,
+    #         )
 
-        if len(dimensions) == 0:
-            if additional_info != None:
-                dimensions = re.findall(
-                    "\d+(?: \d+)?\s?\w*\sx\s\d+\
-                        (?: \d+)?\s?(?:x\s\d+\s?)?\w*",
-                    additional_info,
-                )
+    #     if len(dimensions) == 0:
+    #         if additional_info != None:
+    #             dimensions = re.findall(
+    #                 "\d+(?: \d+)?\s?\w*\sx\s\d+\
+    #                     (?: \d+)?\s?(?:x\s\d+\s?)?\w*",
+    #                 additional_info,
+    #             )
 
-            if dimensions:
-                return dimensions
+    #         if dimensions:
+    #             return dimensions
 
-        # dimensions = re.findall("\d+\s?\w+\s\d+\s?\w+\
-        #         \slead\sx\s\d+\s?\w+", additional_info)
+    #     # dimensions = re.findall("\d+\s?\w+\s\d+\s?\w+\
+    #     #         \slead\sx\s\d+\s?\w+", additional_info)
 
-        return dimensions
+    #     return dimensions
 
     def transform(
-        self, *, wdc_jsonl_file_path: Path
+        self, *, wdc_jsonl_file_path: Path, wdc_product_type_classifier: WdcProductTypeClassifier, wdc_dimension_parser: WdcDimensionParser
     ) -> Generator[Union[KgNode, KgEdge], None, None]:
         # Prepare file and nlp
         wdc_clean_file_path = self.__clean(wdc_jsonl_file_path)
-        nlp = spacy.load("en_core_web_sm")
 
         # Parse file
-        with open(wdc_clean_file_path, mode="r") as data:
+        with open(wdc_clean_file_path) as data:
             for row in data:
                 # print(row)
                 information = json.loads(row)
@@ -141,7 +142,7 @@ class WdcTransformer(_Transformer):
                     if listing == None:
                         listing = category
 
-                product = HPTC.classify(title=listing)
+                product = wdc_product_type_classifier.classify(title=listing)
 
                 # doc = nlp(listing)
 
@@ -178,9 +179,7 @@ class WdcTransformer(_Transformer):
 
                 # first_noun_sequence_name.rstrip(" ")
 
-                dimensions = self.__find_dimensions(
-                    description, listing, additional_info
-                )
+                dimensions = wdc_dimension_parser.parse()
 
                 specs = ""
                 if dimensions:
