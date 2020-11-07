@@ -23,6 +23,7 @@ from mowgli_etl.pipeline.wdc.wdc_product_type_classifier import WdcProductTypeCl
 from mowgli_etl.pipeline.wdc.wdc_heuristic_product_type_classifier import (
     WdcHeuristicProductTypeClassifier as HPTC,
 )
+from mowgli_etl.pipeline.wdc.wdc_offers_corpus_entry import WdcOffersCorpusEntry
 
 
 class WdcTransformer(_Transformer):
@@ -129,20 +130,7 @@ class WdcTransformer(_Transformer):
         # Parse file
         with open(wdc_clean_file_path) as data:
             for row in data:
-                # print(row)
-                information = json.loads(row)
-                listing = information["title"]
-                description = information["description"]
-                additional_info = information["specTableContent"]
-                category = information["category"]
-
-                # Ignore product if there is no listing name
-                if listing == None:
-                    listing = description
-                    if listing == None:
-                        listing = category
-
-                product = wdc_product_type_classifier.classify(title=listing)
+                product = next(wdc_product_type_classifier.classify(entry=WdcOffersCorpusEntry.from_json(row)))
 
                 # doc = nlp(listing)
 
@@ -179,15 +167,17 @@ class WdcTransformer(_Transformer):
 
                 # first_noun_sequence_name.rstrip(" ")
 
-                dimensions = wdc_dimension_parser.parse()
+                # dimensions = 
+                # if wdc_dimension_parser:
+                #     dimensions = next(wdc_dimension_parser.parse())
 
-                specs = ""
-                if dimensions:
-                    for d in dimensions:
-                        specs += f" {d}"
-                    specs.rstrip(" ")
-                else:
-                    specs = "NA"
+                # specs = ""
+                # if dimensions:
+                #     for d in dimensions:
+                #         specs += f" {d}"
+                #     specs.rstrip(" ")
+                # else:
+                #     specs = "NA"
 
                 # general_name = f"{last_noun_name} or\
                 #         {first_noun_sequence_name} or\
@@ -196,7 +186,7 @@ class WdcTransformer(_Transformer):
                 yield KgEdge.with_generated_id(
                     subject=product.expected.name,
                     predicate=WDC_HAS_DIMENSIONS,
-                    object=specs,
+                    object="NA",
                     source_ids=(WDC_DATASOURCE_ID,),
                 )
                 # yield KgNode(id = f"{WDC_DATASOURCE_ID}:\"general_name\"",
