@@ -2,12 +2,13 @@ from spacy import load
 
 from mowgli_etl.pipeline.wdc.wdc_product_type import WdcProductType
 from mowgli_etl.pipeline.wdc.wdc_product_type_classifier import WdcProductTypeClassifier
-
+from mowgli_etl.pipeline.wdc.wdc_offers_corpus_entry import WdcOffersCorpusEntry
 
 class WdcHeuristicProductTypeClassifier(WdcProductTypeClassifier):
-    NLP = load('en_core_web_sm')
+    def __init__(self):
+        self.NLP = load('en_core_web_sm')
 
-    def __clean_words(line):
+    def __clean_words(self, line):
         words = line.split(' ')
         for i in range(len(words)):
             words[i] = words[i].split('_')
@@ -16,65 +17,66 @@ class WdcHeuristicProductTypeClassifier(WdcProductTypeClassifier):
             pure_words.extend(sequence)
         return ' '.join([word for word in pure_words if word.isalpha()])
 
-    def classify(*, title: str) -> WdcProductType:
+    def classify(self, *, entry: WdcOffersCorpusEntry) -> WdcProductType:
         """
         Parse title/listing/other to pull ProductType with confidence value
         """
-        title = WdcHeuristicProductTypeClassifier.__clean_words(title)
+        for field in ["category", "description", "spec_table_content", "title"]:
+            text = getattr(entry, field)
+            if text is None:
+                continue
+            text = self.__clean_words(getattr(entry, field))
         
-        doc = WdcHeuristicProductTypeClassifier.NLP(title)
+            doc = self.NLP(text)
 
-        last_noun_name = ""
-        first_noun_sequence_name = ""
-        first_noun_flag = 0
-        last_noun_sequence_name = ""
-        last_noun_flag = 1
+            last_noun_name = ""
+            first_noun_sequence_name = ""
+            first_noun_flag = 0
+            last_noun_sequence_name = ""
+            last_noun_flag = 1
 
-        for token in doc:
-            if token.pos in range(92, 101):
-                # Assume that general product name is last noun in title
-                last_noun_name = token.text
+            for token in doc:
+                if token.pos in range(92, 101):
+                    # Assume that general product name is last noun in title
+                    last_noun_name = token.text
 
-                # Assume that general product name is the first sequence of just nouns
-                if first_noun_flag == 0:
+                    # Assume that general product name is the first sequence of just nouns
+                    if first_noun_flag == 0:
+                        if first_noun_sequence_name != "":
+                            first_noun_sequence_name += " "
+                        first_noun_sequence_name += token.text
+
+                    # Assume that general product name is the last sequence of just nouns
+                    if last_noun_flag == 1:
+                        last_noun_sequence_name = ""
+                        last_noun_flag = 0
+                    if last_noun_sequence_name != "":
+                        last_noun_sequence_name += " "
+                    last_noun_sequence_name += token.text
+
+                else:
+                    # Throw flag to terminate first noun sequence
                     if first_noun_sequence_name != "":
-                        first_noun_sequence_name += " "
-                    first_noun_sequence_name += token.text
+                        first_noun_flag = 1
+                    last_noun_flag = 1
 
-                # Assume that general product name is the last sequence of just nouns
-                if last_noun_flag == 1:
-                    last_noun_sequence_name = ""
-                    last_noun_flag = 0
-                if last_noun_sequence_name != "":
-                    last_noun_sequence_name += " "
-                last_noun_sequence_name += token.text
+            first_noun_sequence_name.rstrip(" ")
 
-            else:
-                # Throw flag to terminate first noun sequence
-                if first_noun_sequence_name != "":
-                    first_noun_flag = 1
-                last_noun_flag = 1
+            selections = [(last_noun_name, 1/3, "last_noun_heuristic"),
+                        (first_noun_sequence_name, 1/3, "first_noun_sequence_heuristic"),
+                        (last_noun_sequence_name, 1/3, "last_noun_sequence_heuristic")]
 
-        first_noun_sequence_name.rstrip(" ")
-
-        selections = [WdcProductType.option(last_noun_name, 1/3, "last_noun_heuristic"),
-                    WdcProductType.option(first_noun_sequence_name, 1/3, "first_noun_sequence_heuristic"),
-                    WdcProductType.option(last_noun_sequence_name, 1/3, "last_noun_sequence_heuristic")]
-
-        return WdcProductType(options=selections, source=title)
+            yield WdcProductType(options=selections, source=text, key=field)
 
 
 if __name__ == '__main__':
     from mowgli_etl.pipeline.wdc.wdc_constants import WDC_ARCHIVE_PATH
     from json import loads
-    with open(WDC_ARCHIVE_PATH / "offers_corpus_english_v2_random_100_clean.jsonl", "r") as data:
+    HPTC = WdcHeuristicProductTypeClassifier()
+    with open(WDC_ARCHIVE_PATH / "offers_corpus_english_v2_random_100_clean.jsonl") as data:
         for line in data:
-            line = loads(line)
-            for key in ["title", "description", "specTableContent", "category"]:
-                if line[key]:
-                    product_type = WdcHeuristicProductTypeClassifier.classify(title=line[key])
-                    product_type.set_key(key)
-                    print(f"From {key}={product_type.source}:")
-                    print(f"\tFrom {len(product_type.possible)} options:")
-                    for product_option in product_type.possible:
-                        print(f"\t\t{product_option.name}, {product_option.confidence*product_type.key_confidence:.3%} from {product_option.method}")
+            for product_type in HPTC.classify(entry=WdcOffersCorpusEntry.from_json(line)):
+                print(f"From {product_type.key}={product_type.source}:")
+                print(f"\tFrom {len(product_type.possible)} options:")
+                for product_option in product_type.possible:
+                    print(f"\t\t{product_option.name}, {product_option.confidence*product_type.key_confidence:.3%} from {product_option.method}")
