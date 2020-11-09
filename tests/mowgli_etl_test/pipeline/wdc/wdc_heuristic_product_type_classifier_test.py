@@ -7,7 +7,7 @@ from mowgli_etl.pipeline.wdc.wdc_heuristic_product_type_classifier import (
 from mowgli_etl.pipeline.wdc.wdc_offers_corpus_entry import WdcOffersCorpusEntry
 
 # Should have Path argument, for now using clean file already in directory
-def test_heuristic_prdocut_type_classifier_clean(wdc_json_clean_file_path: Path):
+def test_heuristic_product_type_classifier_clean(wdc_json_clean_file_path: Path):
     with open(wdc_json_clean_file_path) as data:
         HPTC = WdcHeuristicProductTypeClassifier()
         for count, row in enumerate(data):
