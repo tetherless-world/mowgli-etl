@@ -70,56 +70,7 @@ class WdcTransformer(_Transformer):
 
         return new_file_name
 
-    # def __find_dimensions(self, description, listing, additional_info):
-    #     """
-    #     Extract dimension data using regex
-    #     """
-    #     dimensions = []
-
-    #     if description != None:
-    #         dimensions = re.findall(
-    #             "\d+(?: \d+)?\s?\w*\sx\s\d+\
-    #                 (?: \d+)?\s?(?:x\s\d+\s?)?\w*",
-    #             description,
-    #         )
-
-    #     if len(dimensions) == 0:
-    #         if description:
-    #             dimensions = re.findall(
-    #                 "\d+\s?\w+\s\d+\s?\w+\
-    #                     \slead\sx\s\d+\s?\w+",
-    #                 description,
-    #             )
-
-    #     if len(dimensions) == 0:
-    #         dimensions = re.findall(
-    #             "\d+\s?\w*\sx\s\d+\
-    #                 \s?\w*",
-    #             listing,
-    #         )
-
-    #     if len(dimensions) == 0:
-    #         dimensions = re.findall(
-    #             "\d+\s?\w+\s\d+\s?\w+\
-    #                 \slead\sx\s\d+\s?\w+",
-    #             listing,
-    #         )
-
-    #     if len(dimensions) == 0:
-    #         if additional_info != None:
-    #             dimensions = re.findall(
-    #                 "\d+(?: \d+)?\s?\w*\sx\s\d+\
-    #                     (?: \d+)?\s?(?:x\s\d+\s?)?\w*",
-    #                 additional_info,
-    #             )
-
-    #         if dimensions:
-    #             return dimensions
-
-    #     # dimensions = re.findall("\d+\s?\w+\s\d+\s?\w+\
-    #     #         \slead\sx\s\d+\s?\w+", additional_info)
-
-    #     return dimensions
+    
 
     def transform(
         self, *, wdc_jsonl_file_path: Path, wdc_product_type_classifier: WdcProductTypeClassifier, wdc_dimension_parser: WdcDimensionParser
@@ -132,63 +83,11 @@ class WdcTransformer(_Transformer):
             for row in data:
                 product = next(wdc_product_type_classifier.classify(entry=WdcOffersCorpusEntry.from_json(row)))
 
-                # doc = nlp(listing)
-
-                # last_noun_name = ""
-                # first_noun_sequence_name = ""
-                # first_noun_flag = 0
-                # last_noun_sequence_name = ""
-                # last_noun_flag = 1
-
-                # for token in doc:
-                #     if token.pos in range(92, 101):
-                #         # Assume that general product name is last noun in title
-                #         last_noun_name = token.text
-
-                #         # Assume that general product name is the first sequence of just nouns
-                #         if first_noun_flag == 0:
-                #             if first_noun_sequence_name != "":
-                #                 first_noun_sequence_name += " "
-                #             first_noun_sequence_name += token.text
-
-                #         # Assume that general product name is the last sequence of just nouns
-                #         if last_noun_flag == 1:
-                #             last_noun_sequence_name = ""
-                #             last_noun_flag = 0
-                #         if last_noun_sequence_name != "":
-                #             last_noun_sequence_name += " "
-                #         last_noun_sequence_name += token.text
-
-                #     else:
-                #         # Throw flag to terminate first noun sequence
-                #         if first_noun_sequence_name != "":
-                #             first_noun_flag = 1
-                #         last_noun_flag = 1
-
-                # first_noun_sequence_name.rstrip(" ")
-
-                # dimensions = 
-                # if wdc_dimension_parser:
-                #     dimensions = next(wdc_dimension_parser.parse())
-
-                # specs = ""
-                # if dimensions:
-                #     for d in dimensions:
-                #         specs += f" {d}"
-                #     specs.rstrip(" ")
-                # else:
-                #     specs = "NA"
-
-                # general_name = f"{last_noun_name} or\
-                #         {first_noun_sequence_name} or\
-                #         {last_noun_sequence_name}"
-
+                
                 yield KgEdge.with_generated_id(
                     subject=product.expected.name,
                     predicate=WDC_HAS_DIMENSIONS,
                     object="NA",
                     source_ids=(WDC_DATASOURCE_ID,),
                 )
-                # yield KgNode(id = f"{WDC_DATASOURCE_ID}:\"general_name\"",
-                #     sources = (WDC_DATASOURCE_ID,),
-                #     labels = dimensions if dimensions != None else ["NA"])
+                
