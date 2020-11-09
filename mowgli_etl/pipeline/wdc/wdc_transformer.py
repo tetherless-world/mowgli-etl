@@ -88,7 +88,7 @@ class WdcTransformer(_Transformer):
 
         self.__dimension_parser = wdc_dimension_parser
         self.__product_type_classifier = wdc_product_type_classifier
-
+        
         # Parse file
         with open(wdc_clean_file_path) as data:
             for row in data:
