@@ -78,25 +78,26 @@ class WdcTransformer(_Transformer):
         # Prepare file and nlp
         wdc_clean_file_path = self.__clean(wdc_jsonl_file_path)
 
-        # Set default ProductTypeClassifier
-        if not wdc_product_type_classifier:
-            wdc_product_type_classifier = WdcProductTypeClassifier()
+        # # Set default ProductTypeClassifier
+        # if not wdc_product_type_classifier:
+        #     wdc_product_type_classifier = WdcProductTypeClassifier()
 
-        # Set default DimensionParser
-        if not wdc_dimension_parser:
-            wdc_dimension_parser = WdcDimensionParser()
+        # # Set default DimensionParser
+        # if not wdc_dimension_parser:
+        #     wdc_dimension_parser = WdcDimensionParser()
 
         self.__dimension_parser = wdc_dimension_parser
         self.__product_type_classifier = wdc_product_type_classifier
-        
+
         # Parse file
         with open(wdc_clean_file_path) as data:
             for row in data:
-                product = next(self.__product_type_classifier.classify(entry=WdcOffersCorpusEntry.from_json(row)))
-
+                name = "NA"
+                if self.__dimension_parser:
+                    name = next(self.__product_type_classifier.classify(entry=WdcOffersCorpusEntry.from_json(row))).expected.name
                 
                 yield KgEdge.with_generated_id(
-                    subject=product.expected.name,
+                    subject=name,
                     predicate=WDC_HAS_DIMENSIONS,
                     object="NA",
                     source_ids=(WDC_DATASOURCE_ID,),
