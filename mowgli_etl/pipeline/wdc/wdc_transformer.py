@@ -21,8 +21,9 @@ from mowgli_etl.pipeline.wdc.wdc_constants import (
 from mowgli_etl.pipeline.wdc.wdc_dimension_parser import WdcDimensionParser
 from mowgli_etl.pipeline.wdc.wdc_product_type_classifier import WdcProductTypeClassifier
 from mowgli_etl.pipeline.wdc.wdc_heuristic_product_type_classifier import (
-    WdcHeuristicProductTypeClassifier as HPTC,
+    WdcHeuristicProductTypeClassifier,
 )
+from mowgli_etl.pipeline.wdc.parsimonious_parser.wdc_parsimonious_dimension_parser import WdcParsimoniousDimensionParser
 from mowgli_etl.pipeline.wdc.wdc_offers_corpus_entry import WdcOffersCorpusEntry
 
 
@@ -78,13 +79,13 @@ class WdcTransformer(_Transformer):
         # Prepare file and nlp
         wdc_clean_file_path = self.__clean(wdc_jsonl_file_path)
 
-        # # Set default ProductTypeClassifier
-        # if not wdc_product_type_classifier:
-        #     wdc_product_type_classifier = WdcProductTypeClassifier()
+        # Set default ProductTypeClassifier
+        if not wdc_product_type_classifier:
+            wdc_product_type_classifier = WdcHeuristicProductTypeClassifier()
 
-        # # Set default DimensionParser
-        # if not wdc_dimension_parser:
-        #     wdc_dimension_parser = WdcDimensionParser()
+        # Set default DimensionParser
+        if not wdc_dimension_parser:
+            wdc_dimension_parser = WdcParsimoniousDimensionParser()
 
         self.__dimension_parser = wdc_dimension_parser
         self.__product_type_classifier = wdc_product_type_classifier
@@ -92,14 +93,19 @@ class WdcTransformer(_Transformer):
         # Parse file
         with open(wdc_clean_file_path) as data:
             for row in data:
-                name = "NA"
-                if self.__dimension_parser:
-                    name = next(self.__product_type_classifier.classify(entry=WdcOffersCorpusEntry.from_json(row))).expected.name
-                
-                yield KgEdge.with_generated_id(
-                    subject=name,
-                    predicate=WDC_HAS_DIMENSIONS,
-                    object="NA",
-                    source_ids=(WDC_DATASOURCE_ID,),
-                )
+                product = next(self.__product_type_classifier.classify(entry=WdcOffersCorpusEntry.from_json(row)))
+                if product.expected:
+                    yield KgEdge.with_generated_id(
+                        subject=product.expected.name,
+                        predicate=WDC_HAS_DIMENSIONS,
+                        object="NA",
+                        source_ids=(WDC_DATASOURCE_ID,),
+                    )
+                else:
+                    yield KgEdge.with_generated_id(
+                        subject="NA",
+                        predicate=WDC_HAS_DIMENSIONS,
+                        object="NA",
+                        source_ids=(WDC_DATASOURCE_ID,),
+                    )
                 
