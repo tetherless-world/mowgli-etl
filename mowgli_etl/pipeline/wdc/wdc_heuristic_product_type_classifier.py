@@ -29,10 +29,10 @@ class WdcHeuristicProductTypeClassifier(WdcProductTypeClassifier):
         
             doc = self.NLP(text)
 
-            last_noun_name = ""
-            first_noun_sequence_name = ""
+            last_noun_name = None
+            first_noun_sequence_name = None
             first_noun_flag = 0
-            last_noun_sequence_name = ""
+            last_noun_sequence_name = None
             last_noun_flag = 1
 
             for token in doc:
@@ -42,29 +42,36 @@ class WdcHeuristicProductTypeClassifier(WdcProductTypeClassifier):
 
                     # Assume that general product name is the first sequence of just nouns
                     if first_noun_flag == 0:
-                        if first_noun_sequence_name != "":
-                            first_noun_sequence_name += " "
-                        first_noun_sequence_name += token.text
+                        if first_noun_sequence_name:
+                            first_noun_sequence_name += " " + token.text
+                        else:
+                            first_noun_sequence_name = token.text
 
                     # Assume that general product name is the last sequence of just nouns
                     if last_noun_flag == 1:
-                        last_noun_sequence_name = ""
+                        last_noun_sequence_name = None
                         last_noun_flag = 0
-                    if last_noun_sequence_name != "":
-                        last_noun_sequence_name += " "
-                    last_noun_sequence_name += token.text
+                    if last_noun_sequence_name:
+                        last_noun_sequence_name += " " + token.text
+                    else:
+                        last_noun_sequence_name = token.text
 
                 else:
                     # Throw flag to terminate first noun sequence
-                    if first_noun_sequence_name != "":
+                    if first_noun_sequence_name:
                         first_noun_flag = 1
                     last_noun_flag = 1
 
-            first_noun_sequence_name.rstrip(" ")
+            if first_noun_sequence_name:
+                first_noun_sequence_name.rstrip(" ")
 
-            selections = [(last_noun_name, 1/3, "last_noun_heuristic"),
-                        (first_noun_sequence_name, 1/3, "first_noun_sequence_heuristic"),
-                        (last_noun_sequence_name, 1/3, "last_noun_sequence_heuristic")]
+            selections = []
+            if last_noun_name:
+                selections.append((last_noun_name, 1/3, "last_noun_heuristic"))
+            if first_noun_sequence_name:
+                selections.append((first_noun_sequence_name, 1/3, "first_noun_sequence_heuristic"))
+            if last_noun_sequence_name:
+                selections.append((last_noun_sequence_name, 1/3, "last_noun_sequence_heuristic"))
 
             yield WdcProductType(options=selections, source=text, key=field)
 
