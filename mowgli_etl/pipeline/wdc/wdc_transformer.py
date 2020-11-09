@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from typing import Generator, Set, Dict, Union
+from typing import Generator, Set, Dict, Union, Optional
 from urllib.parse import quote
 import re
 import spacy
@@ -73,7 +73,7 @@ class WdcTransformer(_Transformer):
     
 
     def transform(
-        self, *, wdc_jsonl_file_path: Path, wdc_product_type_classifier: WdcProductTypeClassifier, wdc_dimension_parser: WdcDimensionParser
+        self, *, wdc_jsonl_file_path: Path, wdc_product_type_classifier: Optional[WdcProductTypeClassifier]=None, wdc_dimension_parser: Optional[WdcDimensionParser]=None
     ) -> Generator[Union[KgNode, KgEdge], None, None]:
         # Prepare file and nlp
         wdc_clean_file_path = self.__clean(wdc_jsonl_file_path)
