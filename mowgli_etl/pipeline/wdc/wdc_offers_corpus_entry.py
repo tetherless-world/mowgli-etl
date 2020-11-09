@@ -22,6 +22,7 @@ class WdcOffersCorpusEntry:
         productID: Optional[str] = None
         sku: Optional[str] = None
 
+    title: Optional[str]
     brand: Optional[str]
     category: Optional[str]
     cluster_id: int

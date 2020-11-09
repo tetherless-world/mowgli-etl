@@ -41,7 +41,7 @@ class WdcParsimoniousNodeVisitor(NodeVisitor):
     def __init__(self):
         self.dictionary = WdcParsimoniousNodeVisitor.__Node()
 
-    def __parse_decimal(self,values):
+    def __parse_decimal(self, values):
         if len(values) == 0:
             return
         if len(values) == 1:
@@ -70,7 +70,9 @@ class WdcParsimoniousNodeVisitor(NodeVisitor):
                     getattr(
                         self.dictionary, WdcParsimoniousNodeVisitor.KEY_MAP[key]
                     ).unit = value
-                    getattr(self.dictionary, WdcParsimoniousNodeVisitor.KEY_MAP[key]).unit_text = node.text
+                    getattr(
+                        self.dictionary, WdcParsimoniousNodeVisitor.KEY_MAP[key]
+                    ).unit_text = node.text
 
     def visit_weight(self, node, visited_children):
         self.dictionary.source = node.text
