@@ -86,10 +86,13 @@ class WdcTransformer(_Transformer):
         if not wdc_dimension_parser:
             wdc_dimension_parser = WdcDimensionParser()
 
+        self.__dimension_parser = wdc_dimension_parser
+        self.__product_type_classifier = wdc_product_type_classifier
+
         # Parse file
         with open(wdc_clean_file_path) as data:
             for row in data:
-                product = next(wdc_product_type_classifier.classify(entry=WdcOffersCorpusEntry.from_json(row)))
+                product = next(self.__product_type_classifier.classify(entry=WdcOffersCorpusEntry.from_json(row)))
 
                 
                 yield KgEdge.with_generated_id(
