@@ -23,7 +23,9 @@ from mowgli_etl.pipeline.wdc.wdc_product_type_classifier import WdcProductTypeCl
 from mowgli_etl.pipeline.wdc.wdc_heuristic_product_type_classifier import (
     WdcHeuristicProductTypeClassifier,
 )
-from mowgli_etl.pipeline.wdc.parsimonious_parser.wdc_parsimonious_dimension_parser import WdcParsimoniousDimensionParser
+from mowgli_etl.pipeline.wdc.parsimonious_parser.wdc_parsimonious_dimension_parser import (
+    WdcParsimoniousDimensionParser,
+)
 from mowgli_etl.pipeline.wdc.wdc_offers_corpus_entry import WdcOffersCorpusEntry
 
 
@@ -71,10 +73,12 @@ class WdcTransformer(_Transformer):
 
         return new_file_name
 
-    
-
     def transform(
-        self, *, wdc_jsonl_file_path: Path, wdc_product_type_classifier: Optional[WdcProductTypeClassifier]=None, wdc_dimension_parser: Optional[WdcDimensionParser]=None
+        self,
+        *,
+        wdc_jsonl_file_path: Path,
+        wdc_product_type_classifier: Optional[WdcProductTypeClassifier] = None,
+        wdc_dimension_parser: Optional[WdcDimensionParser] = None
     ) -> Generator[Union[KgNode, KgEdge], None, None]:
         # Prepare file and nlp
         wdc_clean_file_path = self.__clean(wdc_jsonl_file_path)
@@ -93,7 +97,11 @@ class WdcTransformer(_Transformer):
         # Parse file
         with open(wdc_clean_file_path) as data:
             for row in data:
-                product = next(self.__product_type_classifier.classify(entry=WdcOffersCorpusEntry.from_json(row)))
+                product = next(
+                    self.__product_type_classifier.classify(
+                        entry=WdcOffersCorpusEntry.from_json(row)
+                    )
+                )
                 if product.expected:
                     yield KgEdge.with_generated_id(
                         subject=product.expected.name,
@@ -108,4 +116,3 @@ class WdcTransformer(_Transformer):
                         object="NA",
                         source_ids=(WDC_DATASOURCE_ID,),
                     )
-                

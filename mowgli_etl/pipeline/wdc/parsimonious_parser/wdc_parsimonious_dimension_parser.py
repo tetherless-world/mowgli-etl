@@ -12,7 +12,6 @@ from typing import Optional
 
 
 class WdcParsimoniousDimensionParser(WdcDimensionParser):
-
     @dataclasses.dataclass
     class ParseResults:
         dimensions: Optional[WdcProductDimensions] = None
@@ -66,7 +65,7 @@ class WdcParsimoniousDimensionParser(WdcDimensionParser):
                 and retVal.power is None
             ):
                 return None
-            return WdcParsimoniousDimensionParser.ParseResults(dimensions = retVal)
+            return WdcParsimoniousDimensionParser.ParseResults(dimensions=retVal)
 
         if entry.key_value_pairs is not None:
             for key in ("dimensions", "weight"):
@@ -157,19 +156,12 @@ if __name__ == "__main__":
                 "accuracy",
                 "line",
                 "field",
-                "bin"
+                "bin",
             ]
             writer = csv.DictWriter(output, fields)
             writer.writeheader()
             for entry in holder["dimensions"]:
-                for key in (
-                    "width",
-                    "height",
-                    "length",
-                    "depth",
-                    "power",
-                    "weight"
-                ):
+                for key in ("width", "height", "length", "depth", "power", "weight"):
                     entry["source"] = holder["source"]
                     if key in entry.keys() and type(entry[key]) is dict:
                         entry[f"{key}_unit"] = entry[key]["unit"]
