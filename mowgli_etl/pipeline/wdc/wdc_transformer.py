@@ -17,7 +17,6 @@ from mowgli_etl.pipeline.wdc.wdc_constants import (
     WDC_DATASOURCE_ID,
     WDC_HAS_DIMENSIONS,
     WDC_ARCHIVE_PATH,
-    WDC_OFFERS_CORPUS,
 )
 from mowgli_etl.pipeline.wdc.wdc_dimension_parser import WdcDimensionParser
 from mowgli_etl.pipeline.wdc.wdc_product_type_classifier import WdcProductTypeClassifier
