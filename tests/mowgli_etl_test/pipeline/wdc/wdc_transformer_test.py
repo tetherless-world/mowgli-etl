@@ -9,7 +9,8 @@ from mowgli_etl.pipeline.wdc.wdc_heuristic_product_type_classifier import (
 from mowgli_etl.pipeline.wdc.parsimonious_parser.wdc_parsimonious_dimension_parser import (
     WdcParsimoniousDimensionParser,
 )
+from mowgli_etl.pipeline.wdc.wdc_offers_corpus import WdcOffersCorpus
 
 # Need to write actual tests
-def test_transform(wdc_large_json_file_path: Path):
+def test_transform(wdc_large_offers_corpus: WdcOffersCorpus):
     pass
