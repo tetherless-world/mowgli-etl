@@ -1,19 +1,19 @@
-from mowgli_etl.pipeline.wdc.data_exploration.offers_corpus_english_v2_random_sample import data_sample
+from mowgli_etl.pipeline.wdc.wdc_offers_corpus import WdcOffersCorpus
 from pathlib import Path
 
 import warnings
 warnings.simplefilter(action='ignore', category=StopIteration)
 
-def test_100_data_sample(wdc_large_json_file_path: Path):
+def test_100_data_sample(wdc_large_offers_corpus: WdcOffersCorpus):
 	count = 0
-	for entry in data_sample(wdc_large_json_file_path, 100):
+	for entry in wdc_large_offers_corpus.sample(100):
 		count += 1
 	assert count == 100
 
-def test_small_data_sample(wdc_large_json_file_path: Path):
-	for item in data_sample(wdc_large_json_file_path, 0):
+def test_small_data_sample(wdc_large_offers_corpus: WdcOffersCorpus):
+	for item in wdc_large_offers_corpus.sample(0):
 		assert item is None
 
-def test_massive_data_sample(wdc_large_json_file_path: Path):
-	for item in data_sample(wdc_large_json_file_path, 10**8):
+def test_massive_data_sample(wdc_large_offers_corpus: WdcOffersCorpus):
+	for item in wdc_large_offers_corpus.sample(10**8):
 		assert item is None
