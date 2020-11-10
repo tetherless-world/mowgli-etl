@@ -3,7 +3,7 @@ from pathlib import Path
 
 from mowgli_etl.pipeline.wdc.wdc_offers_corpus_entry import WdcOffersCorpusEntry
 
-def sample(wdc_jsonl_file_path: Path, n: int) -> WdcOffersCorpusEntry:
+def data_sample(wdc_jsonl_file_path: Path, n: int) -> WdcOffersCorpusEntry:
 	if n < 1:
 		print(f"ERROR: Desired number of lines {n} is not a positive integer")
 		return None
