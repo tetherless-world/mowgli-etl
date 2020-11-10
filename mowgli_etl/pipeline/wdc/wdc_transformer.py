@@ -30,7 +30,7 @@ from mowgli_etl.pipeline.wdc.wdc_offers_corpus_entry import WdcOffersCorpusEntry
 
 
 class WdcTransformer(_Transformer):
-    
+
     def transform(
         self,
         *,
@@ -55,14 +55,17 @@ class WdcTransformer(_Transformer):
         # Parse file
         with open(wdc_clean_file_path) as data:
             for row in data:
-                product = next(
+                entry = WdcOffersCorpusEntry.from_json(row)
+                product_type = next(
                     self.__product_type_classifier.classify(
-                        entry=WdcOffersCorpusEntry.from_json(row)
+                        entry=entry
                     )
                 )
-                if product.expected:
+                parsed_dimensions = next(self.__dimension_parser.parse(entry=entry))
+                
+                if product_type.expected:
                     yield KgEdge.with_generated_id(
-                        subject=product.expected.name,
+                        subject=product_type.expected.name,
                         predicate=WDC_HAS_DIMENSIONS,
                         object="NA",
                         source_ids=(WDC_DATASOURCE_ID,),
