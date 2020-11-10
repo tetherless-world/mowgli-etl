@@ -94,6 +94,7 @@ class WdcREDimensionParser(WdcDimensionParser):
         return [list(set(dimensions)), unit]
 
     def parse(self, *, information: dict) -> WdcProductDimensions:
+        print("WARNING: Likely to be depricated. Consider using WdcParsimoniousDimensionParser")
         """
         We want to find any case where there is a numberxnumberxnumber... combination
         Or number+d, number+w, number+h, number+l
@@ -125,41 +126,6 @@ class WdcREDimensionParser(WdcDimensionParser):
             in specTableContent: " 7 x10"
             in specTableContent: " xs 2 34 s 4 6 35 36 m 8 10 37 38 l 12 14 39 5 41 xl 16 18 42 5 44 5 2xl 20 46 3xl 22 47 5 4xl 24 49"
         """
-        """
-        OLD CODE:
-        
-        dimensions = []
-
-        if description != None:
-            dimensions = re.findall("\d+(?: \d+)?\s?\w*\sx\s\d+\
-                    (?: \d+)?\s?(?:x\s\d+\s?)?\w*", description)
-
-        if len(dimensions) == 0:
-            if(description):
-                dimensions = re.findall("\d+\s?\w+\s\d+\s?\w+\
-                        \slead\sx\s\d+\s?\w+", description)
-
-        if len(dimensions) == 0:
-            dimensions = re.findall("\d+\s?\w*\sx\s\d+\
-                    \s?\w*", listing)
-
-        if len(dimensions) == 0:
-            dimensions = re.findall("\d+\s?\w+\s\d+\s?\w+\
-                    \slead\sx\s\d+\s?\w+", listing)
-
-        if len(dimensions) == 0:
-            if additional_info != None:
-                dimensions = re.findall("\d+(?: \d+)?\s?\w*\sx\s\d+\
-                        (?: \d+)?\s?(?:x\s\d+\s?)?\w*", additional_info)
-
-            # if dimensions:
-            #     return dimensions
-
-        # dimensions = re.findall("\d+\s?\w+\s\d+\s?\w+\
-        #         \slead\sx\s\d+\s?\w+", additional_info)
-
-        return dimensions
-        """
         titleDimensions = self._parseTitle(title=information["title"])
         if titleDimensions and len(titleDimensions[0]) > 1:
             print("from title:", titleDimensions, sep="\n\t")
@@ -185,12 +151,13 @@ class WdcREDimensionParser(WdcDimensionParser):
         return WdcProductDimensions()
 
 
-# with open(
-#     WDC_ARCHIVE_PATH / "offers_corpus_english_v2_random_100_clean.jsonl", "r"
-# ) as data:
-#     count = 0
-#     for row in data:
-#         count += 1
-#         print(count)
-#         info = json.loads(row)
-#         WdcREDimensionParser().parse(information=info)
+if __name__ == "__main__":
+    with open(
+        WDC_ARCHIVE_PATH / "offers_corpus_english_v2_1000.jsonl", "r"
+    ) as data:
+        count = 0
+        for row in data:
+            count += 1
+            print(count)
+            info = json.loads(row)
+            WdcREDimensionParser().parse(information=info)
