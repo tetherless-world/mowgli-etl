@@ -38,8 +38,6 @@ class WdcTransformer(_Transformer):
         wdc_product_type_classifier: Optional[WdcProductTypeClassifier] = None,
         wdc_dimension_parser: Optional[WdcDimensionParser] = None
     ) -> Generator[Union[KgNode, KgEdge], None, None]:
-        # Prepare file and nlp
-        wdc_clean_file_path = self.__clean(wdc_jsonl_file_path)
 
         # Set default ProductTypeClassifier
         if not wdc_product_type_classifier:
@@ -53,7 +51,7 @@ class WdcTransformer(_Transformer):
         self.__product_type_classifier = wdc_product_type_classifier
 
         # Parse file
-        with open(wdc_clean_file_path) as data:
+        with open(wdc_jsonl_file_path) as data:
             for row in data:
                 entry = WdcOffersCorpusEntry.from_json(row)
                 product_type = next(
