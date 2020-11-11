@@ -24,6 +24,6 @@ class WdcOffersCorpus:
             )
         step_size = self.__file_length // n
         for i, entry in enumerate(self.entries()):
-            if i + 1 % step_size == 0:
+            if (i + 1) % step_size == 0:
                 yield entry
         return None
