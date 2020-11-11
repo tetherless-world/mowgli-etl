@@ -4,6 +4,7 @@ from mowgli_etl.pipeline.wdc.wdc_heuristic_product_type_classifier import (
 from mowgli_etl.pipeline.wdc.wdc_offers_corpus_entry import WdcOffersCorpusEntry
 from mowgli_etl.pipeline.wdc.wdc_offers_corpus import WdcOffersCorpus
 
+
 def test_heuristic_product_type_classifier(wdc_large_offers_corpus: WdcOffersCorpus):
     HPTC = WdcHeuristicProductTypeClassifier()
     for count, entry in enumerate(wdc_large_offers_corpus.entries()):
