@@ -35,24 +35,24 @@ class WdcTransformer(_Transformer):
     def transform(
         self,
         *,
-        wdc_corpus: WdcOffersCorpus,
-        wdc_product_type_classifier: Optional[WdcProductTypeClassifier] = None,
-        wdc_dimension_parser: Optional[WdcDimensionParser] = None
+        corpus: WdcOffersCorpus,
+        product_type_classifier: Optional[WdcProductTypeClassifier] = None,
+        dimension_parser: Optional[WdcDimensionParser] = None
     ) -> Generator[Union[KgNode, KgEdge], None, None]:
 
         # Set default ProductTypeClassifier
-        if not wdc_product_type_classifier:
-            wdc_product_type_classifier = WdcHeuristicProductTypeClassifier()
+        if not product_type_classifier:
+            product_type_classifier = WdcHeuristicProductTypeClassifier()
 
         # Set default DimensionParser
-        if not wdc_dimension_parser:
-            wdc_dimension_parser = WdcParsimoniousDimensionParser()
+        if not dimension_parser:
+            dimension_parser = WdcParsimoniousDimensionParser()
 
-        self.__dimension_parser = wdc_dimension_parser
-        self.__product_type_classifier = wdc_product_type_classifier
+        self.__dimension_parser = dimension_parser
+        self.__product_type_classifier = product_type_classifier
 
         # Parse file
-        for entry in wdc_corpus.entries:
+        for entry in corpus.entries():
             product_type = next(
                 self.__product_type_classifier.classify(
                     entry=entry
