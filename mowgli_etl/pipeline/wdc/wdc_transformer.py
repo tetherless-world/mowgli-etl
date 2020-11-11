@@ -27,92 +27,45 @@ from mowgli_etl.pipeline.wdc.parsimonious_parser.wdc_parsimonious_dimension_pars
     WdcParsimoniousDimensionParser,
 )
 from mowgli_etl.pipeline.wdc.wdc_offers_corpus_entry import WdcOffersCorpusEntry
+from mowgli_etl.pipeline.wdc.wdc_offers_corpus import WdcOffersCorpus
 
 
 class WdcTransformer(_Transformer):
-    __BAD_DUPLICATE = '{"brand":'
-
-    def __clean(self, wdc_jsonl_file_path: Path):
-        """
-        Clean input file, particularly checking for multiple json items in one line, or split json object; return file with original name + "_clean"
-        """
-        wdc_jsonl_dir_path, wdc_jsonl_file_name = os.path.split(wdc_jsonl_file_path)
-        wdc_jsonl_file_base_name, _ext = os.path.splitext(wdc_jsonl_file_name)
-        new_file_name = (
-            wdc_jsonl_dir_path + "/" + wdc_jsonl_file_base_name + "_clean.jsonl"
-        )
-
-        with open(wdc_jsonl_file_path, "r") as wdc_jsonl_file_file, open(
-            new_file_name, "w"
-        ) as new_file:
-            for line in wdc_jsonl_file_file:
-                # Catch duplicate objects
-                if line.count(self.__BAD_DUPLICATE) > 1:
-                    temp_line = ""
-                    data_starts = []
-                    val = 0
-                    while val != -1:
-                        val = line.find(self.__BAD_DUPLICATE, val + 1)
-                        if line[val - 2] == ":" or val == -1:
-                            continue
-                        data_starts.append(val - 1)
-
-                    for i in range(len(data_starts)):
-                        if i < len(data_starts) - 1:
-                            temp_line += line[data_starts[i] : data_starts[i + 1]]
-                            if temp_line[-1] != "}":
-                                temp_line += "}"
-                            temp_line += "\n"
-                        else:
-                            t = list(line[data_starts[i] : :])
-                            t[0] = "{"
-                            temp_line += "".join(t)
-
-                        line = temp_line
-                new_file.write(line)
-
-        return new_file_name
-
     def transform(
         self,
         *,
-        wdc_jsonl_file_path: Path,
-        wdc_product_type_classifier: Optional[WdcProductTypeClassifier] = None,
-        wdc_dimension_parser: Optional[WdcDimensionParser] = None
+        corpus: WdcOffersCorpus,
+        product_type_classifier: Optional[WdcProductTypeClassifier] = None,
+        dimension_parser: Optional[WdcDimensionParser] = None
     ) -> Generator[Union[KgNode, KgEdge], None, None]:
-        # Prepare file and nlp
-        wdc_clean_file_path = self.__clean(wdc_jsonl_file_path)
 
         # Set default ProductTypeClassifier
-        if not wdc_product_type_classifier:
-            wdc_product_type_classifier = WdcHeuristicProductTypeClassifier()
+        if not product_type_classifier:
+            product_type_classifier = WdcHeuristicProductTypeClassifier()
 
         # Set default DimensionParser
-        if not wdc_dimension_parser:
-            wdc_dimension_parser = WdcParsimoniousDimensionParser()
+        if not dimension_parser:
+            dimension_parser = WdcParsimoniousDimensionParser()
 
-        self.__dimension_parser = wdc_dimension_parser
-        self.__product_type_classifier = wdc_product_type_classifier
+        self.__dimension_parser = dimension_parser
+        self.__product_type_classifier = product_type_classifier
 
         # Parse file
-        with open(wdc_clean_file_path) as data:
-            for row in data:
-                product = next(
-                    self.__product_type_classifier.classify(
-                        entry=WdcOffersCorpusEntry.from_json(row)
-                    )
+        for entry in corpus.entries():
+            product_type = next(self.__product_type_classifier.classify(entry=entry))
+            parsed_dimensions = next(self.__dimension_parser.parse(entry=entry))
+
+            if product_type.expected:
+                yield KgEdge.with_generated_id(
+                    subject=product_type.expected.name,
+                    predicate=WDC_HAS_DIMENSIONS,
+                    object="NA",
+                    source_ids=(WDC_DATASOURCE_ID,),
                 )
-                if product.expected:
-                    yield KgEdge.with_generated_id(
-                        subject=product.expected.name,
-                        predicate=WDC_HAS_DIMENSIONS,
-                        object="NA",
-                        source_ids=(WDC_DATASOURCE_ID,),
-                    )
-                else:
-                    yield KgEdge.with_generated_id(
-                        subject="NA",
-                        predicate=WDC_HAS_DIMENSIONS,
-                        object="NA",
-                        source_ids=(WDC_DATASOURCE_ID,),
-                    )
+            else:
+                yield KgEdge.with_generated_id(
+                    subject="NA",
+                    predicate=WDC_HAS_DIMENSIONS,
+                    object="NA",
+                    source_ids=(WDC_DATASOURCE_ID,),
+                )
