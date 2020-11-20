@@ -56,7 +56,7 @@ class WdcParsimoniousDimensionParser(WdcDimensionParser):
                     """
     )
 
-    def parse(self, *, entry: WdcOffersCorpusEntry) -> List[WdcParsimoniousDimensionParser.ParseResults]:
+    def parse(self, *, entry: WdcOffersCorpusEntry):
         """
         Use Parsimonious grammar to parse dimensions from entries
         Parameters: entry - WdcOffersCorpusEntry to be parsed
@@ -66,7 +66,7 @@ class WdcParsimoniousDimensionParser(WdcDimensionParser):
         returns = []
         return_flag = False
 
-        def __generate_dimensions(source) -> WdcParsimoniousDimensionParser.ParseReults:
+        def __generate_dimensions(source):
             """
             Use WdcParsimoniousNodeVisitor to parse grammar result
             Parameters: source - Parsimonious Grammar parse result to be analyzed
