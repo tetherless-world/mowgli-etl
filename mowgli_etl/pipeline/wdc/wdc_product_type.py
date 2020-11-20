@@ -5,7 +5,11 @@ from collections import Counter
 
 @dataclass(init=False)
 class WdcProductType:
+    """
+    Store parsed product type for easier access
+    """
 
+    # Dictionary mapping data source to relative confidence
     METHOD_CONFIDENCE = {
         "category": 1 / 2,
         "description": 1 / 10,
@@ -16,6 +20,10 @@ class WdcProductType:
 
     @dataclass
     class __Option:
+        """
+        Track each option separately to track finer detail
+        """
+
         name: str
         confidence: float
         method: str
@@ -27,6 +35,13 @@ class WdcProductType:
     source: str = None
 
     def __init__(self, *, options, source, key):
+        """
+        Generate product type entries
+        Parameters: options - list of tuples containing name, confidence, method
+                    source - str containing original text
+                    key - WdcCorpusEntry field that was used for parsing
+        """
+
         self.possible = []
         if options:
             name_counter = Counter()
