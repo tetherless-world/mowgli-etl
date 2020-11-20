@@ -6,10 +6,29 @@ from mowgli_etl.pipeline.wdc.wdc_offers_corpus_entry import WdcOffersCorpusEntry
 
 
 class WdcHeuristicProductTypeClassifier(WdcProductTypeClassifier):
+    """
+    Classify product types from data entries using the following heuristics:
+        last-noun: The product type is found in the last noun of the entry
+        first-noun-sequence: The product type is found in the first sequence of nouns
+        last-noun-sequence: The product type is found in the last sequence of nouns
+    """
+
+    __NLP = None
+
     def __init__(self):
-        self.NLP = load("en_core_web_sm")
+        """
+        Set local NLP to optimize execution
+        """
+        if self.__class__.__NLP is None:
+            self.__class__.__NLP = load('en_core_web_sm')
 
     def __clean_words(self, line):
+        """
+        Modify a word (or sequence of words) to have a standardized format (i.e. replace "_" with " " and remove words with non-alphabetical characters)
+        
+        :param line: entry field to be cleaned
+        :return: cleaned word
+        """
         words = line.split(" ")
         for i in range(len(words)):
             words[i] = words[i].split("_")
@@ -20,22 +39,31 @@ class WdcHeuristicProductTypeClassifier(WdcProductTypeClassifier):
 
     def classify(self, *, entry: WdcOffersCorpusEntry) -> WdcProductType:
         """
-        Parse title/listing/other to pull ProductType with confidence value
+        Parse product to find reasonable generic product type using heuristics
+        
+        :param entry: data entry to be classified
+        :return: parsed product type
         """
+
+        # Iterate over entry fields
         for field in ["category", "description", "spec_table_content", "title"]:
             text = getattr(entry, field)
             if text is None:
                 continue
+            # Clean entry
             text = self.__clean_words(getattr(entry, field))
 
-            doc = self.NLP(text)
+            # Parse text
+            doc = self.__class__.__NLP(text)
 
+            # Initialize heuristics
             last_noun_name = None
             first_noun_sequence_name = None
             first_noun_flag = 0
             last_noun_sequence_name = None
             last_noun_flag = 1
 
+            # Parse entry
             for token in doc:
                 if token.pos in range(92, 101):
                     # Assume that general product name is last noun in title
@@ -63,9 +91,11 @@ class WdcHeuristicProductTypeClassifier(WdcProductTypeClassifier):
                         first_noun_flag = 1
                     last_noun_flag = 1
 
+            # Strip extra spaces
             if first_noun_sequence_name:
                 first_noun_sequence_name.rstrip(" ")
 
+            # Create heursitic tuples
             selections = []
             if last_noun_name:
                 selections.append((last_noun_name, 1 / 3, "last_noun_heuristic"))
@@ -81,6 +111,7 @@ class WdcHeuristicProductTypeClassifier(WdcProductTypeClassifier):
             yield WdcProductType(options=selections, source=text, key=field)
 
 
+# Local testing for debug
 if __name__ == "__main__":
     from mowgli_etl.pipeline.wdc.wdc_constants import WDC_ARCHIVE_PATH
     from json import loads

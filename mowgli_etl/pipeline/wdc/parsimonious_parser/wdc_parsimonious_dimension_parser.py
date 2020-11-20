@@ -8,21 +8,32 @@ from mowgli_etl.pipeline.wdc.parsimonious_parser.wdc_parsimonious_node_visitor i
 
 from parsimonious import Grammar
 import dataclasses, json
-from typing import Optional
+from typing import Optional, List
 
 
 class WdcParsimoniousDimensionParser(WdcDimensionParser):
+    """
+    Parse dimensions from entries using Parsimonious grammar
+    """
+
     @dataclasses.dataclass
     class ParseResults:
+        """
+        Separate dataclass enclosure for the parsing results for easier access
+        """
+
         dimensions: Optional[WdcProductDimensions] = None
         field: Optional[str] = None
         raw_text: Optional[str] = None
 
+    # Dictionary mapping source to confidence weight
     SOURCE_KEY = {
         "description": 1 / 2,
         "spec_table_content": 3 / 4,
         "key_value_pairs": 1,
     }
+
+    # Parsimonious grammar stored class-wide to optimize execution
     __GRAMMAR = Grammar(
         """
 					bin 			= (space/alt/unit/dimensions/dimension/weight/power/complex/decimal/direction/mass/current/number/word)*
@@ -46,11 +57,24 @@ class WdcParsimoniousDimensionParser(WdcDimensionParser):
     )
 
     def parse(self, *, entry: WdcOffersCorpusEntry):
+        """
+        Use Parsimonious grammar to parse dimensions from entries
+
+        :param entry: Data point to be parsed
+        :return: List of potential dimensions differentiated by source
+        """
+
         returns = []
         return_flag = False
-        __VISITOR = WdcParsimoniousNodeVisitor()
 
         def __generate_dimensions(source):
+            """
+            Use WdcParsimoniousNodeVisitor to parse grammar result
+
+            :param source: Parsimonious Grammar parse result to be analyzed
+            :return: resulting dimension from Grammar parsing
+            """
+
             __VISITOR = WdcParsimoniousNodeVisitor()
             __VISITOR.visit(source)
             retVal = WdcProductDimensions.from_dict(
@@ -67,6 +91,7 @@ class WdcParsimoniousDimensionParser(WdcDimensionParser):
                 return None
             return WdcParsimoniousDimensionParser.ParseResults(dimensions=retVal)
 
+        # Parse key_value_pairs field
         if entry.key_value_pairs is not None:
             for key in ("dimensions", "weight"):
                 if key in entry.key_value_pairs.keys():
@@ -77,6 +102,7 @@ class WdcParsimoniousDimensionParser(WdcDimensionParser):
                         result.raw_text = entry.key_value_pairs
                         returns.append(result)
 
+        # Parse description field
         if entry.description is not None:
             description = self.__GRAMMAR.parse(entry.description)
             result = __generate_dimensions(description)
@@ -85,6 +111,7 @@ class WdcParsimoniousDimensionParser(WdcDimensionParser):
                 result.raw_text = entry.description
                 returns.append(result)
 
+        # Parse spec_table_content field
         if entry.spec_table_content is not None:
             spec_table_content = self.__GRAMMAR.parse(entry.spec_table_content)
             result = __generate_dimensions(spec_table_content)
@@ -95,7 +122,7 @@ class WdcParsimoniousDimensionParser(WdcDimensionParser):
 
         return returns
 
-
+# Local tests for debug
 if __name__ == "__main__":
     import sys, time, csv
 

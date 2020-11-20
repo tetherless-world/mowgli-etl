@@ -7,10 +7,16 @@ from dataclasses_json import dataclass_json
 @dataclass_json
 @dataclass(frozen=True)
 class WdcProductDimensions:
-    """"""
+    """
+    Store product dimensions in a dataclass for easier access
+    """
 
     @dataclass
     class __Dimension:
+        """
+        Store dimensions separately to encapsulate information for each dimension
+        """
+
         value: Optional[float] = None
         unit: Optional[str] = None
         value_text: Optional[str] = None
@@ -24,16 +30,37 @@ class WdcProductDimensions:
     weight: Optional[__Dimension] = None
 
     def __weight_accuracy(self, weight: float) -> float:
+        """
+        Calculate weight accuracy dependent on whether or not there's a unit associated
+
+        :param weight: weight from source to be applied to dimension confidence
+        :return: confidence of dimension result
+        """
+
         if self.weight is None:
             return 0
         return weight if self.weight.unit else weight / 2
 
     def __power_accuracy(self, weight: float) -> float:
+        """
+        Calculate power accuracy dependent on whether or not there's a unit associated
+
+        :param weight: weight from source to be applied to dimension confidence
+        :return: confidence of dimension result
+        """
+
         if self.power is None:
             return 0
         return weight if self.power.unit else weight / 2
 
     def accuracy(self, weight: float) -> float:
+        """
+        Calculate overall accuracy of the parsed dimension
+
+        :param weight: weight from source to be applied to dimension confidence
+        :return: confidence of dimension result
+        """
+
         tally = 0
         for a in ("depth", "height", "length", "width"):
             if getattr(self, a) is not None:

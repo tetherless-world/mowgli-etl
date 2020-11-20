@@ -10,9 +10,17 @@ from mowgli_etl.paths import DATA_DIR
 @dataclass_json(letter_case=LetterCase.CAMEL)
 @dataclass(frozen=True)
 class WdcOffersCorpusEntry:
+    """
+    Collect and store data entries in a dataclass for simpler parsing
+    """
+
     @dataclass_json
     @dataclass(frozen=True)
     class __WdcOffersCorpusEntryIdentifier:
+        """
+        Separately parse identifier field
+        """
+
         gtin8: Optional[str] = None
         gtin12: Optional[str] = None
         gtin13: Optional[str] = None
@@ -34,6 +42,7 @@ class WdcOffersCorpusEntry:
     # {"brand":null,"category":"Clothing","cluster_id":3617395,"description":null,"id":210,"identifiers":[{"\/sku":"[codesku17smmtzi50x]"}],"keyValuePairs":null,"price":null,"specTableContent":null,"title":"selce zip t shirt montura maungashop"}
 
 
+# Local testing for debug
 if __name__ == "__main__":
     with open(
         DATA_DIR / "wdc" / "extracted" / "offers_corpus_english_v2_1000.jsonl"
