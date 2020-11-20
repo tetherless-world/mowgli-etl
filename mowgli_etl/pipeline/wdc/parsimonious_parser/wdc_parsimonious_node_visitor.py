@@ -53,7 +53,7 @@ class WdcParsimoniousNodeVisitor(NodeVisitor):
 
     def __init__(self):
         """
-        Initialize dictionary as Node object
+        Constructor method
         """
 
         self.dictionary = WdcParsimoniousNodeVisitor.__Node()
@@ -61,6 +61,9 @@ class WdcParsimoniousNodeVisitor(NodeVisitor):
     def __parse_decimal(self, values):
         """
         Parse decimal values by assuming a space between digits is a decimal
+
+        :param values: raw text input from decimal Grammar parse
+        :return: reasonable conversion from raw string to decimal string
         """
 
         if len(values) == 0:
@@ -74,6 +77,9 @@ class WdcParsimoniousNodeVisitor(NodeVisitor):
     def visit_dimension(self, node, visited_children):
         """
         Parse dimension value into local dictionary
+
+        :param node: the Parsimonious.node object being visited
+        :param visited_children: results of visiting the children of this node
         """
 
         entries = node.text.split(" ")
@@ -87,6 +93,9 @@ class WdcParsimoniousNodeVisitor(NodeVisitor):
     def visit_unit(self, node, visited_children):
         """
         Parse unit from unit dictionary
+        
+        :param node: the Parsimonious.node object being visited
+        :param visited_children: results of visiting the children of this node
         """
 
         value = node.text.split(" ")[-1]
@@ -106,6 +115,9 @@ class WdcParsimoniousNodeVisitor(NodeVisitor):
     def visit_weight(self, node, visited_children):
         """
         Parse weight values
+
+        :param node: the Parsimonious.node object being visited
+        :param visited_children: results of visiting the children of this node
         """
 
         self.dictionary.source = node.text
@@ -121,6 +133,9 @@ class WdcParsimoniousNodeVisitor(NodeVisitor):
     def visit_power(self, node, visited_children):
         """
         Parse power values
+
+        :param node: the Parsimonious.node object being visited
+        :param visited_children: results of visiting the children of this node
         """
 
         entries = node.text.split(" ")
@@ -135,6 +150,9 @@ class WdcParsimoniousNodeVisitor(NodeVisitor):
     def generic_visit(self, node, visited_children):
         """
         Catchall for unnamed grammar results
+
+        :param node: the Parsimonious.node object being visited
+        :param visited_children: results of visiting the children of this node
         """
 
         return None
