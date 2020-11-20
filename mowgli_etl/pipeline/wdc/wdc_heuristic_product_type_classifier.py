@@ -6,17 +6,28 @@ from mowgli_etl.pipeline.wdc.wdc_offers_corpus_entry import WdcOffersCorpusEntry
 
 
 class WdcHeuristicProductTypeClassifier(WdcProductTypeClassifier):
+    """
+    Classify product types from data entries using the following heuristics:
+        last-noun: The product type is found in the last noun of the entry
+        first-noun-sequence: The product type is found in the first sequence of nouns
+        last-noun-sequence: The product type is found in the last sequence of nouns
+    """
+
+    __NLP = None
+
     def __init__(self):
         """
         Set local NLP to optimize execution
         """
-        self.NLP = load("en_core_web_sm")
+        if self.__class__.__NLP is None:
+            self.__class__.__NLP = load('en_core_web_sm')
 
     def __clean_words(self, line):
         """
         Modify a word (or sequence of words) to have a standardized format (i.e. replace "_" with " " and remove words with non-alphabetical characters)
-        Parameters: line - str to be cleaned
-        Return: str of cleaned words from input
+        
+        :param line: entry field to be cleaned
+        :return: cleaned word
         """
         words = line.split(" ")
         for i in range(len(words)):
@@ -28,12 +39,10 @@ class WdcHeuristicProductTypeClassifier(WdcProductTypeClassifier):
 
     def classify(self, *, entry: WdcOffersCorpusEntry) -> WdcProductType:
         """
-        Parse product to find reasonable generic product type using the following heuristics:
-                last-noun: The product type is found in the last noun of the entry
-                first-noun-sequence: The product type is found in the first sequence of nouns
-                last-noun-sequence: The product type is found in the last sequence of nouns
-        Parameters: entry - WdcOffersCorpusEntry object to be parsed
-        Return: WdcProductType object parsed from the input
+        Parse product to find reasonable generic product type using heuristics
+        
+        :param entry: data entry to be classified
+        :return: parsed product type
         """
 
         # Iterate over entry fields
@@ -45,7 +54,7 @@ class WdcHeuristicProductTypeClassifier(WdcProductTypeClassifier):
             text = self.__clean_words(getattr(entry, field))
 
             # Parse text
-            doc = self.NLP(text)
+            doc = self.__class__.__NLP(text)
 
             # Initialize heuristics
             last_noun_name = None

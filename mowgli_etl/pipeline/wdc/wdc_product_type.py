@@ -7,6 +7,10 @@ from collections import Counter
 class WdcProductType:
     """
     Store parsed product type for easier access
+
+    :param options: collection of possible product types
+    :param source: original text
+    :param key: class:WdcCorpusEntry field used for parsing
     """
 
     # Dictionary mapping data source to relative confidence
@@ -36,10 +40,7 @@ class WdcProductType:
 
     def __init__(self, *, options, source, key):
         """
-        Generate product type entries
-        Parameters: options - list of tuples containing name, confidence, method
-                    source - str containing original text
-                    key - WdcCorpusEntry field that was used for parsing
+        Constructor method
         """
 
         self.possible = []

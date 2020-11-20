@@ -4,19 +4,26 @@ from mowgli_etl.pipeline.wdc.wdc_offers_corpus_entry import WdcOffersCorpusEntry
 
 
 class WdcOffersCorpus:
+    """
+    Container for data source used to generate and access data entries easily
+
+    :param wdc_json_file_path: directory of data source
+    """
+
     def __init__(self, *, wdc_json_file_path: Path):
         """
-        Establish collection of product entries in dataclass enclosures
-        Parameters: wdc_json_file_path - Path object to data source
+        Constructor method
         """
 
         self.__file_path = wdc_json_file_path
-        self.__file_length = open(self.__file_path).read().count("\n") + 1
+        with open(self.__file_path) as data:
+            self.__file_length = data.read().count('\n') + 1
 
     def entries(self) -> Generator[WdcOffersCorpusEntry, None, None]:
         """
         Access entries from corpus
-        Yield: WdcOffersCorpusEntry - entry generated from each line in the data source
+
+        :return: entries generated from each line in the data source
         """
 
         with open(self.__file_path) as data:
@@ -26,8 +33,10 @@ class WdcOffersCorpus:
     def sample(self, n: int) -> Generator[WdcOffersCorpusEntry, None, None]:
         """
         Randomly sample entries from the corpus to simplify testing and exploration
-        Parameters: n - int number of entries desired such that 0 < n < file_length
-        Yields: WdcOffersCorpusEntry - entry generated from randomly selected lines 
+
+        :param n: number of desired entries such that 0 < n < length of file
+        :return: entries generated from randomly selected lines
+        :raises ValueError: n is not a valid integer value between 0 and length of file
         """
 
         if n < 1:

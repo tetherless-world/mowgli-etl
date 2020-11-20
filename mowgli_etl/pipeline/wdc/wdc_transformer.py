@@ -42,10 +42,11 @@ class WdcTransformer(_Transformer):
     ) -> Generator[Union[KgNode, KgEdge], None, None]:
         """
         Main functionality for transformer
-        Parameters: corpus - WdcOffersCorpus object that contains WdcOfferCorpusEntry objects to make parsing easier
-                    product_type_classifier - WdcProductTypeClassifier object to determine the appropriate generic product category
-                    dimension_parser - WdcDimensionParser object to determine most likely dimensions and units
-        Yields: KgEdge objects representing spatial relations between products
+
+        :param corpus: container for data points for easier parsing
+        :param product_type_classifier: classifier used to determine the appropriate generic product category, defaults to None
+        :param dimension_parser: parser used to determine dimensions, defaults to None
+        :return: KgEdge objects representing spatial relations between products
         """
 
         # Set default ProductTypeClassifier

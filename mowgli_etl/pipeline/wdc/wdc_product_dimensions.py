@@ -32,6 +32,9 @@ class WdcProductDimensions:
     def __weight_accuracy(self, weight: float) -> float:
         """
         Calculate weight accuracy dependent on whether or not there's a unit associated
+
+        :param weight: weight from source to be applied to dimension confidence
+        :return: confidence of dimension result
         """
 
         if self.weight is None:
@@ -41,6 +44,9 @@ class WdcProductDimensions:
     def __power_accuracy(self, weight: float) -> float:
         """
         Calculate power accuracy dependent on whether or not there's a unit associated
+
+        :param weight: weight from source to be applied to dimension confidence
+        :return: confidence of dimension result
         """
 
         if self.power is None:
@@ -50,8 +56,9 @@ class WdcProductDimensions:
     def accuracy(self, weight: float) -> float:
         """
         Calculate overall accuracy of the parsed dimension
-        Parameters: weight - float associated to the source certainty
-        Return: float - certainty of dimension
+
+        :param weight: weight from source to be applied to dimension confidence
+        :return: confidence of dimension result
         """
 
         tally = 0
