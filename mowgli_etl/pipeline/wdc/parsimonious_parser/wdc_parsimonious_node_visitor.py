@@ -5,6 +5,11 @@ from typing import Optional
 
 
 class WdcParsimoniousNodeVisitor(NodeVisitor):
+    """
+    NodeVisitor implementation for Wdc Parsimonious Grammar parsing
+    """
+
+    # Dictionary mapping a unit to a full-text unit
     COMMON_UNIT = ["l", "d", "w", "h"]
     KEY_MAP = {
         "l": "length",
@@ -24,8 +29,16 @@ class WdcParsimoniousNodeVisitor(NodeVisitor):
 
     @dataclass
     class __Node:
+        """
+        Store information from each Node
+        """
+
         @dataclass
         class Entry:
+            """
+            Store entry found from Node
+            """
+
             value: Optional[float] = None
             unit: Optional[str] = None
             value_text: Optional[str] = None
@@ -39,9 +52,17 @@ class WdcParsimoniousNodeVisitor(NodeVisitor):
         power: Optional[Entry] = None
 
     def __init__(self):
+        """
+        Initialize dictionary as Node object
+        """
+
         self.dictionary = WdcParsimoniousNodeVisitor.__Node()
 
     def __parse_decimal(self, values):
+        """
+        Parse decimal values by assuming a space between digits is a decimal
+        """
+
         if len(values) == 0:
             return
         if len(values) == 1:
@@ -51,6 +72,10 @@ class WdcParsimoniousNodeVisitor(NodeVisitor):
         return str(int(values[0]) + float(".".join(values[1:])))
 
     def visit_dimension(self, node, visited_children):
+        """
+        Parse dimension value into local dictionary
+        """
+
         entries = node.text.split(" ")
         value = self.__parse_decimal(entries[0:-1])
         key = WdcParsimoniousNodeVisitor.KEY_MAP[entries[-1]]
@@ -60,6 +85,10 @@ class WdcParsimoniousNodeVisitor(NodeVisitor):
         getattr(self.dictionary, key).value_text = node.text
 
     def visit_unit(self, node, visited_children):
+        """
+        Parse unit from unit dictionary
+        """
+
         value = node.text.split(" ")[-1]
         if value in WdcParsimoniousNodeVisitor.COMMON_UNIT:
             for key in WdcParsimoniousNodeVisitor.COMMON_UNIT:
@@ -75,6 +104,10 @@ class WdcParsimoniousNodeVisitor(NodeVisitor):
                     ).unit_text = node.text
 
     def visit_weight(self, node, visited_children):
+        """
+        Parse weight values
+        """
+
         self.dictionary.source = node.text
         entries = node.text.split(" ")
         value = self.__parse_decimal(entries[0:-1])
@@ -86,6 +119,10 @@ class WdcParsimoniousNodeVisitor(NodeVisitor):
         self.dictionary.weight.unit_text = node.text
 
     def visit_power(self, node, visited_children):
+        """
+        Parse power values
+        """
+
         entries = node.text.split(" ")
         value = self.__parse_decimal(entries[0:-1])
         unit = entries[-1]
@@ -96,4 +133,8 @@ class WdcParsimoniousNodeVisitor(NodeVisitor):
         self.dictionary.power.unit_text = node.text
 
     def generic_visit(self, node, visited_children):
+        """
+        Catchall for unnamed grammar results
+        """
+
         return None
