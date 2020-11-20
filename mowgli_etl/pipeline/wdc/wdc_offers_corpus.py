@@ -16,8 +16,10 @@ class WdcOffersCorpus:
         """
 
         self.__file_path = wdc_json_file_path
+        self.__file_length = 0
         with open(self.__file_path) as data:
-            self.__file_length = data.read().count('\n') + 1
+            for line in data:
+                self.__file_length += 1
 
     def entries(self) -> Generator[WdcOffersCorpusEntry, None, None]:
         """
