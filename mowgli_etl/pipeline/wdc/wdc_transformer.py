@@ -6,10 +6,8 @@ import re
 import spacy
 import os.path
 
-# from mowgli_etl.model.concept_net_predicates import
 from mowgli_etl.model.kg_edge import KgEdge
 
-# from mowtli_etl.model.mowgli_predicates import
 from mowgli_etl.model.kg_node import KgNode
 from mowgli_etl._transformer import _Transformer
 from mowgli_etl.model.word_net_id import WordNetId
@@ -31,6 +29,10 @@ from mowgli_etl.pipeline.wdc.wdc_offers_corpus import WdcOffersCorpus
 
 
 class WdcTransformer(_Transformer):
+    """
+    Transformer implementaion for WebDataCommons dataset using qualitative spatial reasoning predicates
+    """
+    
     def transform(
         self,
         *,
@@ -38,6 +40,13 @@ class WdcTransformer(_Transformer):
         product_type_classifier: Optional[WdcProductTypeClassifier] = None,
         dimension_parser: Optional[WdcDimensionParser] = None
     ) -> Generator[Union[KgNode, KgEdge], None, None]:
+        """
+        Main functionality for transformer
+        Parameters: corpus - WdcOffersCorpus object that contains WdcOfferCorpusEntry objects to make parsing easier
+                    product_type_classifier - WdcProductTypeClassifier object to determine the appropriate generic product category
+                    dimension_parser - WdcDimensionParser object to determine most likely dimensions and units
+        Yields: KgEdge objects representing spatial relations between products
+        """
 
         # Set default ProductTypeClassifier
         if not product_type_classifier:
