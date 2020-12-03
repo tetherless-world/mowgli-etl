@@ -1,0 +1,31 @@
+NOTE: No longer necessary predicates
+broaderThan
+narrowerThan
+tallerThan
+shorterThan
+deeperThan
+shallowerThan
+equivalentTo
+
+Ontology:
+buckets for general sizes
+generic product type sizes
+
+New predicates:
+Much larger than
+Larger than
+Equivalent to
+Smaller than
+Much smaller than
+
+Much more powerful than
+More powerful than
+Equivalent to
+Less powerful than
+Much less powerful than
+
+Much heavier than
+Heavier than
+Equivalent to
+Lighter than
+Much lighter than
