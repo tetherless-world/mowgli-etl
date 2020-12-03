@@ -1,16 +1,11 @@
 from dataclasses import dataclass
 from typing import Optional
+from mowgli_etl.pipeline.wdc.wdc_product_dimensions import WdcProductDimensions
+
 
 @dataclass
 class WdcGenericSize:
-	@dataclass
-	class _Dimension:
-		value: float
-		unit: str
-		count: int = 1
-
 	name: str
-	volume: Optional[_Dimension] = None
-	power: Optional[_Dimension] = None
-	weight: Optional[_Dimension] = None
+	dimension: WdcProductDimensions
+	unit: str
 	bucket: Optional[int] = None
