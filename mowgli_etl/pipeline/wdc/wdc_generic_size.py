@@ -13,3 +13,4 @@ class WdcGenericSize:
 	volume: Optional[_Dimension] = None
 	power: Optional[_Dimension] = None
 	weight: Optional[_Dimension] = None
+	bucket: Optional[int] = None
