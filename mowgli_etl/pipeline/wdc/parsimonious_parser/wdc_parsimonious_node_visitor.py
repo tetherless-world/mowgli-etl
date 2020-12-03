@@ -17,7 +17,7 @@ class WdcParsimoniousNodeVisitor(NodeVisitor):
         "w": "width",
         "h": "height",
         "v": "power",
-        "mv": "volatage",
+        "mv": "power",
         "kv": "power",
         "lb": "weight",
         "lbs": "weight",
