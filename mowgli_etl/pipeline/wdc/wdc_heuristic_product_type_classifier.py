@@ -20,12 +20,12 @@ class WdcHeuristicProductTypeClassifier(WdcProductTypeClassifier):
         Set local NLP to optimize execution
         """
         if self.__class__.__NLP is None:
-            self.__class__.__NLP = load('en_core_web_sm')
+            self.__class__.__NLP = load("en_core_web_sm")
 
     def __clean_words(self, line):
         """
         Modify a word (or sequence of words) to have a standardized format (i.e. replace "_" with " " and remove words with non-alphabetical characters)
-        
+
         :param line: entry field to be cleaned
         :return: cleaned word
         """
@@ -40,7 +40,7 @@ class WdcHeuristicProductTypeClassifier(WdcProductTypeClassifier):
     def classify(self, *, entry: WdcOffersCorpusEntry) -> WdcProductType:
         """
         Parse product to find reasonable generic product type using heuristics
-        
+
         :param entry: data entry to be classified
         :return: parsed product type
         """

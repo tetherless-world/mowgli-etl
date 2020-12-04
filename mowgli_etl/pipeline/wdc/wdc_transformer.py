@@ -32,7 +32,7 @@ class WdcTransformer(_Transformer):
     """
     Transformer implementaion for WebDataCommons dataset using qualitative spatial reasoning predicates
     """
-    
+
     def transform(
         self,
         *,

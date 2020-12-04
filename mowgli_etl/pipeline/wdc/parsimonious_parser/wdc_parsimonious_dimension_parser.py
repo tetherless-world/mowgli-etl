@@ -122,6 +122,7 @@ class WdcParsimoniousDimensionParser(WdcDimensionParser):
 
         return returns
 
+
 # Local tests for debug
 if __name__ == "__main__":
     import sys, time, csv
