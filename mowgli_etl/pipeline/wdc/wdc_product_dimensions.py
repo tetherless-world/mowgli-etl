@@ -3,6 +3,7 @@ from typing import Optional
 from copy import deepcopy
 
 from dataclasses_json import dataclass_json
+from dataclasses import fields
 
 
 @dataclass_json
@@ -98,7 +99,7 @@ class WdcProductDimensions:
 
         english_dimension = deepcopy(self)
 
-        for field in english_dimension.keys():
+        for field in fields(english_dimension):
             origin = getattr(english_dimension, field.name)
             if not origin:
                 continue
@@ -108,6 +109,14 @@ class WdcProductDimensions:
                 "lbs",
                 "v",
             ):
+                continue
+            if not origin.unit:
+                if field.name in ("depth", "height", "width", "length"):
+                    origin.unit = "in"
+                elif field.name == "power":
+                    origin.unit = "v"
+                elif field.name == "weight":
+                    origin.unit = "lbs"
                 continue
             origin.value *= converter[origin.unit]
 
