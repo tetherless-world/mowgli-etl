@@ -5,6 +5,7 @@ from mowgli_etl.pipeline.wdc.wdc_generic_size import WdcProductSize
 
 from dataclasses import fields
 
+
 class WdcSizeBuckets:
     def __init__(self):
         self.averages = dict()
@@ -25,7 +26,7 @@ class WdcSizeBuckets:
         width:
             min: 1.3
             max: 34.0
-        
+
         volume:
             min: 0.468
             max: 82,688
@@ -38,9 +39,9 @@ class WdcSizeBuckets:
             5: 100,000
         """
         bucket_1 = 0
-        bucket_2 = 100000 * (10 ** (1/4))/10
-        bucket_3 = 100000 * (10 ** (1/2))/10
-        bucket_4 = 100000 * (10 ** (3/4))/10
+        bucket_2 = 100000 * (10 ** (1 / 4)) / 10
+        bucket_3 = 100000 * (10 ** (1 / 2)) / 10
+        bucket_4 = 100000 * (10 ** (3 / 4)) / 10
         bucket_5 = 100000
         volume = -1
         for field in ("depth", "height", "length", "width"):
