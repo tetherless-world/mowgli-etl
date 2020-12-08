@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import Optional
+from copy import deepcopy
 
 from dataclasses_json import dataclass_json
 
@@ -76,3 +77,27 @@ class WdcProductDimensions:
                 return ma
             return self.__power_accuracy(weight)
         return tally
+
+    def to_english(self):
+        """
+        Convert dimensions to english units (in, lb, lbs, v) in a new object
+        """
+
+        converter = {"mm": 3.9, "cm": 0.39, "m": 0.0039, "ft": 12, "mv": 1/1000, "kv": 1000, "oz": 1/16, "g": 0.0022046, "mg": 0.0000022046, "kg": 2.2046}
+        
+        english_dimension = deepcopy(self)
+
+        for field in english_dimension.keys():
+            origin = getattr(english_dimension, field.name)
+            if not origin:
+                continue
+            if origin.unit in (
+                "in",
+                "lb",
+                "lbs",
+                "v",
+            ):
+                continue
+            origin.value *= converter[origin.unit]
+
+        return english_dimension
