@@ -16,7 +16,7 @@ class WdcProductSize:
     :type count: int
     :field unit: Unit of measurement for the dimension. Separated from dimension for parsing purposes
     :type unit: str
-    :field bucket: The size bucket the product fits in. Defautl=None
+    :field bucket: The size bucket the product fits in. Default=None
     :type bucket: int
     """
 
