@@ -83,8 +83,19 @@ class WdcProductDimensions:
         Convert dimensions to english units (in, lb, lbs, v) in a new object
         """
 
-        converter = {"mm": 3.9, "cm": 0.39, "m": 0.0039, "ft": 12, "mv": 1/1000, "kv": 1000, "oz": 1/16, "g": 0.0022046, "mg": 0.0000022046, "kg": 2.2046}
-        
+        converter = {
+            "mm": 3.9,
+            "cm": 0.39,
+            "m": 0.0039,
+            "ft": 12,
+            "mv": 1 / 1000,
+            "kv": 1000,
+            "oz": 1 / 16,
+            "g": 0.0022046,
+            "mg": 0.0000022046,
+            "kg": 2.2046,
+        }
+
         english_dimension = deepcopy(self)
 
         for field in english_dimension.keys():
