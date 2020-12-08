@@ -50,12 +50,25 @@ class WdcSizeBuckets:
         if generic_dimensions.name in self.averages:
             tracked_dimension = self.averages[generic_dimensions.name]
             for field in tracked_dimension.dimension.keys():
-                dimension = getattr(tracked_dimension, field.name)
+                tracked_dimension = getattr(tracked_dimension.dimension, field.name)
+                new_dimension = getattr(generic_dimensions.dimension, field.name)
+                
+                # If the average dimension doesn't have the field, but the new dimension does, assign to new dimension
                 if not dimension:
-                    continue
-                dimension.value = (
+                	if not new_dimension:
+	                    continue
+	                tracked_dimension.value = new_dimension.value
+	                continue
+
+                # If the field is not in the new dimension, set to average dimension
+                if not new_dimension:
+                	new_dimension = tracked_dimension.value
+                else:
+                	new_dimension = new_dimension.value
+
+                tracked_dimension.value = (
                     dimension.value * tracked_dimension.count
-                    + getattr(generic_dimensions, field.name).value
+                    + new_dimension
                 ) / (tracked_dimension.count + 1)
             tracked_dimension.count += 1
 
