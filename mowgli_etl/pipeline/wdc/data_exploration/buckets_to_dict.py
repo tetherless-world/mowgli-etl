@@ -39,10 +39,17 @@ if __name__ == "__main__":
     for key in buckets.keys():
         print(f"{key} contains {len(buckets[key])} products")
 
+    max_length = max([len(item) for item in buckets.values()])
+    for key in buckets.keys():
+        while len(buckets[key]) < max_length:
+            buckets[key].append('')
+
     keys = sorted(buckets.keys())
     with open("buckets.csv", "w") as f:
         writer = csv.writer(f)
         writer.writerow(keys)
-        writer.writerows(zip(*buckets.values()))
+        for i in range(max_length):
+            row = [buckets[key][i] for key in keys]
+            writer.writerow(row)
 
     print(f"Wrote into 5 buckets")
