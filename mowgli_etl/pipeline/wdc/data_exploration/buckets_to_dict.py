@@ -34,7 +34,7 @@ if __name__ == "__main__":
     for key in bucketer.averages.keys():
         if not bucketer.averages[key].bucket:
             continue
-        buckets[f"Bucket{bucketer.averages[key].bucket}"].append(key)
+        buckets[f"Bucket{bucketer.averages[key].bucket}"].append((key,bucketer.averages[key].volume))
 
     for key in buckets.keys():
         print(f"{key} contains {len(buckets[key])} products")
@@ -42,14 +42,14 @@ if __name__ == "__main__":
     max_length = max([len(item) for item in buckets.values()])
     for key in buckets.keys():
         while len(buckets[key]) < max_length:
-            buckets[key].append('')
+            buckets[key].append(('',''))
 
     keys = sorted(buckets.keys())
-    with open("buckets.csv", "w") as f:
+    with open("buckets.csv", "w", newline="\n") as f:
         writer = csv.writer(f)
         writer.writerow(keys)
         for i in range(max_length):
-            row = [buckets[key][i] for key in keys]
+            row = [f"{buckets[key][i][0]} (volume: {buckets[key][i][1]})" if buckets[key][i][0] != '' else '' for key in keys]
             writer.writerow(row)
 
     print(f"Wrote into 5 buckets")
