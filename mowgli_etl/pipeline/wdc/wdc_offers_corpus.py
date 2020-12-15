@@ -20,7 +20,8 @@ class WdcOffersCorpus:
         self.__file_length = 0
         with open(self.__file_path) as data:
             for line in data:
-                self.__file_length += 1
+                if detect(line) == 'en':
+                    self.__file_length += 1
 
     def entries(self) -> Generator[WdcOffersCorpusEntry, None, None]:
         """
@@ -52,6 +53,11 @@ class WdcOffersCorpus:
                 f"ERROR: Desired number of lines {n} is beyond the number of entries {self.__file_length}"
             )
         step_size = self.__file_length // n
+        counter = 0
         for i, entry in enumerate(self.entries()):
             if (i + 1) % step_size == 0:
+                counter += 1
                 yield entry
+                # Special break in case of uneven split
+                if counter == n:
+                    return
