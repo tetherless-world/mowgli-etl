@@ -10,7 +10,7 @@ SOURCE_KEY = {"description": 1 / 2, "spec_table_content": 3 / 4, "key_value_pair
 
 def test_parsimonious_parser_large(wdc_large_offers_corpus: WdcOffersCorpus):
     for count, entry in enumerate(wdc_large_offers_corpus.entries()):
-        if count in (19,20):
+        if count in (19, 20):
             dimension = WdcParsimoniousDimensionParser().parse(entry=entry)
             if not dimension:
                 continue
@@ -19,7 +19,7 @@ def test_parsimonious_parser_large(wdc_large_offers_corpus: WdcOffersCorpus):
             assert dimension.dimensions.weight.unit == "g"
             assert dimension.dimensions.accuracy(SOURCE_KEY[dimension.field]) == 0.75
 
-        elif count in (79,80):
+        elif count in (79, 80):
             dimension = WdcParsimoniousDimensionParser().parse(entry=entry)
             if not dimension:
                 continue
