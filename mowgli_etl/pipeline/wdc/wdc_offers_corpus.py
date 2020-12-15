@@ -1,6 +1,7 @@
 from typing import Optional, List, Generator
 from pathlib import Path
 from mowgli_etl.pipeline.wdc.wdc_offers_corpus_entry import WdcOffersCorpusEntry
+from langdetect import detect
 
 
 class WdcOffersCorpus:
@@ -30,7 +31,8 @@ class WdcOffersCorpus:
 
         with open(self.__file_path) as data:
             for row in data:
-                yield WdcOffersCorpusEntry.from_json(row)
+                if detect(row) == 'en':
+                    yield WdcOffersCorpusEntry.from_json(row)
 
     def sample(self, n: int) -> Generator[WdcOffersCorpusEntry, None, None]:
         """
