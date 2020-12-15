@@ -45,13 +45,15 @@ class WdcSizeBuckets:
         bucket_5 = 100000
         volume = -1
         for field in ("depth", "height", "length", "width"):
-            dim = getattr(dimension, field)
+            dim = getattr(dimension.dimension, field)
             if not dim:
                 continue
             if volume < 0:
                 volume = dim.value
             else:
                 volume *= dim.value
+
+        dimension.volume = volume
 
         if volume >= bucket_5:
             return 5
@@ -130,7 +132,7 @@ class WdcSizeBuckets:
             self.averages[generic_dimensions.name] = generic_dimensions
 
         self.averages[generic_dimensions.name].bucket = self.__bucket(
-            self.averages[generic_dimensions.name].dimension
+            self.averages[generic_dimensions.name]
         )
 
         return generic_dimensions
