@@ -9,8 +9,11 @@ from mowgli_etl.pipeline.wdc.wdc_heuristic_product_type_classifier import (
 )
 
 import csv
+from time import time
 
 assert __name__ == "__main__"
+
+start = time()
 
 buckets = {
     "Bucket1": [],
@@ -53,4 +56,4 @@ with open("buckets.csv", "w", newline="\n") as f:
         row = [f"{buckets[key][i][0]} (volume: {buckets[key][i][1]})" if buckets[key][i][0] != '' else '' for key in keys]
         writer.writerow(row)
 
-print(f"Wrote into 5 buckets")
+print(f"Wrote into 5 buckets in {time()-start:.2f} seconds")
