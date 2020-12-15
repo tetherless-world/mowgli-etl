@@ -38,7 +38,9 @@ for entry in corpus.entries():
 for key in bucketer.averages.keys():
     if not bucketer.averages[key].bucket:
         continue
-    buckets[f"Bucket{bucketer.averages[key].bucket}"].append((key,bucketer.averages[key].volume))
+    buckets[f"Bucket{bucketer.averages[key].bucket}"].append(
+        (key, bucketer.averages[key].volume)
+    )
 
 for key in buckets.keys():
     print(f"{key} contains {len(buckets[key])} products")
@@ -46,14 +48,19 @@ for key in buckets.keys():
 max_length = max([len(item) for item in buckets.values()])
 for key in buckets.keys():
     while len(buckets[key]) < max_length:
-        buckets[key].append(('',''))
+        buckets[key].append(("", ""))
 
 keys = sorted(buckets.keys())
 with open("buckets.csv", "w", newline="\n") as f:
     writer = csv.writer(f)
     writer.writerow(keys)
     for i in range(max_length):
-        row = [f"{buckets[key][i][0]} (volume: {buckets[key][i][1]})" if buckets[key][i][0] != '' else '' for key in keys]
+        row = [
+            f"{buckets[key][i][0]} (volume: {buckets[key][i][1]})"
+            if buckets[key][i][0] != ""
+            else ""
+            for key in keys
+        ]
         writer.writerow(row)
 
 print(f"Wrote into 5 buckets in {time()-start:.2f} seconds")
