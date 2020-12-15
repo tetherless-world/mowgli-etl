@@ -25,3 +25,4 @@ class WdcProductSize:
     count: int
     unit: str
     bucket: Optional[int] = None
+    volume: Optional[float] = None
