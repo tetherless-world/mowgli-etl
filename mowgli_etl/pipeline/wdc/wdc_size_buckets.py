@@ -70,6 +70,7 @@ class WdcSizeBuckets:
 
     def generalize(
         self,
+        *,
         wdc_product_type: WdcProductType,
         wdc_product_dimensions: WdcProductDimensions,
     ):
