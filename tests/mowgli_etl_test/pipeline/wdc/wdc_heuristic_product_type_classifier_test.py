@@ -22,5 +22,5 @@ def test_heuristic_product_type_classifier(wdc_large_offers_corpus: WdcOffersCor
             assert f"{item.expected.confidence:.3%}" == "33.333%"
         elif count + 1 == 5:
             item = next(HPTC.classify(entry=entry))
-            assert item.expected.name == "Photo"
+            assert item.expected.name == "Pet Supplies"
             assert f"{item.expected.confidence:.3%}" == "66.667%"
