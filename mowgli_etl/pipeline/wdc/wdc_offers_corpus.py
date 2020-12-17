@@ -35,7 +35,7 @@ class WdcOffersCorpus:
 
         with open(self.__file_path) as data:
             for row in data:
-                if self.__valid_line(line):
+                if self.__valid_line(row):
                     yield WdcOffersCorpusEntry.from_json(row)
 
     def sample(self, n: int) -> Generator[WdcOffersCorpusEntry, None, None]:
