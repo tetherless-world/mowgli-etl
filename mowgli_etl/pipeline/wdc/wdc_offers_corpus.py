@@ -20,8 +20,11 @@ class WdcOffersCorpus:
         self.__file_length = 0
         with open(self.__file_path) as data:
             for line in data:
-                if detect(line) == "en":
+                if self.__valid_line(line):
                     self.__file_length += 1
+
+    def __valid_line(self, line):
+        return detect(line) == "en"
 
     def entries(self) -> Generator[WdcOffersCorpusEntry, None, None]:
         """
@@ -32,7 +35,7 @@ class WdcOffersCorpus:
 
         with open(self.__file_path) as data:
             for row in data:
-                if detect(row) == "en":
+                if self.__valid_line(line):
                     yield WdcOffersCorpusEntry.from_json(row)
 
     def sample(self, n: int) -> Generator[WdcOffersCorpusEntry, None, None]:
