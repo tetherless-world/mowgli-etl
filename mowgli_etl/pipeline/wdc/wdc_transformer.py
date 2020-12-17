@@ -29,6 +29,13 @@ class WdcTransformer(_Transformer):
     """
 
     def __find_predicate(self, product1, product2):
+        # Placeholder predicates
+        # MUCH_SMALLER_THAN = "/r/MuchSmallerThan"
+        SMALLER_THAN = "/r/SmallerThan"
+        EQUIVALENT_TO = "/r/EquivalentTo"
+        LARGER_THAN = "/r/LargerThan"
+        # MUCH_LARGER_THAN = "/r/MuchLargerThan"
+        CANT_COMPARE = "/r/Can'tCompare"
         """
         Find the appropriate predicate for two WdcProductSize objects
         """
