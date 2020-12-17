@@ -2,15 +2,10 @@ import json
 from pathlib import Path
 from typing import Generator, Set, Dict, Union, Optional
 from urllib.parse import quote
-import re
-import spacy
-import os.path
 
 from mowgli_etl.model.kg_edge import KgEdge
 
-from mowgli_etl.model.kg_node import KgNode
 from mowgli_etl._transformer import _Transformer
-from mowgli_etl.model.word_net_id import WordNetId
 from mowgli_etl.pipeline.wdc.wdc_constants import *
 from mowgli_etl.pipeline.wdc.wdc_dimension_parser import WdcDimensionParser
 from mowgli_etl.pipeline.wdc.wdc_product_type_classifier import WdcProductTypeClassifier
@@ -20,7 +15,6 @@ from mowgli_etl.pipeline.wdc.wdc_heuristic_product_type_classifier import (
 from mowgli_etl.pipeline.wdc.parsimonious_parser.wdc_parsimonious_dimension_parser import (
     WdcParsimoniousDimensionParser,
 )
-from mowgli_etl.pipeline.wdc.wdc_offers_corpus_entry import WdcOffersCorpusEntry
 from mowgli_etl.pipeline.wdc.wdc_offers_corpus import WdcOffersCorpus
 from mowgli_etl.pipeline.wdc.wdc_size_buckets import WdcSizeBuckets
 
