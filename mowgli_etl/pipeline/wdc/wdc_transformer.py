@@ -4,6 +4,7 @@ from typing import Generator, Set, Dict, Union, Optional
 from urllib.parse import quote
 
 from mowgli_etl.model.kg_edge import KgEdge
+from mowgli_etl.model.kg_node import KgNode
 
 from mowgli_etl._transformer import _Transformer
 from mowgli_etl.pipeline.wdc.wdc_constants import *
@@ -17,6 +18,7 @@ from mowgli_etl.pipeline.wdc.parsimonious_parser.wdc_parsimonious_dimension_pars
 )
 from mowgli_etl.pipeline.wdc.wdc_offers_corpus import WdcOffersCorpus
 from mowgli_etl.pipeline.wdc.wdc_size_buckets import WdcSizeBuckets
+from mowgli_etl.pipeline.wdc.wdc_half_order_size_buckets import WdcHalfOrderSizeBuckets
 
 import itertools
 
@@ -30,23 +32,19 @@ class WdcTransformer(_Transformer):
         """
         Find the appropriate predicate for two WdcProductSize objects
         """
-        predicate_dict = {
-            -10: CANT_COMPARE,
-            -2: MUCH_SMALLER_THAN,
-            -1: SMALLER_THAN,
-            0: EQUIVALENT_TO,
-            1: LARGER_THAN,
-            2: MUCH_LARGER_THAN,
-        }
-        # Restrict difference to [-2,2]
+        pred = None
         if not product1.bucket or not product2.bucket:
-            bucket_difference = -10
+            pred = CANT_COMPARE
+        elif product1.bucket > product2.bucket:
+            pred = LARGER_THAN
+        elif product1.bucket < product2.bucket:
+            pred = SMALLER_THAN
         else:
-            bucket_difference = min(max(product1.bucket - product2.bucket, -2), 2)
+            pred = EQUIVALENT_TO
         return KgEdge.with_generated_id(
             subject=product1.name,
             object=product2.name,
-            predicate=predicate_dict[bucket_difference],
+            predicate=pred,
             source_ids=(WDC_DATASOURCE_ID,),
         )
 
@@ -77,7 +75,7 @@ class WdcTransformer(_Transformer):
             dimension_parser = WdcParsimoniousDimensionParser()
 
         if not bucketer:
-            bucketer = WdcSizeBuckets()
+            bucketer = WdcHalfOrderSizeBuckets()
 
         self.__dimension_parser = dimension_parser
         self.__product_type_classifier = product_type_classifier
