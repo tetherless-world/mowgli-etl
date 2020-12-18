@@ -26,4 +26,3 @@ class WdcSizeBuckets(ABC):
         :return: Generalized dimensions, not the average dimensions though
         :rtype: class<WdcProductSize>
         """
-
