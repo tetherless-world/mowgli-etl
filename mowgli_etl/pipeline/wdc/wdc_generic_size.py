@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from dataclasses_json import dataclass_json
-from typing import Optional
+from typing import Optional, Union
 from mowgli_etl.pipeline.wdc.wdc_product_dimensions import WdcProductDimensions
 
 
@@ -24,5 +24,5 @@ class WdcProductSize:
     dimension: WdcProductDimensions
     count: int
     unit: str
-    bucket: Optional[int] = None
+    bucket: Optional[Union[int,float]] = None
     volume: Optional[float] = None
