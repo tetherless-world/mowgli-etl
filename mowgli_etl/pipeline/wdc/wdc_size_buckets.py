@@ -5,8 +5,15 @@ from mowgli_etl.pipeline.wdc.wdc_generic_size import WdcProductSize
 from abc import ABC, abstractmethod
 from dataclasses import fields
 
+
 class WdcSizeBuckets(ABC):
-    def __init__(self, *, num_buckets: int = 5, max_volume: float = 100000.):
+    """
+    Abstract structure for bucketing algorithms
+    :param num_buckets: The maximum number of buckets that products will be sorted into. Default=5
+    :param max_volume: The lower-bound on the largest bucket. Default=100,000
+    """
+
+    def __init__(self, *, num_buckets: int = 5, max_volume: float = 100000.0):
         self.averages = dict()
         self.max_volume = max_volume
         self.num_buckets = num_buckets
@@ -17,12 +24,9 @@ class WdcSizeBuckets(ABC):
         *,
         wdc_product_type: WdcProductType,
         wdc_product_dimensions: WdcProductDimensions,
-    ):
+    ) -> WdcProductSize:
         """
         :param wdc_product_type: Parsed general product type
-        :type wdc_product_type: class<WdcProductType>
         :param wdc_product_dimensions: Parsed product dimensions
-        :type wdc_product_dimensions: class<WdcProductDimensions>
         :return: Generalized dimensions, not the average dimensions though
-        :rtype: class<WdcProductSize>
         """

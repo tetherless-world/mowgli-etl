@@ -5,21 +5,25 @@ from mowgli_etl.pipeline.wdc.wdc_generic_size import WdcProductSize
 
 from dataclasses import fields
 
+
 class WdcRoundedSizeBuckets(WdcSizeBuckets):
     """
     Implementation of WdcSizeBuckets that uses the volume of a product type as its bucket
     """
 
     def __bucket(self, dimension):
+        """
+        Assign appropriate bucket number
+        """
         volume = -1
         for field in ("depth", "height", "length", "width"):
-        	dim = getattr(dimension.dimension, field)
-        	if not dim:
-        		continue
-        	if volume < 0:
-        		volume = dim.value
-        	else:
-        		volume *= dim.value
+            dim = getattr(dimension.dimension, field)
+            if not dim:
+                continue
+            if volume < 0:
+                volume = dim.value
+            else:
+                volume *= dim.value
 
         if volume >= 0:
             dimension.volume = volume
@@ -27,7 +31,12 @@ class WdcRoundedSizeBuckets(WdcSizeBuckets):
 
         return None
 
-    def generalize(self, *, wdc_product_type: WdcProductType, wdc_product_dimensions: WdcProductDimensions):
+    def generalize(
+        self,
+        *,
+        wdc_product_type: WdcProductType,
+        wdc_product_dimensions: WdcProductDimensions
+    ) -> WdcProductSize:
         if not wdc_product_type or not wdc_product_dimensions:
             return None
 

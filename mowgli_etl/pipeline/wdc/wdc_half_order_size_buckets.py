@@ -5,13 +5,14 @@ from mowgli_etl.pipeline.wdc.wdc_generic_size import WdcProductSize
 
 from dataclasses import fields
 
+
 class WdcHalfOrderSizeBuckets(WdcSizeBuckets):
     """
     Implementation of WdcSizeBuckets that uses half orders of magnitude for bucketing
     """
 
     def __bucket(self, dimension):
-		# Determine heuristics for buckets
+        # Determine heuristics for buckets
         # Assume that any None dimension is 1
         """
         depth:
@@ -55,15 +56,20 @@ class WdcHalfOrderSizeBuckets(WdcSizeBuckets):
 
         dimension.volume = volume
 
-       	for i in range(self.num_buckets-1, 0, -1):
-       		if volume >= self.max_volume * (10 ** (i/(self.num_buckets-1)))/10:
-       			return i+1
-       	if volume >= 0:
-       		return 1
+        for i in range(self.num_buckets - 1, 0, -1):
+            if volume >= self.max_volume * (10 ** (i / (self.num_buckets - 1))) / 10:
+                return i + 1
+        if volume >= 0:
+            return 1
 
         return None
 
-    def generalize(self, *, wdc_product_type: WdcProductType, wdc_product_dimensions: WdcProductDimensions):
+    def generalize(
+        self,
+        *,
+        wdc_product_type: WdcProductType,
+        wdc_product_dimensions: WdcProductDimensions
+    ) -> WdcProductSize:
         if not wdc_product_type or not wdc_product_dimensions:
             return None
 
