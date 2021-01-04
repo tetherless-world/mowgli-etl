@@ -1,6 +1,7 @@
 from typing import Optional, List, Generator
 from pathlib import Path
 from mowgli_etl.pipeline.wdc.wdc_offers_corpus_entry import WdcOffersCorpusEntry
+from langdetect import detect
 
 
 class WdcOffersCorpus:
@@ -19,7 +20,11 @@ class WdcOffersCorpus:
         self.__file_length = 0
         with open(self.__file_path) as data:
             for line in data:
-                self.__file_length += 1
+                if self.__valid_line(line):
+                    self.__file_length += 1
+
+    def __valid_line(self, line):
+        return detect(line) == "en"
 
     def entries(self) -> Generator[WdcOffersCorpusEntry, None, None]:
         """
@@ -30,7 +35,8 @@ class WdcOffersCorpus:
 
         with open(self.__file_path) as data:
             for row in data:
-                yield WdcOffersCorpusEntry.from_json(row)
+                if self.__valid_line(row):
+                    yield WdcOffersCorpusEntry.from_json(row)
 
     def sample(self, n: int) -> Generator[WdcOffersCorpusEntry, None, None]:
         """
@@ -50,6 +56,11 @@ class WdcOffersCorpus:
                 f"ERROR: Desired number of lines {n} is beyond the number of entries {self.__file_length}"
             )
         step_size = self.__file_length // n
+        counter = 0
         for i, entry in enumerate(self.entries()):
             if (i + 1) % step_size == 0:
+                counter += 1
                 yield entry
+                # Special break in case of uneven split
+                if counter == n:
+                    return

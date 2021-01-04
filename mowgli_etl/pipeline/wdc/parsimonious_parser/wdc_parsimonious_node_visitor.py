@@ -17,7 +17,7 @@ class WdcParsimoniousNodeVisitor(NodeVisitor):
         "w": "width",
         "h": "height",
         "v": "power",
-        "mv": "volatage",
+        "mv": "power",
         "kv": "power",
         "lb": "weight",
         "lbs": "weight",
@@ -93,7 +93,7 @@ class WdcParsimoniousNodeVisitor(NodeVisitor):
     def visit_unit(self, node, visited_children):
         """
         Parse unit from unit dictionary
-        
+
         :param node: the Parsimonious.node object being visited
         :param visited_children: results of visiting the children of this node
         """
