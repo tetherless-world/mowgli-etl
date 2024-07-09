@@ -20,4 +20,4 @@ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.2.0
 stringcase==1.2.0
 tqdm==4.46.0
 wcwidth==0.1.8
-zipp==2.0.1
+zipp==3.19.1
